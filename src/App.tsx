@@ -1,16 +1,18 @@
-import './App.css'
-import MetaMask from './wallet/MetaMask'
-import UniSat from './wallet/UniSat'
-
+import "./App.css";
+import ConnectWallet from "@/components/common/ConnectWallet";
+import MetaMask from "./wallet/MetaMask";
+import Okx from "./wallet/UseOkx";
+import UniSat from "./wallet/UseUniSat";
 
 const App = () => {
-
   return (
     <div className="App">
-      <MetaMask/>
-      <UniSat/>
+      {/* <MetaMask/> */}
+      {/* <UniSat /> */}
+      {/* <Okx /> */}
+      <ConnectWallet className="mt-10" />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

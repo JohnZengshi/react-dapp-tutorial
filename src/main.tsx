@@ -1,21 +1,23 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import './index.css'
-import "../app/globals.css"
-import { MetaMaskProvider } from '@metamask/sdk-react'
+/*
+ * @LastEditors: John
+ * @Date: 2023-12-29 10:31:13
+ * @LastEditTime: 2024-01-02 14:40:04
+ * @Author: John
+ */
+/*
+ * @LastEditors: John
+ * @Date: 2023-12-29 10:31:13
+ * @LastEditTime: 2023-12-29 11:46:05
+ * @Author: John
+ */
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./index.css";
+import "../app/globals.css";
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <MetaMaskProvider debug={false} sdkOptions={{
-      dappMetadata: {
-        name: "Example React Dapp",
-        url: window.location.host,
-      },
-      checkInstallationImmediately: false
-      // Other options
-    }}>
-      <App />
-    </MetaMaskProvider>
-  </React.StrictMode>,
-)
+    <App />
+  </React.StrictMode>
+);
