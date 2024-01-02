@@ -1,8 +1,8 @@
 import "./App.css";
 import ConnectWallet from "@/components/common/ConnectWallet";
 import MetaMask from "./wallet/MetaMask";
-import Okx from "./wallet/UseOkx";
-import UniSat from "./wallet/UseUniSat";
+import Okx from "./wallet/Okx";
+import UniSat from "./wallet/UniSat";
 
 const App = () => {
   return (

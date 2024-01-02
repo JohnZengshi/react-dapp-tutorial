@@ -17,7 +17,13 @@ import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import sdk from "@unisat/wallet-sdk";
@@ -29,7 +35,10 @@ const formSchema = z.object({
 
 const BTC_Unit_Converter = 100000000;
 
-export default function () {
+export type UniSat_handleType = {
+  _connect: () => void;
+};
+const UniSat = forwardRef<UniSat_handleType>(function (props, ref) {
   const [unisatInstalled, setUnisatInstalled] = useState(false);
   const [connected, setConnected] = useState(false);
   const [accounts, setAccounts] = useState<string[]>([]);
@@ -43,6 +52,14 @@ export default function () {
   const [network, setNetwork] = useState("livenet");
   const [open, setOpen] = useState(false);
   const [sending, setSending] = useState<Boolean>(false);
+
+  useImperativeHandle(ref, () => {
+    return {
+      _connect() {
+        connect();
+      },
+    };
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -136,8 +153,13 @@ export default function () {
   }
 
   async function connect() {
-    const result = await unisat.requestAccounts();
-    handleAccountsChanged(result);
+    unisat
+      .requestAccounts()
+      .then((accounts: string[]) => {
+        console.log("unisat accounts", accounts);
+        handleAccountsChanged(accounts);
+      })
+      .catch(handleCatch);
   }
 
   useEffect(() => {
@@ -150,13 +172,21 @@ export default function () {
       }
 
       if (unisat) {
-        console.log("unisat", unisat);
+        console.log("unisat is installed!!", unisat);
         setUnisatInstalled(true);
-      } else if (!unisat) return;
+      } else if (!unisat) {
+        // 用户没有安装unisat插件
+        console.warn("unisat is not installed!!");
+        return;
+      }
 
-      unisat.getAccounts().then((accounts: string[]) => {
-        handleAccountsChanged(accounts);
-      });
+      unisat
+        .getAccounts()
+        .then((accounts: string[]) => {
+          console.log("unisat accounts", accounts);
+          handleAccountsChanged(accounts);
+        })
+        .catch(handleCatch);
 
       unisat.on("accountsChanged", handleAccountsChanged);
       unisat.on("networkChanged", handleNetworkChanged);
@@ -171,6 +201,14 @@ export default function () {
   }, []);
 
   const unisat = (window as any).unisat;
+
+  function handleCatch(e: { code: number; message: string }) {
+    // console.log(e);
+    if (e.code === 4001) {
+      // 用户没有创建钱包
+      console.warn(e.message);
+    }
+  }
 
   // return (
   //   <>
@@ -317,15 +355,19 @@ export default function () {
   //   </>
   // );
 
-  return {
-    unisatInstalled,
-    connect,
-    connected,
-    accounts,
-    publicKey,
-    address,
-    balance,
-    network,
-    sending,
-  };
-}
+  // return {
+  //   unisatInstalled,
+  //   connect,
+  //   connected,
+  //   accounts,
+  //   publicKey,
+  //   address,
+  //   balance,
+  //   network,
+  //   sending,
+  // };
+
+  return <></>;
+});
+
+export default UniSat;
