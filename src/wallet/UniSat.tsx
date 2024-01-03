@@ -21,12 +21,14 @@ import {
   forwardRef,
   useEffect,
   useImperativeHandle,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import sdk from "@unisat/wallet-sdk";
+import { verifyMessage } from "@unisat/wallet-utils";
 
 const formSchema = z.object({
   toAddress: z.string(),
@@ -34,11 +36,22 @@ const formSchema = z.object({
 });
 
 const BTC_Unit_Converter = 100000000;
-
+let connecting = false;
 export type UniSat_handleType = {
   _connect: () => void;
+  _disConnect: () => void;
+  _onSubmit: (cost: number, toAddress: string) => void;
 };
-const UniSat = forwardRef<UniSat_handleType>(function (props, ref) {
+const UniSat = forwardRef<
+  UniSat_handleType,
+  {
+    onUpdate: (
+      okxInstalled: boolean,
+      connected: boolean,
+      address: string | undefined
+    ) => void;
+  }
+>(function (props, ref) {
   const [unisatInstalled, setUnisatInstalled] = useState(false);
   const [connected, setConnected] = useState(false);
   const [accounts, setAccounts] = useState<string[]>([]);
@@ -52,11 +65,18 @@ const UniSat = forwardRef<UniSat_handleType>(function (props, ref) {
   const [network, setNetwork] = useState("livenet");
   const [open, setOpen] = useState(false);
   const [sending, setSending] = useState<Boolean>(false);
+  // const [connecting, setConnecting] = useState<boolean>(false);
 
   useImperativeHandle(ref, () => {
     return {
       _connect() {
         connect();
+      },
+      _disConnect() {
+        disConnect();
+      },
+      _onSubmit(cost: number, toAddress: string) {
+        onSubmit(cost, toAddress);
       },
     };
   });
@@ -68,6 +88,10 @@ const UniSat = forwardRef<UniSat_handleType>(function (props, ref) {
       satoshis: 0,
     },
   });
+
+  useEffect(() => {
+    props.onUpdate(unisatInstalled, connected, address);
+  }, [unisatInstalled, connected, address]);
 
   const getBasicInfo = async () => {
     const unisat = (window as any).unisat;
@@ -91,18 +115,18 @@ const UniSat = forwardRef<UniSat_handleType>(function (props, ref) {
   const handleAccountsChanged = (_accounts: string[]) => {
     if (self.accounts[0] === _accounts[0]) {
       // prevent from triggering twice
-      return;
+      console.log("prevent from triggering twice");
+      // return;
     }
     self.accounts = _accounts;
+    console.log("_accounts", _accounts);
     if (_accounts.length > 0) {
       setAccounts(_accounts);
       setConnected(true);
-
-      setAddress(_accounts[0]);
-
       getBasicInfo();
     } else {
       setConnected(false);
+      disConnect(); // 手动触发
     }
   };
 
@@ -112,22 +136,21 @@ const UniSat = forwardRef<UniSat_handleType>(function (props, ref) {
   };
 
   // 发送交易
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(cost: number, toAddress: string) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log("form:", values);
 
     console.log(
       "values.satoshis * BTC_Unit_Converter",
-      values.satoshis * BTC_Unit_Converter
+      cost * BTC_Unit_Converter
     );
     if (sending) return;
 
     setSending(true);
     unisat
       .sendBitcoin(
-        values.toAddress, // Required except during contract publications.
-        Math.round(values.satoshis * BTC_Unit_Converter)
+        toAddress, // Required except during contract publications.
+        Math.round(cost * BTC_Unit_Converter)
       )
       .then((txHash: string) => {
         setSending(false);
@@ -142,31 +165,52 @@ const UniSat = forwardRef<UniSat_handleType>(function (props, ref) {
       })
       .catch((error: any) => {
         setSending(false);
-        // toast({
-        //   variant: "destructive",
-        //   title: "Uh oh! Something went wrong.",
-        //   description: error.message,
-        //   action: <ToastAction altText="Try again">Try again</ToastAction>,
-        // });
-        console.error(error);
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: error.message,
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
+        // console.error(error);
       });
   }
 
   async function connect() {
+    if (connecting) return;
+    await checkInstall();
+    // setConnecting(true);
+    connecting = true;
     unisat
       .requestAccounts()
-      .then((accounts: string[]) => {
-        console.log("unisat accounts", accounts);
+      .then(async (accounts: string[]) => {
+        console.log("request accounts", accounts);
+        await signMessage();
+
         handleAccountsChanged(accounts);
+        connecting = false;
       })
       .catch(handleCatch);
   }
 
-  useEffect(() => {
-    async function checkUnisat() {
+  function disConnect() {
+    console.log("dis connect");
+    setAccounts([]);
+    setConnected(false);
+    setAddress("");
+    setPublicKey("");
+    setBalance({
+      confirmed: 0,
+      unconfirmed: 0,
+      total: 0,
+    });
+    setNetwork("livenet");
+  }
+
+  function checkInstall() {
+    return new Promise<void>(async (reslove, reject) => {
       let unisat = (window as any).unisat;
 
-      for (let i = 1; i < 10 && !unisat; i += 1) {
+      for (let i = 1; i < 5 && !unisat; i += 1) {
         await new Promise((resolve) => setTimeout(resolve, 100 * i));
         unisat = (window as any).unisat;
       }
@@ -177,14 +221,63 @@ const UniSat = forwardRef<UniSat_handleType>(function (props, ref) {
       } else if (!unisat) {
         // 用户没有安装unisat插件
         console.warn("unisat is not installed!!");
+
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "PLEASE INSTALL UNISAT WALLET",
+        });
+        reject();
         return;
       }
 
+      reslove();
+    });
+  }
+
+  async function signMessage() {
+    return new Promise<void>(async (reslove, reject) => {
+      try {
+        const message = `
+  Welcome to UniSat!
+  
+  Click to sign in and accept the UniSat Terms of Service (https://unisat.io/terms-of-service.html) and Privacy Policy (https://unisat.io/privacy-policy.html).
+      
+  This request will not trigger a blockchain transaction.
+      
+  Your authentication status will reset after 24 hours.
+      
+  Wallet address:
+  ${address}
+      
+  Nonce:
+  73ead579-8152-49bf-a2d4-ebb430f449b7
+  `;
+        let res = await window.unisat.signMessage(message);
+        console.log("signature:", res);
+        // const pubkey = publicKey;
+        // const message = "abcdefghijk123456789";
+        // const signature = res;
+        // const result = verifyMessage(pubkey, message, signature);
+        // console.log("verifyMessage:", result);
+        reslove();
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  }
+  useLayoutEffect(() => {
+    async function checkUnisat() {
+      await checkInstall();
       unisat
         .getAccounts()
         .then((accounts: string[]) => {
           console.log("unisat accounts", accounts);
-          handleAccountsChanged(accounts);
+          if (accounts.length > 0) {
+            handleAccountsChanged(accounts);
+          } else {
+            connect();
+          }
         })
         .catch(handleCatch);
 
@@ -207,166 +300,13 @@ const UniSat = forwardRef<UniSat_handleType>(function (props, ref) {
     if (e.code === 4001) {
       // 用户没有创建钱包
       console.warn(e.message);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: e.message,
+      });
     }
   }
-
-  // return (
-  //   <>
-  //     {/* UniSat */}
-  //     <div className="space-y-1 mt-10">
-  //       <Separator className="my-4" />
-  //       <div className="flex items-center">
-  //         <Badge variant="default" className="mr-5">
-  //           UniSat
-  //         </Badge>
-  //         <h4 className="text-sm font-medium leading-none">
-  //           Injected Provider {unisatInstalled ? "DOES" : "DOES NOT"} Exist
-  //         </h4>
-  //       </div>
-  //     </div>
-
-  //     {!connected && unisatInstalled && (
-  //       <Button
-  //         className="mt-5"
-  //         disabled={connected}
-  //         onClick={async () => {
-  //           const result = await unisat.requestAccounts();
-  //           handleAccountsChanged(result);
-  //         }}
-  //       >
-  //         Connect UniSat
-  //       </Button>
-  //     )}
-
-  //     {connected && accounts.length > 0 && (
-  //       <>
-  //         <div>
-  //           <div>
-  //             <Separator className="my-4" />
-  //             <p className="text-sm text-muted-foreground">钱包信息：</p>
-  //             <Separator className="my-4" />
-
-  //             <div className="w-full flex h-5 items-center text-sm my-2">
-  //               <div>Wallet Accounts: </div>
-  //               <Separator className="mx-2" orientation="vertical" />
-  //               <div className="ml-auto"> {address}</div>
-  //             </div>
-
-  //             <div className="w-full flex h-5 items-center text-sm my-2">
-  //               <div>Wallet Balance:</div>
-  //               <Separator className="mx-2" orientation="vertical" />
-  //               <div className="ml-auto">
-  //                 {" "}
-  //                 {balance.total / BTC_Unit_Converter}
-  //               </div>
-  //             </div>
-
-  //             <div className="w-full flex h-5 items-center text-sm my-2">
-  //               <div>public key:</div>
-  //               <Separator className="mx-2" orientation="vertical" />
-  //               <div className="ml-auto"> {publicKey}</div>
-  //             </div>
-
-  //             <div className="w-full flex h-5 items-center text-sm my-2">
-  //               <div>network:</div>
-  //               <Separator className="mx-2" orientation="vertical" />
-  //               <div className="ml-auto"> {network}</div>
-  //             </div>
-  //           </div>
-
-  //           <Separator className="my-4" />
-  //           <div className="flex items-center">
-  //             <p className="text-sm text-muted-foreground">发送交易:</p>
-  //             <Dialog open={open} onOpenChange={setOpen}>
-  //               <DialogTrigger className="ml-auto" asChild>
-  //                 <Button>send transactions</Button>
-  //               </DialogTrigger>
-  //               <DialogContent>
-  //                 <ScrollArea>
-  //                   <Form {...form}>
-  //                     <form
-  //                       onSubmit={form.handleSubmit(onSubmit)}
-  //                       className="space-y-1 p-5"
-  //                     >
-  //                       <FormField
-  //                         control={form.control}
-  //                         name="toAddress"
-  //                         render={({ field }) => (
-  //                           <FormItem>
-  //                             <FormLabel>{field.name + "（*必填）:"}</FormLabel>
-  //                             <FormControl>
-  //                               <Input {...field} type="text" />
-  //                             </FormControl>
-  //                             <FormDescription>
-  //                               交易的目标地址。
-  //                             </FormDescription>
-  //                             <FormMessage />
-  //                           </FormItem>
-  //                         )}
-  //                       />
-
-  //                       <FormField
-  //                         control={form.control}
-  //                         name="satoshis"
-  //                         render={({ field }) => (
-  //                           <FormItem>
-  //                             <FormLabel>{field.name + "（*必填）:"}</FormLabel>
-  //                             <FormControl>
-  //                               {/* TIP */}
-  //                               {/* 所有 HTML 输入元素值都是字符串。该库输入组件是使用 Controller 编写为受控 RHF 输入的，这意味着您需要在提交之前自行转换输入值 onChange。 */}
-  //                               <Input
-  //                                 {...field}
-  //                                 value={isNaN(field.value) ? "" : field.value}
-  //                                 type="number"
-  //                                 onChange={(event) =>
-  //                                   field.onChange(
-  //                                     parseFloat(event.target.value)
-  //                                   )
-  //                                 }
-  //                               />
-  //                             </FormControl>
-  //                             <FormDescription>
-  //                               交易的价值。（以太币数量）
-  //                             </FormDescription>
-  //                             <FormMessage />
-  //                           </FormItem>
-  //                         )}
-  //                       />
-  //                       <div className="pt-10">
-  //                         {sending ? (
-  //                           <Button disabled>
-  //                             <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-  //                             Please wait
-  //                           </Button>
-  //                         ) : (
-  //                           <Button type="submit">Submit</Button>
-  //                         )}
-  //                       </div>
-  //                     </form>
-  //                   </Form>
-  //                 </ScrollArea>
-  //               </DialogContent>
-  //             </Dialog>
-  //           </div>
-  //           <Separator className="my-4" />
-  //         </div>
-  //       </>
-  //     )}
-  //   </>
-  // );
-
-  // return {
-  //   unisatInstalled,
-  //   connect,
-  //   connected,
-  //   accounts,
-  //   publicKey,
-  //   address,
-  //   balance,
-  //   network,
-  //   sending,
-  // };
-
   return <></>;
 });
 

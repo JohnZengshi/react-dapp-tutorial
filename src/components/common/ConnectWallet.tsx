@@ -1,6 +1,13 @@
 import { Button, ButtonProps } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
-import { useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import UseOkx, { Okx_HandleType } from "@/wallet/Okx";
@@ -9,10 +16,22 @@ import UseUniSat, { UniSat_handleType } from "@/wallet/UniSat";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 14:40:57
- * @LastEditTime: 2024-01-02 21:49:39
+ * @LastEditTime: 2024-01-03 14:29:20
  * @Author: John
  */
-export default function ConnectWallet(props: ButtonProps) {
+export type ConnectWallet_handleType = {
+  _onSubmit: (cost: number, toAddress: string) => void;
+};
+const ConnectWallet = forwardRef<
+  ConnectWallet_handleType,
+  {
+    onUpdate: (
+      installed: boolean,
+      connected: boolean,
+      address: string | undefined
+    ) => void;
+  }
+>(function (props, ref) {
   const [open, setOpen] = useState(false);
   enum Wallet {
     OKX = "OKX",
@@ -22,28 +41,48 @@ export default function ConnectWallet(props: ButtonProps) {
 
   const okxRef = useRef<Okx_HandleType>(null);
   const uniSatRef = useRef<UniSat_handleType>(null);
-  // let {
-  //   connect: okx_Connect,
-  //   disConnect: okx_DisConnect,
-  //   address: okx_Address,
-  //   connected: okx_Connected,
-  // } = UseOkx();
 
-  // let {
-  //   connect: uniSat_Connect,
-  //   connected: uniSat_Connected,
-  //   address: uniSat_Address,
-  // } = UseUniSat();
+  const [installed, setInstalled] = useState(false);
+  const [connected, setConnected] = useState(false);
+  const [address, setAddress] = useState<string>();
 
-  let okx_Connected = false;
-  let okx_Address = "";
+  useImperativeHandle(ref, () => {
+    return {
+      _onSubmit(cost: number, toAddress: string) {
+        if (walletType === Wallet.UniSat) {
+          uniSatRef.current?._onSubmit(cost, toAddress);
+        }
+      },
+    };
+  });
 
-  let uniSat_Connected = false;
-  let uniSat_Address = "";
+  function onUpdate(i: boolean, c: boolean, a: string | undefined) {
+    setInstalled(i);
+    setConnected(c);
+    setAddress(a);
+    props.onUpdate(i, c, a);
+  }
 
+  useEffect(() => {
+    let timer = setInterval(async () => {
+      // console.log(window.okxwallet.bitcoin.selectedAccount);
+      if (window.unisat) {
+        const [address] = await window.unisat.getAccounts();
+        console.log(address);
+        if (address) {
+          clearInterval(timer);
+          setWalletType(Wallet.UniSat);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
   return (
     <>
-      {okx_Connected && (
+      {/* {connected && (
         <div>
           <Separator className="my-4" />
           <p className="text-sm text-muted-foreground">钱包信息：</p>
@@ -52,42 +91,12 @@ export default function ConnectWallet(props: ButtonProps) {
           <div className="w-full flex h-5 items-center text-sm my-2">
             <div>Wallet Accounts: </div>
             <Separator className="mx-2" orientation="vertical" />
-            <div className="ml-auto"> {okx_Address}</div>
+            <div className="ml-auto"> {address}</div>
           </div>
-
-          <Button
-            onClick={() => {
-              // okx_DisConnect();
-            }}
-          >
-            disConnect Wallet
-          </Button>
         </div>
-      )}
+      )} */}
 
-      {uniSat_Connected && (
-        <div>
-          <Separator className="my-4" />
-          <p className="text-sm text-muted-foreground">钱包信息：</p>
-          <Separator className="my-4" />
-
-          <div className="w-full flex h-5 items-center text-sm my-2">
-            <div>Wallet Accounts: </div>
-            <Separator className="mx-2" orientation="vertical" />
-            <div className="ml-auto"> {uniSat_Address}</div>
-          </div>
-
-          <Button
-            onClick={() => {
-              // okx_DisConnect();
-            }}
-          >
-            disConnect Wallet
-          </Button>
-        </div>
-      )}
-
-      {!okx_Connected && !uniSat_Connected && (
+      {!connected && (
         <Dialog
           open={open}
           onOpenChange={(v) => {
@@ -95,7 +104,7 @@ export default function ConnectWallet(props: ButtonProps) {
           }}
         >
           <DialogTrigger asChild>
-            <Button {...props}>Connect Wallet</Button>
+            <Button>Connect Wallet</Button>
           </DialogTrigger>
           <DialogContent>
             <RadioGroup
@@ -114,10 +123,10 @@ export default function ConnectWallet(props: ButtonProps) {
                 setOpen(false);
               }}
             >
-              <div className="flex items-center space-x-2">
+              {/* <div className="flex items-center space-x-2">
                 <RadioGroupItem value={Wallet.OKX} id={Wallet.OKX} />
                 <Label htmlFor={Wallet.OKX}>OKX</Label>
-              </div>
+              </div> */}
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value={Wallet.UniSat} id={Wallet.UniSat} />
                 <Label htmlFor={Wallet.UniSat}>UniSat</Label>
@@ -127,8 +136,34 @@ export default function ConnectWallet(props: ButtonProps) {
         </Dialog>
       )}
 
-      {walletType === Wallet.OKX && <UseOkx ref={okxRef} />}
-      {walletType === Wallet.UniSat && <UseUniSat ref={uniSatRef} />}
+      {connected && (
+        <Button
+          onClick={() => {
+            uniSatRef.current?._disConnect();
+          }}
+        >
+          Disconnect Wallet
+        </Button>
+      )}
+
+      {walletType === Wallet.OKX && (
+        <UseOkx
+          ref={okxRef}
+          onUpdate={(i, c, a) => {
+            onUpdate(i, c, a);
+          }}
+        />
+      )}
+      {walletType === Wallet.UniSat && (
+        <UseUniSat
+          ref={uniSatRef}
+          onUpdate={(i, c, a) => {
+            onUpdate(i, c, a);
+          }}
+        />
+      )}
     </>
   );
-}
+});
+
+export default ConnectWallet;

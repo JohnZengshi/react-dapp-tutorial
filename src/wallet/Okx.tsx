@@ -9,7 +9,7 @@ import {
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
- * @LastEditTime: 2024-01-02 21:49:08
+ * @LastEditTime: 2024-01-03 09:40:14
  * @Author: John
  */
 type Account = {
@@ -22,12 +22,19 @@ export type Okx_HandleType = {
   _connect: () => void;
 };
 
-const Okx = forwardRef<Okx_HandleType>(function (props, ref) {
+const Okx = forwardRef<
+  Okx_HandleType,
+  {
+    onUpdate: (
+      okxInstalled: boolean,
+      connected: boolean,
+      address: string | undefined
+    ) => void;
+  }
+>(function (props, ref) {
   const [okxInstalled, setOkxInstalled] = useState<boolean>(false);
   const [connected, setConnected] = useState<boolean>(false);
   const [address, setAddress] = useState<string>();
-
-  const contextRef = useRef(null);
 
   useImperativeHandle(ref, () => {
     return {
@@ -40,6 +47,10 @@ const Okx = forwardRef<Okx_HandleType>(function (props, ref) {
   useEffect(() => {
     init();
   }, []);
+
+  useEffect(() => {
+    props.onUpdate(okxInstalled, connected, address);
+  }, [okxInstalled, connected, address]);
 
   async function init() {
     if (typeof window.okxwallet !== "undefined") {
@@ -59,6 +70,17 @@ const Okx = forwardRef<Okx_HandleType>(function (props, ref) {
         setAddress(result.address);
         setConnected(true);
         updateBalance(result.address);
+
+        window.okxwallet.bitcoin.on(
+          "accountChanged",
+          (addressInfo: Account) => {
+            console.log("accounts changed:", addressInfo);
+            if (addressInfo === null) {
+              setConnected(false);
+              setAddress("");
+            }
+          }
+        );
       })
       .catch(handleCatch);
   }
@@ -78,15 +100,7 @@ const Okx = forwardRef<Okx_HandleType>(function (props, ref) {
       console.warn(e.message);
     }
   }
-
-  // return {
-  //   connect,
-  //   disConnect,
-  //   address,
-  //   connected,
-  //   okxInstalled,
-  // };
-  return <div ref={contextRef}></div>;
+  return <></>;
 });
 
 export default Okx;
