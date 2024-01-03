@@ -1,11 +1,11 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-03 17:31:34
+ * @LastEditTime: 2024-01-03 22:28:18
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
-import "./Participate.css";
+import "./Participate.scss";
 import { Button } from "@/components/ui/button";
 import ConnectWallet, {
   ConnectWallet_handleType,
@@ -36,7 +36,7 @@ export default function () {
           />
         }
       />
-      <div className="container">
+      <div className="Participate">
         <div className="card">
           <div className="card_1">
             <div className="card_1_1">Phase 2</div>

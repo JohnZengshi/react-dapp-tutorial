@@ -1,14 +1,14 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-01-03 17:23:11
+ * @LastEditTime: 2024-01-03 22:27:56
  * @Author: John
  */
 import bg from "@/assets/herobg.mp4";
 import { useLayoutEffect, useRef } from "react";
-import "./Home.css";
 import { useNavigate } from "react-router-dom";
 import Nav from "@/components/common/Nav";
+import "./Home.scss";
 export default function () {
   const navigate = useNavigate();
   return (
@@ -48,7 +48,7 @@ export default function () {
 
       {/* <Nav /> */}
 
-      <div className="content">
+      <div className="Home">
         <div className="content_1">
           <div className="content_1_1">
             <span>
