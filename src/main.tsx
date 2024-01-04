@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-03 16:18:04
+ * @LastEditTime: 2024-01-04 16:38:43
  * @Author: John
  */
 /*
@@ -13,8 +13,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import "./index.css";
+// import "./index.css";
 import "../app/globals.css";
+import { HashRouter } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

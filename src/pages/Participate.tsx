@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-03 22:28:18
+ * @LastEditTime: 2024-01-04 14:01:02
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -10,9 +10,10 @@ import { Button } from "@/components/ui/button";
 import ConnectWallet, {
   ConnectWallet_handleType,
 } from "@/components/common/ConnectWallet";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import Nav from "@/components/common/Nav";
+import zepoch from "@/assets/zepoch.mp4";
 
 export default function () {
   const [installed, setInstalled] = useState(false);
@@ -20,7 +21,78 @@ export default function () {
   const [address, setAddress] = useState<string>();
   const connectWalletRef = useRef<ConnectWallet_handleType>(null);
   const [num, setNum] = useState<number>();
-  const [cost, setCost] = useState(0.00001);
+  const [cost, setCost] = useState(0);
+  const [nodeTotal, setNodeTotal] = useState(0);
+  const [nodeRemaining, setNodeRemaining] = useState(0);
+
+  const [userTotalBuy, setUserTotalBuy] = useState(0);
+
+  function getNodeInfo() {
+    fetch("/api/node/queryById?id=3")
+      .then((response) => {
+        return response.json();
+      })
+      .then(
+        (data: {
+          code: number;
+          message: string;
+          result: {
+            nodeTotal: string;
+            purchasedCount: number;
+            startPrice: number;
+            increasePrice: number;
+            increaseCount: number;
+          };
+          success: boolean;
+          timestamp: number;
+        }) => {
+          console.log(data.result);
+          let nodeTotal = parseInt(data.result.nodeTotal);
+          setNodeTotal(nodeTotal);
+          setNodeRemaining(nodeTotal - data.result.purchasedCount);
+          setCost(data.result.startPrice);
+        }
+      );
+  }
+
+  function getUserNodeRecord() {
+    fetch(`/api/subscribe/queryByWalletAddress?walletAddress=${address}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then(
+        (data: {
+          code: number;
+          message: string;
+          result: {
+            total: number;
+            list: {
+              walletAddress: string;
+              recommendId: number;
+              buyCount: number;
+              payCoin: string;
+              buyAmount: number;
+              createTime: string;
+            }[];
+          };
+          success: boolean;
+          timestamp: number;
+        }) => {
+          console.log(data.result);
+          setUserTotalBuy(
+            data.result.list.reduce((sum, v) => (sum += v.buyCount), 0)
+          );
+        }
+      );
+  }
+
+  useEffect(() => {
+    getNodeInfo();
+  }, []);
+
+  useEffect(() => {
+    if (address) getUserNodeRecord();
+  }, [address]);
   return (
     <>
       <Nav
@@ -56,7 +128,7 @@ export default function () {
                   Buy Node
                 </span>
                 <div
-                  className="flex-row flex justify-between"
+                  className="nodeCount flex-row flex justify-between"
                   style={{ alignItems: "center" }}
                 >
                   <span
@@ -70,7 +142,12 @@ export default function () {
                   >
                     Purchased quantity
                   </span>
-                  <Progress value={60} />
+                  {/* <Progress value={60} /> */}
+                  <div>
+                    <span>剩余：{nodeRemaining}</span>
+                    &nbsp;&nbsp;&nbsp;
+                    <span>总数：{nodeTotal}</span>
+                  </div>
                 </div>
                 <div
                   className="w-full"
@@ -99,7 +176,8 @@ export default function () {
                       lineHeight: "140%",
                     }}
                   >
-                    Currently 1 node {cost} BTC
+                    {/* TODO 小数位处理 */}
+                    Currently 1 node {cost.toFixed(8)} BTC
                   </span>
                 </div>
               </div>
@@ -116,44 +194,102 @@ export default function () {
                 }}
               />
               <span className="ml-auto">
+                {/* TODO 小数位处理 */}
                 Cost：{(cost * (num || 0)).toFixed(8)} BTC
               </span>
 
               <Button
-                disabled={!connected}
+                disabled={!connected || nodeRemaining <= 0}
                 onClick={() => {
                   if (typeof num === "number") {
-                    connectWalletRef.current?._onSubmit(
-                      cost * num,
-                      "tb1qlketwhc53kcnq3smvvjvwpsf2yfayhpkyf72y4"
-                    );
+                    connectWalletRef.current
+                      ?._onSubmit(
+                        cost * num,
+                        "tb1qlketwhc53kcnq3smvvjvwpsf2yfayhpkyf72y4" // TODO 测试链接
+                      )
+                      .then((ok) => {
+                        if (ok && address) {
+                          // console.log("交易成功");
+                          const postData: { [key: string]: number | string } = {
+                            buyAmount: cost * num,
+                            buyCount: num,
+                            payCoin: "BTC",
+                            walletAddress: address,
+                            nodeId: 3,
+                          };
+                          const queryString = Object.keys(postData)
+                            .map(
+                              (key) =>
+                                `${encodeURIComponent(
+                                  key
+                                )}=${encodeURIComponent(postData[key])}`
+                            )
+                            .join("&");
+                          fetch(`/api/subscribe/add?${queryString}`, {
+                            method: "POST",
+                          })
+                            .then((response) => {
+                              if (!response.ok) {
+                                throw new Error(
+                                  `HTTP error! Status: ${response.status}`
+                                );
+                              }
+                              return response.json(); // 如果返回的是 JSON 数据，使用 json() 方法解析
+                            })
+                            .then((data) => {
+                              console.log("Response data:", data);
+
+                              getNodeInfo(); // 更新节点信息
+                              getUserNodeRecord(); // 更新用户购买记录
+                              // 在这里处理返回的数据
+                            })
+                            .catch((error) => {
+                              console.error("Error:", error);
+                              // 在这里处理请求发生的错误
+                            });
+                        }
+                      });
                   }
                 }}
               >
-                Buy
+                {nodeRemaining > 0 ? "Buy" : "Node Completed"}
               </Button>
-              <span style={{ marginTop: "10px" }}>address:{address}</span>
+              {/* <span style={{ marginTop: "10px" }}>address:{address}</span> */}
 
-              <span
-                className="font-black"
-                style={{
-                  fontSize: "28px",
-                  lineHeight: "110%",
-                  color: "#000",
-                }}
-              >
-                My Node
-              </span>
+              {connected && (
+                <>
+                  <span
+                    className="font-black"
+                    style={{
+                      fontSize: "28px",
+                      lineHeight: "110%",
+                      color: "#000",
+                    }}
+                  >
+                    My Node
+                  </span>
+                  {userTotalBuy > 0 && (
+                    <>
+                      <div className="flex flex-row justify-between w-full">
+                        <span>Nodes:</span>
+                        <span>{userTotalBuy}</span>
+                      </div>
 
-              <div className="flex flex-row justify-between w-full">
-                <span>Nodes:</span>
-                <span>1</span>
-              </div>
+                      <span>
+                        Congratulations on becoming a node of XX, you can enjoy
+                        the following benefits.
+                      </span>
+                    </>
+                  )}
 
-              <span>
-                Congratulations on becoming a node of XX, you can enjoy the
-                following benefits.
-              </span>
+                  {userTotalBuy <= 0 && (
+                    <span>
+                      There are currently no nodes. Subscribing nodes enjoys the
+                      following benefits
+                    </span>
+                  )}
+                </>
+              )}
 
               <span
                 className="font-black"
@@ -175,7 +311,22 @@ export default function () {
                 and interests
               </span>
             </div>
-            <div className="card_2_2"></div>
+            <div className="card_2_2">
+              <video
+                muted
+                autoPlay
+                loop
+                style={{
+                  pointerEvents: "none",
+                  userSelect: "none",
+                  display: "block",
+                  verticalAlign: "middle",
+                  borderRadius: "12px",
+                }}
+              >
+                <source src={zepoch} type="video/mp4" />
+              </video>
+            </div>
           </div>
         </div>
       </div>

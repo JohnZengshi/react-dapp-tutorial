@@ -1,4 +1,5 @@
-import "./Nav.css";
+import { Button } from "../ui/button";
+import "./Nav.scss";
 export default function (props: { connectBtn?: any }) {
   return (
     <>
@@ -6,81 +7,81 @@ export default function (props: { connectBtn?: any }) {
         <div className="nav_1">ROOS logo</div>
         <div className="nav_2">
           <div className="nav_2_1">
-            <button>
+            <Button>
               <span>RoosNode</span>
-              <svg
+              {/* <svg
                 viewBox="0 0 12 13"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="m3 5 3 3 3-3" stroke="white" strokeWidth="1.2"></path>
-              </svg>
-            </button>
+              </svg> */}
+            </Button>
           </div>
 
           <div className="nav_2_1">
-            <button>
+            <Button>
               <span>RoosNode</span>
-              <svg
+              {/* <svg
                 viewBox="0 0 12 13"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="m3 5 3 3 3-3" stroke="white" strokeWidth="1.2"></path>
-              </svg>
-            </button>
+              </svg> */}
+            </Button>
           </div>
 
           <div className="nav_2_1">
-            <button>
+            <Button>
               <span>Ecosystems</span>
-              <svg
+              {/* <svg
                 viewBox="0 0 12 13"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="m3 5 3 3 3-3" stroke="white" strokeWidth="1.2"></path>
-              </svg>
-            </button>
+              </svg> */}
+            </Button>
           </div>
 
           <div className="nav_2_1">
-            <button>
+            <Button>
               <span>Bridge</span>
-              <svg
+              {/* <svg
                 viewBox="0 0 12 13"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="m3 5 3 3 3-3" stroke="white" strokeWidth="1.2"></path>
-              </svg>
-            </button>
+              </svg> */}
+            </Button>
           </div>
 
           <div className="nav_2_1">
-            <button>
+            <Button>
               <span>Airdrop</span>
-              <svg
+              {/* <svg
                 viewBox="0 0 12 13"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="m3 5 3 3 3-3" stroke="white" strokeWidth="1.2"></path>
-              </svg>
-            </button>
+              </svg> */}
+            </Button>
           </div>
 
           <div className="nav_2_1">
-            <button>
+            <Button>
               <span>Journey</span>
-              <svg
+              {/* <svg
                 viewBox="0 0 12 13"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="m3 5 3 3 3-3" stroke="white" strokeWidth="1.2"></path>
-              </svg>
-            </button>
+              </svg> */}
+            </Button>
           </div>
         </div>
         <div className="nav_3">
@@ -88,10 +89,10 @@ export default function (props: { connectBtn?: any }) {
             {props.connectBtn ? (
               props.connectBtn
             ) : (
-              <button>
+              <Button>
                 EN
                 <span>
-                  <svg
+                  {/* <svg
                     viewBox="0 0 12 13"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -101,9 +102,9 @@ export default function (props: { connectBtn?: any }) {
                       stroke="white"
                       strokeWidth="1.2"
                     ></path>
-                  </svg>
+                  </svg> */}
                 </span>
-              </button>
+              </Button>
             )}
           </div>
         </div>

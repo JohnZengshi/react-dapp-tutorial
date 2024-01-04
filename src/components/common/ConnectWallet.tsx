@@ -13,6 +13,15 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import UseOkx, { Okx_HandleType } from "@/wallet/Okx";
 import { Separator } from "@/components/ui/separator";
 import UseUniSat, { UniSat_handleType } from "@/wallet/UniSat";
+import { shortenString } from "@/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 14:40:57
@@ -20,7 +29,7 @@ import UseUniSat, { UniSat_handleType } from "@/wallet/UniSat";
  * @Author: John
  */
 export type ConnectWallet_handleType = {
-  _onSubmit: (cost: number, toAddress: string) => void;
+  _onSubmit: (cost: number, toAddress: string) => Promise<boolean>;
 };
 const ConnectWallet = forwardRef<
   ConnectWallet_handleType,
@@ -49,9 +58,10 @@ const ConnectWallet = forwardRef<
   useImperativeHandle(ref, () => {
     return {
       _onSubmit(cost: number, toAddress: string) {
-        if (walletType === Wallet.UniSat) {
-          uniSatRef.current?._onSubmit(cost, toAddress);
+        if (walletType === Wallet.UniSat && uniSatRef.current) {
+          return uniSatRef.current._onSubmit(cost, toAddress);
         }
+        return new Promise((reslove) => reslove(false));
       },
     };
   });
@@ -68,7 +78,7 @@ const ConnectWallet = forwardRef<
       // console.log(window.okxwallet.bitcoin.selectedAccount);
       if (window.unisat) {
         const [address] = await window.unisat.getAccounts();
-        console.log(address);
+        // console.log(address);
         if (address) {
           clearInterval(timer);
           setWalletType(Wallet.UniSat);
@@ -137,13 +147,30 @@ const ConnectWallet = forwardRef<
       )}
 
       {connected && (
-        <Button
-          onClick={() => {
-            uniSatRef.current?._disConnect();
-          }}
-        >
-          Disconnect Wallet
-        </Button>
+        // <Button
+        //   onClick={() => {
+        //     uniSatRef.current?._disConnect();
+        //   }}
+        // >
+        //   {/* Disconnect Wallet */}
+        //   {address && shortenString(address, 6, 5)}
+        // </Button>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger type="button">
+            {" "}
+            {address && shortenString(address, 6, 5)}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={() => {
+                uniSatRef.current?._disConnect();
+              }}
+            >
+              Disconnect Wallet
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
 
       {walletType === Wallet.OKX && (

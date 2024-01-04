@@ -40,7 +40,7 @@ let connecting = false;
 export type UniSat_handleType = {
   _connect: () => void;
   _disConnect: () => void;
-  _onSubmit: (cost: number, toAddress: string) => void;
+  _onSubmit: (cost: number, toAddress: string) => Promise<boolean>;
 };
 const UniSat = forwardRef<
   UniSat_handleType,
@@ -76,7 +76,7 @@ const UniSat = forwardRef<
         disConnect();
       },
       _onSubmit(cost: number, toAddress: string) {
-        onSubmit(cost, toAddress);
+        return onSubmit(cost, toAddress);
       },
     };
   });
@@ -136,43 +136,45 @@ const UniSat = forwardRef<
   };
 
   // 发送交易
-  function onSubmit(cost: number, toAddress: string) {
+  function onSubmit(cost: number, toAddress: string): Promise<boolean> {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    return new Promise((reslove, reject) => {
+      console.log(
+        "values.satoshis * BTC_Unit_Converter",
+        cost * BTC_Unit_Converter
+      );
+      if (sending) return;
 
-    console.log(
-      "values.satoshis * BTC_Unit_Converter",
-      cost * BTC_Unit_Converter
-    );
-    if (sending) return;
+      setSending(true);
+      unisat
+        .sendBitcoin(
+          toAddress, // Required except during contract publications.
+          Math.round(cost * BTC_Unit_Converter)
+        )
+        .then((txHash: string) => {
+          setSending(false);
+          console.log(txHash);
+          // alert("Hash值为：" + txHash)
+          toast({
+            title: "交易成功",
+            description: "Hash值为：" + txHash,
+          });
 
-    setSending(true);
-    unisat
-      .sendBitcoin(
-        toAddress, // Required except during contract publications.
-        Math.round(cost * BTC_Unit_Converter)
-      )
-      .then((txHash: string) => {
-        setSending(false);
-        console.log(txHash);
-        // alert("Hash值为：" + txHash)
-        toast({
-          title: "交易处理中",
-          description: "Hash值为：" + txHash,
+          reslove(true);
+          setOpen(false);
+        })
+        .catch((error: any) => {
+          setSending(false);
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: error.message,
+            action: <ToastAction altText="Try again">Try again</ToastAction>,
+          });
+          // console.error(error);
         });
-
-        setOpen(false);
-      })
-      .catch((error: any) => {
-        setSending(false);
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: error.message,
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
-        // console.error(error);
-      });
+    });
   }
 
   async function connect() {
@@ -184,16 +186,18 @@ const UniSat = forwardRef<
       .requestAccounts()
       .then(async (accounts: string[]) => {
         console.log("request accounts", accounts);
-        await signMessage();
-
-        handleAccountsChanged(accounts);
-        connecting = false;
+        if (accounts.length > 0) {
+          await signMessage(accounts[0]);
+          handleAccountsChanged(accounts);
+          connecting = false;
+        }
       })
       .catch(handleCatch);
   }
 
   function disConnect() {
     console.log("dis connect");
+
     setAccounts([]);
     setConnected(false);
     setAddress("");
@@ -235,24 +239,11 @@ const UniSat = forwardRef<
     });
   }
 
-  async function signMessage() {
+  async function signMessage(address: string) {
     return new Promise<void>(async (reslove, reject) => {
       try {
-        const message = `
-  Welcome to UniSat!
-  
-  Click to sign in and accept the UniSat Terms of Service (https://unisat.io/terms-of-service.html) and Privacy Policy (https://unisat.io/privacy-policy.html).
-      
-  This request will not trigger a blockchain transaction.
-      
-  Your authentication status will reset after 24 hours.
-      
-  Wallet address:
-  ${address}
-      
-  Nonce:
-  73ead579-8152-49bf-a2d4-ebb430f449b7
-  `;
+        const nonce = "22a68408-fea7-4491-996c-a92fbf710a72";
+        const message = `Welcome to UniSat!\n\nClick to sign in and accept the UniSat Terms of Service (https://unisat.io/terms-of-service.html) and Privacy Policy (https://unisat.io/privacy-policy.html).\n    \nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${address}\n    \nNonce:\n${nonce}\n`;
         let res = await window.unisat.signMessage(message);
         console.log("signature:", res);
         // const pubkey = publicKey;
