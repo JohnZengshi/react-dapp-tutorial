@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-04 14:01:02
+ * @LastEditTime: 2024-01-04 18:04:18
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -144,9 +144,9 @@ export default function () {
                   </span>
                   {/* <Progress value={60} /> */}
                   <div>
-                    <span>剩余：{nodeRemaining}</span>
+                    <span>Remaining:&nbsp;{nodeRemaining}</span>
                     &nbsp;&nbsp;&nbsp;
-                    <span>总数：{nodeTotal}</span>
+                    <span>Total:&nbsp;{nodeTotal}</span>
                   </div>
                 </div>
                 <div
@@ -258,18 +258,18 @@ export default function () {
 
               {connected && (
                 <>
-                  <span
-                    className="font-black"
-                    style={{
-                      fontSize: "28px",
-                      lineHeight: "110%",
-                      color: "#000",
-                    }}
-                  >
-                    My Node
-                  </span>
                   {userTotalBuy > 0 && (
                     <>
+                      <span
+                        className="font-black"
+                        style={{
+                          fontSize: "28px",
+                          lineHeight: "110%",
+                          color: "#000",
+                        }}
+                      >
+                        My Node
+                      </span>
                       <div className="flex flex-row justify-between w-full">
                         <span>Nodes:</span>
                         <span>{userTotalBuy}</span>
