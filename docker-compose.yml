@@ -10,13 +10,11 @@ services:
       MYSQL_DATABASE: node
       MYSQL_PASSWORD: 2869
     ports:
-      - "3306:3306"
+      - "3307:3306"
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
-    # volumes:
-    #   - ./roos-api-test-mysql-data:/var/lib/mysql
-
     volumes:
+      - ./roos-api-test-mysql-data:/var/lib/mysql:rw
       - ./roos-api-test-mysql-db-scripts:/docker-entrypoint-initdb.d
 
     networks:
