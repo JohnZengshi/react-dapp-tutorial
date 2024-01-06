@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-01-04 16:07:29
+ * @LastEditTime: 2024-01-05 11:08:44
  * @Author: John
  */
 import bg from "@/assets/herobg.mp4";
@@ -9,6 +9,7 @@ import { useLayoutEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Nav from "@/components/common/Nav";
 import "./Home.scss";
+import { ScrollArea } from "@/components/ui/scroll-area";
 export default function () {
   const navigate = useNavigate();
   return (
@@ -19,8 +20,8 @@ export default function () {
       </video>
       <video className="w-full h-full" />
       {/* <Nav /> */}
-
-      <div className="content_1">
+      <ScrollArea className="content_1">
+        {/* <div className="content_1"> */}
         <div className="content_1_1">
           <span>
             The First Bitcoin Layer2 ,Build For Bitcoiners,Led By The
@@ -43,7 +44,8 @@ export default function () {
             Get RoosNode Now
           </button>
         </div>
-      </div>
+        {/* </div> */}
+      </ScrollArea>
     </div>
   );
 }

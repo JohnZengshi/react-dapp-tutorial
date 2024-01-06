@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-04 12:01:06
+ * @LastEditTime: 2024-01-06 11:53:21
  * @Author: John
  */
 export const formatBalance = (rawBalance: string) => {

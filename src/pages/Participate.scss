@@ -76,6 +76,11 @@
       width: 50%;
       grid-gap: 15px;
       gap: 15px;
+      border-radius: 12px;
+
+      background-image: url("../assets/20240105-152907.png");
+      background-position: center;
+      background-size: cover;
     }
 
     @media (max-width: 768px) {

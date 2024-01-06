@@ -1,5 +1,6 @@
 .Home {
   position: relative;
+  background-color: #000000;
 
   video {
     object-fit: contain;
@@ -42,7 +43,7 @@
     display: flex;
     height: 100vh;
     // max-width: 1372px;
-    width: 100%;
+    width: 100vw;
     -webkit-align-items: center;
     -webkit-box-align: center;
     -ms-flex-align: center;
@@ -53,9 +54,27 @@
 
     box-sizing: border-box;
 
+    @media (max-width: 425px) {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    [data-radix-scroll-area-viewport] {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
     .content_1_1 {
       display: flex;
       flex-direction: column;
+      padding-top: 80px;
+      padding-bottom: 60px;
+
+      @media (min-width: 375px) {
+        padding-top: 100px;
+      }
+
       @media (min-width: 1440px) {
         width: 50%;
       }

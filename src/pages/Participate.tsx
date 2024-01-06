@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-04 18:04:18
+ * @LastEditTime: 2024-01-06 12:50:46
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import Nav from "@/components/common/Nav";
 import zepoch from "@/assets/zepoch.mp4";
+import box from "@/assets/20240105-152907.png";
 
 export default function () {
   const [installed, setInstalled] = useState(false);
@@ -28,7 +29,7 @@ export default function () {
   const [userTotalBuy, setUserTotalBuy] = useState(0);
 
   function getNodeInfo() {
-    fetch("/api/node/queryById?id=3")
+    fetch(`${import.meta.env.VITE_BASE_API_URL}/node/queryById?id=3`)
       .then((response) => {
         return response.json();
       })
@@ -56,7 +57,11 @@ export default function () {
   }
 
   function getUserNodeRecord() {
-    fetch(`/api/subscribe/queryByWalletAddress?walletAddress=${address}`)
+    fetch(
+      `${
+        import.meta.env.VITE_BASE_API_URL
+      }/subscribe/queryByWalletAddress?walletAddress=${address}`
+    )
       .then((response) => {
         return response.json();
       })
@@ -225,9 +230,14 @@ export default function () {
                                 )}=${encodeURIComponent(postData[key])}`
                             )
                             .join("&");
-                          fetch(`/api/subscribe/add?${queryString}`, {
-                            method: "POST",
-                          })
+                          fetch(
+                            `${
+                              import.meta.env.VITE_BASE_API_URL
+                            }/subscribe/add?${queryString}`,
+                            {
+                              method: "POST",
+                            }
+                          )
                             .then((response) => {
                               if (!response.ok) {
                                 throw new Error(
@@ -312,7 +322,7 @@ export default function () {
               </span>
             </div>
             <div className="card_2_2">
-              <video
+              {/* <video
                 muted
                 autoPlay
                 loop
@@ -325,7 +335,8 @@ export default function () {
                 }}
               >
                 <source src={zepoch} type="video/mp4" />
-              </video>
+              </video> */}
+              {/* <img src={box} alt="" /> */}
             </div>
           </div>
         </div>
