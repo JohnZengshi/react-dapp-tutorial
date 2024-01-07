@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-06 12:50:46
+ * @LastEditTime: 2024-01-07 19:20:27
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,21 @@ import { Progress } from "@/components/ui/progress";
 import Nav from "@/components/common/Nav";
 import zepoch from "@/assets/zepoch.mp4";
 import box from "@/assets/20240105-152907.png";
+
+import { Canvas } from "@react-three/fiber";
+import {
+  BakeShadows,
+  Environment,
+  Grid,
+  OrbitControls,
+  Stage,
+} from "@react-three/drei";
+import Shoe from "@/components/common/Shoe";
+import {
+  Bloom,
+  EffectComposer,
+  ToneMapping,
+} from "@react-three/postprocessing";
 
 export default function () {
   const [installed, setInstalled] = useState(false);
@@ -337,6 +352,59 @@ export default function () {
                 <source src={zepoch} type="video/mp4" />
               </video> */}
               {/* <img src={box} alt="" /> */}
+              {/* <Canvas shadows camera={{ position: [0, 0, 150], fov: 40 }}>
+                <Stage environment="city" intensity={0.6}>
+                  <Shoe
+                    color="orange"
+                    scale={-1}
+                    rotation={[0, 0.5, Math.PI]}
+                    position={[0, 0, -2]}
+                  />
+                </Stage>
+                <BakeShadows />
+                <OrbitControls makeDefault autoRotate />
+              </Canvas> */}
+
+              <Canvas flat shadows camera={{ position: [-15, 0, 10], fov: 25 }}>
+                <fog attach="fog" args={["black", 15, 21.5]} />
+                <Stage
+                  intensity={0.5}
+                  environment="city"
+                  shadows={{
+                    type: "accumulative",
+                    bias: -0.001,
+                    intensity: Math.PI,
+                  }}
+                  adjustCamera={false}
+                >
+                  {/* <Kamdo rotation={[0, Math.PI, 0]} /> */}
+                  <Shoe scale={2} rotation={[0, Math.PI, 0]} />
+                </Stage>
+                {/* <Grid
+                  renderOrder={-1}
+                  position={[0, -1.85, 0]}
+                  infiniteGrid
+                  cellSize={0.6}
+                  cellThickness={0.6}
+                  sectionSize={3.3}
+                  sectionThickness={1.5}
+                  sectionColor={[0.5, 0.5, 10]}
+                  fadeDistance={30}
+                /> */}
+                <OrbitControls
+                  autoRotate
+                  autoRotateSpeed={1}
+                  enableZoom={false}
+                  makeDefault
+                  minPolarAngle={Math.PI / 2}
+                  maxPolarAngle={Math.PI / 2}
+                />
+                <EffectComposer disableNormalPass>
+                  <Bloom luminanceThreshold={2} mipmapBlur />
+                  <ToneMapping />
+                </EffectComposer>
+                <Environment background preset="apartment" blur={0.8} />
+              </Canvas>
             </div>
           </div>
         </div>

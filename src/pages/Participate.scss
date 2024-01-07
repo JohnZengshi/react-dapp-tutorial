@@ -76,11 +76,13 @@
       width: 50%;
       grid-gap: 15px;
       gap: 15px;
-      border-radius: 12px;
 
-      background-image: url("../assets/20240105-152907.png");
-      background-position: center;
-      background-size: cover;
+      // background-image: url("../assets/20240105-152907.png");
+      // background-position: center;
+      // background-size: cover;
+      canvas {
+        border-radius: 12px;
+      }
     }
 
     @media (max-width: 768px) {
