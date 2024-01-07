@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-07 19:20:27
+ * @LastEditTime: 2024-01-07 23:03:06
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -24,7 +24,7 @@ import {
   OrbitControls,
   Stage,
 } from "@react-three/drei";
-import Shoe from "@/components/common/Shoe";
+import Shoe, { Env } from "@/components/common/Shoe";
 import {
   Bloom,
   EffectComposer,
@@ -366,10 +366,10 @@ export default function () {
               </Canvas> */}
 
               <Canvas flat shadows camera={{ position: [-15, 0, 10], fov: 25 }}>
-                <fog attach="fog" args={["black", 15, 21.5]} />
+                {/* <fog attach="fog" args={["black", 15, 21.5]} /> */}
                 <Stage
-                  intensity={0.5}
-                  environment="city"
+                  intensity={1}
+                  // environment="city"
                   shadows={{
                     type: "accumulative",
                     bias: -0.001,
@@ -377,7 +377,6 @@ export default function () {
                   }}
                   adjustCamera={false}
                 >
-                  {/* <Kamdo rotation={[0, Math.PI, 0]} /> */}
                   <Shoe scale={2} rotation={[0, Math.PI, 0]} />
                 </Stage>
                 {/* <Grid
@@ -388,7 +387,6 @@ export default function () {
                   cellThickness={0.6}
                   sectionSize={3.3}
                   sectionThickness={1.5}
-                  sectionColor={[0.5, 0.5, 10]}
                   fadeDistance={30}
                 /> */}
                 <OrbitControls
@@ -403,7 +401,8 @@ export default function () {
                   <Bloom luminanceThreshold={2} mipmapBlur />
                   <ToneMapping />
                 </EffectComposer>
-                <Environment background preset="apartment" blur={0.8} />
+                {/* <Environment background={false} preset="apartment" blur={0.8} /> */}
+                <Env />
               </Canvas>
             </div>
           </div>

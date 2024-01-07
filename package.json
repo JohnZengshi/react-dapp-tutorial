@@ -34,6 +34,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "ethers": "^6.9.1",
+    "leva": "^0.9.35",
     "localforage": "^1.10.0",
     "lucide-react": "^0.302.0",
     "match-sorter": "^6.3.1",
