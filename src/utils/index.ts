@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-06 11:53:21
+ * @LastEditTime: 2024-01-08 10:48:33
  * @Author: John
  */
 export const formatBalance = (rawBalance: string) => {
@@ -33,3 +33,5 @@ export function shortenString(
 
   return `${startPart}...${endPart}`;
 }
+
+export const BTC_Unit_Converter = 100000000;

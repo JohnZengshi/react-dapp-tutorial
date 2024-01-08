@@ -1,13 +1,13 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:22:01
- * @LastEditTime: 2024-01-06 12:41:03
+ * @LastEditTime: 2024-01-08 13:35:35
  * @Author: John
  */
 /// <reference types="vite/client" />
 
 interface Window {
-  ethereum: any;
+  ethereum?: any;
   okxwallet: any | undefined;
   unisat: any;
 }

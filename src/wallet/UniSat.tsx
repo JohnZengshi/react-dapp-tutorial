@@ -29,13 +29,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import sdk from "@unisat/wallet-sdk";
 import { verifyMessage } from "@unisat/wallet-utils";
+import { BTC_Unit_Converter } from "@/utils";
 
 const formSchema = z.object({
   toAddress: z.string(),
   satoshis: z.number().positive(),
 });
 
-const BTC_Unit_Converter = 100000000;
 let connecting = false;
 export type UniSat_handleType = {
   _connect: () => void;

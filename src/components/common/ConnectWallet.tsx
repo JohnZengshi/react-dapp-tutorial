@@ -60,6 +60,8 @@ const ConnectWallet = forwardRef<
       _onSubmit(cost: number, toAddress: string) {
         if (walletType === Wallet.UniSat && uniSatRef.current) {
           return uniSatRef.current._onSubmit(cost, toAddress);
+        } else if (walletType === Wallet.OKX && okxRef.current) {
+          return okxRef.current._onSubmit(cost, toAddress);
         }
         return new Promise((reslove) => reslove(false));
       },
@@ -76,12 +78,29 @@ const ConnectWallet = forwardRef<
   useEffect(() => {
     let timer = setInterval(async () => {
       // console.log(window.okxwallet.bitcoin.selectedAccount);
+      // console.log(window.unisat);
       if (window.unisat) {
         const [address] = await window.unisat.getAccounts();
         // console.log(address);
         if (address) {
           clearInterval(timer);
+          console.log("user is connected unisat!!");
           setWalletType(Wallet.UniSat);
+
+          return;
+        }
+      }
+
+      // console.log("window.okxwallet", window.okxwallet);
+      if (window.okxwallet) {
+        const address = window.okxwallet.bitcoin.selectedAccount;
+        // console.log("window.okxwallet.bitcoin", address);
+        if (address) {
+          clearInterval(timer);
+          console.log("user is connected okx!!");
+          setWalletType(Wallet.OKX);
+
+          return;
         }
       }
     }, 1000);
@@ -92,20 +111,6 @@ const ConnectWallet = forwardRef<
   }, []);
   return (
     <>
-      {/* {connected && (
-        <div>
-          <Separator className="my-4" />
-          <p className="text-sm text-muted-foreground">钱包信息：</p>
-          <Separator className="my-4" />
-
-          <div className="w-full flex h-5 items-center text-sm my-2">
-            <div>Wallet Accounts: </div>
-            <Separator className="mx-2" orientation="vertical" />
-            <div className="ml-auto"> {address}</div>
-          </div>
-        </div>
-      )} */}
-
       {!connected && (
         <Dialog
           open={open}
@@ -117,14 +122,30 @@ const ConnectWallet = forwardRef<
             <Button>Connect Wallet</Button>
           </DialogTrigger>
           <DialogContent>
-            <RadioGroup
+            <Button
+              onClick={() => {
+                setWalletType(Wallet.OKX);
+                okxRef.current?._connect();
+              }}
+            >
+              OKX
+            </Button>
+
+            <Button
+              onClick={() => {
+                setWalletType(Wallet.UniSat);
+                uniSatRef.current?._connect();
+              }}
+            >
+              UniSat
+            </Button>
+            {/* <RadioGroup
               onValueChange={(v: Wallet) => {
                 console.log(`user choose ${v}`);
                 setWalletType(v);
                 if (v === Wallet.OKX) {
                   // okx_Connect();
-                  console.log("connect?");
-
+                  // console.log("connect?");
                   okxRef.current?._connect();
                 } else if (v === Wallet.UniSat) {
                   // uniSat_Connect();
@@ -133,29 +154,20 @@ const ConnectWallet = forwardRef<
                 setOpen(false);
               }}
             >
-              {/* <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2">
                 <RadioGroupItem value={Wallet.OKX} id={Wallet.OKX} />
                 <Label htmlFor={Wallet.OKX}>OKX</Label>
-              </div> */}
+              </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value={Wallet.UniSat} id={Wallet.UniSat} />
                 <Label htmlFor={Wallet.UniSat}>UniSat</Label>
               </div>
-            </RadioGroup>
+            </RadioGroup> */}
           </DialogContent>
         </Dialog>
       )}
 
       {connected && (
-        // <Button
-        //   onClick={() => {
-        //     uniSatRef.current?._disConnect();
-        //   }}
-        // >
-        //   {/* Disconnect Wallet */}
-        //   {address && shortenString(address, 6, 5)}
-        // </Button>
-
         <DropdownMenu>
           <DropdownMenuTrigger type="button">
             {" "}
@@ -164,7 +176,11 @@ const ConnectWallet = forwardRef<
           <DropdownMenuContent>
             <DropdownMenuItem
               onClick={() => {
-                uniSatRef.current?._disConnect();
+                if (walletType == Wallet.UniSat) {
+                  uniSatRef.current?._disConnect();
+                } else if (walletType == Wallet.OKX) {
+                  okxRef.current?._disConnect();
+                }
               }}
             >
               Disconnect Wallet

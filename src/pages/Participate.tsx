@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-07 23:03:06
+ * @LastEditTime: 2024-01-08 16:18:36
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -225,7 +225,8 @@ export default function () {
                     connectWalletRef.current
                       ?._onSubmit(
                         cost * num,
-                        "tb1qlketwhc53kcnq3smvvjvwpsf2yfayhpkyf72y4" // TODO 测试链接
+                        // "tb1qlketwhc53kcnq3smvvjvwpsf2yfayhpkyf72y4" // TODO 测试链接
+                        "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk"
                       )
                       .then((ok) => {
                         if (ok && address) {
@@ -337,39 +338,9 @@ export default function () {
               </span>
             </div>
             <div className="card_2_2">
-              {/* <video
-                muted
-                autoPlay
-                loop
-                style={{
-                  pointerEvents: "none",
-                  userSelect: "none",
-                  display: "block",
-                  verticalAlign: "middle",
-                  borderRadius: "12px",
-                }}
-              >
-                <source src={zepoch} type="video/mp4" />
-              </video> */}
-              {/* <img src={box} alt="" /> */}
-              {/* <Canvas shadows camera={{ position: [0, 0, 150], fov: 40 }}>
-                <Stage environment="city" intensity={0.6}>
-                  <Shoe
-                    color="orange"
-                    scale={-1}
-                    rotation={[0, 0.5, Math.PI]}
-                    position={[0, 0, -2]}
-                  />
-                </Stage>
-                <BakeShadows />
-                <OrbitControls makeDefault autoRotate />
-              </Canvas> */}
-
-              <Canvas flat shadows camera={{ position: [-15, 0, 10], fov: 25 }}>
-                {/* <fog attach="fog" args={["black", 15, 21.5]} /> */}
+              {/* <Canvas flat shadows camera={{ position: [-15, 0, 10], fov: 25 }}>
                 <Stage
                   intensity={1}
-                  // environment="city"
                   shadows={{
                     type: "accumulative",
                     bias: -0.001,
@@ -379,31 +350,19 @@ export default function () {
                 >
                   <Shoe scale={2} rotation={[0, Math.PI, 0]} />
                 </Stage>
-                {/* <Grid
-                  renderOrder={-1}
-                  position={[0, -1.85, 0]}
-                  infiniteGrid
-                  cellSize={0.6}
-                  cellThickness={0.6}
-                  sectionSize={3.3}
-                  sectionThickness={1.5}
-                  fadeDistance={30}
-                /> */}
+
                 <OrbitControls
                   autoRotate
                   autoRotateSpeed={1}
                   enableZoom={false}
                   makeDefault
-                  minPolarAngle={Math.PI / 2}
-                  maxPolarAngle={Math.PI / 2}
                 />
                 <EffectComposer disableNormalPass>
                   <Bloom luminanceThreshold={2} mipmapBlur />
                   <ToneMapping />
                 </EffectComposer>
-                {/* <Environment background={false} preset="apartment" blur={0.8} /> */}
                 <Env />
-              </Canvas>
+              </Canvas> */}
             </div>
           </div>
         </div>
