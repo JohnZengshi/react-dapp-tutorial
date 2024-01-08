@@ -12,7 +12,7 @@ import {
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
- * @LastEditTime: 2024-01-08 16:26:16
+ * @LastEditTime: 2024-01-08 16:49:51
  * @Author: John
  */
 type Account = {
@@ -58,32 +58,6 @@ const Okx = forwardRef<
   const okxwallet = window.okxwallet;
 
   useLayoutEffect(() => {
-    const ua = navigator.userAgent;
-    const isIOS = /iphone|ipad|ipod|ios/i.test(ua);
-    const isAndroid = /android|XiaoMi|MiuiBrowser/i.test(ua);
-    const isMobile = isIOS || isAndroid;
-    const isOKApp = /OKApp/i.test(ua);
-
-    if (isMobile && !isOKApp) {
-      // 在欧易移动端中打开您的 DApp
-      // const dappUrl = "https://roos-test.fcaex.vip/";
-      // const encodedUrl =
-      //   "https://www.okx.com/download?deeplink=" +
-      //   encodeURIComponent(
-      //     "okx://wallet/dapp/url?dappUrl=" + encodeURIComponent(location.href)
-      //   );
-      // window.location.href = encodedUrl;
-      // console.log("window.location.href", window.location.href);
-      // window.open(`okx://wallet/dapp/details?dappUrl=${dappUrl}`);
-    } else {
-      // console.log("window.ethereum", window.ethereum);
-      // window.ethereum?.on("chainChanged", handleChainChanged);
-      // function handleChainChanged(chainId: any) {
-      //   console.log("chainChanged:", chainId);
-      //   // We recommend reloading the page, unless you must do otherwise.
-      // }
-    }
-
     init();
   }, []);
 

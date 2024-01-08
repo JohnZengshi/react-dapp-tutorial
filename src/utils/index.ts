@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-08 10:48:33
+ * @LastEditTime: 2024-01-08 16:49:27
  * @Author: John
  */
 export const formatBalance = (rawBalance: string) => {
@@ -35,3 +35,9 @@ export function shortenString(
 }
 
 export const BTC_Unit_Converter = 100000000;
+
+export const ua = navigator.userAgent;
+export const isIOS = /iphone|ipad|ipod|ios/i.test(ua);
+export const isAndroid = /android|XiaoMi|MiuiBrowser/i.test(ua);
+export const isMobile = isIOS || isAndroid;
+export const isOKApp = /OKApp/i.test(ua);

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-08 16:18:36
+ * @LastEditTime: 2024-01-08 16:49:49
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -30,6 +30,7 @@ import {
   EffectComposer,
   ToneMapping,
 } from "@react-three/postprocessing";
+import { isMobile } from "@/utils";
 
 export default function () {
   const [installed, setInstalled] = useState(false);
@@ -338,31 +339,37 @@ export default function () {
               </span>
             </div>
             <div className="card_2_2">
-              {/* <Canvas flat shadows camera={{ position: [-15, 0, 10], fov: 25 }}>
-                <Stage
-                  intensity={1}
-                  shadows={{
-                    type: "accumulative",
-                    bias: -0.001,
-                    intensity: Math.PI,
-                  }}
-                  adjustCamera={false}
+              {!isMobile && (
+                <Canvas
+                  flat
+                  shadows
+                  camera={{ position: [-15, 0, 10], fov: 25 }}
                 >
-                  <Shoe scale={2} rotation={[0, Math.PI, 0]} />
-                </Stage>
+                  <Stage
+                    intensity={1}
+                    shadows={{
+                      type: "accumulative",
+                      bias: -0.001,
+                      intensity: Math.PI,
+                    }}
+                    adjustCamera={false}
+                  >
+                    <Shoe scale={2} rotation={[0, Math.PI, 0]} />
+                  </Stage>
 
-                <OrbitControls
-                  autoRotate
-                  autoRotateSpeed={1}
-                  enableZoom={false}
-                  makeDefault
-                />
-                <EffectComposer disableNormalPass>
-                  <Bloom luminanceThreshold={2} mipmapBlur />
-                  <ToneMapping />
-                </EffectComposer>
-                <Env />
-              </Canvas> */}
+                  <OrbitControls
+                    autoRotate
+                    autoRotateSpeed={1}
+                    enableZoom={false}
+                    makeDefault
+                  />
+                  <EffectComposer disableNormalPass>
+                    <Bloom luminanceThreshold={2} mipmapBlur />
+                    <ToneMapping />
+                  </EffectComposer>
+                  <Env />
+                </Canvas>
+              )}
             </div>
           </div>
         </div>

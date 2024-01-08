@@ -75,9 +75,10 @@ const ConnectWallet = forwardRef<
     props.onUpdate(i, c, a);
   }
 
+  const okxwallet = window.okxwallet;
   useEffect(() => {
     let timer = setInterval(async () => {
-      // console.log(window.okxwallet.bitcoin.selectedAccount);
+      // console.log(okxwallet.bitcoin.selectedAccount);
       // console.log(window.unisat);
       if (window.unisat) {
         const [address] = await window.unisat.getAccounts();
@@ -91,11 +92,11 @@ const ConnectWallet = forwardRef<
         }
       }
 
-      // console.log("window.okxwallet", window.okxwallet);
-      if (window.okxwallet) {
-        const address = window.okxwallet.bitcoin.selectedAccount;
-        // console.log("window.okxwallet.bitcoin", address);
-        if (address) {
+      // console.log("okxwallet", okxwallet);
+      if (okxwallet) {
+        const account = okxwallet.bitcoin.selecteaAccount;
+        console.log("selected account:", account);
+        if (account) {
           clearInterval(timer);
           console.log("user is connected okx!!");
           setWalletType(Wallet.OKX);
