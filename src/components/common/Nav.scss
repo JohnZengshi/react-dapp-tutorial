@@ -14,28 +14,21 @@
 
   backdrop-filter: blur(122.32px);
   box-shadow: 0px -1.5px 0px 0px rgba(0, 0, 0, 0.2);
-  @media (max-width: 768px) {
-    height: 44px;
-  }
+
   .logo {
     width: 96.58px;
     height: 38px;
     margin-left: 14px;
-
-    @media (max-width: 768px) {
-      width: 60px;
-      height: 23.75px;
-    }
   }
 
   .nav_list {
     display: flex;
     align-items: center;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    // position: absolute;
+    // left: 50%;
+    // transform: translateX(-50%);
 
-    @media (max-width: 1024px) {
+    @media (max-width: 768px) {
       display: none;
     }
 

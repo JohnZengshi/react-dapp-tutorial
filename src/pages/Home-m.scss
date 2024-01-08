@@ -1,20 +1,10 @@
 .Home {
   > .content {
-    height: 100vh;
-
-    [data-radix-scroll-area-viewport] {
-      // display: flex;
-      // flex-direction: column;
-      // justify-content: center;
-      > div {
-        min-height: 100%;
-      }
-    }
-
     .content_1 {
       @media (max-width: 768px) {
         padding: 0 20px;
         padding-bottom: 20px;
+        padding-top: 44px;
         > span {
           &:nth-child(1) {
             /* The First Bitcoin Layer2 */
@@ -128,8 +118,4 @@
       }
     }
   }
-}
-
-.ScrollAreaThumb {
-  display: none;
 }

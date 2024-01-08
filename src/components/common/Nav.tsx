@@ -1,11 +1,12 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-08 17:23:10
+ * @LastEditTime: 2024-01-08 23:34:31
  * @Author: John
  */
 import { Button } from "../ui/button";
 import "./Nav.scss";
+import "./Nav-m.scss";
 import roosLogo from "@/assets/roos_logo.png";
 export default function (props: { connectBtn?: any }) {
   return (
@@ -14,53 +15,42 @@ export default function (props: { connectBtn?: any }) {
         <img className="logo" src={roosLogo} alt="" />
         <div className="nav_list">
           <div className="nav_btn">
-            <Button>
+            <button>
               <span>Roosbox</span>
-            </Button>
+            </button>
           </div>
 
           <div className="nav_btn">
-            <Button>
+            <button>
               <span>Ecosystems</span>
-            </Button>
+            </button>
           </div>
 
           <div className="nav_btn">
-            <Button>
+            <button>
               <span>Bridge</span>
-            </Button>
+            </button>
           </div>
 
           <div className="nav_btn">
-            <Button>
+            <button>
               <span>Airdrop</span>
-            </Button>
+            </button>
           </div>
 
           <div className="nav_btn">
-            <Button>
+            <button>
               <span>Journey</span>
-            </Button>
+            </button>
           </div>
 
           <div className="nav_btn">
-            <Button>
+            <button>
               <span>BLOG</span>
-            </Button>
+            </button>
           </div>
         </div>
-        {/* <div className="nav_meun">
-          <div className="nav_3_1">
-            {props.connectBtn ? (
-              props.connectBtn
-            ) : (
-              <Button>
-                EN
-                <span></span>
-              </Button>
-            )}
-          </div>
-        </div> */}
+        <div className="nav_meun"></div>
       </div>
     </>
   );
