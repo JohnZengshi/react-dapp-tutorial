@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-08 13:43:58
+ * @LastEditTime: 2024-01-08 22:16:41
  * @Author: John
  */
 /*
@@ -16,7 +16,7 @@ import App from "./App";
 // import "./index.css";
 import "../app/globals.css";
 import { HashRouter } from "react-router-dom";
-
+import "amfe-flexible";
 import VConsole from "vconsole";
 
 const vConsole = new VConsole();

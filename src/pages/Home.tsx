@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-01-08 18:32:00
+ * @LastEditTime: 2024-01-08 22:39:53
  * @Author: John
  */
 import bg from "@/assets/herobg.mp4";
@@ -9,6 +9,7 @@ import { useLayoutEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Nav from "@/components/common/Nav";
 import "./Home.scss";
+import "./Home-m.scss";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import tuite from "@/assets/tuite.png";
 import telegram from "@/assets/telegram.png";
