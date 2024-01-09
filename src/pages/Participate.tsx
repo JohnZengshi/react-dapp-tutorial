@@ -1,11 +1,12 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-08 16:49:49
+ * @LastEditTime: 2024-01-09 18:33:18
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
 import "./Participate.scss";
+import "./Participate-m.scss";
 import { Button } from "@/components/ui/button";
 import ConnectWallet, {
   ConnectWallet_handleType,
@@ -30,7 +31,10 @@ import {
   EffectComposer,
   ToneMapping,
 } from "@react-three/postprocessing";
-import { isMobile } from "@/utils";
+import { isMobile, isOKApp } from "@/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import roos_box from "@/assets/roos_box.png";
+import ConnectUs from "@/components/common/ConnectUs";
 
 export default function () {
   const [installed, setInstalled] = useState(false);
@@ -129,251 +133,208 @@ export default function () {
           />
         }
       />
-      <div className="Participate">
-        <div className="card">
-          <div className="card_1">
-            <div className="card_1_1">Phase 2</div>
-          </div>
+      <ScrollArea className="Participate">
+        <div className="content">
+          <div className="card">
+            <div className="left top">
+              <div className="bulr-box"></div>
+              <div className="model">
+                {/* !isMobile && !isOKApp && */}
+                {
+                  // <Canvas
+                  //   flat
+                  //   shadows
+                  //   camera={{ position: [-15, 0, 10], fov: 25 }}
+                  // >
+                  //   <Stage
+                  //     intensity={1}
+                  //     shadows={{
+                  //       type: "accumulative",
+                  //       bias: -0.001,
+                  //       intensity: Math.PI,
+                  //     }}
+                  //     adjustCamera={false}
+                  //   >
+                  //     <Shoe scale={2} rotation={[0, Math.PI, 0]} />
+                  //   </Stage>
+                  //   <OrbitControls
+                  //     autoRotate
+                  //     autoRotateSpeed={1}
+                  //     enableZoom={false}
+                  //     makeDefault
+                  //   />
+                  //   <EffectComposer disableNormalPass>
+                  //     <Bloom luminanceThreshold={2} mipmapBlur />
+                  //     <ToneMapping />
+                  //   </EffectComposer>
+                  //   <Env />
+                  // </Canvas>
+                }
 
-          <div className="card_2">
-            <div className="card_2_1">
-              <div className="card_2_1_1 flex flex-col gap-4">
-                <span
-                  className="font-black"
-                  style={{
-                    fontSize: "28px",
-                    lineHeight: "110%",
-                    color: "#000",
-                  }}
-                >
-                  Buy Node
-                </span>
-                <div
-                  className="nodeCount flex-row flex justify-between"
-                  style={{ alignItems: "center" }}
-                >
-                  <span
-                    style={{
-                      fontWeight: 500,
-                      fontSize: "16px",
-                      textAlign: "left",
-                      lineHeight: "140%",
-                      color: "#000",
-                    }}
-                  >
-                    Purchased quantity
-                  </span>
-                  {/* <Progress value={60} /> */}
-                  <div>
-                    <span>Remaining:&nbsp;{nodeRemaining}</span>
-                    &nbsp;&nbsp;&nbsp;
-                    <span>Total:&nbsp;{nodeTotal}</span>
-                  </div>
+                <img src={roos_box} alt="" />
+              </div>
+            </div>
+
+            <ScrollArea className="right bottom">
+              <div className="inputContent">
+                <span className="title">NODEBOX</span>
+                <div className="num_tip">
+                  <span>Total Supply:&nbsp;{nodeTotal}&nbsp;&nbsp;</span>
+                  <span>Remaining:&nbsp;{nodeRemaining}</span>
                 </div>
-                <div
-                  className="w-full"
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <span
-                    style={{
-                      color: "#59d89d",
-                      fontWeight: 500,
-                      fontSize: "16px",
-                      textAlign: "left",
-                      lineHeight: "140%",
-                    }}
-                  >
-                    Enter quantity
-                  </span>
-                  <span
-                    style={{
-                      color: "#59d89d",
-                      fontWeight: 500,
-                      fontSize: "16px",
-                      textAlign: "left",
-                      lineHeight: "140%",
-                    }}
-                  >
+                <span className="des">
+                  GoWrap is a cutting-edge cross-chain DeFi protocol tailored
+                  for BRC20. It's designed to integrate BRC20 seamlessly into
+                  the broader blockchain ecosystem by offering features like AMM
+                  swapping, liquidity mining, and lending. The goal is to enable
+                  cross-chain interoperability for BRC20 and provide a
+                  comprehensive suite of decentralized financial services,
+                  enhancing their functionality and utility across various
+                  blockchain networks. OG PASS Whitelists are granted to
+                  Gowrap's early community supporters. OG PASS holders are
+                  entitled to a portion of the 1% $GWGW airdrop from the total
+                  supply and enjoy fee discounts on all Gowrap products.
+                </span>
+
+                <div className="quantity">
+                  <span>Enter quantity</span>
+                  <span>
                     {/* TODO 小数位处理 */}
                     Currently 1 node {cost.toFixed(8)} BTC
                   </span>
                 </div>
-              </div>
-              <div className="card_2_1_2">
-                <div className="">{/* <span>BTC</span> */}</div>
-              </div>
 
-              <Input
-                style={{ color: "#000" }}
-                type="number"
-                value={num || ""}
-                onChange={(e) => {
-                  setNum(parseInt(e.target.value));
-                }}
-              />
-              <span className="ml-auto">
-                {/* TODO 小数位处理 */}
-                Cost：{(cost * (num || 0)).toFixed(8)} BTC
-              </span>
-
-              <Button
-                disabled={!connected || nodeRemaining <= 0}
-                onClick={() => {
-                  if (typeof num === "number") {
-                    connectWalletRef.current
-                      ?._onSubmit(
-                        cost * num,
-                        // "tb1qlketwhc53kcnq3smvvjvwpsf2yfayhpkyf72y4" // TODO 测试链接
-                        "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk"
-                      )
-                      .then((ok) => {
-                        if (ok && address) {
-                          // console.log("交易成功");
-                          const postData: { [key: string]: number | string } = {
-                            buyAmount: cost * num,
-                            buyCount: num,
-                            payCoin: "BTC",
-                            walletAddress: address,
-                            nodeId: 3,
-                          };
-                          const queryString = Object.keys(postData)
-                            .map(
-                              (key) =>
-                                `${encodeURIComponent(
-                                  key
-                                )}=${encodeURIComponent(postData[key])}`
-                            )
-                            .join("&");
-                          fetch(
-                            `${
-                              import.meta.env.VITE_BASE_API_URL
-                            }/subscribe/add?${queryString}`,
-                            {
-                              method: "POST",
-                            }
-                          )
-                            .then((response) => {
-                              if (!response.ok) {
-                                throw new Error(
-                                  `HTTP error! Status: ${response.status}`
-                                );
-                              }
-                              return response.json(); // 如果返回的是 JSON 数据，使用 json() 方法解析
-                            })
-                            .then((data) => {
-                              console.log("Response data:", data);
-
-                              getNodeInfo(); // 更新节点信息
-                              getUserNodeRecord(); // 更新用户购买记录
-                              // 在这里处理返回的数据
-                            })
-                            .catch((error) => {
-                              console.error("Error:", error);
-                              // 在这里处理请求发生的错误
-                            });
-                        }
-                      });
-                  }
-                }}
-              >
-                {nodeRemaining > 0 ? "Buy" : "Node Completed"}
-              </Button>
-              {/* <span style={{ marginTop: "10px" }}>address:{address}</span> */}
-
-              {connected && (
-                <>
-                  {userTotalBuy > 0 && (
-                    <>
-                      <span
-                        className="font-black"
-                        style={{
-                          fontSize: "28px",
-                          lineHeight: "110%",
-                          color: "#000",
-                        }}
-                      >
-                        My Node
-                      </span>
-                      <div className="flex flex-row justify-between w-full">
-                        <span>Nodes:</span>
-                        <span>{userTotalBuy}</span>
-                      </div>
-
-                      <span>
-                        Congratulations on becoming a node of XX, you can enjoy
-                        the following benefits.
-                      </span>
-                    </>
-                  )}
-
-                  {userTotalBuy <= 0 && (
-                    <span>
-                      There are currently no nodes. Subscribing nodes enjoys the
-                      following benefits
-                    </span>
-                  )}
-                </>
-              )}
-
-              <span
-                className="font-black"
-                style={{
-                  fontSize: "28px",
-                  lineHeight: "110%",
-                  color: "#000",
-                }}
-              >
-                Node equity
-              </span>
-              <span style={{ fontSize: "14px" }}>
-                .25% of platform tokens .Permanently enjoy network gas fee
-                dividends (the initial proportion is as high as 70%, and with
-                the development of the ecosystem in the later period, the
-                community will vote to determine the redistribution proportion)
-                .X% proportion of GAS fee airdrop activity rewards high weight
-                voting rights .A series of other ecological development rights
-                and interests
-              </span>
-            </div>
-            <div className="card_2_2">
-              {!isMobile && (
-                <Canvas
-                  flat
-                  shadows
-                  camera={{ position: [-15, 0, 10], fov: 25 }}
-                >
-                  <Stage
-                    intensity={1}
-                    shadows={{
-                      type: "accumulative",
-                      bias: -0.001,
-                      intensity: Math.PI,
+                <div className="input">
+                  <div
+                    className="reduce"
+                    onClick={() => {
+                      if (num) setNum(num - 1);
                     }}
-                    adjustCamera={false}
                   >
-                    <Shoe scale={2} rotation={[0, Math.PI, 0]} />
-                  </Stage>
-
-                  <OrbitControls
-                    autoRotate
-                    autoRotateSpeed={1}
-                    enableZoom={false}
-                    makeDefault
+                    -
+                  </div>
+                  <Input
+                    type="number"
+                    value={num || ""}
+                    onChange={(e) => {
+                      setNum(parseInt(e.target.value));
+                    }}
                   />
-                  <EffectComposer disableNormalPass>
-                    <Bloom luminanceThreshold={2} mipmapBlur />
-                    <ToneMapping />
-                  </EffectComposer>
-                  <Env />
-                </Canvas>
-              )}
-            </div>
+                  <div
+                    className="add"
+                    onClick={() => {
+                      if (num) {
+                        setNum(num + 1);
+                      } else {
+                        setNum(1);
+                      }
+                    }}
+                  >
+                    +
+                  </div>
+                </div>
+                <div className="cost-total">
+                  {/* TODO 小数位处理 */}
+                  <span>Cost：</span>
+                  <span>{(cost * (num || 0)).toFixed(8)} BTC</span>
+                </div>
+
+                {/* {connected && (
+                  <>
+                    {userTotalBuy > 0 && (
+                      <>
+                        <span>My Node</span>
+                        <div>
+                          <span>Nodes:</span>
+                          <span>{userTotalBuy}</span>
+                        </div>
+
+                        <span>
+                          Congratulations on becoming a node of XX, you can
+                          enjoy the following benefits.
+                        </span>
+                      </>
+                    )}
+
+                    {userTotalBuy <= 0 && (
+                      <span>
+                        There are currently no nodes. Subscribing nodes enjoys
+                        the following benefits
+                      </span>
+                    )}
+                  </>
+                )} */}
+
+                <Button
+                  className="buy-btn"
+                  disabled={!connected || nodeRemaining <= 0}
+                  onClick={() => {
+                    if (typeof num === "number") {
+                      connectWalletRef.current
+                        ?._onSubmit(
+                          cost * num,
+                          // "tb1qlketwhc53kcnq3smvvjvwpsf2yfayhpkyf72y4" // TODO 测试链接
+                          "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk"
+                        )
+                        .then((ok) => {
+                          if (ok && address) {
+                            // console.log("交易成功");
+                            const postData: { [key: string]: number | string } =
+                              {
+                                buyAmount: cost * num,
+                                buyCount: num,
+                                payCoin: "BTC",
+                                walletAddress: address,
+                                nodeId: 3,
+                              };
+                            const queryString = Object.keys(postData)
+                              .map(
+                                (key) =>
+                                  `${encodeURIComponent(
+                                    key
+                                  )}=${encodeURIComponent(postData[key])}`
+                              )
+                              .join("&");
+                            fetch(
+                              `${
+                                import.meta.env.VITE_BASE_API_URL
+                              }/subscribe/add?${queryString}`,
+                              {
+                                method: "POST",
+                              }
+                            )
+                              .then((response) => {
+                                if (!response.ok) {
+                                  throw new Error(
+                                    `HTTP error! Status: ${response.status}`
+                                  );
+                                }
+                                return response.json(); // 如果返回的是 JSON 数据，使用 json() 方法解析
+                              })
+                              .then((data) => {
+                                console.log("Response data:", data);
+
+                                getNodeInfo(); // 更新节点信息
+                                getUserNodeRecord(); // 更新用户购买记录
+                                // 在这里处理返回的数据
+                              })
+                              .catch((error) => {
+                                console.error("Error:", error);
+                                // 在这里处理请求发生的错误
+                              });
+                          }
+                        });
+                    }
+                  }}
+                >
+                  {nodeRemaining > 0 ? "Buy" : "Node Completed"}
+                </Button>
+              </div>
+            </ScrollArea>
           </div>
         </div>
-      </div>
+        <ConnectUs />
+      </ScrollArea>
     </>
   );
 }

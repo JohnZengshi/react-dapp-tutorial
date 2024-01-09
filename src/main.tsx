@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-08 22:16:41
+ * @LastEditTime: 2024-01-09 14:06:09
  * @Author: John
  */
 /*
@@ -13,12 +13,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-// import "./index.css";
+import "./index.css";
 import "../app/globals.css";
 import { HashRouter } from "react-router-dom";
-import "amfe-flexible";
+// import "amfe-flexible";
 import VConsole from "vconsole";
+import flexible from "./utils/flexible";
 
+flexible(window, document);
 const vConsole = new VConsole();
 // or init with options
 // const vConsole = new VConsole({ theme: 'dark' });

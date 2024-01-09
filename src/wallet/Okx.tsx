@@ -12,7 +12,7 @@ import {
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
- * @LastEditTime: 2024-01-08 16:49:51
+ * @LastEditTime: 2024-01-09 18:34:39
  * @Author: John
  */
 type Account = {
@@ -176,12 +176,12 @@ const Okx = forwardRef<
     console.log(e);
     connecting = false;
     if (typeof e.message === "string") {
-      // console.warn(e.message);
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: e.message,
-      });
+      console.warn(e.message);
+      // toast({
+      //   variant: "destructive",
+      //   title: "Uh oh! Something went wrong.",
+      //   description: e.message,
+      // });
     }
   }
   return <></>;

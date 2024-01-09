@@ -1,4 +1,4 @@
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .Participate {
     position: relative;
     background-color: #000000;
@@ -8,14 +8,15 @@
     background-repeat: no-repeat;
     background-size: cover;
     box-sizing: border-box;
-
     > [data-radix-scroll-area-viewport] {
       // display: flex;
       // flex-direction: column;
       // justify-content: center;
+
       > div {
         min-height: 100%;
         display: flex !important;
+        display: none;
         flex-direction: column;
         align-items: center;
       }
@@ -29,24 +30,33 @@
 
       flex: auto;
 
-      // min-height: 100vh;
-      padding-top: 88px;
-      margin-bottom: 81px;
+      flex-direction: column;
+
+      padding-top: 44px;
 
       .card {
         /* 矩形 3 */
-        max-width: 1590px;
-        height: 695px;
+        /* 矩形 3 */
+
+        width: 335px;
+        // height: 802.33px;
         border-radius: 9.46px;
         // opacity: 0.8;
         background: #260217;
         margin: 0 auto;
         display: flex;
-        margin-top: calc(166px - 88px);
+        margin-top: 38.33px;
 
-        .left {
-          width: 50%;
+        flex-direction: column;
+
+        .top {
+          /* 矩形 6 */
+
+          width: 335px;
+          height: 335px;
+
           position: relative;
+
           /* 矩形 6 */
 
           .bulr-box {
@@ -59,15 +69,15 @@
 
             /* 矩形 4 */
 
-            border-radius: 9.46px;
+            /* 矩形 4 */
+
+            border-radius: 3.15px;
             opacity: 1;
 
-            background: #260217;
-
             box-sizing: border-box;
-            border: 5px solid #f58c00;
+            border: 0.63px solid #f58c00;
 
-            filter: blur(18.93px);
+            filter: blur(6.31px);
           }
 
           .model {
@@ -78,78 +88,72 @@
             align-items: center;
             position: relative;
 
-            border-radius: 9.46px;
+            border-radius: 3.15px;
             opacity: 1;
-            background: #260217;
+
             box-sizing: border-box;
-            border: 0.95px solid #f58c00;
+            border: 0.32px solid #f58c00;
 
             img {
               /* 1 */
-              width: 617.07px;
-              height: 608.95px;
+              width: 258px;
+              height: 254.67px;
               opacity: 1;
             }
           }
         }
 
-        .right {
-          width: 50%;
+        .bottom {
           [data-radix-scroll-area-viewport] {
             // > div {
-
             // }
           }
 
           .inputContent {
-            padding: 44px 68px;
+            padding: 23px 30px;
             display: flex;
             flex-direction: column;
-
             .title {
-              /* ROOSBOX */
-
-              opacity: 1;
+              /* NODEBOX */
 
               font-family: Raleway-Bold;
-              font-size: 34px;
+              font-size: 18px;
               font-weight: bold;
               line-height: normal;
               letter-spacing: 0em;
 
               font-feature-settings: "kern" on;
               color: #f58c00;
-
-              margin-top: 0;
             }
 
             .des {
               /* GoWrap is a cutting-edge cross-chain DeFi protocol tailored for BRC20. It's designed to integrate BRC20 seamlessly into the broader blockchain ecosystem by offering features like AMM swapping, liquidity mining, and lending. The goal is to enable cross-chain interoperability for BRC20 and provide a comprehensive suite of decentralized financial services, enhancing their functionality and utility across various blockchain networks. OG PASS Whitelists are granted to Gowrap's early community supporters. OG PASS holders are entitled to a portion of the 1% $GWGW airdrop from the total supply and enjoy fee discounts on all Gowrap products. */
 
-              opacity: 1;
-
               font-family: Raleway-Medium;
-              font-size: 18px;
+              font-size: 12px;
               font-weight: 500;
-              line-height: 26.5px;
+              line-height: normal;
               letter-spacing: 0em;
 
               font-feature-settings: "kern" on;
               color: #eaeaea;
 
-              margin-top: 30px;
+              z-index: 0;
+
+              margin-top: 23px;
             }
 
             .num_tip,
             .quantity {
               > span {
                 /* Total Supply:1000 */
+
                 opacity: 0.5;
 
                 font-family: Raleway-Bold;
-                font-size: 18px;
+                font-size: 10px;
                 font-weight: bold;
-                line-height: 26.5px;
+                line-height: 8.83px;
                 letter-spacing: 0em;
 
                 font-feature-settings: "kern" on;
@@ -158,7 +162,9 @@
             }
 
             .num_tip {
-              margin-top: 10px;
+              display: flex;
+
+              margin-top: 4px;
             }
             .quantity {
               margin-top: 10px;
@@ -170,9 +176,9 @@
               /* 矩形 2 */
               display: flex;
               flex-direction: row;
-              height: 60px;
+              height: 24.82px;
 
-              margin-top: 20px;
+              margin-top: 23.33px;
 
               .reduce,
               .add {
@@ -181,7 +187,7 @@
                 text-align: center;
 
                 width: 78px;
-                height: 60px;
+                height: 100%;
 
                 opacity: 1;
 
@@ -192,7 +198,7 @@
                 font-family: Raleway-Medium;
                 font-size: 37.86px;
                 font-weight: 600;
-                line-height: 60px;
+                line-height: 24.82px;
                 text-transform: uppercase;
                 letter-spacing: 0em;
 
@@ -208,13 +214,14 @@
                 border-radius: 0px 4.73px 4.73px 0px;
               }
               input {
-                height: 100%;
+                /* 矩形 2 */
+
                 border-radius: 0;
                 opacity: 1;
 
                 background: rgba(245, 140, 0, 0.1);
 
-                box-shadow: 0px 9.46px 94.64px -17px #633800;
+                box-shadow: 0px 3.93px 39.26px -17px #633800;
 
                 border-color: #f58c00;
 
@@ -223,7 +230,7 @@
                 opacity: 1;
 
                 font-family: Raleway-Medium;
-                font-size: 38px;
+                font-size: 16px;
                 font-weight: 500;
                 line-height: normal;
                 text-transform: uppercase;
@@ -231,6 +238,9 @@
 
                 font-feature-settings: "kern" on;
                 color: #f58c00;
+
+                height: 100%;
+                padding: 0 !important;
 
                 text-align: center;
 
@@ -249,9 +259,9 @@
                   opacity: 0.5;
 
                   font-family: Raleway-Medium;
-                  font-size: 17.04px;
+                  font-size: 7.07px;
                   font-weight: 500;
-                  line-height: 26.5px;
+                  line-height: 10.99px;
                   letter-spacing: 0em;
 
                   font-feature-settings: "kern" on;
@@ -264,9 +274,9 @@
                   opacity: 1;
 
                   font-family: Raleway-Medium;
-                  font-size: 17.04px;
+                  font-size: 7.07px;
                   font-weight: 600;
-                  line-height: 26.5px;
+                  line-height: 10.99px;
                   letter-spacing: 0em;
 
                   font-feature-settings: "kern" on;
@@ -278,23 +288,21 @@
             .buy-btn {
               /* 矩形 2 */
               width: 100%;
-              height: 59.57px;
-              border-radius: 4.73px;
+              height: 36.67px;
+              border-radius: 1.96px;
               opacity: 1;
 
               background: #f58c00;
 
               box-sizing: border-box;
-              border: 0.95px solid #f58c00;
+              border: 0.39px solid #f58c00;
 
-              box-shadow: 0px 9.46px 94.64px -17px #633800;
+              box-shadow: 0px 3.93px 39.28px -17px #633800;
 
-              /* BUY NOW */
-
-              opacity: 1;
+              /* Node Completed */
 
               font-family: Raleway-ExtraBold;
-              font-size: 15.14px;
+              font-size: 9.33px;
               font-weight: 800;
               line-height: normal;
               text-transform: uppercase;
@@ -303,11 +311,15 @@
               font-feature-settings: "kern" on;
               color: #333333;
 
-              margin-top: 40px;
+              margin-top: 13.33px;
             }
           }
         }
       }
     }
+  }
+
+  .ScrollAreaThumb {
+    display: none;
   }
 }

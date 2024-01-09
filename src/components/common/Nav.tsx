@@ -1,56 +1,66 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-08 23:34:31
+ * @LastEditTime: 2024-01-09 10:55:48
  * @Author: John
  */
 import { Button } from "../ui/button";
 import "./Nav.scss";
 import "./Nav-m.scss";
 import roosLogo from "@/assets/roos_logo.png";
+import { useNavigate } from "react-router-dom";
 export default function (props: { connectBtn?: any }) {
+  const navigate = useNavigate();
   return (
     <>
       <div className="nav">
-        <img className="logo" src={roosLogo} alt="" />
+        <img
+          className="logo"
+          src={roosLogo}
+          alt=""
+          onClick={() => {
+            navigate("/");
+          }}
+        />
         <div className="nav_list">
           <div className="nav_btn">
-            <button>
+            <Button>
               <span>Roosbox</span>
-            </button>
+            </Button>
           </div>
 
           <div className="nav_btn">
-            <button>
+            <Button>
               <span>Ecosystems</span>
-            </button>
+            </Button>
           </div>
 
           <div className="nav_btn">
-            <button>
+            <Button>
               <span>Bridge</span>
-            </button>
+            </Button>
           </div>
 
           <div className="nav_btn">
-            <button>
+            <Button>
               <span>Airdrop</span>
-            </button>
+            </Button>
           </div>
 
           <div className="nav_btn">
-            <button>
+            <Button>
               <span>Journey</span>
-            </button>
+            </Button>
           </div>
 
           <div className="nav_btn">
-            <button>
+            <Button>
               <span>BLOG</span>
-            </button>
+            </Button>
           </div>
         </div>
-        <div className="nav_meun"></div>
+
+        <div className="nav_meun">{props.connectBtn}</div>
       </div>
     </>
   );

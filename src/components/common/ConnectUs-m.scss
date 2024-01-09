@@ -1,0 +1,33 @@
+@media (max-width: 768px) {
+  .connect_btn {
+    display: none;
+  }
+  .connect_btn-m {
+    display: flex;
+    align-items: center;
+    // justify-content: space-between;
+    padding: 20px;
+    width: 100%;
+
+    margin-top: auto;
+    .logo {
+      /* 组 19 */
+
+      width: 66px;
+      height: 26.13px;
+      opacity: 1;
+      margin-right: auto;
+    }
+
+    img {
+      width: 17.33px;
+      height: 17.67px;
+      opacity: 1;
+      margin-right: 16px;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+}

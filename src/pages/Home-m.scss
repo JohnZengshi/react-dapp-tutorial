@@ -1,20 +1,87 @@
-.Home {
-  > .content {
-    .content_1 {
-      @media (max-width: 768px) {
-        padding: 0 20px;
-        padding-bottom: 20px;
-        padding-top: 44px;
+@media (max-width: 768px) {
+  .Home {
+    position: relative;
+    background-color: #000000;
+    // background-image: url("../assets/home_bg.png");
+    height: 100vh;
+    width: 100vw;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .videoBg {
+      width: 636px;
+      height: 358px;
+      position: absolute;
+      top: 10px;
+      left: 0;
+
+      transform: translateX(-200px) scale(1);
+      video {
+        overflow-clip-margin: content-box;
+        overflow: clip;
+
+        pointer-events: none;
+        user-select: none;
+        object-fit: fill;
+        display: block;
+
+        // &:first-of-type {
+        //   position: absolute;
+        //   top: 0;
+        //   left: 0;
+        //   pointer-events: none;
+        //   user-select: none;
+        //   display: block;
+        // }
+
+        // &:last-of-type {
+        //   position: absolute;
+        //   top: 0;
+        //   // zIndex: -9;
+        //   background: linear-gradient(
+        //     0deg,
+        //     rgb(0, 0, 0) 12%,
+        //     rgba(0, 0, 0, 0.75) 17%,
+        //     rgba(0, 0, 0, 0.4) 23%,
+        //     rgba(0, 0, 0, 0.28) 32%,
+        //     rgba(0, 0, 0, 0.12) 52%,
+        //     rgb(0, 0, 0) 100%
+        //   );
+        //   display: block;
+        // }
+      }
+    }
+
+    > .content {
+      height: 100vh;
+      padding: 0 20px;
+
+      [data-radix-scroll-area-viewport] {
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: center;
+        > div {
+          min-height: 100%;
+          display: flex !important;
+          flex-direction: column;
+          // align-items: center;
+        }
+      }
+      .nav_box {
+        width: 100%;
+        height: 44px;
+      }
+      .content_1 {
+        display: flex;
+        flex-direction: column;
+        // justify-content: center;
+        box-sizing: border-box;
+        margin-top: 226px;
         > span {
           &:nth-child(1) {
-            /* The First Bitcoin Layer2 */
-
-            /* 自动布局子元素 */
-            /* The First Bitcoin Layer2 */
-
             /* 自动布局子元素 */
 
-            font-family: Raleway;
+            font-family: Raleway-ExtraBold;
             font-size: 18px;
             font-weight: 800;
             line-height: normal;
@@ -26,7 +93,7 @@
 
             z-index: 0;
 
-            margin-top: 0;
+            // margin-top: 226px;
           }
 
           &:nth-child(2),
@@ -38,7 +105,7 @@
 
             /* 自动布局子元素 */
 
-            font-family: Raleway;
+            font-family: Raleway-ExtraBold;
             font-size: 22.67px;
             font-weight: 800;
             line-height: normal;
@@ -55,7 +122,7 @@
 
           &:nth-child(4) {
             /* Permissionless. Frictionless. Boundless. */
-            font-family: Raleway;
+            font-family: Raleway-Bold;
             font-size: 12.67px;
             font-weight: bold;
             line-height: normal;
@@ -69,7 +136,7 @@
           &:nth-child(5) {
             /* ROOS is the first fully decentralized EVM-compatible Bitcoin L2 that uses BTC asGas. It allows all DApps which can run in the Ethereum ecosystem to operate on Bitcoin L2. */
 
-            font-family: Raleway;
+            font-family: Raleway-Medium;
             font-size: 8px;
             font-weight: 500;
             line-height: 9.18px;
@@ -97,7 +164,7 @@
 
           /* Get RooBOX Now */
 
-          font-family: Raleway;
+          font-family: Raleway-ExtraBold;
           font-size: 8px;
           font-weight: 800;
           line-height: normal;
@@ -110,10 +177,8 @@
           margin-top: 31px;
         }
       }
-    }
 
-    .connect_btn {
-      @media (max-width: 768px) {
+      .connect_btn {
         display: none;
       }
     }

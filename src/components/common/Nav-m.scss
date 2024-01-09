@@ -1,17 +1,14 @@
-.nav {
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
+  .nav {
     height: 44px;
-  }
-  .logo {
-    @media (max-width: 768px) {
+
+    .logo {
       width: 60px;
       height: 23.75px;
+      margin-left: 25.33px;
     }
-  }
-
-  .nav_list {
-    @media (max-width: 1024px) {
-      // display: none;
+    .nav_meun {
+      margin-right: 20.33px;
     }
   }
 }

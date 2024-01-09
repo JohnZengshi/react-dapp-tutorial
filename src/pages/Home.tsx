@@ -1,67 +1,75 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-01-08 22:39:53
+ * @LastEditTime: 2024-01-09 17:12:22
  * @Author: John
  */
-import bg from "@/assets/herobg.mp4";
-import { useLayoutEffect, useRef } from "react";
+import roosHomeBg from "@/assets/roos-home.mp4";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Nav from "@/components/common/Nav";
 import "./Home.scss";
 import "./Home-m.scss";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import tuite from "@/assets/tuite.png";
-import telegram from "@/assets/telegram.png";
-import github from "@/assets/github.png";
-import gitbook from "@/assets/gitbook.png";
+
+import ConnectWallet, {
+  ConnectWallet_handleType,
+} from "@/components/common/ConnectWallet";
+import ConnectUs from "@/components/common/ConnectUs";
 export default function () {
   const navigate = useNavigate();
+  const [installed, setInstalled] = useState(false);
+  const [connected, setConnected] = useState(false);
+  const [address, setAddress] = useState<string>();
+  const connectWalletRef = useRef<ConnectWallet_handleType>(null);
+
   return (
     <div className="Home">
-      <Nav />
-      {/* <video muted loop autoPlay className="w-full h-full">
-        <source src={bg} type="video/mp4" />
-      </video>
-      <video className="w-full h-full" /> */}
+      <Nav
+        connectBtn={
+          <ConnectWallet
+            ref={connectWalletRef}
+            onUpdate={(i, c, a) => {
+              console.log(a);
+              setConnected(c);
+              setInstalled(i);
+              setAddress(a);
+            }}
+          />
+        }
+      />
+      <div className="videoBg">
+        <video muted loop autoPlay width="100%" height="100%">
+          <source src={roosHomeBg} type="video/mp4" />
+        </video>
+      </div>
+      {/* <video className="w-full h-full" /> */}
       {/* <Nav /> */}
       <ScrollArea className="content">
         {/* <div className="content_1"> */}
+        <div className="nav_box"></div>
         <div className="content_1">
           <span>The First Bitcoin Layer2</span>
           <span>For The Bitcoiners.</span>
           <span>By The Bitcoiners.</span>
           <span>Permissionless. Frictionless. Boundless.</span>
           <span>
-            ROOS is the first fully decentralized EVM-compatible Bitcoin L2 that
-            uses BTC as Gas. It allows all DApps which can run in the Ethereum
-            ecosystem to operate on Bitcoin L2.
+            ROOS is a trustless Bitcoin Layer2 Scaling Solution based on ZK
+            Rollups,which bolsters transaction speed and broadens application
+            diversity without sacrificing security.We aim to create a Bitcoin
+            rollup ecosystem to power innovation and experimentation without
+            relying on Bitcoin forks.
           </span>
           <button
             onClick={() => {
               navigate("/participate");
             }}
           >
-            Get RoosNode Now
+            Get ROOSBOX Now
           </button>
         </div>
 
-        <div className="connect_btn">
-          <div className="Partners">
-            <span>Partners:</span>
-            <img src={tuite} alt="" />
-            <img src={telegram} alt="" />
-            <img src={github} alt="" />
-            <img src={gitbook} alt="" />
-          </div>
-          <div className="ContactUs">
-            <span>Contact Us:</span>
-            <img src={tuite} alt="" />
-            <img src={telegram} alt="" />
-            <img src={github} alt="" />
-            <img src={gitbook} alt="" />
-          </div>
-        </div>
+        <ConnectUs />
         {/* </div> */}
       </ScrollArea>
     </div>

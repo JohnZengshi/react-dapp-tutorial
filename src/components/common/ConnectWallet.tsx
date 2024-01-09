@@ -22,6 +22,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import "./ConnectWallet.scss";
+import "./ConnectWallet-m.scss";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 14:40:57
@@ -114,15 +116,24 @@ const ConnectWallet = forwardRef<
     <>
       {!connected && (
         <Dialog
-          open={open}
+          open={false}
           onOpenChange={(v) => {
             setOpen(v);
           }}
         >
           <DialogTrigger asChild>
-            <Button>Connect Wallet</Button>
+            <button
+              className="ConnectWallet"
+              // TODO 暂时连接okx
+              onClick={() => {
+                setWalletType(Wallet.OKX);
+                okxRef.current?._connect();
+              }}
+            >
+              CONNECT WALLET
+            </button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="connectWalletDoalogContent">
             <Button
               onClick={() => {
                 setWalletType(Wallet.OKX);
@@ -170,7 +181,7 @@ const ConnectWallet = forwardRef<
 
       {connected && (
         <DropdownMenu>
-          <DropdownMenuTrigger type="button">
+          <DropdownMenuTrigger className="address" type="button">
             {" "}
             {address && shortenString(address, 6, 5)}
           </DropdownMenuTrigger>

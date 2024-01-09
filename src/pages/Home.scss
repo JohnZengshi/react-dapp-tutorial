@@ -1,234 +1,208 @@
-.Home {
-  position: relative;
-  background-color: #000000;
-  background-image: url("../assets/home_bg.png");
-  height: 100vh;
-  background-repeat: no-repeat;
-  background-size: cover;
-
-  video {
-    object-fit: contain;
-    overflow-clip-margin: content-box;
-    overflow: clip;
-
-    &:first-of-type {
-      position: absolute;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      user-select: none;
-      object-fit: none;
-      display: block;
-    }
-
-    &:last-of-type {
-      position: absolute;
-      top: 0;
-      // zIndex: -9;
-      background: linear-gradient(
-        0deg,
-        rgb(0, 0, 0) 12%,
-        rgba(0, 0, 0, 0.75) 17%,
-        rgba(0, 0, 0, 0.4) 23%,
-        rgba(0, 0, 0, 0.28) 32%,
-        rgba(0, 0, 0, 0.12) 52%,
-        rgb(0, 0, 0) 100%
-      );
-      display: block;
-    }
-  }
-
-  > .content {
+@media (min-width: 768px) {
+  .Home {
+    position: relative;
+    background-color: #000000;
+    background-image: url("../assets/home_bg.png");
+    background-position-x: -400px;
     height: 100vh;
+    width: 100vw;
+    background-repeat: no-repeat;
+    background-size: cover;
 
-    [data-radix-scroll-area-viewport] {
-      // display: flex;
-      // flex-direction: column;
-      // justify-content: center;
-      > div {
-        min-height: 100%;
+    .videoBg {
+      width: 1734px;
+      height: 976px;
+      position: absolute;
+      top: 16px;
+      left: 0;
+      transform: translateX(256px) scale(0.8);
+
+      video {
+        object-fit: contain;
+        overflow-clip-margin: content-box;
+        overflow: clip;
+
+        pointer-events: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        -o-object-fit: none;
+        object-fit: none;
+        display: block;
+
+        &:first-of-type {
+          position: absolute;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+          user-select: none;
+          object-fit: none;
+          display: block;
+        }
+
+        &:last-of-type {
+          position: absolute;
+          top: 0;
+          // zIndex: -9;
+          background: linear-gradient(
+            0deg,
+            rgb(0, 0, 0) 12%,
+            rgba(0, 0, 0, 0.75) 17%,
+            rgba(0, 0, 0, 0.4) 23%,
+            rgba(0, 0, 0, 0.28) 32%,
+            rgba(0, 0, 0, 0.12) 52%,
+            rgb(0, 0, 0) 100%
+          );
+          display: block;
+        }
       }
     }
 
-    .content_1 {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      box-sizing: border-box;
-      padding: 0 120px;
-      min-height: 100vh;
-      padding-bottom: 20px;
-      > span {
-        &:nth-child(1) {
-          /* The First Bitcoin Layer2 */
-          opacity: 1;
+    > .content {
+      height: 100vh;
 
-          font-family: Raleway;
-          font-size: 54px;
-          font-weight: 800;
-          line-height: normal;
-          text-transform: capitalize;
-          letter-spacing: 0em;
-
-          font-feature-settings: "kern" on;
-          color: #f58c00;
-          margin-top: 100px;
-        }
-
-        &:nth-child(2),
-        &:nth-child(3) {
-          /* for The bitcoiners. */
-
-          opacity: 1;
-
-          font-family: Raleway;
-          font-size: 68px;
-          font-weight: 800;
-          line-height: normal;
-          text-transform: capitalize;
-          letter-spacing: 0em;
-
-          font-feature-settings: "kern" on;
-          color: #ffffff;
-
-          margin-top: 15px;
-        }
-
-        &:nth-child(4) {
-          /* Permissionless. Frictionless. Boundless. */
-
-          /* 自动布局子元素 */
-          opacity: 1;
-
-          font-family: Raleway;
-          font-size: 32px;
-          font-weight: bold;
-          line-height: normal;
-          letter-spacing: 0em;
-
-          font-feature-settings: "kern" on;
-          color: #f58c00;
-
-          z-index: 0;
-
-          margin-top: 60px;
-        }
-
-        &:nth-child(5) {
-          /* ROOS is the first fully decentralized EVM-compatible Bitcoin L2 that uses BTC as Gas. It allows all DApps which can run in the Ethereum ecosystem to operate on Bitcoin L2. */
-
-          /* 自动布局子元素 */
-          width: 770px;
-          opacity: 1;
-
-          font-family: Raleway;
-          font-size: 18px;
-          font-weight: bold;
-          line-height: 28px;
-          letter-spacing: 0em;
-
-          font-feature-settings: "kern" on;
-          color: #ffffff;
-
-          z-index: 1;
-
-          margin-top: 20px;
+      [data-radix-scroll-area-viewport] {
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: center;
+        > div {
+          min-height: 100%;
+          display: flex !important;
+          flex-direction: column;
+          align-items: center;
         }
       }
 
-      button {
-        /* 矩形 2 */
-
-        width: 283px;
-        height: 63px;
-        border-radius: 5px;
-        opacity: 1;
-
-        background: #f58c00;
-
-        box-sizing: border-box;
-        border: 1px solid #f58c00;
-
-        box-shadow: 0px 10px 100px -17px #633800;
-
-        /* Get ROOSBOX Now */
-
-        font-family: Raleway;
-        font-size: 18px;
-        font-weight: 800;
-        line-height: normal;
-        letter-spacing: 0em;
-
-        font-feature-settings: "kern" on;
-        color: #000000;
-
-        margin-top: 102px;
+      .nav_box {
+        width: 100%;
+        height: 88px;
       }
-    }
 
-    .connect_btn {
-      @media (max-width: 1024px) {
-        display: none;
-      }
-      /* 矩形 4 */
-
-      width: 100vw;
-
-      height: 143px;
-      opacity: 0.8;
-
-      // background: #260217;
-
-      // box-shadow: 0px 0px 64px 0px #570b36;
-
-      padding: 50px 43px 42px 40px;
-
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-
-      .Partners {
-        margin-right: 10px;
-      }
-      .Partners,
-      .ContactUs {
-        width: 50%;
+      .content_1 {
         display: flex;
-        flex-direction: row;
-        align-items: center;
-        // justify-content: space-between;
+        flex-direction: column;
+        // justify-content: center;
+        box-sizing: border-box;
+        // padding: 0 120px;
+        // min-height: 100vh;
+        // padding-bottom: 20px;
+        // padding-top: 88px;
+        margin-top: calc(239px - 88px);
+        width: 87%;
+        flex: auto;
+        > span {
+          &:nth-child(1) {
+            /* The First Bitcoin Layer2 */
+            opacity: 1;
 
-        span {
-          /* Partners: */
+            font-family: Raleway-ExtraBold;
+            font-size: 54px;
+            font-weight: 800;
+            line-height: normal;
+            text-transform: capitalize;
+            letter-spacing: 0em;
 
-          font-family: Raleway;
-          font-size: 32px;
-          font-weight: bold;
+            font-feature-settings: "kern" on;
+            color: #f58c00;
+            // margin-top: 239px;
+          }
+
+          &:nth-child(2),
+          &:nth-child(3) {
+            /* for The bitcoiners. */
+
+            opacity: 1;
+
+            font-family: Raleway-ExtraBold;
+            font-size: 68px;
+            font-weight: 800;
+            line-height: normal;
+            text-transform: capitalize;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #ffffff;
+
+            margin-top: 10px;
+          }
+
+          &:nth-child(4) {
+            /* Permissionless. Frictionless. Boundless. */
+
+            /* 自动布局子元素 */
+            opacity: 1;
+
+            font-family: Raleway-Bold;
+            font-size: 32px;
+            font-weight: bold;
+            line-height: normal;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #f58c00;
+
+            z-index: 0;
+
+            margin-top: 54px;
+          }
+
+          &:nth-child(5) {
+            /* ROOS is the first fully decentralized EVM-compatible Bitcoin L2 that uses BTC as Gas. It allows all DApps which can run in the Ethereum ecosystem to operate on Bitcoin L2. */
+
+            /* 自动布局子元素 */
+            width: 770px;
+            height: 81px;
+            opacity: 1;
+
+            font-family: Raleway-Bold;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 28px;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #ffffff;
+
+            z-index: 1;
+
+            margin-top: 20px;
+          }
+        }
+
+        button {
+          /* 矩形 2 */
+
+          width: 283px;
+          height: 63px;
+          border-radius: 5px;
+          opacity: 1;
+
+          background: #f58c00;
+
+          box-sizing: border-box;
+          border: 1px solid #f58c00;
+
+          box-shadow: 0px 10px 100px -17px #633800;
+
+          /* Get ROOSBOX Now */
+
+          font-family: Raleway-ExtraBold;
+          font-size: 18px;
+          font-weight: 800;
           line-height: normal;
-          text-transform: uppercase;
           letter-spacing: 0em;
 
           font-feature-settings: "kern" on;
-          color: #ffffff;
+          color: #000000;
 
-          margin-right: 40px;
-        }
-
-        img {
-          /* gitbook.8b149653 */
-
-          /* 自动布局子元素 */
-          width: 52px;
-          height: 52px;
-          opacity: 1;
-          margin-right: 50px;
+          margin-top: 102px;
+          margin-bottom: 119px;
         }
       }
     }
   }
-}
 
-.ScrollAreaThumb {
-  display: none;
+  .ScrollAreaThumb {
+    // display: none;
+  }
 }
