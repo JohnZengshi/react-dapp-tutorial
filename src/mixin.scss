@@ -1,11 +1,11 @@
 @mixin mq {
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     @content; // @content用于插入Mixin的内容
   }
 }
 
 @mixin pq {
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) and (width > 1024px) {
     @content; // @content用于插入Mixin的内容
   }
 }

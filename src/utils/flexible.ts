@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-09 09:34:24
- * @LastEditTime: 2024-01-10 10:13:25
+ * @LastEditTime: 2024-01-10 23:47:25
  * @Author: John
  */
 export default function flexible(window: Window, document: Document) {
@@ -20,7 +20,7 @@ export default function flexible(window: Window, document: Document) {
 
   // set 1rem = viewWidth / 10
   function setRemUnit() {
-    if (docEl.clientWidth > 768) {
+    if (docEl.clientWidth > 1024) {
       docEl.style.fontSize = "16px";
     } else {
       var rem = docEl.clientWidth / 10;
