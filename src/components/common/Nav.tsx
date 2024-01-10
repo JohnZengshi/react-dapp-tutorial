@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-10 23:31:56
+ * @LastEditTime: 2024-01-11 00:00:13
  * @Author: John
  */
 import { Button } from "../ui/button";
@@ -22,6 +22,7 @@ export default function (props: { connectBtn?: any }) {
             navigate("/");
           }}
         />
+        {/* TODO 移动端适配菜单*/}
         <div className="nav_list">
           <div className="nav_btn">
             <button>
