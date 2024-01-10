@@ -12,7 +12,7 @@ import {
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
- * @LastEditTime: 2024-01-09 18:34:39
+ * @LastEditTime: 2024-01-09 20:29:58
  * @Author: John
  */
 type Account = {
@@ -24,7 +24,7 @@ let connecting = false;
 export type Okx_HandleType = {
   _connect: () => void;
   _disConnect: () => void;
-  _onSubmit: (cost: number, toAddress: string) => Promise<boolean>;
+  _onSubmit: (cost: number, toAddress: string) => Promise<string>;
 };
 
 const Okx = forwardRef<
@@ -140,7 +140,7 @@ const Okx = forwardRef<
   }
 
   function onSubmit(cost: number, toAddress: string) {
-    return new Promise<boolean>((reslove, reject) => {
+    return new Promise<string>((reslove, reject) => {
       // reslove(false);
       console.log("okxwallet.bitcoin", okxwallet.bitcoin);
       if (typeof okxwallet.bitcoin === "undefined") return;
@@ -166,7 +166,7 @@ const Okx = forwardRef<
             description: "txid值为：" + txid,
           });
 
-          reslove(true);
+          reslove(txid);
         })
         .catch(handleCatch);
     });

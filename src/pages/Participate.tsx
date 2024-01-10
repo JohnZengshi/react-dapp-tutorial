@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-09 18:33:18
+ * @LastEditTime: 2024-01-09 20:33:13
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -31,11 +31,21 @@ import {
   EffectComposer,
   ToneMapping,
 } from "@react-three/postprocessing";
-import { isMobile, isOKApp } from "@/utils";
+import { fetchUrl, isMobile, isOKApp } from "@/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import roos_box from "@/assets/roos_box.png";
 import ConnectUs from "@/components/common/ConnectUs";
 
+type NodeInfo = {
+  nodeTotal: number;
+  purchasedCount: number;
+  startPrice: number;
+  increasePrice: number;
+  increaseCount: number;
+  id: number;
+};
+
+type OrderInfo = { buyAmount: number; orderNumber: number };
 export default function () {
   const [installed, setInstalled] = useState(false);
   const [connected, setConnected] = useState(false);
@@ -48,32 +58,34 @@ export default function () {
 
   const [userTotalBuy, setUserTotalBuy] = useState(0);
 
+  const [nodeInfo, setNodeInfo] = useState<NodeInfo>();
+
+  const [orderInfo, setOrderInfo] = useState<OrderInfo>();
+
   function getNodeInfo() {
-    fetch(`${import.meta.env.VITE_BASE_API_URL}/node/queryById?id=3`)
-      .then((response) => {
-        return response.json();
-      })
-      .then(
-        (data: {
-          code: number;
-          message: string;
-          result: {
-            nodeTotal: string;
-            purchasedCount: number;
-            startPrice: number;
-            increasePrice: number;
-            increaseCount: number;
-          };
-          success: boolean;
-          timestamp: number;
-        }) => {
-          console.log(data.result);
-          let nodeTotal = parseInt(data.result.nodeTotal);
-          setNodeTotal(nodeTotal);
-          setNodeRemaining(nodeTotal - data.result.purchasedCount);
-          setCost(data.result.startPrice);
-        }
-      );
+    fetchUrl("/api/node/getNodeSetting", {
+      method: "GET",
+    }).then((res) => {
+      console.log(res.data);
+      const nodeData = res.data[0];
+      setNodeInfo(nodeData);
+
+      let nodeTotal = nodeData.nodeTotal;
+      setNodeTotal(nodeTotal);
+      setNodeRemaining(nodeTotal - nodeData.purchasedCount);
+      // setCost(nodeData.startPrice);
+
+      getNodePrice(nodeData.id);
+    });
+  }
+
+  function getNodePrice(id: number) {
+    fetchUrl(`/api/node/getNodePrice?nodeId=${id}`, {
+      method: "GET",
+    }).then((res) => {
+      console.log(res.data);
+      setCost(res.data);
+    });
   }
 
   function getUserNodeRecord() {
@@ -116,7 +128,7 @@ export default function () {
   }, []);
 
   useEffect(() => {
-    if (address) getUserNodeRecord();
+    // if (address) getUserNodeRecord();
   }, [address]);
   return (
     <>
@@ -208,6 +220,7 @@ export default function () {
                   <div
                     className="reduce"
                     onClick={() => {
+                      if (num == 1) return;
                       if (num) setNum(num - 1);
                     }}
                   >
@@ -217,12 +230,14 @@ export default function () {
                     type="number"
                     value={num || ""}
                     onChange={(e) => {
-                      setNum(parseInt(e.target.value));
+                      // setNum(parseInt(e.target.value));
+                      setNum(1);
                     }}
                   />
                   <div
                     className="add"
                     onClick={() => {
+                      if (num == 1) return;
                       if (num) {
                         setNum(num + 1);
                       } else {
@@ -270,60 +285,79 @@ export default function () {
                   disabled={!connected || nodeRemaining <= 0}
                   onClick={() => {
                     if (typeof num === "number") {
-                      connectWalletRef.current
-                        ?._onSubmit(
-                          cost * num,
-                          // "tb1qlketwhc53kcnq3smvvjvwpsf2yfayhpkyf72y4" // TODO 测试链接
-                          "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk"
-                        )
-                        .then((ok) => {
-                          if (ok && address) {
-                            // console.log("交易成功");
-                            const postData: { [key: string]: number | string } =
-                              {
-                                buyAmount: cost * num,
-                                buyCount: num,
-                                payCoin: "BTC",
-                                walletAddress: address,
-                                nodeId: 3,
-                              };
-                            const queryString = Object.keys(postData)
-                              .map(
-                                (key) =>
-                                  `${encodeURIComponent(
-                                    key
-                                  )}=${encodeURIComponent(postData[key])}`
-                              )
-                              .join("&");
-                            fetch(
-                              `${
-                                import.meta.env.VITE_BASE_API_URL
-                              }/subscribe/add?${queryString}`,
-                              {
-                                method: "POST",
-                              }
-                            )
-                              .then((response) => {
-                                if (!response.ok) {
-                                  throw new Error(
-                                    `HTTP error! Status: ${response.status}`
-                                  );
-                                }
-                                return response.json(); // 如果返回的是 JSON 数据，使用 json() 方法解析
-                              })
-                              .then((data) => {
-                                console.log("Response data:", data);
+                      fetchUrl("/api/node/pay_node", {
+                        method: "POST",
+                        body: JSON.stringify({
+                          nodeId: nodeInfo?.id,
+                          number: 1,
+                        }),
+                      }).then((res: { data: OrderInfo }) => {
+                        console.log(res);
 
-                                getNodeInfo(); // 更新节点信息
-                                getUserNodeRecord(); // 更新用户购买记录
-                                // 在这里处理返回的数据
-                              })
-                              .catch((error) => {
-                                console.error("Error:", error);
-                                // 在这里处理请求发生的错误
+                        connectWalletRef.current
+                          ?._onSubmit(
+                            res.data.buyAmount,
+                            // "tb1qlketwhc53kcnq3smvvjvwpsf2yfayhpkyf72y4" // TODO 测试链接
+                            "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk"
+                          )
+                          .then((hash: string) => {
+                            if (hash && address) {
+                              // console.log("交易成功");
+                              // const postData: {
+                              //   [key: string]: number | string;
+                              // } = {
+                              //   buyAmount: cost * num,
+                              //   buyCount: num,
+                              //   payCoin: "BTC",
+                              //   walletAddress: address,
+                              //   nodeId: 3,
+                              // };
+                              // const queryString = Object.keys(postData)
+                              //   .map(
+                              //     (key) =>
+                              //       `${encodeURIComponent(
+                              //         key
+                              //       )}=${encodeURIComponent(postData[key])}`
+                              //   )
+                              //   .join("&");
+                              // fetch(
+                              //   `${
+                              //     import.meta.env.VITE_BASE_API_URL
+                              //   }/subscribe/add?${queryString}`,
+                              //   {
+                              //     method: "POST",
+                              //   }
+                              // )
+                              //   .then((response) => {
+                              //     if (!response.ok) {
+                              //       throw new Error(
+                              //         `HTTP error! Status: ${response.status}`
+                              //       );
+                              //     }
+                              //     return response.json(); // 如果返回的是 JSON 数据，使用 json() 方法解析
+                              //   })
+                              //   .then((data) => {
+                              //     console.log("Response data:", data);
+
+                              //     getNodeInfo(); // 更新节点信息
+                              //     // getUserNodeRecord(); // 更新用户购买记录
+                              //     // 在这里处理返回的数据
+                              //   })
+                              //   .catch((error) => {
+                              //     console.error("Error:", error);
+                              //     // 在这里处理请求发生的错误
+                              //   });
+
+                              console.log("hash", hash);
+                              fetchUrl(
+                                `/api/node/pay_node_sms?orderNumber=${orderInfo?.orderNumber}&hash=${hash}`,
+                                { method: "GET" }
+                              ).then((res) => {
+                                console.log(res);
                               });
-                          }
-                        });
+                            }
+                          });
+                      });
                     }
                   }}
                 >

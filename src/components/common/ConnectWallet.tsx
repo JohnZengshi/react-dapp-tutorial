@@ -13,7 +13,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import UseOkx, { Okx_HandleType } from "@/wallet/Okx";
 import { Separator } from "@/components/ui/separator";
 import UseUniSat, { UniSat_handleType } from "@/wallet/UniSat";
-import { shortenString } from "@/utils";
+import { localStorageKey, shortenString } from "@/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,7 +31,7 @@ import "./ConnectWallet-m.scss";
  * @Author: John
  */
 export type ConnectWallet_handleType = {
-  _onSubmit: (cost: number, toAddress: string) => Promise<boolean>;
+  _onSubmit: (cost: number, toAddress: string) => Promise<string>;
 };
 const ConnectWallet = forwardRef<
   ConnectWallet_handleType,
@@ -65,7 +65,7 @@ const ConnectWallet = forwardRef<
         } else if (walletType === Wallet.OKX && okxRef.current) {
           return okxRef.current._onSubmit(cost, toAddress);
         }
-        return new Promise((reslove) => reslove(false));
+        return new Promise((reslove) => reslove(""));
       },
     };
   });
@@ -74,6 +74,7 @@ const ConnectWallet = forwardRef<
     setInstalled(i);
     setConnected(c);
     setAddress(a);
+    if (a) localStorage.setItem(localStorageKey.okx_address, a);
     props.onUpdate(i, c, a);
   }
 
@@ -96,15 +97,21 @@ const ConnectWallet = forwardRef<
 
       // console.log("okxwallet", okxwallet);
       if (okxwallet) {
-        const account = okxwallet.bitcoin.selecteaAccount;
-        console.log("selected account:", account);
-        if (account) {
+        if (localStorage.getItem(localStorageKey.okx_address)) {
           clearInterval(timer);
           console.log("user is connected okx!!");
           setWalletType(Wallet.OKX);
-
           return;
         }
+        // const account = okxwallet.bitcoin.selecteaAccount;
+        // console.log("selected account:", account);
+        // if (account) {
+        //   clearInterval(timer);
+        //   console.log("user is connected okx!!");
+        //   setWalletType(Wallet.OKX);
+
+        //   return;
+        // }
       }
     }, 1000);
 

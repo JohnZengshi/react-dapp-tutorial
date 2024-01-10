@@ -40,7 +40,7 @@ let connecting = false;
 export type UniSat_handleType = {
   _connect: () => void;
   _disConnect: () => void;
-  _onSubmit: (cost: number, toAddress: string) => Promise<boolean>;
+  _onSubmit: (cost: number, toAddress: string) => Promise<string>;
 };
 const UniSat = forwardRef<
   UniSat_handleType,
@@ -136,7 +136,7 @@ const UniSat = forwardRef<
   };
 
   // 发送交易
-  function onSubmit(cost: number, toAddress: string): Promise<boolean> {
+  function onSubmit(cost: number, toAddress: string): Promise<string> {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     return new Promise((reslove, reject) => {
@@ -161,7 +161,7 @@ const UniSat = forwardRef<
             description: "Hash值为：" + txHash,
           });
 
-          reslove(true);
+          reslove(txHash);
           setOpen(false);
         })
         .catch((error: any) => {

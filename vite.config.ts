@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-09 15:27:59
+ * @LastEditTime: 2024-01-09 19:10:38
  * @Author: John
  */
 import { defineConfig } from "vite";
@@ -16,10 +16,10 @@ export default defineConfig({
     host: "192.168.10.167",
     // https: true,
     proxy: {
-      "/api": {
-        target: "http://192.168.10.150:8080",
+      "/dev": {
+        target: "http://192.168.10.166:20020",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
+        rewrite: (path) => path.replace(/^\/dev/, ""),
       },
     },
   },

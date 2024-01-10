@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-09 14:06:09
+ * @LastEditTime: 2024-01-09 20:48:11
  * @Author: John
  */
 /*
@@ -21,7 +21,7 @@ import VConsole from "vconsole";
 import flexible from "./utils/flexible";
 
 flexible(window, document);
-const vConsole = new VConsole();
+// const vConsole = new VConsole();
 // or init with options
 // const vConsole = new VConsole({ theme: 'dark' });
 

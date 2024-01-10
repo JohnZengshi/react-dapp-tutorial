@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-08 16:49:27
+ * @LastEditTime: 2024-01-09 20:19:57
  * @Author: John
  */
 export const formatBalance = (rawBalance: string) => {
@@ -41,3 +41,33 @@ export const isIOS = /iphone|ipad|ipod|ios/i.test(ua);
 export const isAndroid = /android|XiaoMi|MiuiBrowser/i.test(ua);
 export const isMobile = isIOS || isAndroid;
 export const isOKApp = /OKApp/i.test(ua);
+export enum localStorageKey {
+  okx_address = "okx_address",
+}
+interface RequestOptions {
+  method: "GET" | "POST";
+  headers?: HeadersInit;
+  body?: BodyInit | null;
+}
+export const BaseUrl = import.meta.env.VITE_BASE_API_URL;
+export async function fetchUrl(url: string, options: RequestOptions) {
+  options.headers = {
+    Authorization: localStorage.getItem("token") || "",
+    "Accept-Language": "zh-CN",
+    address: localStorage.getItem(localStorageKey.okx_address) || "",
+    "Content-Type": "application/json",
+  };
+  try {
+    const response = await fetch(`${BaseUrl}${url}`, options);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error during fetch:", error);
+    throw error;
+  }
+}
