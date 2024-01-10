@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-10 13:36:48
+ * @LastEditTime: 2024-01-10 23:23:12
  * @Author: John
  */
 import { defineConfig } from "vite";
@@ -27,6 +27,13 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "@/mixin.scss";`,
+      },
     },
   },
 });

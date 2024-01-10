@@ -1,4 +1,4 @@
-@media (max-width: 768px) {
+@include mq {
   .custom-toast {
     /* 5.反馈/1.Alert警告提示/暗色/默认-提示 */
 

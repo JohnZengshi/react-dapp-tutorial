@@ -1,4 +1,4 @@
-@media (min-width: 768px) {
+@include pq {
   .Home {
     position: relative;
     background-color: #000000;

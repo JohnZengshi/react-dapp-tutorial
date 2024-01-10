@@ -1,4 +1,4 @@
-@media (max-width: 768px) {
+@include mq {
   .ConnectWallet,
   .address {
     /* 矩形 2 */

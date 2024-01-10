@@ -1,4 +1,4 @@
-@media (max-width: 768px) {
+@include mq {
   .dialog-close {
     position: absolute;
     right: 8px;

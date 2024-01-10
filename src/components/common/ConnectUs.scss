@@ -1,4 +1,4 @@
-@media (min-width: 768px) {
+@include pq {
   .connect_btn {
     // @media (max-width: 1024px) {
     //   display: none;

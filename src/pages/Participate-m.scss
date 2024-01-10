@@ -1,4 +1,4 @@
-@media (max-width: 768px) {
+@include mq {
   .Participate {
     position: relative;
     background-color: #000000;
