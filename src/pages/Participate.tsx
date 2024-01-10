@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-09 20:33:13
+ * @LastEditTime: 2024-01-10 10:14:14
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -45,7 +45,7 @@ type NodeInfo = {
   id: number;
 };
 
-type OrderInfo = { buyAmount: number; orderNumber: number };
+type OrderInfo = { buyAmount: number; orderNumber: number; status: number };
 export default function () {
   const [installed, setInstalled] = useState(false);
   const [connected, setConnected] = useState(false);

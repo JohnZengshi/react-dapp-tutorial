@@ -109,7 +109,6 @@ const ConnectWallet = forwardRef<
         //   clearInterval(timer);
         //   console.log("user is connected okx!!");
         //   setWalletType(Wallet.OKX);
-
         //   return;
         // }
       }

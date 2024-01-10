@@ -1,20 +1,11 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 08:51:29
- * @LastEditTime: 2024-01-09 15:53:52
+ * @LastEditTime: 2024-01-10 10:11:30
  * @Author: John
  */
 // import "./App.css";
-import ConnectWallet from "@/components/common/ConnectWallet";
-import MetaMask from "./wallet/MetaMask";
-import Okx from "./wallet/Okx";
-import UniSat from "./wallet/UniSat";
-import {
-  RouterProvider,
-  createBrowserRouter,
-  HashRouter,
-  createHashRouter,
-} from "react-router-dom";
+import { RouterProvider, createHashRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import Participate from "./pages/Participate";
 import { Toaster } from "@/components/ui/toaster";
