@@ -1,0 +1,46 @@
+@media (max-width: 768px) {
+  .custom-toast-m {
+    /* 5.反馈/1.Alert警告提示/暗色/默认-提示 */
+
+    width: 72.8%;
+    height: 3.07%;
+    border-radius: 2px !important;
+    opacity: 1;
+
+    background: #550935;
+
+    box-sizing: border-box;
+    border: 1px solid #15395b;
+
+    padding: 6px 0;
+
+    > img {
+      margin-left: 16px;
+    }
+
+    > span {
+      /* Text */
+
+      opacity: 1;
+
+      font-family: Raleway-Medium;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 22px;
+      letter-spacing: 0em;
+
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    > button {
+      padding: 0;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      > svg {
+        width: 12px;
+        height: 12px;
+      }
+    }
+  }
+}
