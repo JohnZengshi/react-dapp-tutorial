@@ -186,11 +186,7 @@ const Okx = forwardRef<
     connecting = false;
     if (typeof e.message === "string") {
       console.warn(e.message);
-      // toast({
-      //   variant: "destructive",
-      //   title: "Uh oh! Something went wrong.",
-      //   description: e.message,
-      // });
+      CustomToast(e.message);
     }
   }
   return <></>;

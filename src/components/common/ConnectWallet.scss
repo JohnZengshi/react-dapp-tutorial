@@ -1,28 +1,130 @@
-.ConnectWallet,
-.address {
-  /* 矩形 2 */
+@media (min-width: 768px) {
+  .ConnectWallet,
+  .address {
+    /* 矩形 2 */
 
-  // width: 129.95px;
-  height: 44px;
-  border-radius: 5px;
-  opacity: 1;
+    // width: 129.95px;
+    height: 44px;
+    border-radius: 5px;
+    opacity: 1;
 
-  box-sizing: border-box;
-  border: 0.68px solid #f58c00;
+    box-sizing: border-box;
+    border: 0.68px solid #f58c00;
 
-  box-shadow: 0px 6.77px 67.74px -17px #633800;
-  background-color: transparent;
+    box-shadow: 0px 6.77px 67.74px -17px #633800;
+    background-color: transparent;
 
-  /* CONNECT WALLET */
+    /* CONNECT WALLET */
 
-  font-family: Raleway-Bold;
-  font-size: 12px;
-  font-weight: bold;
-  line-height: normal;
-  letter-spacing: 0em;
+    font-family: Raleway-Bold;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: normal;
+    letter-spacing: 0em;
 
-  padding: 10px 15px;
+    padding: 10px 15px;
 
-  font-feature-settings: "kern" on;
-  color: #f58c00;
+    font-feature-settings: "kern" on;
+    color: #f58c00;
+  }
+
+  .dialog-content {
+    width: 512px;
+    height: 310px;
+    > div {
+      &:nth-child(1) {
+        /* 矩形 9 */
+        /* 矩形 9 */
+
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 512px;
+        height: 310px;
+        border-radius: 5px;
+        opacity: 1;
+        border: 4px solid #f58c00;
+
+        filter: blur(10px);
+      }
+
+      &:nth-child(2) {
+        /* 矩形 8 */
+
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 512px;
+        height: 310px;
+        border-radius: 5px;
+        opacity: 0.8;
+
+        background: #550935;
+
+        box-sizing: border-box;
+        border: 1px solid #f58c00;
+
+        > span {
+          &:nth-child(1) {
+            /* Connect Wallet */
+
+            opacity: 1;
+
+            font-family: Raleway-Bold;
+            font-size: 34px;
+            font-weight: bold;
+            line-height: normal;
+            text-transform: uppercase;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #f58c00;
+
+            margin-top: 42px;
+          }
+        }
+
+        > button {
+          /* 矩形 8 */
+
+          width: 307px;
+          height: 45px;
+          border-radius: 3.55px;
+          opacity: 1;
+
+          box-sizing: border-box;
+          border: 0.71px solid #eaeaea;
+
+          box-shadow: 0px 7.1px 70.98px -17px #633800;
+          margin-top: 65px;
+
+          > img {
+            width: 27px;
+            height: 27px;
+            margin-left: 24px;
+            margin-right: 11px;
+          }
+
+          > span {
+            /* OKX */
+
+            font-family: Raleway-Bold;
+            font-size: 19.13px;
+            font-weight: bold;
+            line-height: normal;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #ffffff;
+
+            z-index: 1;
+          }
+
+          &:nth-child(3) {
+            margin-top: 22.5px;
+          }
+        }
+      }
+    }
+  }
 }

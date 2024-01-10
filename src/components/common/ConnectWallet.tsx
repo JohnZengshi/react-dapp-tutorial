@@ -152,44 +152,32 @@ const ConnectWallet = forwardRef<
               CONNECT WALLET
             </button>
           </DialogTrigger>
-          <DialogContent className="min-[768px]:w-[512px] min-[768px]:h-[310px] dialog-m">
-            <div className="w-full h-full min-[768px]:border-[4px] border-solid border-[#F58C00] blur-[10px] absolute"></div>
-            <div className="min-[768px]:border-[1px] min-[768px]:rounded-[5px] flex flex-col items-center absolute w-full h-full  border-solid border-[#F58C00] bg-[#550935] opacity-80 ">
-              <span className="min-[768px]:text-[34px] min-[768px]:mt-[42px] font-[Raleway-Bold] text-[#F58C00] uppercase ">
+          <DialogContent className="dialog-content">
+            <div className="w-full h-full border-solid border-[#F58C00] blur-[10px] absolute"></div>
+            <div className="flex flex-col items-center absolute w-full h-full  border-solid border-[#F58C00] bg-[#550935] opacity-80 ">
+              <span className="font-[Raleway-Bold] text-[#F58C00] uppercase ">
                 Connect Wallet
               </span>
               <button
-                className="min-[768px]:w-[307px] min-[768px]:h-[45px] min-[768px]:rounded-[3.55px] min-[768px]:border-[0.71px]  min-[768px]:mt-[65px] box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
                 onClick={() => {
                   setWalletType(Wallet.OKX);
                   okxRef.current?._connect();
                 }}
               >
-                <img
-                  className="min-[768px]:w-[27px] min-[768px]:h-[27px] min-[768px]:mr-[11.25px] min-[768px]:ml-[24px]"
-                  src={okx_logo}
-                  alt=""
-                />
-                <span className="min-[768px]:text-[19.13px] font-[Raleway-Bold]  text-[#fff]">
-                  OKX
-                </span>
+                <img className="" src={okx_logo} alt="" />
+                <span className="font-[Raleway-Bold]  text-[#fff]">OKX</span>
               </button>
 
               <button
-                className="min-[768px]:w-[307px] min-[768px]:h-[45px] min-[768px]:rounded-[3.55px] min-[768px]:border-[0.71px]  min-[768px]:mt-[22.5px] box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
                 onClick={() => {
                   setWalletType(Wallet.UniSat);
                   uniSatRef.current?._connect();
                 }}
               >
-                <img
-                  className="min-[768px]:w-[27px] min-[768px]:h-[27px] min-[768px]:mr-[11.25px] min-[768px]:ml-[24px]"
-                  src={unisat_logo}
-                  alt=""
-                />
-                <span className="min-[768px]:text-[19.13px] font-[Raleway-Bold]  text-[#fff]">
-                  UniSat
-                </span>
+                <img className="" src={unisat_logo} alt="" />
+                <span className="font-[Raleway-Bold]  text-[#fff]">UniSat</span>
               </button>
             </div>
           </DialogContent>
