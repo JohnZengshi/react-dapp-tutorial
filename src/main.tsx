@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-10 10:11:39
+ * @LastEditTime: 2024-01-10 11:32:29
  * @Author: John
  */
 /*
@@ -18,7 +18,12 @@ import "../app/globals.css";
 // import "amfe-flexible";
 import VConsole from "vconsole";
 import flexible from "./utils/flexible";
+import { getUrlQueryParam } from "./utils";
 
+// 打开控制台
+if (getUrlQueryParam("vconsole") === "1") {
+  new VConsole();
+}
 flexible(window, document);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

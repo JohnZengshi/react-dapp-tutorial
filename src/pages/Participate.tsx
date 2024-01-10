@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-10 10:14:14
+ * @LastEditTime: 2024-01-10 16:54:22
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -31,7 +31,7 @@ import {
   EffectComposer,
   ToneMapping,
 } from "@react-three/postprocessing";
-import { fetchUrl, isMobile, isOKApp } from "@/utils";
+import { Wallet, fetchUrl, isMobile, isOKApp } from "@/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import roos_box from "@/assets/roos_box.png";
 import ConnectUs from "@/components/common/ConnectUs";
@@ -51,7 +51,7 @@ export default function () {
   const [connected, setConnected] = useState(false);
   const [address, setAddress] = useState<string>();
   const connectWalletRef = useRef<ConnectWallet_handleType>(null);
-  const [num, setNum] = useState<number>();
+  const [num, setNum] = useState<number>(1);
   const [cost, setCost] = useState(0);
   const [nodeTotal, setNodeTotal] = useState(0);
   const [nodeRemaining, setNodeRemaining] = useState(0);
@@ -220,24 +220,24 @@ export default function () {
                   <div
                     className="reduce"
                     onClick={() => {
-                      if (num == 1) return;
+                      // if (num == 1) return;
                       if (num) setNum(num - 1);
                     }}
                   >
                     -
                   </div>
                   <Input
-                    type="number"
+                    type="text"
                     value={num || ""}
                     onChange={(e) => {
-                      // setNum(parseInt(e.target.value));
-                      setNum(1);
+                      setNum(parseInt(e.target.value));
+                      // setNum(1);
                     }}
                   />
                   <div
                     className="add"
                     onClick={() => {
-                      if (num == 1) return;
+                      // if (num == 1) return;
                       if (num) {
                         setNum(num + 1);
                       } else {
@@ -282,8 +282,18 @@ export default function () {
 
                 <Button
                   className="buy-btn"
-                  disabled={!connected || nodeRemaining <= 0}
+                  disabled={connected && nodeRemaining <= 0}
                   onClick={() => {
+                    if (!address) {
+                      console.log(address);
+
+                      // TODO 选择钱包弹窗✔
+                      // connectWalletRef.current?._setWalletType(Wallet.OKX);
+                      // connectWalletRef.current?._connect();
+                      connectWalletRef.current?._selectWallet();
+
+                      return;
+                    }
                     if (typeof num === "number") {
                       fetchUrl("/api/node/pay_node", {
                         method: "POST",
@@ -349,11 +359,13 @@ export default function () {
                               //   });
 
                               console.log("hash", hash);
+                              // TODO 轮询购买是否成功
                               fetchUrl(
                                 `/api/node/pay_node_sms?orderNumber=${orderInfo?.orderNumber}&hash=${hash}`,
                                 { method: "GET" }
                               ).then((res) => {
                                 console.log(res);
+                                // TODO 提示弹出购买成功
                               });
                             }
                           });
@@ -361,7 +373,11 @@ export default function () {
                     }
                   }}
                 >
-                  {nodeRemaining > 0 ? "Buy" : "Node Completed"}
+                  {!address
+                    ? "Connent wallet"
+                    : nodeRemaining > 0
+                    ? "Buy"
+                    : "Node Completed"}
                 </Button>
               </div>
             </ScrollArea>

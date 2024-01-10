@@ -1,9 +1,10 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-09 20:19:57
+ * @LastEditTime: 2024-01-10 15:56:03
  * @Author: John
  */
+import { Buffer } from "buffer";
 export const formatBalance = (rawBalance: string) => {
   // console.log("rawBalance:", rawBalance);
   const balance = (parseInt(rawBalance) / 1000000000000000000).toFixed(4);
@@ -70,4 +71,29 @@ export async function fetchUrl(url: string, options: RequestOptions) {
     console.error("Error during fetch:", error);
     throw error;
   }
+}
+
+export enum Wallet {
+  OKX = "OKX",
+  UniSat = "UniSat",
+}
+
+// 定义一个函数，用于获取指定参数的值
+export function getUrlQueryParam(key: string): string | undefined {
+  console.log(window.location);
+  const query: Map<string, string> = new Map();
+  const queryStr = window.location.href.split("?")[1];
+  if (queryStr) {
+    const queryStrArr = queryStr.split("&");
+    queryStrArr.forEach((v) => {
+      const queryArr = v.split("=");
+      query.set(queryArr[0], queryArr[1]);
+    });
+  }
+  return query.get(key);
+}
+
+export function stringToHex(inputString: string): string {
+  const buffer = Buffer.from(inputString, "utf-8");
+  return buffer.toString("hex");
 }

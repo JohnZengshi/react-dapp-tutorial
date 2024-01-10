@@ -1,37 +1,42 @@
-import { Button, ButtonProps } from "@/components/ui/button";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogClose,
+} from "@/components/ui/dialog";
 import {
   forwardRef,
   useEffect,
   useImperativeHandle,
-  useMemo,
   useRef,
   useState,
 } from "react";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import UseOkx, { Okx_HandleType } from "@/wallet/Okx";
-import { Separator } from "@/components/ui/separator";
 import UseUniSat, { UniSat_handleType } from "@/wallet/UniSat";
-import { localStorageKey, shortenString } from "@/utils";
+import { Wallet, localStorageKey, shortenString } from "@/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import "./ConnectWallet.scss";
 import "./ConnectWallet-m.scss";
+import okx_logo from "@/assets/okx_logo.png";
+import unisat_logo from "@/assets/unisat_logo.png";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 14:40:57
  * @LastEditTime: 2024-01-03 14:29:20
  * @Author: John
  */
+
 export type ConnectWallet_handleType = {
   _onSubmit: (cost: number, toAddress: string) => Promise<string>;
+  _connect: () => void;
+  _setWalletType: (type: Wallet) => void;
+  _selectWallet: () => void;
 };
 const ConnectWallet = forwardRef<
   ConnectWallet_handleType,
@@ -44,10 +49,7 @@ const ConnectWallet = forwardRef<
   }
 >(function (props, ref) {
   const [open, setOpen] = useState(false);
-  enum Wallet {
-    OKX = "OKX",
-    UniSat = "UniSat",
-  }
+
   const [walletType, setWalletType] = useState<Wallet | "">("");
 
   const okxRef = useRef<Okx_HandleType>(null);
@@ -67,6 +69,19 @@ const ConnectWallet = forwardRef<
         }
         return new Promise((reslove) => reslove(""));
       },
+      _connect() {
+        if (walletType === Wallet.UniSat && uniSatRef.current) {
+          return uniSatRef.current._connect();
+        } else if (walletType === Wallet.OKX && okxRef.current) {
+          return okxRef.current._connect();
+        }
+      },
+      _setWalletType(type) {
+        setWalletType(type);
+      },
+      _selectWallet() {
+        setOpen(true);
+      },
     };
   });
 
@@ -74,7 +89,7 @@ const ConnectWallet = forwardRef<
     setInstalled(i);
     setConnected(c);
     setAddress(a);
-    if (a) localStorage.setItem(localStorageKey.okx_address, a);
+
     props.onUpdate(i, c, a);
   }
 
@@ -122,7 +137,7 @@ const ConnectWallet = forwardRef<
     <>
       {!connected && (
         <Dialog
-          open={false}
+          open={open}
           onOpenChange={(v) => {
             setOpen(v);
           }}
@@ -130,57 +145,53 @@ const ConnectWallet = forwardRef<
           <DialogTrigger asChild>
             <button
               className="ConnectWallet"
-              // TODO 暂时连接okx
               onClick={() => {
-                setWalletType(Wallet.OKX);
-                okxRef.current?._connect();
+                setOpen(true);
               }}
             >
               CONNECT WALLET
             </button>
           </DialogTrigger>
-          <DialogContent className="connectWalletDoalogContent">
-            <Button
-              onClick={() => {
-                setWalletType(Wallet.OKX);
-                okxRef.current?._connect();
-              }}
-            >
-              OKX
-            </Button>
-
-            <Button
-              onClick={() => {
-                setWalletType(Wallet.UniSat);
-                uniSatRef.current?._connect();
-              }}
-            >
-              UniSat
-            </Button>
-            {/* <RadioGroup
-              onValueChange={(v: Wallet) => {
-                console.log(`user choose ${v}`);
-                setWalletType(v);
-                if (v === Wallet.OKX) {
-                  // okx_Connect();
-                  // console.log("connect?");
+          <DialogContent className="w-[512px] h-[310px]">
+            <div className="w-full h-full border-[4px] border-solid border-[#F58C00] blur-[10px] absolute"></div>
+            <div className="flex flex-col items-center absolute w-full h-full border-[1px] border-solid border-[#F58C00] bg-[#550935] opacity-80 rounded-[5px]">
+              <span className="text-[34px] font-[Raleway-Bold] text-[#F58C00] uppercase mt-[42px]">
+                Connect Wallet
+              </span>
+              <button
+                className="w-[307px] h-[45px] rounded-[3.55px] box-border border-[0.71px] border-solid border-[#EAEAEA] flex flex-row items-center mt-[65px] hover:bg-[#F58C00] hover:border-[#F58C00]"
+                onClick={() => {
+                  setWalletType(Wallet.OKX);
                   okxRef.current?._connect();
-                } else if (v === Wallet.UniSat) {
-                  // uniSat_Connect();
+                }}
+              >
+                <img
+                  className="w-[27px] h-[27px] mr-[11.25px] ml-[24px]"
+                  src={okx_logo}
+                  alt=""
+                />
+                <span className="font-[Raleway-Bold] text-[19.13px] text-[#fff]">
+                  OKX
+                </span>
+              </button>
+
+              <button
+                className="w-[307px] h-[45px] rounded-[3.55px] box-border border-[0.71px] border-solid border-[#EAEAEA] flex flex-row items-center mt-[22.5px] hover:bg-[#F58C00] hover:border-[#F58C00]"
+                onClick={() => {
+                  setWalletType(Wallet.UniSat);
                   uniSatRef.current?._connect();
-                }
-                setOpen(false);
-              }}
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value={Wallet.OKX} id={Wallet.OKX} />
-                <Label htmlFor={Wallet.OKX}>OKX</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value={Wallet.UniSat} id={Wallet.UniSat} />
-                <Label htmlFor={Wallet.UniSat}>UniSat</Label>
-              </div>
-            </RadioGroup> */}
+                }}
+              >
+                <img
+                  className="w-[27px] h-[27px] mr-[11.25px] ml-[24px]"
+                  src={unisat_logo}
+                  alt=""
+                />
+                <span className="font-[Raleway-Bold] text-[19.13px] text-[#fff]">
+                  UniSat
+                </span>
+              </button>
+            </div>
           </DialogContent>
         </Dialog>
       )}
@@ -191,7 +202,7 @@ const ConnectWallet = forwardRef<
             {" "}
             {address && shortenString(address, 6, 5)}
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          {/* <DropdownMenuContent>
             <DropdownMenuItem
               onClick={() => {
                 if (walletType == Wallet.UniSat) {
@@ -203,7 +214,7 @@ const ConnectWallet = forwardRef<
             >
               Disconnect Wallet
             </DropdownMenuItem>
-          </DropdownMenuContent>
+          </DropdownMenuContent> */}
         </DropdownMenu>
       )}
 

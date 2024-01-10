@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { ToastAction } from "@/components/ui/toast";
-import { toast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import {
@@ -30,6 +29,7 @@ import { z } from "zod";
 import sdk from "@unisat/wallet-sdk";
 import { verifyMessage } from "@unisat/wallet-utils";
 import { BTC_Unit_Converter } from "@/utils";
+import CustomToast from "@/components/common/CustomToast";
 
 const formSchema = z.object({
   toAddress: z.string(),
@@ -156,22 +156,15 @@ const UniSat = forwardRef<
           setSending(false);
           console.log(txHash);
           // alert("Hash值为：" + txHash)
-          toast({
-            title: "交易成功",
-            description: "Hash值为：" + txHash,
-          });
+          CustomToast(`交易成功,Hash值为：${txHash}`);
 
           reslove(txHash);
           setOpen(false);
         })
         .catch((error: any) => {
           setSending(false);
-          toast({
-            variant: "destructive",
-            title: "Uh oh! Something went wrong.",
-            description: error.message,
-            action: <ToastAction altText="Try again">Try again</ToastAction>,
-          });
+          CustomToast(`${error.message}`);
+
           // console.error(error);
         });
     });
@@ -225,12 +218,7 @@ const UniSat = forwardRef<
       } else if (!unisat) {
         // 用户没有安装unisat插件
         console.warn("unisat is not installed!!");
-
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: "PLEASE INSTALL UNISAT WALLET",
-        });
+        CustomToast("PLEASE INSTALL UNISAT WALLET");
         reject();
         return;
       }
@@ -291,11 +279,7 @@ const UniSat = forwardRef<
     if (e.code === 4001) {
       // 用户没有创建钱包
       console.warn(e.message);
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: e.message,
-      });
+      CustomToast(`${e.message}`);
     }
   }
   return <></>;

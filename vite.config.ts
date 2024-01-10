@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-09 19:10:38
+ * @LastEditTime: 2024-01-10 13:36:48
  * @Author: John
  */
 import { defineConfig } from "vite";
@@ -13,7 +13,7 @@ import autoprefixer from "autoprefixer";
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    host: "192.168.10.167",
+    // host: "192.168.10.167",
     // https: true,
     proxy: {
       "/dev": {

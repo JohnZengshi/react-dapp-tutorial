@@ -1,5 +1,10 @@
-import { toast } from "@/components/ui/use-toast";
-import { BTC_Unit_Converter } from "@/utils";
+import CustomToast from "@/components/common/CustomToast";
+import {
+  BTC_Unit_Converter,
+  isOKApp,
+  localStorageKey,
+  stringToHex,
+} from "@/utils";
 import {
   forwardRef,
   useEffect,
@@ -12,7 +17,7 @@ import {
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
- * @LastEditTime: 2024-01-09 20:29:58
+ * @LastEditTime: 2024-01-10 12:50:32
  * @Author: John
  */
 type Account = {
@@ -58,87 +63,95 @@ const Okx = forwardRef<
   const okxwallet = window.okxwallet;
 
   useLayoutEffect(() => {
-    init();
+    (async () => {
+      await checkinstall();
+      await connect();
+      // 监听账户变化
+      okxwallet.bitcoin?.on("accountChanged", handleAccountsChanged);
+    })();
+
+    return () => {
+      okxwallet?.bitcoin?.removeListener(
+        "accountsChanged",
+        handleAccountsChanged
+      );
+    };
   }, []);
 
   useEffect(() => {
     props.onUpdate(okxInstalled, connected, address);
   }, [okxInstalled, connected, address]);
 
-  async function init() {
-    if (typeof okxwallet !== "undefined") {
-      console.log("OKX is installed!");
-      setOkxInstalled(true);
-
-      // okxwallet.bitcoin
-      //   .getAccounts()
-      //   .then((address: string[]) => {
-      //     console.log("get accounts:", address);
-      //     if (address.length > 0) {
-      //       handleAccountsChanged(address[0]);
-      //       setConnected(true);
-      //     } else {
-      //       connect();
-      //     }
-      //   })
-      //   .catch(handleCatch);
-
-      connect();
-
-      // 监听账户变化
-      okxwallet.bitcoin.on("accountChanged", (addressInfo: Account) => {
-        console.log("accounts changed:", addressInfo);
-        if (addressInfo === null) {
-          setConnected(false);
-          setAddress("");
-        } else {
-          handleAccountsChanged(addressInfo.address);
-        }
-      });
-      // connect();
-    } else {
-      // 用户没有安装OKX插件
-      console.warn("OKX is not installed!!");
-    }
+  // 检测是否安装okx
+  function checkinstall(): Promise<void> {
+    return new Promise((reslove, reject) => {
+      if (typeof okxwallet !== "undefined") {
+        console.log("OKX is installed!");
+        setOkxInstalled(true);
+        reslove();
+      } else {
+        // 提示用户没有安装OKX插件
+        console.warn("OKX is not installed!!");
+        setOkxInstalled(false);
+        CustomToast("You haven't installed a wallet yet！");
+      }
+    });
   }
 
   async function connect() {
-    if (connecting) return;
+    return new Promise<void>(async (reslove, reject) => {
+      await checkinstall();
+      if (connecting) return;
+      connecting = true;
+      okxwallet.bitcoin
+        .connect()
+        .then(async (result: Account) => {
+          // TODO 判断是否有token，没有则签名请求获取token
+          // TODO 签名✔
+          // const nonce = "22a68408-fea7-4491-996c-a92fbf710a72";
+          // const message = `Welcome to OKX!\n\nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${result.address}\n    \nNonce:\n${nonce}\n`;
+          const message = `userAddressSignature:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`;
+          // const message = "need sign string";
+          // try {
+          //   okxwallet.bitcoin
+          //     .signMessage(message, { from: result.address }) // OKX app 钱包新的签名方法传参（官网的方法传参不对）！！！！
+          //     .then((sign: string) => {
+          //       console.log("get sign:", sign);
+          //     });
+          // } catch (error) {
+          //   console.warn(error);
+          // }
 
-    connecting = true;
-    okxwallet.bitcoin
-      .connect()
-      .then(async (result: Account) => {
-        // 签名
-        // TODO 移动端报错？？
-        // const nonce = "22a68408-fea7-4491-996c-a92fbf710a72";
-        // const message = `Welcome to OKX!\n\nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${result.address}\n    \nNonce:\n${nonce}\n`;
-        // okxwallet.bitcoin
-        //   .signMessage(message, "ecdsa")
-        //   .then((sign: string) => {
-        //     console.log("get sign:", sign);
-        handleAccountsChanged(result.address);
-        setConnected(true);
-        connecting = false;
-        //   })
-        //   .catch(handleCatch);
-      })
-      .catch(handleCatch);
+          // TODO 登录
+          setAddress(result.address);
+          setConnected(true);
+          connecting = false;
+          localStorage.setItem(localStorageKey.okx_address, result.address);
+          reslove();
+        })
+        .catch(handleCatch);
+    });
   }
 
   async function disConnect() {
     await okxwallet.bitcoin.disconnect();
     setAddress("");
     setConnected(false);
+    localStorage.removeItem(localStorageKey.okx_address);
   }
 
-  async function updateBalance(address: string) {}
-
-  function handleAccountsChanged(address: string) {
-    setAddress(address);
-    // updateBalance(address);
+  // 用户变化
+  function handleAccountsChanged(addressInfo: Account) {
+    if (addressInfo === null) {
+      setConnected(false);
+      setAddress("");
+      localStorage.removeItem(localStorageKey.okx_address);
+    } else {
+      setAddress(addressInfo.address);
+    }
   }
 
+  // 提交发送交易
   function onSubmit(cost: number, toAddress: string) {
     return new Promise<string>((reslove, reject) => {
       // reslove(false);
@@ -156,15 +169,10 @@ const Okx = forwardRef<
           to: toAddress,
           value: cost,
         })
-        // TODO sendBitcoin无法在移动端使用？
-        // .sendBitcoin(toAddress, cost * BTC_Unit_Converter)
         .then((txid: string) => {
           console.log(txid);
 
-          toast({
-            title: "交易成功",
-            description: "txid值为：" + txid,
-          });
+          CustomToast(`交易成功,txid值为：${txid}`);
 
           reslove(txid);
         })
@@ -172,6 +180,7 @@ const Okx = forwardRef<
     });
   }
 
+  // 统一处理错误
   function handleCatch(e: { code: number; message: string }) {
     console.log(e);
     connecting = false;

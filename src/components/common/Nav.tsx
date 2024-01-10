@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-09 10:55:48
+ * @LastEditTime: 2024-01-10 10:31:39
  * @Author: John
  */
 import { Button } from "../ui/button";
@@ -24,39 +24,39 @@ export default function (props: { connectBtn?: any }) {
         />
         <div className="nav_list">
           <div className="nav_btn">
-            <Button>
+            <button>
               <span>Roosbox</span>
-            </Button>
+            </button>
           </div>
 
           <div className="nav_btn">
-            <Button>
+            <button>
               <span>Ecosystems</span>
-            </Button>
+            </button>
           </div>
 
           <div className="nav_btn">
-            <Button>
+            <button>
               <span>Bridge</span>
-            </Button>
+            </button>
           </div>
 
           <div className="nav_btn">
-            <Button>
+            <button>
               <span>Airdrop</span>
-            </Button>
+            </button>
           </div>
 
           <div className="nav_btn">
-            <Button>
+            <button>
               <span>Journey</span>
-            </Button>
+            </button>
           </div>
 
           <div className="nav_btn">
-            <Button>
+            <button>
               <span>BLOG</span>
-            </Button>
+            </button>
           </div>
         </div>
 
