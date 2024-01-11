@@ -12,10 +12,10 @@
     box-sizing: border-box;
     border: 1px solid #15395b;
 
-    padding: 6px 0;
+    padding: 6px 16px;
 
     > .toast-info-icon {
-      margin-left: 16px;
+      // margin-left: 16px;
       margin-right: 5px;
     }
 
@@ -27,7 +27,7 @@
       font-family: Raleway-Medium;
       font-size: 12px;
       font-weight: 500;
-      line-height: 22px;
+      line-height: normal;
       letter-spacing: 0em;
 
       color: rgba(255, 255, 255, 0.65);

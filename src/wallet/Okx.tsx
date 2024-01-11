@@ -1,6 +1,7 @@
 import CustomToast from "@/components/common/CustomToast";
 import {
   BTC_Unit_Converter,
+  fetchUrl,
   isOKApp,
   localStorageKey,
   stringToHex,
@@ -25,7 +26,7 @@ type Account = {
   compressedPublicKey: string;
   publicKey: string;
 };
-let connecting = false;
+let connecting = false; // TODO 优化connecting状态
 export type Okx_HandleType = {
   _connect: () => void;
   _disConnect: () => void;
@@ -45,6 +46,7 @@ const Okx = forwardRef<
   const [okxInstalled, setOkxInstalled] = useState<boolean>(false);
   const [connected, setConnected] = useState<boolean>(false);
   const [address, setAddress] = useState<string>();
+  const [invitationCode, setInvitationCode] = useState("");
 
   useImperativeHandle(ref, () => {
     return {
@@ -106,27 +108,85 @@ const Okx = forwardRef<
       okxwallet.bitcoin
         .connect()
         .then(async (result: Account) => {
-          // TODO 判断是否有token，没有则签名请求获取token
-          // TODO 签名✔
-          // const nonce = "22a68408-fea7-4491-996c-a92fbf710a72";
-          // const message = `Welcome to OKX!\n\nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${result.address}\n    \nNonce:\n${nonce}\n`;
-          const message = `userAddressSignature:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`;
-          // const message = "need sign string";
-          // try {
-          //   okxwallet.bitcoin
-          //     .signMessage(message, { from: result.address }) // OKX app 钱包新的签名方法传参（官网的方法传参不对）！！！！
-          //     .then((sign: string) => {
-          //       console.log("get sign:", sign);
-          //     });
-          // } catch (error) {
-          //   console.warn(error);
-          // }
+          // TODO 判断是否有token，没有则签名请求获取token✔
+          const roos_token = localStorage.getItem(localStorageKey.roos_token);
+          console.log("roos_token", roos_token);
 
-          // TODO 登录
+          if (!roos_token) {
+            await (() => {
+              return new Promise<void>((reslove, reject) => {
+                // TODO 判断用户是否注册✔
+                fetchUrl<{ exist: boolean }>(
+                  `/api/account/exist?account=${result.address}`,
+                  {
+                    method: "GET",
+                  }
+                ).then((res) => {
+                  console.log(res);
+
+                  if (res && !res.data.exist) {
+                    // TODO 注册✔
+
+                    fetchUrl<any, { account: string; shareCode: string }>(
+                      `/api/account/signUp`,
+                      { method: "POST" },
+                      { account: result.address, shareCode: "NODE123" }
+                    ).then((res) => {
+                      if (res && res.code == 0) {
+                        console.log("signUp", res.code);
+                        // 注册成功
+                      }
+                    });
+                  }
+
+                  // TODO 签名✔
+                  // const nonce = "22a68408-fea7-4491-996c-a92fbf710a72";
+                  // const message = `Welcome to OKX!\n\nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${result.address}\n    \nNonce:\n${nonce}\n`;
+                  const message = `userAddressSignature:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`;
+                  // const message = "need sign string";
+                  okxwallet.bitcoin
+                    .signMessage(message, { from: result.address }) // OKX app 钱包新的签名方法传参（官网的方法传参不对）！！！！
+                    .then(async (sign: string) => {
+                      console.log("get sign:", sign);
+
+                      // TODO 登录✔
+                      let loginInfo = await fetchUrl<
+                        { token: string },
+                        { account: string; password: string }
+                      >(
+                        "/api/account/signIn",
+                        {
+                          method: "POST",
+                        },
+                        { account: result.address, password: sign }
+                      );
+                      if (loginInfo) {
+                        console.log(loginInfo);
+                        localStorage.setItem(
+                          localStorageKey.roos_token,
+                          loginInfo.data.token
+                        );
+
+                        // TODO 查询用户邀请码
+                        let invitation = await fetchUrl<{
+                          invitationCode: string;
+                        }>("/api/invite/invitationCode", { method: "GET" });
+                        if (invitation)
+                          setInvitationCode(invitation.data.invitationCode);
+
+                        reslove();
+                      }
+                    })
+                    .catch(handleCatch);
+                });
+              });
+            })();
+          }
+
+          localStorage.setItem(localStorageKey.okx_address, result.address);
           setAddress(result.address);
           setConnected(true);
           connecting = false;
-          localStorage.setItem(localStorageKey.okx_address, result.address);
           reslove();
         })
         .catch(handleCatch);

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-10 16:54:22
+ * @LastEditTime: 2024-01-11 14:58:05
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -35,6 +35,7 @@ import { Wallet, fetchUrl, isMobile, isOKApp } from "@/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import roos_box from "@/assets/roos_box.png";
 import ConnectUs from "@/components/common/ConnectUs";
+import CustomToast from "@/components/common/CustomToast";
 
 type NodeInfo = {
   nodeTotal: number;
@@ -42,6 +43,7 @@ type NodeInfo = {
   startPrice: number;
   increasePrice: number;
   increaseCount: number;
+  nodePrice: number;
   id: number;
 };
 
@@ -60,22 +62,24 @@ export default function () {
 
   const [nodeInfo, setNodeInfo] = useState<NodeInfo>();
 
-  const [orderInfo, setOrderInfo] = useState<OrderInfo>();
+  // const [orderInfo, setOrderInfo] = useState<OrderInfo>();
 
   function getNodeInfo() {
-    fetchUrl("/api/node/getNodeSetting", {
+    fetchUrl<NodeInfo[]>("/api/node/getNodeSetting", {
       method: "GET",
     }).then((res) => {
-      console.log(res.data);
-      const nodeData = res.data[0];
-      setNodeInfo(nodeData);
+      if (res) {
+        console.log(res.data);
+        const nodeData = res.data[0];
+        setNodeInfo(nodeData);
 
-      let nodeTotal = nodeData.nodeTotal;
-      setNodeTotal(nodeTotal);
-      setNodeRemaining(nodeTotal - nodeData.purchasedCount);
-      // setCost(nodeData.startPrice);
+        let nodeTotal = nodeData.nodeTotal;
+        setNodeTotal(nodeTotal);
+        setNodeRemaining(nodeTotal - nodeData.purchasedCount);
+        setCost(nodeData.nodePrice);
+      }
 
-      getNodePrice(nodeData.id);
+      // getNodePrice(nodeData.id);
     });
   }
 
@@ -83,8 +87,10 @@ export default function () {
     fetchUrl(`/api/node/getNodePrice?nodeId=${id}`, {
       method: "GET",
     }).then((res) => {
-      console.log(res.data);
-      setCost(res.data);
+      if (res) {
+        console.log(res.data);
+        setCost(res.data);
+      }
     });
   }
 
@@ -212,7 +218,7 @@ export default function () {
                   <span>Enter quantity</span>
                   <span>
                     {/* TODO 小数位处理 */}
-                    Currently 1 node {cost.toFixed(8)} BTC
+                    Currently 1 node {cost} BTC
                   </span>
                 </div>
 
@@ -251,7 +257,7 @@ export default function () {
                 <div className="cost-total">
                   {/* TODO 小数位处理 */}
                   <span>Cost：</span>
-                  <span>{(cost * (num || 0)).toFixed(8)} BTC</span>
+                  <span>{cost * (num || 0)} BTC</span>
                 </div>
 
                 {/* {connected && (
@@ -283,7 +289,7 @@ export default function () {
                 <Button
                   className="buy-btn"
                   disabled={connected && nodeRemaining <= 0}
-                  onClick={() => {
+                  onClick={async () => {
                     if (!address) {
                       console.log(address);
 
@@ -295,81 +301,68 @@ export default function () {
                       return;
                     }
                     if (typeof num === "number") {
-                      fetchUrl("/api/node/pay_node", {
-                        method: "POST",
-                        body: JSON.stringify({
-                          nodeId: nodeInfo?.id,
-                          number: 1,
-                        }),
-                      }).then((res: { data: OrderInfo }) => {
-                        console.log(res);
+                      if (!nodeInfo) return;
+                      // TODO 购买节点✔
+                      let orderInfo = await fetchUrl<
+                        OrderInfo,
+                        { nodeId: number; number: number; tatolAmount: number }
+                      >(
+                        "/api/node/pay_node",
+                        {
+                          method: "POST",
+                        },
+                        {
+                          nodeId: nodeInfo.id,
+                          number: num,
+                          tatolAmount: num * nodeInfo.nodePrice,
+                        }
+                      );
+                      if (orderInfo) {
+                        // setOrderInfo(res.data);
 
-                        connectWalletRef.current
-                          ?._onSubmit(
-                            res.data.buyAmount,
-                            // "tb1qlketwhc53kcnq3smvvjvwpsf2yfayhpkyf72y4" // TODO 测试链接
-                            "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk"
-                          )
-                          .then((hash: string) => {
-                            if (hash && address) {
-                              // console.log("交易成功");
-                              // const postData: {
-                              //   [key: string]: number | string;
-                              // } = {
-                              //   buyAmount: cost * num,
-                              //   buyCount: num,
-                              //   payCoin: "BTC",
-                              //   walletAddress: address,
-                              //   nodeId: 3,
-                              // };
-                              // const queryString = Object.keys(postData)
-                              //   .map(
-                              //     (key) =>
-                              //       `${encodeURIComponent(
-                              //         key
-                              //       )}=${encodeURIComponent(postData[key])}`
-                              //   )
-                              //   .join("&");
-                              // fetch(
-                              //   `${
-                              //     import.meta.env.VITE_BASE_API_URL
-                              //   }/subscribe/add?${queryString}`,
-                              //   {
-                              //     method: "POST",
-                              //   }
-                              // )
-                              //   .then((response) => {
-                              //     if (!response.ok) {
-                              //       throw new Error(
-                              //         `HTTP error! Status: ${response.status}`
-                              //       );
-                              //     }
-                              //     return response.json(); // 如果返回的是 JSON 数据，使用 json() 方法解析
-                              //   })
-                              //   .then((data) => {
-                              //     console.log("Response data:", data);
+                        let hash = await connectWalletRef.current?._onSubmit(
+                          orderInfo.data.buyAmount,
+                          "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk" // TODO 测试链接
+                        );
+                        if (hash && address) {
+                          console.log("hash", hash);
+                          // TODO 轮询购买是否成功
 
-                              //     getNodeInfo(); // 更新节点信息
-                              //     // getUserNodeRecord(); // 更新用户购买记录
-                              //     // 在这里处理返回的数据
-                              //   })
-                              //   .catch((error) => {
-                              //     console.error("Error:", error);
-                              //     // 在这里处理请求发生的错误
-                              //   });
-
-                              console.log("hash", hash);
-                              // TODO 轮询购买是否成功
-                              fetchUrl(
-                                `/api/node/pay_node_sms?orderNumber=${orderInfo?.orderNumber}&hash=${hash}`,
+                          // 模拟轮询
+                          let time = 0;
+                          async function checkSuccess(
+                            orderNumber: number
+                          ): Promise<boolean> {
+                            time++;
+                            async function check() {
+                              return await fetchUrl(
+                                `/api/node/pay_node_sms?orderNumber=${orderNumber}}&hash=${hash}`,
                                 { method: "GET" }
-                              ).then((res) => {
-                                console.log(res);
-                                // TODO 提示弹出购买成功
-                              });
+                              );
+                              // return new Promise<{ data: boolean }>(
+                              //   (reslove, reject) => {
+                              //     setTimeout(() => {
+                              //       console.log("check!!:", time);
+                              //       if (time == 10) {
+                              //         reslove({ data: true });
+                              //       } else {
+                              //         reslove({ data: false });
+                              //       }
+                              //     }, 1000);
+                              //   }
+                              // );
                             }
-                          });
-                      });
+
+                            let ok = await check();
+                            if (ok?.data) return true;
+                            return checkSuccess(orderNumber);
+                          }
+                          let ok = await checkSuccess(
+                            orderInfo.data.orderNumber
+                          );
+                          if (ok) CustomToast("购买成功！！！");
+                        }
+                      }
                     }
                   }}
                 >

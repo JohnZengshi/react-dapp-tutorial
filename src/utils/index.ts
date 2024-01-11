@@ -1,9 +1,10 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-10 15:56:03
+ * @LastEditTime: 2024-01-11 11:36:37
  * @Author: John
  */
+import CustomToast from "@/components/common/CustomToast";
 import { Buffer } from "buffer";
 export const formatBalance = (rawBalance: string) => {
   // console.log("rawBalance:", rawBalance);
@@ -44,6 +45,7 @@ export const isMobile = isIOS || isAndroid;
 export const isOKApp = /OKApp/i.test(ua);
 export enum localStorageKey {
   okx_address = "okx_address",
+  roos_token = "roos_token",
 }
 interface RequestOptions {
   method: "GET" | "POST";
@@ -51,13 +53,18 @@ interface RequestOptions {
   body?: BodyInit | null;
 }
 export const BaseUrl = import.meta.env.VITE_BASE_API_URL;
-export async function fetchUrl(url: string, options: RequestOptions) {
+export async function fetchUrl<D = any, P = any>(
+  url: string,
+  options: RequestOptions,
+  params?: P
+) {
   options.headers = {
     Authorization: localStorage.getItem("token") || "",
     "Accept-Language": "zh-CN",
     address: localStorage.getItem(localStorageKey.okx_address) || "",
     "Content-Type": "application/json",
   };
+  if (params) options.body = JSON.stringify(params);
   try {
     const response = await fetch(`${BaseUrl}${url}`, options);
 
@@ -65,8 +72,16 @@ export async function fetchUrl(url: string, options: RequestOptions) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data = await response.json();
-    return data;
+    const data: {
+      code: 0;
+      data: D;
+      msg: string;
+      timeMillis: number;
+    } = await response.json();
+
+    if (data.code === 0) return data;
+
+    CustomToast(data.msg);
   } catch (error) {
     console.error("Error during fetch:", error);
     throw error;

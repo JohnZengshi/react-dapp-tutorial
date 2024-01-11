@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-11 10:12:06
+ * @LastEditTime: 2024-01-11 15:02:14
  * @Author: John
  */
 import { Button } from "../ui/button";
@@ -35,7 +35,7 @@ export default function (props: { connectBtn?: any }) {
             navigate("/");
           }}
         />
-        {/* TODO 移动端适配菜单*/}
+        {/* TODO 移动端适配菜单✔*/}
         <div className="nav_list flex items-center absolute left-1/2 translate-x-[-50%]">
           <div className="nav_btn">
             <button>
