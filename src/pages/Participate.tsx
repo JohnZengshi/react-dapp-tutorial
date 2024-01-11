@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-11 17:20:09
+ * @LastEditTime: 2024-01-11 18:31:07
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -291,7 +291,7 @@ export default function () {
                 </div>
               </div>
 
-              <div className="rightContent w-full h-full box-border flex flex-col">
+              <div className="rightContent bottomContent w-full h-full box-border flex flex-col">
                 <div className="boxselect w-full flex items-center">
                   <ActiveButton
                     content={NodeType.J}
@@ -311,22 +311,30 @@ export default function () {
                 </div>
 
                 <ul className="priceDes w-full flex items-center">
-                  <li className="flex flex-col items-center">
+                  <li className="flex flex-col items-center h-full justify-center">
                     <span className="uppercase text-[#EAEAEA]">price</span>
-                    <div className="btcPrice">
-                      <span className="price text-[#EAEAEA]">0.06</span>
-                      <span className="unit">BTC</span>
+                    <div className="btcPrice flex items-baseline">
+                      <span className="price text-[#EAEAEA]">
+                        {nodeInfo?.nodePrice || "0.00"}
+                      </span>
+                      <span className="unit text-[#EAEAEA]">
+                        &nbsp;&nbsp;BTC
+                      </span>
                     </div>
                   </li>
-                  <li className="flex flex-col items-center">
+                  <li className="flex flex-col items-center h-full justify-center">
                     <span className="uppercase text-[#EAEAEA]">Remaining</span>
-                    <span className="text-[#EAEAEA]">50</span>
+                    <span className="text-[#EAEAEA]">
+                      {nodeInfo?.nodeTotal || "0"}
+                    </span>
                   </li>
-                  <li className="flex flex-col items-center">
+                  <li className="flex flex-col items-center h-full justify-center">
                     <span className="uppercase text-[#EAEAEA]">
                       total amount
                     </span>
-                    <span className="text-[#EAEAEA]">200</span>
+                    <span className="text-[#EAEAEA]">
+                      {nodeInfo?.nodeTotal || "0"}
+                    </span>
                   </li>
                 </ul>
 

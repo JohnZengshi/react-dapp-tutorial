@@ -26,7 +26,7 @@ export default function (props: { connectBtn?: any }) {
   const [meunOpen, setMeunOpen] = useState(false);
   return (
     <>
-      <div className="nav fixed t-0 z-[60] flex flex-row items-center w-[100vw] justify-between bg-[#000000] ">
+      <div className="nav fixed t-0 z-[10] flex flex-row items-center w-[100vw] justify-between bg-[#000000] ">
         <img
           className="logo"
           src={roosLogo}
