@@ -1,13 +1,13 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-11 14:58:05
+ * @LastEditTime: 2024-01-11 16:37:01
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
 import "./Participate.scss";
 import "./Participate-m.scss";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import ConnectWallet, {
   ConnectWallet_handleType,
 } from "@/components/common/ConnectWallet";
@@ -48,6 +48,12 @@ type NodeInfo = {
 };
 
 type OrderInfo = { buyAmount: number; orderNumber: number; status: number };
+
+enum NodeType {
+  J = "J",
+  Q = "Q",
+  K = "K",
+}
 export default function () {
   const [installed, setInstalled] = useState(false);
   const [connected, setConnected] = useState(false);
@@ -61,6 +67,8 @@ export default function () {
   const [userTotalBuy, setUserTotalBuy] = useState(0);
 
   const [nodeInfo, setNodeInfo] = useState<NodeInfo>();
+
+  const [selectNodeType, setSelectNodeType] = useState<NodeType>(NodeType.J);
 
   // const [orderInfo, setOrderInfo] = useState<OrderInfo>();
 
@@ -136,6 +144,25 @@ export default function () {
   useEffect(() => {
     // if (address) getUserNodeRecord();
   }, [address]);
+
+  function ActiveButton(
+    props: { content: string; active: boolean } & ButtonProps
+  ) {
+    return (
+      <>
+        <button
+          onClick={props.onClick}
+          className={`active w-[33%] h-full ${
+            props.active
+              ? "text-[#F58C00] border-b-[#F58C00]"
+              : "text-[#333] border-b-[#333333]"
+          } flex border-solid justify-center items-center`}
+        >
+          <span className="uppercase">{props.content}</span>
+        </button>
+      </>
+    );
+  }
   return (
     <>
       <Nav
@@ -153,10 +180,10 @@ export default function () {
       />
       <ScrollArea className="Participate">
         <div className="content">
-          <div className="card">
-            <div className="left top">
-              <div className="bulr-box"></div>
-              <div className="model">
+          <div className="card bg-[#260217] m-0-auto flex ">
+            <div className="left top relative">
+              <div className="bulr-box absolute bg-[#260217] box-border border-solid border-[#f58c00]"></div>
+              <div className="model flex justify-center items-center relative opacity-1 bg-[#260217] box-border border-solid border-[#f58c00]">
                 {/* !isMobile && !isOKApp && */}
                 {
                   // <Canvas
@@ -259,119 +286,157 @@ export default function () {
                   <span>Cost：</span>
                   <span>{cost * (num || 0)} BTC</span>
                 </div>
+              </div>
 
-                {/* {connected && (
-                  <>
-                    {userTotalBuy > 0 && (
-                      <>
-                        <span>My Node</span>
-                        <div>
-                          <span>Nodes:</span>
-                          <span>{userTotalBuy}</span>
-                        </div>
+              <div className="rightContent w-full h-full box-border flex flex-col">
+                <div className="boxselect w-full flex items-center">
+                  <ActiveButton
+                    content={NodeType.J}
+                    active={selectNodeType == NodeType.J}
+                    onClick={() => setSelectNodeType(NodeType.J)}
+                  />
+                  <ActiveButton
+                    content={NodeType.Q}
+                    active={selectNodeType == NodeType.Q}
+                    onClick={() => setSelectNodeType(NodeType.Q)}
+                  />
+                  <ActiveButton
+                    content={NodeType.K}
+                    active={selectNodeType == NodeType.K}
+                    onClick={() => setSelectNodeType(NodeType.K)}
+                  />
+                </div>
 
-                        <span>
-                          Congratulations on becoming a node of XX, you can
-                          enjoy the following benefits.
-                        </span>
-                      </>
-                    )}
+                <ul className="priceDes w-full flex items-center">
+                  <li className="flex flex-col items-center">
+                    <span className="uppercase text-[#EAEAEA]">price</span>
+                    <div className="btcPrice">
+                      <span className="price text-[#EAEAEA]">0.06</span>
+                      <span className="unit">BTC</span>
+                    </div>
+                  </li>
+                  <li className="flex flex-col items-center">
+                    <span className="uppercase text-[#EAEAEA]">Remaining</span>
+                    <span className="text-[#EAEAEA]">50</span>
+                  </li>
+                  <li className="flex flex-col items-center">
+                    <span className="uppercase text-[#EAEAEA]">
+                      total amount
+                    </span>
+                    <span className="text-[#EAEAEA]">200</span>
+                  </li>
+                </ul>
 
-                    {userTotalBuy <= 0 && (
-                      <span>
-                        There are currently no nodes. Subscribing nodes enjoys
-                        the following benefits
-                      </span>
-                    )}
-                  </>
-                )} */}
+                <div className="content-bottom flex flex-col">
+                  <span className="text-[#F58C00]">Box Rights</span>
+                  <span className="text-[#EAEAEA]">
+                    <p>·25% of platform tokens</p>
+                    <p>
+                      ·Permanently enjoy network gas fee dividends (the initial
+                      proportion is as high as 70%, and with the development of
+                      the ecosystem in the later period, the community will vote
+                      to determine the redistribution proportion)
+                    </p>
+                    <p>·X% proportion of GAS fee airdrop activity</p>
+                    rewards high weight voting rights
+                    <p>
+                      ·A series of other ecological development rights and
+                      interests
+                    </p>
+                  </span>
 
-                <Button
-                  className="buy-btn"
-                  disabled={connected && nodeRemaining <= 0}
-                  onClick={async () => {
-                    if (!address) {
-                      console.log(address);
+                  <Button
+                    className="buy-btn"
+                    disabled={connected && nodeRemaining <= 0}
+                    onClick={async () => {
+                      if (!address) {
+                        console.log(address);
 
-                      // TODO 选择钱包弹窗✔
-                      // connectWalletRef.current?._setWalletType(Wallet.OKX);
-                      // connectWalletRef.current?._connect();
-                      connectWalletRef.current?._selectWallet();
+                        // TODO 选择钱包弹窗✔
+                        // connectWalletRef.current?._setWalletType(Wallet.OKX);
+                        // connectWalletRef.current?._connect();
+                        connectWalletRef.current?._selectWallet();
 
-                      return;
-                    }
-                    if (typeof num === "number") {
-                      if (!nodeInfo) return;
-                      // TODO 购买节点✔
-                      let orderInfo = await fetchUrl<
-                        OrderInfo,
-                        { nodeId: number; number: number; tatolAmount: number }
-                      >(
-                        "/api/node/pay_node",
-                        {
-                          method: "POST",
-                        },
-                        {
-                          nodeId: nodeInfo.id,
-                          number: num,
-                          tatolAmount: num * nodeInfo.nodePrice,
-                        }
-                      );
-                      if (orderInfo) {
-                        // setOrderInfo(res.data);
-
-                        let hash = await connectWalletRef.current?._onSubmit(
-                          orderInfo.data.buyAmount,
-                          "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk" // TODO 测试链接
-                        );
-                        if (hash && address) {
-                          console.log("hash", hash);
-                          // TODO 轮询购买是否成功
-
-                          // 模拟轮询
-                          let time = 0;
-                          async function checkSuccess(
-                            orderNumber: number
-                          ): Promise<boolean> {
-                            time++;
-                            async function check() {
-                              return await fetchUrl(
-                                `/api/node/pay_node_sms?orderNumber=${orderNumber}}&hash=${hash}`,
-                                { method: "GET" }
-                              );
-                              // return new Promise<{ data: boolean }>(
-                              //   (reslove, reject) => {
-                              //     setTimeout(() => {
-                              //       console.log("check!!:", time);
-                              //       if (time == 10) {
-                              //         reslove({ data: true });
-                              //       } else {
-                              //         reslove({ data: false });
-                              //       }
-                              //     }, 1000);
-                              //   }
-                              // );
-                            }
-
-                            let ok = await check();
-                            if (ok?.data) return true;
-                            return checkSuccess(orderNumber);
+                        return;
+                      }
+                      if (typeof num === "number") {
+                        if (!nodeInfo) return;
+                        // TODO 购买节点✔
+                        let orderInfo = await fetchUrl<
+                          OrderInfo,
+                          {
+                            nodeId: number;
+                            number: number;
+                            tatolAmount: number;
                           }
-                          let ok = await checkSuccess(
-                            orderInfo.data.orderNumber
+                        >(
+                          "/api/node/pay_node",
+                          {
+                            method: "POST",
+                          },
+                          {
+                            nodeId: nodeInfo.id,
+                            number: num,
+                            tatolAmount: num * nodeInfo.nodePrice,
+                          }
+                        );
+                        if (orderInfo) {
+                          // setOrderInfo(res.data);
+
+                          let hash = await connectWalletRef.current?._onSubmit(
+                            orderInfo.data.buyAmount,
+                            "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk" // TODO 测试链接
                           );
-                          if (ok) CustomToast("购买成功！！！");
+                          if (hash && address) {
+                            console.log("hash", hash);
+                            // TODO 轮询购买是否成功
+
+                            let time = 0;
+                            async function checkSuccess(
+                              orderNumber: number
+                            ): Promise<boolean> {
+                              time++;
+                              async function check() {
+                                return await fetchUrl<{ type: number }>(
+                                  `/api/node/pay_node_sms?orderNumber=${orderNumber}}&hash=${hash}`,
+                                  { method: "GET" }
+                                );
+
+                                // 模拟轮询
+                                // return new Promise<{ data: boolean }>(
+                                //   (reslove, reject) => {
+                                //     setTimeout(() => {
+                                //       console.log("check!!:", time);
+                                //       if (time == 10) {
+                                //         reslove({ data: true });
+                                //       } else {
+                                //         reslove({ data: false });
+                                //       }
+                                //     }, 1000);
+                                //   }
+                                // );
+                              }
+
+                              let ok = await check();
+                              if (ok?.data.type == 1) return true;
+                              return checkSuccess(orderNumber);
+                            }
+                            let ok = await checkSuccess(
+                              orderInfo.data.orderNumber
+                            );
+                            if (ok) CustomToast("购买成功！！！");
+                          }
                         }
                       }
-                    }
-                  }}
-                >
-                  {!address
-                    ? "Connent wallet"
-                    : nodeRemaining > 0
-                    ? "Buy"
-                    : "Node Completed"}
-                </Button>
+                    }}
+                  >
+                    {!address
+                      ? "Connent wallet"
+                      : nodeRemaining > 0
+                      ? "Buy Now"
+                      : "Node Completed"}
+                  </Button>
+                </div>
               </div>
             </ScrollArea>
           </div>

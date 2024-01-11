@@ -35,31 +35,29 @@
 
       .card {
         /* 矩形 3 */
-        max-width: 1590px;
+        max-width: 1680px;
 
         // TODO 处理自适应
-        @media (width > 1590px) {
-          height: 695px;
-        }
-        @media (width <= 1590px) {
-          min-height: 695px;
-        }
+        // @media (width > 1590px) {
+        //   height: 695px;
+        // }
+        // @media (width <= 1590px) {
+        //   min-height: 695px;
+        // }
+        height: 725px;
         border-radius: 9.46px;
-        // opacity: 0.8;
-        background: #260217;
-        margin: 0 auto;
-        display: flex;
-        margin-top: calc(166px - 88px);
+        margin-top: 50px;
+
+        padding: 40px 53px;
 
         .left {
-          width: 50%;
-          position: relative;
+          margin-right: 60px;
+          flex: 1;
           /* 矩形 6 */
 
           .bulr-box {
             /* 矩形 4 */
 
-            position: absolute;
             top: 0px;
             width: 100%;
             height: 100%;
@@ -69,10 +67,7 @@
             border-radius: 9.46px;
             opacity: 1;
 
-            background: #260217;
-
-            box-sizing: border-box;
-            border: 5px solid #f58c00;
+            border-width: 5px;
 
             filter: blur(18.93px);
           }
@@ -80,16 +75,10 @@
           .model {
             width: 100%;
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
 
             border-radius: 9.46px;
-            opacity: 1;
-            background: #260217;
-            box-sizing: border-box;
-            border: 0.95px solid #f58c00;
+
+            border-width: 0.95px;
 
             img {
               /* 1 */
@@ -101,14 +90,14 @@
         }
 
         .right {
-          width: 50%;
-          [data-radix-scroll-area-viewport] {
-            // > div {
-
-            // }
-          }
+          // width: 50%;
+          flex: 1;
+          // [data-radix-scroll-area-viewport] {
+          // }
 
           .inputContent {
+            // TODO
+            display: none !important;
             padding: 44px 68px;
             display: flex;
             flex-direction: column;
@@ -281,37 +270,113 @@
                 }
               }
             }
+          }
 
-            .buy-btn {
-              /* 矩形 2 */
-              width: 100%;
-              height: 59.57px;
-              border-radius: 4.73px;
-              opacity: 1;
+          .rightContent {
+            border-radius: 9.46px;
+            border: 1px solid rgba(153, 153, 153, 0.5);
 
-              background: #f58c00;
+            .boxselect {
+              height: 95px;
+              button {
+                span {
+                  font-family: Raleway-ExtraBold;
+                  font-size: 50px;
+                  font-weight: 900;
+                  line-height: normal;
+                }
 
-              box-sizing: border-box;
-              border: 0.95px solid #f58c00;
-
-              box-shadow: 0px 9.46px 94.64px -17px #633800;
-
-              /* BUY NOW */
-
-              opacity: 1;
-
-              font-family: Raleway-ExtraBold;
-              font-size: 15.14px;
-              font-weight: 800;
-              line-height: normal;
-              text-transform: uppercase;
-              letter-spacing: 0em;
-
-              font-feature-settings: "kern" on;
-              color: #333333;
-
-              margin-top: 40px;
+                &.active {
+                  border-bottom-width: 1px;
+                }
+              }
             }
+
+            .priceDes {
+              height: 127px;
+              li {
+                width: 33%;
+                > span:nth-child(1) {
+                  font-size: 18px;
+                  font-weight: 500;
+                  line-height: 21px;
+                  letter-spacing: 0em;
+                  font-family: Raleway-Medium;
+
+                  font-feature-settings: "kern" on;
+                }
+
+                > span:nth-child(2),
+                .btcPrice .price {
+                  font-family: Raleway-Bold;
+                  font-size: 50px;
+                  line-height: normal;
+                  letter-spacing: 0em;
+                  font-feature-settings: "kern" on;
+
+                  margin-top: 10px;
+                }
+
+                .btcPrice {
+                  .unit {
+                  }
+                }
+              }
+            }
+
+            .content-bottom {
+              padding: 0 30px;
+              padding-bottom: 27.43px;
+              > span {
+                &:nth-child(1) {
+                  font-family: Raleway-Bold;
+                  font-size: 32px;
+                  letter-spacing: 0em;
+                  font-feature-settings: "kern" on;
+                  color: #f58c00;
+                  margin-top: 31px;
+                }
+                &:nth-child(2) {
+                  font-family: Raleway-Medium;
+                  font-size: 18px;
+                  font-weight: 500;
+                  line-height: 26.5px;
+                  letter-spacing: 0em;
+                  margin-top: 25px;
+                }
+              }
+            }
+          }
+
+          .buy-btn {
+            /* 矩形 2 */
+            width: 100%;
+            height: 59.57px;
+            border-radius: 4.73px;
+            opacity: 1;
+
+            background: #f58c00;
+
+            box-sizing: border-box;
+            border: 0.95px solid #f58c00;
+
+            box-shadow: 0px 9.46px 94.64px -17px #633800;
+
+            /* BUY NOW */
+
+            opacity: 1;
+
+            font-family: Raleway-ExtraBold;
+            font-size: 15.14px;
+            font-weight: 800;
+            line-height: normal;
+            text-transform: uppercase;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #333333;
+
+            margin-top: 40px;
           }
         }
       }
