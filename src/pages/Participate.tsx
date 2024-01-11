@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-11 18:31:07
+ * @LastEditTime: 2024-01-11 19:19:50
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,14 @@ import { Button, ButtonProps } from "@/components/ui/button";
 import ConnectWallet, {
   ConnectWallet_handleType,
 } from "@/components/common/ConnectWallet";
-import { useEffect, useRef, useState } from "react";
+import {
+  Fragment,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { Progress } from "@/components/ui/progress";
 import Nav from "@/components/common/Nav";
 import zepoch from "@/assets/zepoch.mp4";
@@ -34,11 +41,12 @@ import {
   EffectComposer,
   ToneMapping,
 } from "@react-three/postprocessing";
-import { Wallet, fetchUrl, isMobile, isOKApp } from "@/utils";
+import { Wallet, fetchUrl, isMobile, isOKApp, localStorageKey } from "@/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import roos_box from "@/assets/roos_box.png";
 import ConnectUs from "@/components/common/ConnectUs";
 import CustomToast from "@/components/common/CustomToast";
+import { connectingReducer } from "@/store/reducer";
 
 type NodeInfo = {
   nodeTotal: number;
@@ -48,6 +56,7 @@ type NodeInfo = {
   increaseCount: number;
   nodePrice: number;
   id: number;
+  nodeName: string;
 };
 
 type OrderInfo = { buyAmount: number; orderNumber: number; status: number };
@@ -69,10 +78,13 @@ export default function () {
 
   const [userTotalBuy, setUserTotalBuy] = useState(0);
 
+  const [nodeList, setNodeList] = useState<NodeInfo[]>([]);
   const [nodeInfo, setNodeInfo] = useState<NodeInfo>();
 
-  const [selectNodeType, setSelectNodeType] = useState<NodeType>(NodeType.J);
+  const [selectNodeType, setSelectNodeType] = useState<string>("");
 
+  const invitationCode = () =>
+    localStorage.getItem(localStorageKey.roos_user_invitation_code);
   // const [orderInfo, setOrderInfo] = useState<OrderInfo>();
 
   function getNodeInfo() {
@@ -81,7 +93,10 @@ export default function () {
     }).then((res) => {
       if (res) {
         console.log(res.data);
+        setNodeList([...res.data]);
         const nodeData = res.data[0];
+
+        setSelectNodeType(nodeData.nodeName);
         setNodeInfo(nodeData);
 
         let nodeTotal = nodeData.nodeTotal;
@@ -149,13 +164,14 @@ export default function () {
   }, [address]);
 
   function ActiveButton(
-    props: { content: string; active: boolean } & ButtonProps
+    props: { content: string; active: boolean; key?: any } & ButtonProps
   ) {
     return (
       <>
         <button
+          key={props.key}
           onClick={props.onClick}
-          className={`active w-[33%] h-full ${
+          className={`box-select-item active w-[33%] h-full ${
             props.active
               ? "text-[#F58C00] border-b-[#F58C00]"
               : "text-[#333] border-b-[#333333]"
@@ -293,21 +309,20 @@ export default function () {
 
               <div className="rightContent bottomContent w-full h-full box-border flex flex-col">
                 <div className="boxselect w-full flex items-center">
-                  <ActiveButton
-                    content={NodeType.J}
-                    active={selectNodeType == NodeType.J}
-                    onClick={() => setSelectNodeType(NodeType.J)}
-                  />
-                  <ActiveButton
-                    content={NodeType.Q}
-                    active={selectNodeType == NodeType.Q}
-                    onClick={() => setSelectNodeType(NodeType.Q)}
-                  />
-                  <ActiveButton
-                    content={NodeType.K}
-                    active={selectNodeType == NodeType.K}
-                    onClick={() => setSelectNodeType(NodeType.K)}
-                  />
+                  {nodeList.map((v, i) => {
+                    return (
+                      <Fragment key={i}>
+                        <ActiveButton
+                          content={v.nodeName}
+                          active={selectNodeType == v.nodeName}
+                          onClick={() => {
+                            setSelectNodeType(v.nodeName);
+                            setNodeInfo(v);
+                          }}
+                        />
+                      </Fragment>
+                    );
+                  })}
                 </div>
 
                 <ul className="priceDes w-full flex items-center">
@@ -413,8 +428,8 @@ export default function () {
                                   { method: "GET" }
                                 );
 
-                                // 模拟轮询
-                                // return new Promise<{ data: boolean }>(
+                                // // 模拟轮询
+                                // return new Promise<{ type: number }>(
                                 //   (reslove, reject) => {
                                 //     setTimeout(() => {
                                 //       console.log("check!!:", time);
@@ -435,7 +450,10 @@ export default function () {
                             let ok = await checkSuccess(
                               orderInfo.data.orderNumber
                             );
-                            if (ok) CustomToast("购买成功！！！");
+                            if (ok)
+                              CustomToast(
+                                "Paid, waiting for confirmation on the chain! Check it later in Personal Center."
+                              );
                           }
                         }
                       }
@@ -458,12 +476,25 @@ export default function () {
               Invite benefits
             </span>
             <span className="font-[Raleway-Medium] text-[#EAEAEA]">
-              ·Invite the box to get contribution, J rewards XX, Q rewards XX, K
-              rewards XX.
+              {invitationCode() && (
+                <>
+                  ·Invite the box to get contribution, J rewards XX, Q rewards
+                  XX, K rewards XX.
+                </>
+              )}
+              {!connected && <>Connect wallet to receive invitation link.</>}
             </span>
             <span className="font-[Raleway-Medium] text-[#EAEAEA]">
-              ·Invite the box to get NFT fragments, J reward XX , Q reward XX, K
-              reward XX .
+              {invitationCode() && (
+                <>
+                  ·Invite the box to get NFT fragments, J reward XX , Q reward
+                  XX, K reward XX .
+                </>
+              )}
+
+              {connected && !invitationCode() && (
+                <>Purchase ROOSBOX to get invitation link.</>
+              )}
             </span>
             <div className="invite-bottom flex">
               <div className="flex items-center">
@@ -471,7 +502,14 @@ export default function () {
                   Link：
                 </span>
                 <span className="font-[Raleway-Medium] text-[#2B4ACB] underline">
-                  https://xxxx.com.....7V8M9
+                  {invitationCode() && <>https://xxxx.com.....7V8M9</>}
+
+                  {!connected && (
+                    <>Connect wallet to receive invitation link.</>
+                  )}
+                  {connected && !invitationCode() && (
+                    <>Purchase ROOSBOX to get invitation link.</>
+                  )}
                 </span>
                 <button>
                   {" "}
@@ -483,7 +521,14 @@ export default function () {
                   code：
                 </span>
                 <span className="font-[Raleway-Medium]  text-[#2B4ACB] underline">
-                  87V8M97S
+                  {invitationCode() && <>87V8M97S</>}
+
+                  {!connected && (
+                    <>Connect wallet to receive invitation link.</>
+                  )}
+                  {connected && !invitationCode() && (
+                    <>Purchase ROOSBOX to get invitation link.</>
+                  )}
                 </span>
                 <button>
                   <img src={copy} alt="" />

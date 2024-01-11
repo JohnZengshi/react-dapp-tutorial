@@ -1,4 +1,5 @@
 import CustomToast from "@/components/common/CustomToast";
+import { connectingReducer } from "@/store/reducer";
 import {
   BTC_Unit_Converter,
   fetchUrl,
@@ -11,6 +12,7 @@ import {
   useEffect,
   useImperativeHandle,
   useLayoutEffect,
+  useReducer,
   useRef,
   useState,
 } from "react";
@@ -26,7 +28,7 @@ type Account = {
   compressedPublicKey: string;
   publicKey: string;
 };
-let connecting = false; // TODO 优化connecting状态
+// let connecting = false; // TODO 优化connecting状态
 export type Okx_HandleType = {
   _connect: () => void;
   _disConnect: () => void;
@@ -47,7 +49,9 @@ const Okx = forwardRef<
   const [connected, setConnected] = useState<boolean>(false);
   const [address, setAddress] = useState<string>();
   const [invitationCode, setInvitationCode] = useState("");
-
+  const [state, dispatch] = useReducer(connectingReducer, {
+    connecting: false,
+  });
   useImperativeHandle(ref, () => {
     return {
       _connect() {
@@ -103,8 +107,10 @@ const Okx = forwardRef<
   async function connect() {
     return new Promise<void>(async (reslove, reject) => {
       await checkinstall();
-      if (connecting) return;
-      connecting = true;
+      if (state.connecting) return;
+      // if (connecting) return;
+      // connecting = true;
+      dispatch({ type: "SET_CONNECTING_TRUE" });
       okxwallet.bitcoin
         .connect()
         .then(async (result: Account) => {
@@ -121,7 +127,7 @@ const Okx = forwardRef<
                   {
                     method: "GET",
                   }
-                ).then((res) => {
+                ).then(async (res) => {
                   console.log(res);
 
                   if (res && !res.data.exist) {
@@ -139,6 +145,8 @@ const Okx = forwardRef<
                     });
                   }
 
+                  let publicKey = await okxwallet.bitcoin.getPublicKey();
+
                   // TODO 签名✔
                   // const nonce = "22a68408-fea7-4491-996c-a92fbf710a72";
                   // const message = `Welcome to OKX!\n\nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${result.address}\n    \nNonce:\n${nonce}\n`;
@@ -152,13 +160,17 @@ const Okx = forwardRef<
                       // TODO 登录✔
                       let loginInfo = await fetchUrl<
                         { token: string },
-                        { account: string; password: string }
+                        { account: string; password: string; publicKey: string }
                       >(
                         "/api/account/signIn",
                         {
                           method: "POST",
                         },
-                        { account: result.address, password: sign }
+                        {
+                          account: result.address,
+                          password: sign,
+                          publicKey,
+                        }
                       );
                       if (loginInfo) {
                         console.log(loginInfo);
@@ -171,8 +183,13 @@ const Okx = forwardRef<
                         let invitation = await fetchUrl<{
                           invitationCode: string;
                         }>("/api/invite/invitationCode", { method: "GET" });
-                        if (invitation)
+                        if (invitation) {
                           setInvitationCode(invitation.data.invitationCode);
+                          localStorage.setItem(
+                            localStorageKey.roos_user_invitation_code,
+                            invitation.data.invitationCode
+                          );
+                        }
 
                         reslove();
                       }
@@ -186,7 +203,8 @@ const Okx = forwardRef<
           localStorage.setItem(localStorageKey.okx_address, result.address);
           setAddress(result.address);
           setConnected(true);
-          connecting = false;
+          // connecting = false;
+          dispatch({ type: "SET_CONNECTING_FALSE" });
           reslove();
         })
         .catch(handleCatch);
@@ -198,6 +216,7 @@ const Okx = forwardRef<
     setAddress("");
     setConnected(false);
     localStorage.removeItem(localStorageKey.okx_address);
+    localStorage.removeItem(localStorageKey.roos_user_invitation_code);
   }
 
   // 用户变化
@@ -206,6 +225,7 @@ const Okx = forwardRef<
       setConnected(false);
       setAddress("");
       localStorage.removeItem(localStorageKey.okx_address);
+      localStorage.removeItem(localStorageKey.roos_user_invitation_code);
     } else {
       setAddress(addressInfo.address);
     }
@@ -243,7 +263,8 @@ const Okx = forwardRef<
   // 统一处理错误
   function handleCatch(e: { code: number; message: string }) {
     console.log(e);
-    connecting = false;
+    // connecting = false;
+    dispatch({ type: "SET_CONNECTING_FALSE" });
     if (typeof e.message === "string") {
       console.warn(e.message);
       CustomToast(e.message);
