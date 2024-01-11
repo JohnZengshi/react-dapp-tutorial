@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-10 23:14:36
+ * @LastEditTime: 2024-01-11 21:59:20
  * @Author: John
  */
 /*
@@ -19,6 +19,8 @@ import "../app/globals.css";
 import VConsole from "vconsole";
 import flexible from "./utils/flexible";
 import { getUrlQueryParam } from "./utils";
+import store from "@/store/store";
+import { Provider } from "react-redux";
 
 // 打开控制台
 if (getUrlQueryParam("vconsole") === "1") {
@@ -28,6 +30,8 @@ flexible(window, document);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );

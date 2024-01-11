@@ -1,23 +1,41 @@
 /*
  * @LastEditors: John
- * @Date: 2024-01-11 19:14:33
- * @LastEditTime: 2024-01-11 19:25:50
+ * @Date: 2024-01-11 21:24:31
+ * @LastEditTime: 2024-01-11 22:45:06
  * @Author: John
  */
-import React, { useReducer } from "react";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-// reducer 函数接收当前状态和一个 action，并返回新的状态
-type State = { connecting: boolean };
-export const connectingReducer = (
-  state: State,
-  action: { type: "SET_CONNECTING_FALSE" | "SET_CONNECTING_TRUE" }
-): State => {
-  switch (action.type) {
-    case "SET_CONNECTING_FALSE":
-      return { connecting: false };
-    case "SET_CONNECTING_TRUE":
-      return { connecting: true };
-    default:
-      return state;
-  }
+interface UserState {
+  wallet: {
+    address: string;
+    connecting: boolean;
+    invitationCode: string;
+  };
+}
+
+const initialState: UserState = {
+  wallet: { address: "", connecting: false, invitationCode: "" },
 };
+
+export const userSlice = createSlice({
+  name: "user",
+  initialState: initialState,
+  reducers: {
+    SET_ADDRESS: (state, action: PayloadAction<string>) => {
+      state.wallet.address = action.payload;
+    },
+    SET_WALLET_CONNECTING: (state, action: PayloadAction<boolean>) => {
+      state.wallet.connecting = action.payload;
+    },
+    SET_USER_INVITATION_CODE: (state, action: PayloadAction<string>) => {
+      state.wallet.invitationCode = action.payload;
+    },
+  },
+});
+
+// Action creators are generated for each case reducer function
+export const { SET_ADDRESS, SET_WALLET_CONNECTING, SET_USER_INVITATION_CODE } =
+  userSlice.actions;
+
+export default userSlice.reducer;

@@ -1,5 +1,9 @@
 import CustomToast from "@/components/common/CustomToast";
-import { connectingReducer } from "@/store/reducer";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import {
+  SET_USER_INVITATION_CODE,
+  SET_WALLET_CONNECTING,
+} from "@/store/reducer";
 import {
   BTC_Unit_Converter,
   fetchUrl,
@@ -7,6 +11,12 @@ import {
   localStorageKey,
   stringToHex,
 } from "@/utils";
+import {
+  API_CHECK_INVITE_CODE,
+  API_CHECT_EXIT,
+  API_LOGIN,
+  API_SIGNUP,
+} from "@/utils/api";
 import {
   forwardRef,
   useEffect,
@@ -28,7 +38,7 @@ type Account = {
   compressedPublicKey: string;
   publicKey: string;
 };
-// let connecting = false; // TODO 优化connecting状态
+// let connecting = false; // TODO 优化connecting状态✔
 export type Okx_HandleType = {
   _connect: () => void;
   _disConnect: () => void;
@@ -49,9 +59,8 @@ const Okx = forwardRef<
   const [connected, setConnected] = useState<boolean>(false);
   const [address, setAddress] = useState<string>();
   const [invitationCode, setInvitationCode] = useState("");
-  const [state, dispatch] = useReducer(connectingReducer, {
-    connecting: false,
-  });
+  const connecting = useAppSelector((state) => state.user.wallet.connecting);
+  const dispath = useAppDispatch();
   useImperativeHandle(ref, () => {
     return {
       _connect() {
@@ -107,10 +116,10 @@ const Okx = forwardRef<
   async function connect() {
     return new Promise<void>(async (reslove, reject) => {
       await checkinstall();
-      if (state.connecting) return;
-      // if (connecting) return;
+      if (connecting) return;
       // connecting = true;
-      dispatch({ type: "SET_CONNECTING_TRUE" });
+      dispath(SET_WALLET_CONNECTING(true));
+
       okxwallet.bitcoin
         .connect()
         .then(async (result: Account) => {
@@ -120,82 +129,48 @@ const Okx = forwardRef<
 
           if (!roos_token) {
             await (() => {
-              return new Promise<void>((reslove, reject) => {
+              return new Promise<void>(async (reslove, reject) => {
                 // TODO 判断用户是否注册✔
-                fetchUrl<{ exist: boolean }>(
-                  `/api/account/exist?account=${result.address}`,
-                  {
-                    method: "GET",
-                  }
-                ).then(async (res) => {
-                  console.log(res);
+                if (!(await API_CHECT_EXIT(result.address))) {
+                  // TODO 注册✔
+                  await API_SIGNUP(result.address);
+                }
 
-                  if (res && !res.data.exist) {
-                    // TODO 注册✔
+                let publicKey = await okxwallet.bitcoin.getPublicKey();
 
-                    fetchUrl<any, { account: string; shareCode: string }>(
-                      `/api/account/signUp`,
-                      { method: "POST" },
-                      { account: result.address, shareCode: "NODE123" }
-                    ).then((res) => {
-                      if (res && res.code == 0) {
-                        console.log("signUp", res.code);
-                        // 注册成功
-                      }
-                    });
-                  }
+                // TODO 签名✔
+                // const nonce = "22a68408-fea7-4491-996c-a92fbf710a72";
+                // const message = `Welcome to OKX!\n\nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${result.address}\n    \nNonce:\n${nonce}\n`;
+                const message = `userAddressSignature:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`;
+                // const message = "need sign string";
+                okxwallet.bitcoin
+                  .signMessage(message, { from: result.address }) // OKX app 钱包新的签名方法传参（官网的方法传参不对）！！！！
+                  .then(async (sign: string) => {
+                    console.log("get sign:", sign);
 
-                  let publicKey = await okxwallet.bitcoin.getPublicKey();
+                    // TODO 登录✔
+                    let loginInfo = await API_LOGIN(
+                      result.address,
+                      sign,
+                      publicKey
+                    );
 
-                  // TODO 签名✔
-                  // const nonce = "22a68408-fea7-4491-996c-a92fbf710a72";
-                  // const message = `Welcome to OKX!\n\nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${result.address}\n    \nNonce:\n${nonce}\n`;
-                  const message = `userAddressSignature:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`;
-                  // const message = "need sign string";
-                  okxwallet.bitcoin
-                    .signMessage(message, { from: result.address }) // OKX app 钱包新的签名方法传参（官网的方法传参不对）！！！！
-                    .then(async (sign: string) => {
-                      console.log("get sign:", sign);
-
-                      // TODO 登录✔
-                      let loginInfo = await fetchUrl<
-                        { token: string },
-                        { account: string; password: string; publicKey: string }
-                      >(
-                        "/api/account/signIn",
-                        {
-                          method: "POST",
-                        },
-                        {
-                          account: result.address,
-                          password: sign,
-                          publicKey,
-                        }
+                    if (loginInfo) {
+                      console.log(loginInfo);
+                      localStorage.setItem(
+                        localStorageKey.roos_token,
+                        loginInfo.token
                       );
-                      if (loginInfo) {
-                        console.log(loginInfo);
-                        localStorage.setItem(
-                          localStorageKey.roos_token,
-                          loginInfo.data.token
-                        );
 
-                        // TODO 查询用户邀请码
-                        let invitation = await fetchUrl<{
-                          invitationCode: string;
-                        }>("/api/invite/invitationCode", { method: "GET" });
-                        if (invitation) {
-                          setInvitationCode(invitation.data.invitationCode);
-                          localStorage.setItem(
-                            localStorageKey.roos_user_invitation_code,
-                            invitation.data.invitationCode
-                          );
-                        }
+                      // TODO 查询用户邀请码
+                      let invitationCode = await API_CHECK_INVITE_CODE();
+                      if (invitationCode)
+                        dispath(SET_USER_INVITATION_CODE(invitationCode));
 
-                        reslove();
-                      }
-                    })
-                    .catch(handleCatch);
-                });
+                      reslove();
+                    }
+                  })
+                  .catch(handleCatch);
               });
             })();
           }
@@ -204,7 +179,7 @@ const Okx = forwardRef<
           setAddress(result.address);
           setConnected(true);
           // connecting = false;
-          dispatch({ type: "SET_CONNECTING_FALSE" });
+          dispath(SET_WALLET_CONNECTING(true));
           reslove();
         })
         .catch(handleCatch);
@@ -216,7 +191,6 @@ const Okx = forwardRef<
     setAddress("");
     setConnected(false);
     localStorage.removeItem(localStorageKey.okx_address);
-    localStorage.removeItem(localStorageKey.roos_user_invitation_code);
   }
 
   // 用户变化
@@ -225,7 +199,6 @@ const Okx = forwardRef<
       setConnected(false);
       setAddress("");
       localStorage.removeItem(localStorageKey.okx_address);
-      localStorage.removeItem(localStorageKey.roos_user_invitation_code);
     } else {
       setAddress(addressInfo.address);
     }
@@ -264,7 +237,7 @@ const Okx = forwardRef<
   function handleCatch(e: { code: number; message: string }) {
     console.log(e);
     // connecting = false;
-    dispatch({ type: "SET_CONNECTING_FALSE" });
+    dispath(SET_WALLET_CONNECTING(false));
     if (typeof e.message === "string") {
       console.warn(e.message);
       CustomToast(e.message);

@@ -25,6 +25,8 @@ import "./ConnectWallet.scss";
 import "./ConnectWallet-m.scss";
 import okx_logo from "@/assets/okx_logo.png";
 import unisat_logo from "@/assets/unisat_logo.png";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { SET_ADDRESS } from "@/store/reducer";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 14:40:57
@@ -59,6 +61,9 @@ const ConnectWallet = forwardRef<
   const [connected, setConnected] = useState(false);
   const [address, setAddress] = useState<string>();
 
+  const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+
   useImperativeHandle(ref, () => {
     return {
       _onSubmit(cost: number, toAddress: string) {
@@ -86,6 +91,8 @@ const ConnectWallet = forwardRef<
   });
 
   function onUpdate(i: boolean, c: boolean, a: string | undefined) {
+    if (a) dispatch(SET_ADDRESS(a));
+
     setInstalled(i);
     setConnected(c);
     setAddress(a);
@@ -191,7 +198,7 @@ const ConnectWallet = forwardRef<
         <DropdownMenu>
           <DropdownMenuTrigger className="address" type="button">
             {" "}
-            {address && shortenString(address, 6, 5)}
+            {user.wallet.address && shortenString(user.wallet.address, 6, 5)}
           </DropdownMenuTrigger>
           {/* <DropdownMenuContent>
             <DropdownMenuItem

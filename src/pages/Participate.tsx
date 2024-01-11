@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-11 19:19:50
+ * @LastEditTime: 2024-01-11 22:48:43
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -46,8 +46,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import roos_box from "@/assets/roos_box.png";
 import ConnectUs from "@/components/common/ConnectUs";
 import CustomToast from "@/components/common/CustomToast";
-import { connectingReducer } from "@/store/reducer";
-
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
 type NodeInfo = {
   nodeTotal: number;
   purchasedCount: number;
@@ -82,10 +81,9 @@ export default function () {
   const [nodeInfo, setNodeInfo] = useState<NodeInfo>();
 
   const [selectNodeType, setSelectNodeType] = useState<string>("");
-
-  const invitationCode = () =>
-    localStorage.getItem(localStorageKey.roos_user_invitation_code);
-  // const [orderInfo, setOrderInfo] = useState<OrderInfo>();
+  const invitationCode = useAppSelector(
+    (state) => state.user.wallet.invitationCode
+  );
 
   function getNodeInfo() {
     fetchUrl<NodeInfo[]>("/api/node/getNodeSetting", {
@@ -476,7 +474,7 @@ export default function () {
               Invite benefits
             </span>
             <span className="font-[Raleway-Medium] text-[#EAEAEA]">
-              {invitationCode() && (
+              {invitationCode && (
                 <>
                   ·Invite the box to get contribution, J rewards XX, Q rewards
                   XX, K rewards XX.
@@ -485,14 +483,14 @@ export default function () {
               {!connected && <>Connect wallet to receive invitation link.</>}
             </span>
             <span className="font-[Raleway-Medium] text-[#EAEAEA]">
-              {invitationCode() && (
+              {invitationCode && (
                 <>
                   ·Invite the box to get NFT fragments, J reward XX , Q reward
                   XX, K reward XX .
                 </>
               )}
 
-              {connected && !invitationCode() && (
+              {connected && !invitationCode && (
                 <>Purchase ROOSBOX to get invitation link.</>
               )}
             </span>
@@ -502,12 +500,12 @@ export default function () {
                   Link：
                 </span>
                 <span className="font-[Raleway-Medium] text-[#2B4ACB] underline">
-                  {invitationCode() && <>https://xxxx.com.....7V8M9</>}
+                  {invitationCode && <>https://xxxx.com.....7V8M9</>}
 
                   {!connected && (
                     <>Connect wallet to receive invitation link.</>
                   )}
-                  {connected && !invitationCode() && (
+                  {connected && !invitationCode && (
                     <>Purchase ROOSBOX to get invitation link.</>
                   )}
                 </span>
@@ -521,12 +519,12 @@ export default function () {
                   code：
                 </span>
                 <span className="font-[Raleway-Medium]  text-[#2B4ACB] underline">
-                  {invitationCode() && <>87V8M97S</>}
+                  {invitationCode && <>87V8M97S</>}
 
                   {!connected && (
                     <>Connect wallet to receive invitation link.</>
                   )}
-                  {connected && !invitationCode() && (
+                  {connected && !invitationCode && (
                     <>Purchase ROOSBOX to get invitation link.</>
                   )}
                 </span>

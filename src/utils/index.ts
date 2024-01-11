@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-11 18:47:21
+ * @LastEditTime: 2024-01-11 22:48:27
  * @Author: John
  */
 import CustomToast from "@/components/common/CustomToast";
@@ -46,7 +46,6 @@ export const isOKApp = /OKApp/i.test(ua);
 export enum localStorageKey {
   okx_address = "okx_address",
   roos_token = "roos_token",
-  roos_user_invitation_code = "roos_user_invitation_code",
 }
 interface RequestOptions {
   method: "GET" | "POST";

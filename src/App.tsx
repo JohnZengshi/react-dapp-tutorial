@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 08:51:29
- * @LastEditTime: 2024-01-10 10:11:30
+ * @LastEditTime: 2024-01-11 21:59:04
  * @Author: John
  */
 // import "./App.css";
@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import Participate from "./pages/Participate";
 import { Toaster } from "@/components/ui/toaster";
 import { useEffect } from "react";
+
 const router = createHashRouter([
   {
     path: "/",
