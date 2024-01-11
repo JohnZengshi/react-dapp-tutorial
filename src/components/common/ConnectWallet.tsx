@@ -135,6 +135,9 @@ const ConnectWallet = forwardRef<
   }, []);
   return (
     <>
+      {connected && (
+        <button className="profile text-[#F58C00] uppercase">profile</button>
+      )}
       {!connected && (
         <Dialog
           open={open}
@@ -144,7 +147,7 @@ const ConnectWallet = forwardRef<
         >
           <DialogTrigger asChild>
             <button
-              className="ConnectWallet"
+              className="ConnectWallet hover:bg-[#F58C00] hover:text-[#FFFFFF]"
               onClick={() => {
                 setOpen(true);
               }}
