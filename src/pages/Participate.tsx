@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-11 16:37:01
+ * @LastEditTime: 2024-01-11 17:20:09
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,9 @@ import { Progress } from "@/components/ui/progress";
 import Nav from "@/components/common/Nav";
 import zepoch from "@/assets/zepoch.mp4";
 import box from "@/assets/20240105-152907.png";
+import roos_logo from "@/assets/roos_logo.png";
+import copy from "@/assets/copy.png";
+import roos_logo_big from "@/assets/roos_logo_big.png";
 
 import { Canvas } from "@react-three/fiber";
 import {
@@ -179,8 +182,8 @@ export default function () {
         }
       />
       <ScrollArea className="Participate">
-        <div className="content">
-          <div className="card bg-[#260217] m-0-auto flex ">
+        <div className="content flex flex-col">
+          <div className="card bg-[#260217a1] m-0-auto flex ">
             <div className="left top relative">
               <div className="bulr-box absolute bg-[#260217] box-border border-solid border-[#f58c00]"></div>
               <div className="model flex justify-center items-center relative opacity-1 bg-[#260217] box-border border-solid border-[#f58c00]">
@@ -439,6 +442,47 @@ export default function () {
                 </div>
               </div>
             </ScrollArea>
+          </div>
+
+          <div className="invite relative bg-[#26021798] box-border border-solid border-[rgb(245, 140, 0)] flex flex-col overflow-hidden">
+            <img className="logo" src={roos_logo} alt="" />
+            <span className="font-[Raleway-Bold] uppercase tracking-[0em] text-[#F58C00]">
+              Invite benefits
+            </span>
+            <span className="font-[Raleway-Medium] text-[#EAEAEA]">
+              ·Invite the box to get contribution, J rewards XX, Q rewards XX, K
+              rewards XX.
+            </span>
+            <span className="font-[Raleway-Medium] text-[#EAEAEA]">
+              ·Invite the box to get NFT fragments, J reward XX , Q reward XX, K
+              reward XX .
+            </span>
+            <div className="invite-bottom flex">
+              <div className="flex items-center">
+                <span className="font-[Raleway-Medium] text-[#EAEAEA]">
+                  Link：
+                </span>
+                <span className="font-[Raleway-Medium] text-[#2B4ACB] underline">
+                  https://xxxx.com.....7V8M9
+                </span>
+                <button>
+                  {" "}
+                  <img src={copy} alt="" />
+                </button>
+              </div>
+              <div className="flex items-center">
+                <span className="font-[Raleway-Medium] text-[#EAEAEA]">
+                  code：
+                </span>
+                <span className="font-[Raleway-Medium]  text-[#2B4ACB] underline">
+                  87V8M97S
+                </span>
+                <button>
+                  <img src={copy} alt="" />
+                </button>
+              </div>
+            </div>
+            <img className="logo-big absolute" src={roos_logo_big} alt="" />
           </div>
         </div>
         <ConnectUs />

@@ -36,7 +36,7 @@
     width: 512px;
     height: 310px;
     > div {
-      &:nth-child(1) {
+      &:nth-of-type(1) {
         /* 矩形 9 */
         /* 矩形 9 */
 
@@ -52,7 +52,7 @@
         filter: blur(10px);
       }
 
-      &:nth-child(2) {
+      &:nth-of-type(2) {
         /* 矩形 8 */
 
         position: absolute;
@@ -69,7 +69,7 @@
         border: 1px solid #f58c00;
 
         > span {
-          &:nth-child(1) {
+          &:nth-of-type(1) {
             /* Connect Wallet */
 
             opacity: 1;
@@ -84,7 +84,7 @@
             font-feature-settings: "kern" on;
             color: #f58c00;
 
-            margin-top: 42px;
+            margin-top: 53px;
           }
         }
 
@@ -100,7 +100,7 @@
           border: 0.71px solid #eaeaea;
 
           box-shadow: 0px 7.1px 70.98px -17px #633800;
-          margin-top: 65px;
+          margin-top: 50px;
 
           > img {
             width: 27px;
@@ -124,7 +124,7 @@
             z-index: 1;
           }
 
-          &:nth-child(3) {
+          &:nth-of-type(2) {
             margin-top: 22.5px;
           }
         }
