@@ -247,8 +247,8 @@ const ConnectWallet = forwardRef<
           </DialogTrigger>
           <DialogContent className="dialog-content">
             <div className="selectWallet w-full h-full">
-              <div className="w-full h-full border-solid border-[#F58C00] blur-[10px] absolute"></div>
-              <div className="flex flex-col items-center absolute w-full h-full  border-solid border-[#F58C00] bg-[#550935] opacity-80 ">
+              <div className="warpper_box w-full h-full border-solid border-[#F58C00] blur-[10px] absolute"></div>
+              <div className="content_box flex flex-col items-center absolute w-full h-full  border-solid border-[#F58C00] bg-[#550935] opacity-80 ">
                 <span className="font-[Raleway-Bold] text-[#F58C00] uppercase ">
                   Connect Wallet
                 </span>
@@ -336,8 +336,8 @@ const ConnectWallet = forwardRef<
       >
         <DialogContent className="dialog-content">
           <div className="inviteCode w-full h-full">
-            <div className="w-full h-full border-solid border-[#F58C00] blur-[10px] absolute"></div>
-            <div className="flex flex-col items-center absolute w-full h-full  border-solid border-[#F58C00] bg-[#550935] opacity-80 ">
+            <div className="warpper_box w-full h-full border-solid border-[#F58C00] blur-[10px] absolute"></div>
+            <div className="content_box flex flex-col items-center absolute w-full h-full  border-solid border-[#F58C00] bg-[#550935] opacity-80 ">
               <span className="items-start">
                 Please enter the invitation code
               </span>
@@ -359,7 +359,7 @@ const ConnectWallet = forwardRef<
                   type="text"
                   className="absolute w-full h-full t-0 l-0 opacity-0"
                   onChange={(e) => {
-                    setInviteCode(e.target.value.slice(0, 6));
+                    setInviteCode(e.target.value.replace(" ", "").slice(0, 6));
                   }}
                 />
 
