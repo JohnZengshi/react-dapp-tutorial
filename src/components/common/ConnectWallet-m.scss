@@ -38,48 +38,193 @@
   .dialog-content {
     width: 273px;
     height: 166px;
-    > div {
-      &:nth-child(1) {
-        /* 矩形 9 */
-        /* 矩形 9 */
+    .selectWallet {
+      > div {
+        &:nth-child(1) {
+          /* 矩形 9 */
+          /* 矩形 9 */
 
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        width: 273px;
-        height: 166px;
-        border-radius: 2.66px;
-        opacity: 1;
+          position: absolute;
+          left: 0px;
+          top: 0px;
+          width: 273px;
+          height: 166px;
+          border-radius: 2.66px;
+          opacity: 1;
 
-        border: 2.13px solid #f58c00;
+          border: 2.13px solid #f58c00;
 
-        filter: blur(5.33px);
+          filter: blur(5.33px);
+        }
+
+        &:nth-child(2) {
+          /* 矩形 8 */
+
+          position: absolute;
+          left: 0px;
+          top: 0px;
+          width: 273px;
+          height: 166px;
+          border-radius: 2.66px;
+          opacity: 0.8;
+
+          background: #550935;
+
+          box-sizing: border-box;
+          border: 0.53px solid #f58c00;
+
+          > span {
+            &:nth-child(1) {
+              /* Connect Wallet */
+
+              opacity: 1;
+
+              font-family: Raleway-Bold;
+              font-size: 18px;
+              font-weight: bold;
+              line-height: normal;
+              text-transform: uppercase;
+              letter-spacing: 0em;
+
+              font-feature-settings: "kern" on;
+              color: #f58c00;
+
+              margin-top: 22.49px;
+            }
+          }
+
+          > button {
+            /* 矩形 8 */
+
+            width: 164px;
+            height: 24px;
+            border-radius: 1.89px;
+            opacity: 1;
+
+            box-sizing: border-box;
+            border: 0.38px solid #eaeaea;
+
+            box-shadow: 0px 3.78px 37.82px -17px #633800;
+
+            margin-top: 35.23px;
+
+            > img {
+              width: 14.63px;
+              height: 15px;
+              margin-left: 13px;
+              margin-right: 6px;
+            }
+
+            > span {
+              /* OKX */
+
+              font-family: Raleway-Bold;
+              font-size: 10px;
+              font-weight: bold;
+              line-height: normal;
+              letter-spacing: 0em;
+
+              font-feature-settings: "kern" on;
+              color: #ffffff;
+
+              z-index: 1;
+            }
+
+            &:nth-child(3) {
+              margin-top: 11.99px;
+            }
+          }
+        }
       }
+    }
 
-      &:nth-child(2) {
-        /* 矩形 8 */
+    .inviteCode {
+      > div {
+        &:nth-of-type(2) {
+          > span {
+            /* Please enter the invitation code */
 
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        width: 273px;
-        height: 166px;
-        border-radius: 2.66px;
-        opacity: 0.8;
-
-        background: #550935;
-
-        box-sizing: border-box;
-        border: 0.53px solid #f58c00;
-
-        > span {
-          &:nth-child(1) {
-            /* Connect Wallet */
+            /* Please enter the invitation code */
 
             opacity: 1;
 
+            font-family: Raleway-Mediun;
+            font-size: 10px;
+            font-weight: 500;
+            line-height: 14.13px;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #999999;
+
+            margin-top: 22.39px;
+          }
+          > ul {
+            margin-top: 32.99px;
+            > li {
+              /* 8 */
+              height: 35px;
+              /* 自动布局子元素 */
+              margin-right: 16px;
+              > span {
+                &.value {
+                  font-family: Raleway-Bold;
+                  /* v */
+
+                  font-size: 30px;
+                  font-weight: bold;
+                  line-height: normal;
+                  text-transform: uppercase;
+                  letter-spacing: 0em;
+
+                  font-feature-settings: "kern" on;
+                  color: #eaeaea;
+
+                  z-index: 1;
+                }
+                &.line {
+                  /* 直线 21 */
+
+                  /* 自动布局子元素 */
+                  width: 22px;
+                  height: 2px;
+                  opacity: 1;
+
+                  // border: 4px solid #d8d8d8;
+                  background-color: #d8d8d8;
+                  border-radius: 4px;
+
+                  z-index: 0;
+
+                  margin-top: auto;
+                }
+              }
+
+              &:last-of-type {
+                margin-right: 0;
+              }
+            }
+          }
+
+          .confirm_btn {
+            /* 矩形 8 */
+
+            /* 矩形 8 */
+
+            width: 163.69px;
+            height: 30px;
+            border-radius: 2.67px;
+            opacity: 1;
+
+            box-sizing: border-box;
+            border: 0.38px solid #f58c00;
+
+            box-shadow: 0px 3.78px 37.85px -17px #633800;
+
+            /* Confirm binding */
+
             font-family: Raleway-Bold;
-            font-size: 18px;
+            font-size: 10px;
             font-weight: bold;
             line-height: normal;
             text-transform: uppercase;
@@ -88,49 +233,7 @@
             font-feature-settings: "kern" on;
             color: #f58c00;
 
-            margin-top: 22.49px;
-          }
-        }
-
-        > button {
-          /* 矩形 8 */
-
-          width: 164px;
-          height: 24px;
-          border-radius: 1.89px;
-          opacity: 1;
-
-          box-sizing: border-box;
-          border: 0.38px solid #eaeaea;
-
-          box-shadow: 0px 3.78px 37.82px -17px #633800;
-
-          margin-top: 35.23px;
-
-          > img {
-            width: 14.63px;
-            height: 15px;
-            margin-left: 13px;
-            margin-right: 6px;
-          }
-
-          > span {
-            /* OKX */
-
-            font-family: Raleway-Bold;
-            font-size: 10px;
-            font-weight: bold;
-            line-height: normal;
-            letter-spacing: 0em;
-
-            font-feature-settings: "kern" on;
-            color: #ffffff;
-
-            z-index: 1;
-          }
-
-          &:nth-child(3) {
-            margin-top: 11.99px;
+            margin-top: 12.26px;
           }
         }
       }

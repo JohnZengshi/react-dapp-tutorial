@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-01-10 18:32:46
+ * @LastEditTime: 2024-01-12 20:57:04
  * @Author: John
  */
 import roosHomeBg from "@/assets/roos-home.mp4";
@@ -26,7 +26,7 @@ export default function () {
 
   return (
     <div className="Home">
-      <Nav
+      {/* <Nav
         connectBtn={
           <ConnectWallet
             ref={connectWalletRef}
@@ -38,7 +38,7 @@ export default function () {
             }}
           />
         }
-      />
+      /> */}
       <div className="videoBg">
         <video muted loop autoPlay={!isMobile} width="100%" height="100%">
           <source src={roosHomeBg} type="video/mp4" />
@@ -47,8 +47,6 @@ export default function () {
       {/* <video className="w-full h-full" /> */}
       {/* <Nav /> */}
       <ScrollArea className="content">
-        {/* <div className="content_1"> */}
-        <div className="nav_box"></div>
         <div className="content_1">
           <span>The First Bitcoin Layer2</span>
           <span>For The Bitcoiners.</span>
@@ -69,7 +67,6 @@ export default function () {
             Get ROOSBOX Now
           </button>
         </div>
-
         <ConnectUs />
         {/* </div> */}
       </ScrollArea>

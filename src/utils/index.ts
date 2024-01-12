@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-11 22:48:27
+ * @LastEditTime: 2024-01-12 18:28:30
  * @Author: John
  */
 import CustomToast from "@/components/common/CustomToast";
@@ -47,6 +47,10 @@ export enum localStorageKey {
   okx_address = "okx_address",
   roos_token = "roos_token",
 }
+
+export enum UrlQueryParamsKey {
+  INVITE_CODE = "inviteCode",
+}
 interface RequestOptions {
   method: "GET" | "POST";
   headers?: HeadersInit;
@@ -59,7 +63,8 @@ export async function fetchUrl<D = any, P = any>(
   params?: P
 ) {
   options.headers = {
-    Authorization: localStorage.getItem("token") || "",
+    Authorization:
+      localStorage.getItem(localStorageKey.roos_token)?.split("=")[1] || "",
     "Accept-Language": "zh-CN",
     address: localStorage.getItem(localStorageKey.okx_address) || "",
     "Content-Type": "application/json",
@@ -80,8 +85,8 @@ export async function fetchUrl<D = any, P = any>(
     } = await response.json();
 
     if (data.code === 0) return data;
-
     CustomToast(data.msg);
+    throw new Error(`error!: ${data.msg}`);
   } catch (error) {
     console.error("Error during fetch:", error);
     throw error;
@@ -90,7 +95,7 @@ export async function fetchUrl<D = any, P = any>(
 
 export enum Wallet {
   OKX = "OKX",
-  UniSat = "UniSat",
+  UniSat = "UNI_SAT",
 }
 
 // 定义一个函数，用于获取指定参数的值
@@ -111,4 +116,12 @@ export function getUrlQueryParam(key: string): string | undefined {
 export function stringToHex(inputString: string): string {
   const buffer = Buffer.from(inputString, "utf-8");
   return buffer.toString("hex");
+}
+
+export function fillArray(inputArray: string[], length: number) {
+  const outputArray = Array(length).fill("");
+  for (let i = 0; i < Math.min(inputArray.length, length); i++) {
+    outputArray[i] = inputArray[i];
+  }
+  return outputArray;
 }

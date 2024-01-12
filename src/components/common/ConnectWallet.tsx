@@ -6,6 +6,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import {
+  Fragment,
   forwardRef,
   useEffect,
   useImperativeHandle,
@@ -14,7 +15,7 @@ import {
 } from "react";
 import UseOkx, { Okx_HandleType } from "@/wallet/Okx";
 import UseUniSat, { UniSat_handleType } from "@/wallet/UniSat";
-import { Wallet, localStorageKey, shortenString } from "@/utils";
+import { Wallet, fillArray, localStorageKey, shortenString } from "@/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,18 +27,27 @@ import "./ConnectWallet-m.scss";
 import okx_logo from "@/assets/okx_logo.png";
 import unisat_logo from "@/assets/unisat_logo.png";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { SET_ADDRESS } from "@/store/reducer";
+import {
+  SET_ADDRESS,
+  SET_CONNECTED,
+  SET_NOTIFICATION_TRIGGER_EVENT,
+  SET_PAY_INFO,
+  SET_WALLET_INSTALL,
+  SET_WALLET_TYPE,
+  UserState,
+} from "@/store/reducer";
+import { useNavigate } from "react-router-dom";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 14:40:57
  * @LastEditTime: 2024-01-03 14:29:20
  * @Author: John
  */
-
+type WalletType = UserState["wallet"]["walletType"];
 export type ConnectWallet_handleType = {
   _onSubmit: (cost: number, toAddress: string) => Promise<string>;
   _connect: () => void;
-  _setWalletType: (type: Wallet) => void;
+  _setWalletType: (type: WalletType) => void;
   _selectWallet: () => void;
 };
 const ConnectWallet = forwardRef<
@@ -52,37 +62,96 @@ const ConnectWallet = forwardRef<
 >(function (props, ref) {
   const [open, setOpen] = useState(false);
 
-  const [walletType, setWalletType] = useState<Wallet | "">("");
+  // const [walletType, setWalletType] = useState<Wallet | "">("");
 
   const okxRef = useRef<Okx_HandleType>(null);
   const uniSatRef = useRef<UniSat_handleType>(null);
 
-  const [installed, setInstalled] = useState(false);
-  const [connected, setConnected] = useState(false);
-  const [address, setAddress] = useState<string>();
+  // const [installed, setInstalled] = useState(false);
+  // const [connected, setConnected] = useState(false);
+  // const [address, setAddress] = useState<string>();
 
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const [inviteCode, setInviteCode] = useState<string>("");
+
+  useEffect(() => {
+    switch (user.wallet.notificationTriggerEvent) {
+      case "SELECT_WALLET": // 选择钱包
+        dispatch(SET_NOTIFICATION_TRIGGER_EVENT(""));
+        setOpen(true);
+
+        break;
+      case "CONNECT": // 连接
+        dispatch(SET_NOTIFICATION_TRIGGER_EVENT(""));
+
+        break;
+      case "TRANSACTION": // 发送交易
+        dispatch(SET_NOTIFICATION_TRIGGER_EVENT(""));
+        // let hash = await onSubmit(
+        //   orderInfo.data.buyAmount,
+        //   "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk" // TODO 测试链接
+        // );
+        // TODO 发送交易✔
+        (async () => {
+          let hash = "";
+          if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
+            hash = await uniSatRef.current._onSubmit(
+              user.wallet.payInfo.cost,
+              user.wallet.payInfo.toAddress
+            );
+          } else if (user.wallet.walletType === "OKX" && okxRef.current) {
+            hash = await okxRef.current._onSubmit(
+              user.wallet.payInfo.cost,
+              user.wallet.payInfo.toAddress
+            );
+          }
+
+          console.log("hash", hash);
+          if (hash)
+            dispatch(SET_PAY_INFO({ ...user.wallet.payInfo, hash: hash }));
+
+          // TODO 用户取消支付
+        })();
+        break;
+
+      default:
+        break;
+    }
+
+    return () => {};
+  }, [user.wallet.notificationTriggerEvent, user.wallet.payInfo]);
+
+  useEffect(() => {
+    // setDialogOpen(true);
+
+    return () => {};
+  }, []);
 
   useImperativeHandle(ref, () => {
     return {
       _onSubmit(cost: number, toAddress: string) {
-        if (walletType === Wallet.UniSat && uniSatRef.current) {
+        if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
           return uniSatRef.current._onSubmit(cost, toAddress);
-        } else if (walletType === Wallet.OKX && okxRef.current) {
+        } else if (user.wallet.walletType === "OKX" && okxRef.current) {
           return okxRef.current._onSubmit(cost, toAddress);
         }
         return new Promise((reslove) => reslove(""));
       },
       _connect() {
-        if (walletType === Wallet.UniSat && uniSatRef.current) {
+        if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
           return uniSatRef.current._connect();
-        } else if (walletType === Wallet.OKX && okxRef.current) {
+        } else if (user.wallet.walletType === "OKX" && okxRef.current) {
           return okxRef.current._connect();
         }
       },
-      _setWalletType(type) {
-        setWalletType(type);
+      _setWalletType(type: WalletType) {
+        // setWalletType(type);
+        dispatch(SET_WALLET_TYPE(type));
       },
       _selectWallet() {
         setOpen(true);
@@ -91,16 +160,21 @@ const ConnectWallet = forwardRef<
   });
 
   function onUpdate(i: boolean, c: boolean, a: string | undefined) {
-    if (a) dispatch(SET_ADDRESS(a));
-
-    setInstalled(i);
-    setConnected(c);
-    setAddress(a);
+    dispatch(SET_ADDRESS(a));
+    dispatch(SET_CONNECTED(c));
+    dispatch(SET_WALLET_INSTALL(i));
+    // setInstalled(i);
+    // setConnected(c);
+    // setAddress(a);
 
     props.onUpdate(i, c, a);
   }
 
   const okxwallet = window.okxwallet;
+
+  useEffect(() => {
+    console.log("user", user);
+  }, [user]);
   useEffect(() => {
     let timer = setInterval(async () => {
       // console.log(okxwallet.bitcoin.selectedAccount);
@@ -111,7 +185,8 @@ const ConnectWallet = forwardRef<
         if (address) {
           clearInterval(timer);
           console.log("user is connected unisat!!");
-          setWalletType(Wallet.UniSat);
+          // setWalletType(Wallet.UniSat);
+          dispatch(SET_WALLET_TYPE("UNISAT"));
 
           return;
         }
@@ -122,7 +197,8 @@ const ConnectWallet = forwardRef<
         if (localStorage.getItem(localStorageKey.okx_address)) {
           clearInterval(timer);
           console.log("user is connected okx!!");
-          setWalletType(Wallet.OKX);
+          // setWalletType(Wallet.OKX);
+          dispatch(SET_WALLET_TYPE("OKX"));
           return;
         }
         // const account = okxwallet.bitcoin.selecteaAccount;
@@ -142,10 +218,17 @@ const ConnectWallet = forwardRef<
   }, []);
   return (
     <>
-      {connected && (
-        <button className="profile text-[#F58C00] uppercase">profile</button>
+      {user.wallet.connected && (
+        <button
+          className="profile text-[#F58C00] uppercase"
+          onClick={() => {
+            navigate("/profile");
+          }}
+        >
+          profile
+        </button>
       )}
-      {!connected && (
+      {!user.wallet.connected && (
         <Dialog
           open={open}
           onOpenChange={(v) => {
@@ -163,38 +246,44 @@ const ConnectWallet = forwardRef<
             </button>
           </DialogTrigger>
           <DialogContent className="dialog-content">
-            <div className="w-full h-full border-solid border-[#F58C00] blur-[10px] absolute"></div>
-            <div className="flex flex-col items-center absolute w-full h-full  border-solid border-[#F58C00] bg-[#550935] opacity-80 ">
-              <span className="font-[Raleway-Bold] text-[#F58C00] uppercase ">
-                Connect Wallet
-              </span>
-              <button
-                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                onClick={() => {
-                  setWalletType(Wallet.OKX);
-                  okxRef.current?._connect();
-                }}
-              >
-                <img className="" src={okx_logo} alt="" />
-                <span className="font-[Raleway-Bold]  text-[#fff]">OKX</span>
-              </button>
+            <div className="selectWallet w-full h-full">
+              <div className="w-full h-full border-solid border-[#F58C00] blur-[10px] absolute"></div>
+              <div className="flex flex-col items-center absolute w-full h-full  border-solid border-[#F58C00] bg-[#550935] opacity-80 ">
+                <span className="font-[Raleway-Bold] text-[#F58C00] uppercase ">
+                  Connect Wallet
+                </span>
+                <button
+                  className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                  onClick={() => {
+                    // setWalletType(Wallet.OKX);
+                    dispatch(SET_WALLET_TYPE("OKX"));
+                    okxRef.current?._connect();
+                  }}
+                >
+                  <img className="" src={okx_logo} alt="" />
+                  <span className="font-[Raleway-Bold]  text-[#fff]">OKX</span>
+                </button>
 
-              <button
-                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                onClick={() => {
-                  setWalletType(Wallet.UniSat);
-                  uniSatRef.current?._connect();
-                }}
-              >
-                <img className="" src={unisat_logo} alt="" />
-                <span className="font-[Raleway-Bold]  text-[#fff]">UniSat</span>
-              </button>
+                <button
+                  className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                  onClick={() => {
+                    // setWalletType(Wallet.UniSat);
+                    dispatch(SET_WALLET_TYPE("UNISAT"));
+                    uniSatRef.current?._connect();
+                  }}
+                >
+                  <img className="" src={unisat_logo} alt="" />
+                  <span className="font-[Raleway-Bold]  text-[#fff]">
+                    UniSat
+                  </span>
+                </button>
+              </div>
             </div>
           </DialogContent>
         </Dialog>
       )}
 
-      {connected && (
+      {user.wallet.connected && (
         <DropdownMenu>
           <DropdownMenuTrigger className="address" type="button">
             {" "}
@@ -216,15 +305,21 @@ const ConnectWallet = forwardRef<
         </DropdownMenu>
       )}
 
-      {walletType === Wallet.OKX && (
+      {user.wallet.walletType === "OKX" && (
         <UseOkx
           ref={okxRef}
           onUpdate={(i, c, a) => {
             onUpdate(i, c, a);
           }}
+          shouldIputInviteCode={(code) => {
+            setOpen(false);
+            setDialogOpen(true);
+            setInviteCode(code || "");
+          }}
+          checkInputInviteCodeOk={() => setDialogOpen(false)}
         />
       )}
-      {walletType === Wallet.UniSat && (
+      {user.wallet.walletType === "UNISAT" && (
         <UseUniSat
           ref={uniSatRef}
           onUpdate={(i, c, a) => {
@@ -232,6 +327,75 @@ const ConnectWallet = forwardRef<
           }}
         />
       )}
+
+      <Dialog
+        open={dialogOpen}
+        onOpenChange={(v) => {
+          setDialogOpen(v);
+        }}
+      >
+        <DialogContent className="dialog-content">
+          <div className="inviteCode w-full h-full">
+            <div className="w-full h-full border-solid border-[#F58C00] blur-[10px] absolute"></div>
+            <div className="flex flex-col items-center absolute w-full h-full  border-solid border-[#F58C00] bg-[#550935] opacity-80 ">
+              <span className="items-start">
+                Please enter the invitation code
+              </span>
+              <ul className="flex items-center relative">
+                {typeof inviteCode === "string" &&
+                  fillArray(inviteCode.split(""), 6).map((v, i) => {
+                    return (
+                      <Fragment key={i}>
+                        <li className="flex flex-col">
+                          <span className="value">{v}</span>
+                          <span className="line"></span>
+                        </li>
+                      </Fragment>
+                    );
+                  })}
+
+                <input
+                  value={inviteCode}
+                  type="text"
+                  className="absolute w-full h-full t-0 l-0 opacity-0"
+                  onChange={(e) => {
+                    setInviteCode(e.target.value.slice(0, 6));
+                  }}
+                />
+
+                {/* <li className="flex flex-col">
+                  <span className="value">8</span>
+                  <span className="line"></span>
+                </li>
+                <li className="flex flex-col">
+                  <span className="value hidden">8</span>
+                  <span className="line"></span>
+                </li>
+                <li className="flex flex-col">
+                  <span className="value hidden">8</span>
+                  <span className="line"></span>
+                </li>
+                <li className="flex flex-col">
+                  <span className="value hidden">8</span>
+                  <span className="line"></span>
+                </li>
+                <li className="flex flex-col">
+                  <span className="value hidden">8</span>
+                  <span className="line"></span>
+                </li> */}
+              </ul>
+              <button
+                className="confirm_btn"
+                onClick={() => {
+                  okxRef.current?._comfireBinding(inviteCode);
+                }}
+              >
+                Confirm binding
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 });

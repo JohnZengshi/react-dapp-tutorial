@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-11 15:02:14
+ * @LastEditTime: 2024-01-12 20:59:16
  * @Author: John
  */
 import { Button } from "../ui/button";
@@ -97,6 +97,7 @@ export default function (props: { connectBtn?: any }) {
           </DropdownMenu>
         </div>
       </div>
+      {/* <div className="nav_display"></div> */}
     </>
   );
 }

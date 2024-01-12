@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-10 23:23:12
+ * @LastEditTime: 2024-01-12 15:27:54
  * @Author: John
  */
 import { defineConfig } from "vite";
@@ -17,7 +17,7 @@ export default defineConfig({
     // https: true,
     proxy: {
       "/dev": {
-        target: "http://192.168.10.166:20020",
+        target: "http://192.168.10.166:8086",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/dev/, ""),
       },

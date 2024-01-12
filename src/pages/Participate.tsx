@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-11 22:48:43
+ * @LastEditTime: 2024-01-12 20:53:02
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -23,9 +23,6 @@ import { Progress } from "@/components/ui/progress";
 import Nav from "@/components/common/Nav";
 import zepoch from "@/assets/zepoch.mp4";
 import box from "@/assets/20240105-152907.png";
-import roos_logo from "@/assets/roos_logo.png";
-import copy from "@/assets/copy.png";
-import roos_logo_big from "@/assets/roos_logo_big.png";
 
 import { Canvas } from "@react-three/fiber";
 import {
@@ -47,6 +44,9 @@ import roos_box from "@/assets/roos_box.png";
 import ConnectUs from "@/components/common/ConnectUs";
 import CustomToast from "@/components/common/CustomToast";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import Invite from "@/components/common/Invite";
+import { SET_NOTIFICATION_TRIGGER_EVENT, SET_PAY_INFO } from "@/store/reducer";
+import { API_PAY_NODE_SMS } from "@/utils/api";
 type NodeInfo = {
   nodeTotal: number;
   purchasedCount: number;
@@ -66,10 +66,11 @@ enum NodeType {
   K = "K",
 }
 export default function () {
-  const [installed, setInstalled] = useState(false);
-  const [connected, setConnected] = useState(false);
-  const [address, setAddress] = useState<string>();
-  const connectWalletRef = useRef<ConnectWallet_handleType>(null);
+  // const [installed, setInstalled] = useState(false);
+  // const [connected, setConnected] = useState(false);
+  // const [address, setAddress] = useState<string>();
+  // TODO 重新处理connectWalletRef✔
+  // const connectWalletRef = useRef<ConnectWallet_handleType>(null);
   const [num, setNum] = useState<number>(1);
   const [cost, setCost] = useState(0);
   const [nodeTotal, setNodeTotal] = useState(0);
@@ -81,9 +82,8 @@ export default function () {
   const [nodeInfo, setNodeInfo] = useState<NodeInfo>();
 
   const [selectNodeType, setSelectNodeType] = useState<string>("");
-  const invitationCode = useAppSelector(
-    (state) => state.user.wallet.invitationCode
-  );
+  const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   function getNodeInfo() {
     fetchUrl<NodeInfo[]>("/api/node/getNodeSetting", {
@@ -122,7 +122,7 @@ export default function () {
     fetch(
       `${
         import.meta.env.VITE_BASE_API_URL
-      }/subscribe/queryByWalletAddress?walletAddress=${address}`
+      }/subscribe/queryByWalletAddress?walletAddress=${user.wallet.address}`
     )
       .then((response) => {
         return response.json();
@@ -158,8 +158,44 @@ export default function () {
   }, []);
 
   useEffect(() => {
-    // if (address) getUserNodeRecord();
-  }, [address]);
+    (async () => {
+      if (user.wallet.payInfo.hash && user.wallet.address) {
+        console.log("hash", user.wallet.payInfo.hash);
+        // TODO 轮询购买是否成功✔
+        let time = 0;
+        async function checkSuccess(orderNumber: number): Promise<boolean> {
+          time++;
+          async function check() {
+            // // 模拟轮询
+            return new Promise<{ type: number } | undefined>(
+              (reslove, reject) => {
+                setTimeout(async () => {
+                  let res = await API_PAY_NODE_SMS(
+                    orderNumber,
+                    user.wallet.payInfo.hash,
+                    1
+                  );
+                  reslove(res);
+                }, 2000);
+              }
+            );
+          }
+
+          let ok = await check();
+          if (ok?.type == 1) return true;
+          return checkSuccess(orderNumber);
+        }
+        // TODO 是否可以查到orderNumber？？
+        let ok = await checkSuccess(user.wallet.payInfo.orderNumber);
+        if (ok)
+          CustomToast(
+            "Paid, waiting for confirmation on the chain! Check it later in Personal Center."
+          );
+      }
+    })();
+
+    return () => {};
+  }, [user.wallet.payInfo.hash]);
 
   function ActiveButton(
     props: { content: string; active: boolean; key?: any } & ButtonProps
@@ -182,19 +218,19 @@ export default function () {
   }
   return (
     <>
-      <Nav
+      {/* <Nav
         connectBtn={
           <ConnectWallet
             ref={connectWalletRef}
             onUpdate={(i, c, a) => {
               console.log(a);
-              setConnected(c);
+              // setConnected(c);
               setInstalled(i);
               setAddress(a);
             }}
           />
         }
-      />
+      /> */}
       <ScrollArea className="Participate">
         <div className="content flex flex-col">
           <div className="card bg-[#260217a1] m-0-auto flex ">
@@ -371,15 +407,18 @@ export default function () {
 
                   <Button
                     className="buy-btn"
-                    disabled={connected && nodeRemaining <= 0}
+                    disabled={user.wallet.connected && nodeRemaining <= 0}
                     onClick={async () => {
-                      if (!address) {
-                        console.log(address);
+                      if (!user.wallet.address) {
+                        console.log(user.wallet.address);
 
                         // TODO 选择钱包弹窗✔
                         // connectWalletRef.current?._setWalletType(Wallet.OKX);
                         // connectWalletRef.current?._connect();
-                        connectWalletRef.current?._selectWallet();
+                        // connectWalletRef.current?._selectWallet();
+                        dispatch(
+                          SET_NOTIFICATION_TRIGGER_EVENT("SELECT_WALLET")
+                        );
 
                         return;
                       }
@@ -407,57 +446,29 @@ export default function () {
                         if (orderInfo) {
                           // setOrderInfo(res.data);
 
-                          let hash = await connectWalletRef.current?._onSubmit(
-                            orderInfo.data.buyAmount,
-                            "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk" // TODO 测试链接
+                          // TODO 重新处理钱包发送交易
+                          // let hash = await connectWalletRef.current?._onSubmit(
+                          //   orderInfo.data.buyAmount,
+                          //   "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk" // TODO 测试链接
+                          // );
+
+                          dispatch(
+                            SET_PAY_INFO({
+                              cost: orderInfo.data.buyAmount,
+                              toAddress:
+                                "bc1pendw5r63zdws68hg9pq3q7yprytkd08hfz84272gs22kaf6zgw7sq2gp5t",
+                              hash: "",
+                              orderNumber: orderInfo.data.orderNumber,
+                            })
                           );
-                          if (hash && address) {
-                            console.log("hash", hash);
-                            // TODO 轮询购买是否成功
-
-                            let time = 0;
-                            async function checkSuccess(
-                              orderNumber: number
-                            ): Promise<boolean> {
-                              time++;
-                              async function check() {
-                                return await fetchUrl<{ type: number }>(
-                                  `/api/node/pay_node_sms?orderNumber=${orderNumber}}&hash=${hash}`,
-                                  { method: "GET" }
-                                );
-
-                                // // 模拟轮询
-                                // return new Promise<{ type: number }>(
-                                //   (reslove, reject) => {
-                                //     setTimeout(() => {
-                                //       console.log("check!!:", time);
-                                //       if (time == 10) {
-                                //         reslove({ data: true });
-                                //       } else {
-                                //         reslove({ data: false });
-                                //       }
-                                //     }, 1000);
-                                //   }
-                                // );
-                              }
-
-                              let ok = await check();
-                              if (ok?.data.type == 1) return true;
-                              return checkSuccess(orderNumber);
-                            }
-                            let ok = await checkSuccess(
-                              orderInfo.data.orderNumber
-                            );
-                            if (ok)
-                              CustomToast(
-                                "Paid, waiting for confirmation on the chain! Check it later in Personal Center."
-                              );
-                          }
+                          dispatch(
+                            SET_NOTIFICATION_TRIGGER_EVENT("TRANSACTION")
+                          );
                         }
                       }
                     }}
                   >
-                    {!address
+                    {!user.wallet.address
                       ? "Connent wallet"
                       : nodeRemaining > 0
                       ? "Buy Now"
@@ -468,73 +479,7 @@ export default function () {
             </ScrollArea>
           </div>
 
-          <div className="invite relative bg-[#26021798] box-border border-solid border-[rgb(245, 140, 0)] flex flex-col overflow-hidden">
-            <img className="logo" src={roos_logo} alt="" />
-            <span className="font-[Raleway-Bold] uppercase tracking-[0em] text-[#F58C00]">
-              Invite benefits
-            </span>
-            <span className="font-[Raleway-Medium] text-[#EAEAEA]">
-              {invitationCode && (
-                <>
-                  ·Invite the box to get contribution, J rewards XX, Q rewards
-                  XX, K rewards XX.
-                </>
-              )}
-              {!connected && <>Connect wallet to receive invitation link.</>}
-            </span>
-            <span className="font-[Raleway-Medium] text-[#EAEAEA]">
-              {invitationCode && (
-                <>
-                  ·Invite the box to get NFT fragments, J reward XX , Q reward
-                  XX, K reward XX .
-                </>
-              )}
-
-              {connected && !invitationCode && (
-                <>Purchase ROOSBOX to get invitation link.</>
-              )}
-            </span>
-            <div className="invite-bottom flex">
-              <div className="flex items-center">
-                <span className="font-[Raleway-Medium] text-[#EAEAEA]">
-                  Link：
-                </span>
-                <span className="font-[Raleway-Medium] text-[#2B4ACB] underline">
-                  {invitationCode && <>https://xxxx.com.....7V8M9</>}
-
-                  {!connected && (
-                    <>Connect wallet to receive invitation link.</>
-                  )}
-                  {connected && !invitationCode && (
-                    <>Purchase ROOSBOX to get invitation link.</>
-                  )}
-                </span>
-                <button>
-                  {" "}
-                  <img src={copy} alt="" />
-                </button>
-              </div>
-              <div className="flex items-center">
-                <span className="font-[Raleway-Medium] text-[#EAEAEA]">
-                  code：
-                </span>
-                <span className="font-[Raleway-Medium]  text-[#2B4ACB] underline">
-                  {invitationCode && <>87V8M97S</>}
-
-                  {!connected && (
-                    <>Connect wallet to receive invitation link.</>
-                  )}
-                  {connected && !invitationCode && (
-                    <>Purchase ROOSBOX to get invitation link.</>
-                  )}
-                </span>
-                <button>
-                  <img src={copy} alt="" />
-                </button>
-              </div>
-            </div>
-            <img className="logo-big absolute" src={roos_logo_big} alt="" />
-          </div>
+          <Invite />
         </div>
         <ConnectUs />
       </ScrollArea>

@@ -1,0 +1,70 @@
+@include pq {
+  .invite {
+    padding: 34px 54px;
+    margin-top: 50px;
+    border-radius: 9.46px;
+    .logo {
+      width: 96.5px;
+      height: 38px;
+    }
+
+    > span {
+      &:nth-of-type(1) {
+        font-size: 34px;
+        font-weight: bold;
+        line-height: normal;
+        font-feature-settings: "kern" on;
+        margin-top: 30px;
+        margin-bottom: 20px;
+      }
+
+      &:nth-of-type(2),
+      &:nth-of-type(3) {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: normal;
+        margin-bottom: 15px;
+      }
+      &:nth-of-type(3) {
+        margin-bottom: 20px;
+      }
+    }
+
+    .invite-bottom {
+      > div {
+        &:nth-child(1) {
+          margin-right: 40px;
+        }
+        > span {
+          margin-right: 10px;
+          &:nth-child(1) {
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 26.5px;
+            font-feature-settings: "kern" on;
+          }
+
+          &:nth-child(2) {
+            font-size: 18px;
+            font-weight: normal;
+            line-height: 26.5px;
+            font-feature-settings: "kern" on;
+          }
+        }
+        > button {
+          > img {
+            width: 24px;
+            height: 24px;
+          }
+        }
+      }
+    }
+
+    .logo-big {
+      width: 457px;
+      height: 457px;
+      right: -35px;
+      top: 49px;
+    }
+  }
+}

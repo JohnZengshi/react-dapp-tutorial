@@ -1,0 +1,107 @@
+@include mq {
+  .invite {
+    padding: 15px 25px;
+    margin-top: 20px;
+    border-radius: 9.46px;
+    .logo {
+      width: 48.29px;
+      height: 19px;
+    }
+
+    > span {
+      &:nth-of-type(1) {
+        /* Invite benefits */
+
+        font-family: Raleway-Medium;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: normal;
+        text-transform: uppercase;
+        letter-spacing: 0em;
+
+        font-feature-settings: "kern" on;
+        color: #f58c00;
+
+        z-index: 0;
+
+        margin-top: 15px;
+      }
+
+      &:nth-of-type(2),
+      &:nth-of-type(3) {
+        /* ·Invite the box to get contribution, J rewards XX, Q rewards XX, K rewards XX. */
+
+        font-family: Raleway-Medium;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: 0em;
+
+        font-feature-settings: "kern" on;
+        color: #eaeaea;
+
+        z-index: 0;
+      }
+      &:nth-of-type(3) {
+        margin-bottom: 15px;
+        margin-top: 7.5px;
+      }
+    }
+
+    .invite-bottom {
+      flex-direction: column;
+      > div {
+        &:nth-of-type(1) {
+          margin-right: 5px;
+        }
+        > span {
+          margin-right: 10px;
+          &:nth-of-type(1) {
+            /* Link： */
+
+            font-family: Raleway-Medium;
+            font-size: 10px;
+            font-weight: 500;
+            line-height: normal;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #eaeaea;
+
+            z-index: 0;
+          }
+
+          &:nth-of-type(2) {
+            /* https://xxxx.com.....7V8M9 */
+
+            font-family: Raleway-Medium;
+            font-size: 10px;
+            font-weight: normal;
+            line-height: normal;
+            letter-spacing: 0em;
+            text-decoration: underline;
+
+            font-feature-settings: "kern" on;
+            color: #2b4acb;
+
+            z-index: 0;
+            margin-top: 10px;
+          }
+        }
+        > button {
+          > img {
+            width: 14px;
+            height: 14px;
+          }
+        }
+      }
+    }
+
+    .logo-big {
+      width: 185.66px;
+      height: 185.49px;
+      right: 0;
+      top: 0;
+    }
+  }
+}

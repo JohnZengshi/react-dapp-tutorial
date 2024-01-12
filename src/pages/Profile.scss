@@ -1,0 +1,416 @@
+@include pq {
+  .Profile {
+    background-color: #000000;
+    // background-image: url("../assets/home_bg.png");
+    height: 100vh;
+    width: 100vw;
+
+    > [data-radix-scroll-area-viewport] {
+      > div {
+        min-height: 100%;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+    .content {
+      padding-bottom: 70px;
+      padding-top: 88px;
+      > .title {
+        /* MY BOX */
+
+        /* 自动布局子元素 */
+        opacity: 1;
+
+        font-family: Raleway-Bold;
+        font-size: 40px;
+        font-weight: bold;
+        line-height: normal;
+        letter-spacing: 0em;
+
+        font-feature-settings: "kern" on;
+        color: #f58c00;
+
+        z-index: 0;
+
+        margin-top: 50px;
+      }
+
+      .roosBox {
+        /* 矩形 3 */
+
+        max-width: 1680px;
+        height: 486px;
+        border-radius: 9.46px;
+        opacity: 0.8;
+
+        background: #260217;
+
+        box-sizing: border-box;
+        border: 1px solid rgba(245, 140, 0, 0.2);
+
+        padding: 27px 147px 57.43px 122px;
+
+        margin-top: 50px;
+        .left {
+          margin-right: 191px;
+          width: 436px;
+          height: 431px;
+          opacity: 1;
+          .boxPng {
+            /* 1 */
+          }
+        }
+
+        .right {
+          margin-top: 31px;
+          > span {
+            /* Get ROOSBOX,you can enjoy the following benefits. */
+
+            /* 自动布局子元素 */
+
+            font-family: Raleway-Bold;
+            font-size: 32px;
+            font-weight: bold;
+            line-height: normal;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #f58c00;
+
+            z-index: 0;
+          }
+          > .desBox {
+            margin-top: 30px;
+            width: 668px;
+          }
+
+          .boxNamePrice {
+            > span {
+              &:nth-of-type(1) {
+                /* J-BOX */
+
+                /* 自动布局子元素 */
+                opacity: 1;
+                font-family: Raleway-Bold;
+                font-size: 80px;
+                font-weight: bold;
+                line-height: normal;
+                letter-spacing: 0em;
+
+                font-feature-settings: "kern" on;
+                color: #f58c00;
+
+                z-index: 0;
+
+                margin-right: 60px;
+              }
+
+              &:nth-of-type(2) {
+                /* 0.06 */
+
+                font-family: Raleway-Medium;
+                font-size: 40px;
+                font-weight: 500;
+                line-height: normal;
+                text-transform: uppercase;
+                letter-spacing: 0em;
+
+                font-feature-settings: "kern" on;
+                color: #eaeaea;
+              }
+
+              &:nth-of-type(3) {
+                /* btc */
+
+                font-family: Raleway-Medium;
+                font-size: 20px;
+                font-weight: normal;
+                line-height: normal;
+                text-transform: uppercase;
+                letter-spacing: 0em;
+
+                font-feature-settings: "kern" on;
+                color: #eaeaea;
+              }
+            }
+          }
+
+          .Equity {
+            /* ROOSBOX Equity */
+
+            /* 自动布局子元素 */
+
+            font-family: Raleway-Medium;
+            font-size: 32px;
+            font-weight: 500;
+            line-height: normal;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #f58c00;
+
+            z-index: 0;
+
+            margin-top: 50px;
+          }
+
+          p {
+            /* ·25% of platform tokens ·Permanently enjoy network gas fee dividends (the initial proportion is as high as 70%, and with the development of the ecosystem in the later period, the community will vote to determine the redistribution proportion) ·X% proportion of GAS fee airdrop activity rewards high weight voting rights ·A series of other ecological development rights and interests */
+
+            /* 自动布局子元素 */
+            opacity: 1;
+
+            font-family: Raleway-Medium;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 26.5px;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #eaeaea;
+
+            z-index: 1;
+          }
+
+          .getBoxBtn {
+            /* 矩形 8 */
+
+            width: 668.18px;
+            height: 59.57px;
+            border-radius: 4.73px;
+            opacity: 1;
+
+            background: #f58c00;
+
+            box-sizing: border-box;
+            border: 0.95px solid #f58c00;
+
+            box-shadow: 0px 9.46px 94.64px -17px #633800;
+
+            /* Get ROOSBOX */
+
+            opacity: 1;
+
+            font-family: Raleway-Medium;
+            font-size: 15.14px;
+            font-weight: 800;
+            line-height: normal;
+            text-transform: uppercase;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #333333;
+
+            margin-top: 50px;
+          }
+        }
+      }
+
+      .contribution {
+        /* 矩形 4 */
+
+        max-width: 1680px;
+        // height: 377px;
+        border-radius: 9.46px;
+
+        background: #260217;
+
+        box-sizing: border-box;
+        border: 1px solid rgba(245, 140, 0, 0.2);
+
+        margin-top: 50px;
+        padding: 50px 130px;
+
+        > .title {
+          /* Contribution */
+
+          /* 自动布局子元素 */
+          opacity: 1;
+
+          font-family: Raleway-Bold;
+          font-size: 34px;
+          font-weight: bold;
+          line-height: normal;
+          text-transform: uppercase;
+          letter-spacing: 0em;
+
+          font-feature-settings: "kern" on;
+          color: #f58c00;
+
+          z-index: 0;
+
+          &:nth-of-type(2) {
+            margin-top: 60px;
+          }
+        }
+
+        > ul {
+          > li {
+            > span {
+              &:last-of-type {
+                /* Invite ROOSBOX */
+
+                /* 自动布局子元素 */
+                opacity: 1;
+
+                font-family: Raleway-Medium;
+                font-size: 34px;
+                font-weight: 500;
+                line-height: normal;
+                text-transform: uppercase;
+                letter-spacing: 0em;
+
+                font-feature-settings: "kern" on;
+                color: #999999;
+
+                z-index: 1;
+
+                margin-top: 20px;
+              }
+            }
+
+            &:nth-of-type(1),
+            &:nth-of-type(2) {
+              > span {
+                &:nth-of-type(1) {
+                  /* 0 */
+
+                  /* 自动布局子元素 */
+                  opacity: 1;
+
+                  font-family: Raleway-Bold;
+                  font-size: 100px;
+                  font-weight: bold;
+                  line-height: normal;
+                  text-transform: uppercase;
+                  letter-spacing: 0em;
+
+                  font-feature-settings: "kern" on;
+                  color: #eaeaea;
+
+                  z-index: 0;
+                }
+              }
+            }
+
+            &:nth-of-type(3) {
+              > div {
+                img {
+                  width: 80px;
+                  height: 80px;
+                }
+                > span {
+                  &:nth-of-type(1) {
+                    /* x */
+                    opacity: 1;
+
+                    font-family: Raleway-Medium;
+                    font-size: 20px;
+                    font-weight: 500;
+                    line-height: normal;
+                    text-transform: uppercase;
+                    letter-spacing: 0em;
+
+                    font-feature-settings: "kern" on;
+                    color: #ffffff;
+                  }
+
+                  &:nth-of-type(2) {
+                    /* 2 */
+
+                    font-family: Raleway-Medium;
+                    font-size: 50px;
+                    font-weight: 500;
+                    line-height: normal;
+                    text-transform: uppercase;
+                    letter-spacing: 0em;
+
+                    font-feature-settings: "kern" on;
+                    color: #ffffff;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .buyList {
+          margin-top: 60px;
+
+          /* 矩形 23 */
+
+          // border-radius: 9.46px;
+
+          background: #3d0927;
+
+          box-sizing: border-box;
+          border: 1px solid rgba(245, 140, 0, 0.2);
+
+          thead {
+            tr {
+              border-bottom: 1px solid rgba(245, 140, 0, 0.2);
+              // border-radius: 9.46px;
+              th {
+                width: 33%;
+                height: 94px;
+
+                /* Bank */
+
+                opacity: 1;
+
+                font-family: Raleway-Medium;
+                font-size: 34px;
+                font-weight: 500;
+                line-height: normal;
+                text-transform: uppercase;
+                letter-spacing: 0em;
+                font-feature-settings: "kern" on;
+                color: #999999;
+
+                border-right: 1px solid rgba(245, 140, 0, 0.2);
+
+                &:last-of-type {
+                  border-right: none;
+                }
+
+                &:first-of-type {
+                  // border-top-left-radius: 9.46px;
+                }
+              }
+            }
+          }
+
+          tbody {
+            tr {
+              td {
+                width: 33%;
+                height: 94px;
+
+                /* 0x2323...W313 */
+
+                opacity: 1;
+
+                font-family: Raleway-Medium;
+                font-size: 34px;
+                font-weight: 500;
+                line-height: normal;
+                text-transform: uppercase;
+                letter-spacing: 0em;
+
+                font-feature-settings: "kern" on;
+                color: #eaeaea;
+
+                border-right: 1px solid rgba(245, 140, 0, 0.2);
+
+                &:last-of-type {
+                  border-right: none;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

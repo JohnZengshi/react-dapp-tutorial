@@ -1,0 +1,429 @@
+@include mq {
+  .Profile {
+    background-color: #000000;
+    // background-image: url("../assets/home_bg.png");
+    height: 100vh;
+    width: 100vw;
+
+    > [data-radix-scroll-area-viewport] {
+      > div {
+        min-height: 100%;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+    .content {
+      padding: 0 25px;
+      padding-bottom: 48.5px;
+      padding-top: 44px;
+
+      > .title {
+        /* MY BOX */
+
+        opacity: 1;
+
+        font-family: Raleway-Bold;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: normal;
+        letter-spacing: 0em;
+
+        font-feature-settings: "kern" on;
+        color: #f58c00;
+
+        margin-top: 20.67px;
+      }
+
+      .roosBox {
+        /* 矩形 3 */
+
+        /* 矩形 3 */
+
+        min-width: 325px;
+        height: 475px;
+        border-radius: 9.46px;
+        opacity: 0.8;
+
+        background: #260217;
+
+        box-sizing: border-box;
+        border: 1px solid rgba(245, 140, 0, 0.2);
+
+        flex-direction: column;
+        // margin-top: 20px;
+
+        .top {
+          width: 218px;
+          height: 215.5px;
+          opacity: 1;
+          .boxPng {
+            /* 1 */
+          }
+        }
+
+        .bottom {
+          margin-top: 19.5px;
+          > span {
+            /* Get ROOSBOX,you can enjoy the following benefits. */
+
+            /* 自动布局子元素 */
+
+            /* J-BOX */
+
+            opacity: 1;
+
+            font-family: Raleway-Bold;
+            font-size: 30px;
+            font-weight: bold;
+            line-height: normal;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #f58c00;
+
+            z-index: 0;
+          }
+          > .desBox {
+            margin-top: 15px;
+            width: 262px;
+          }
+
+          .boxNamePrice {
+            > span {
+              &:nth-of-type(1) {
+                /* J-BOX */
+
+                /* 自动布局子元素 */
+                opacity: 1;
+                font-family: Raleway-Bold;
+                /* J-BOX */
+
+                font-size: 30px;
+                font-weight: bold;
+                line-height: normal;
+                letter-spacing: 0em;
+
+                font-feature-settings: "kern" on;
+                color: #f58c00;
+
+                margin-right: 19.5px;
+              }
+
+              &:nth-of-type(2) {
+                /* 0.06 */
+
+                font-family: Raleway-Medium;
+                /* 0.06 */
+
+                font-size: 16px;
+                font-weight: 500;
+                line-height: normal;
+                text-transform: uppercase;
+                letter-spacing: 0em;
+
+                font-feature-settings: "kern" on;
+                color: #eaeaea;
+              }
+
+              &:nth-of-type(3) {
+                /* btc */
+                /* btc */
+
+                font-family: Raleway-Medium;
+
+                font-size: 10px;
+                font-weight: normal;
+                line-height: normal;
+                text-transform: uppercase;
+                letter-spacing: 0em;
+
+                font-feature-settings: "kern" on;
+                color: #eaeaea;
+              }
+            }
+          }
+
+          .Equity {
+            /* ROOSBOX Equity */
+
+            /* 自动布局子元素 */
+
+            font-family: Raleway-Medium;
+            /* ROOSBOX Equity */
+
+            /* 自动布局子元素 */
+            font-size: 14px;
+            font-weight: bold;
+            line-height: normal;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #f58c00;
+
+            z-index: 0;
+            margin-top: 19px;
+          }
+
+          p {
+            /* ·25% of platform tokens ·Permanently enjoy network gas fee dividends (the initial proportion is as high as 70%, and with the development of the ecosystem in the later period, the community will vote to determine the redistribution proportion) ·X% proportion of GAS fee airdrop activity rewards high weight voting rights ·A series of other ecological development rights and interests */
+
+            /* 自动布局子元素 */
+            opacity: 1;
+
+            font-family: Raleway-Medium;
+            /* ·25% of platform tokens ·Permanently enjoy network gas fee dividends (the initial proportion is as high as 70%, and with the development of the ecosystem in the later period, the community will vote to determine the redistribution proportion) ·X% proportion of GAS fee airdrop activity rewards high weight voting rights ·A series of other ecological development rights and interests */
+
+            font-size: 10px;
+            font-weight: 500;
+            line-height: 13.25px;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #eaeaea;
+
+            z-index: 1;
+          }
+
+          .getBoxBtn {
+            /* 矩形 8 */
+
+            /* 矩形 8 */
+
+            width: 244px;
+            height: 30px;
+            border-radius: 2.37px;
+            opacity: 1;
+
+            background: #f58c00;
+
+            box-sizing: border-box;
+            border: 0.47px solid #f58c00;
+
+            box-shadow: 0px 4.73px 47.32px -17px #633800;
+
+            /* Get ROOSBOX */
+
+            font-family: Raleway-Medium;
+            font-size: 7.57px;
+            font-weight: 800;
+            line-height: normal;
+            text-transform: uppercase;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #333333;
+
+            margin-top: 20px;
+          }
+        }
+      }
+
+      .contribution {
+        min-width: 325px;
+        border-radius: 9.46px;
+        opacity: 0.8;
+
+        background: #260217;
+
+        box-sizing: border-box;
+        border: 1px solid rgba(245, 140, 0, 0.2);
+        margin-top: 20px;
+        padding: 20px 24px;
+
+        > .title {
+          /* Contribution */
+
+          /* 自动布局子元素 */
+
+          font-family: Raleway-Bold;
+          font-size: 14px;
+          font-weight: bold;
+          line-height: normal;
+          text-transform: uppercase;
+          letter-spacing: 0em;
+
+          font-feature-settings: "kern" on;
+          color: #f58c00;
+
+          z-index: 0;
+          margin-top: 15px;
+
+          &:nth-of-type(2) {
+            margin-top: 15px;
+          }
+        }
+
+        > ul {
+          > li {
+            > span {
+              &:last-of-type {
+                /* Invite ROOSBOX */
+
+                /* 自动布局子元素 */
+
+                font-family: Raleway-Medium;
+                font-size: 9px;
+                font-weight: 500;
+                line-height: normal;
+                text-transform: uppercase;
+                letter-spacing: 0em;
+
+                font-feature-settings: "kern" on;
+                color: #999999;
+
+                z-index: 1;
+              }
+            }
+
+            &:nth-of-type(1),
+            &:nth-of-type(2) {
+              > span {
+                &:nth-of-type(1) {
+                  /* 10 */
+
+                  font-family: Raleway-Bold;
+                  font-size: 35px;
+                  font-weight: bold;
+                  line-height: normal;
+                  text-transform: uppercase;
+                  letter-spacing: 0em;
+
+                  font-feature-settings: "kern" on;
+                  color: #eaeaea;
+
+                  z-index: 0;
+                }
+              }
+            }
+
+            &:nth-of-type(3) {
+              > div {
+                img {
+                  width: 30px;
+                  height: 30px;
+                }
+                > span {
+                  &:nth-of-type(1) {
+                    /* x */
+
+                    font-family: Raleway-Medium;
+                    /* x */
+
+                    font-size: 8px;
+                    font-weight: 500;
+                    line-height: normal;
+                    text-transform: uppercase;
+                    letter-spacing: 0em;
+
+                    font-feature-settings: "kern" on;
+                    color: #ffffff;
+                  }
+
+                  &:nth-of-type(2) {
+                    /* 2 */
+
+                    font-family: Raleway-Medium;
+                    /* 5 */
+
+                    font-size: 16px;
+                    font-weight: 500;
+                    line-height: normal;
+                    text-transform: uppercase;
+                    letter-spacing: 0em;
+
+                    font-feature-settings: "kern" on;
+                    color: #ffffff;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .buyList {
+          margin-top: 15px;
+
+          /* 矩形 23 */
+
+          // border-radius: 9.46px;
+
+          background: #3d0927;
+
+          box-sizing: border-box;
+          border: 1px solid rgba(245, 140, 0, 0.2);
+
+          thead {
+            tr {
+              border-bottom: 1px solid rgba(245, 140, 0, 0.2);
+              // border-radius: 9.46px;
+              th {
+                width: 33%;
+                height: 46px;
+
+                /* Bank */
+
+                opacity: 1;
+
+                font-family: Raleway-Medium;
+                /* Address */
+
+                font-size: 12px;
+                font-weight: 500;
+                line-height: normal;
+                text-transform: uppercase;
+                letter-spacing: 0em;
+
+                font-feature-settings: "kern" on;
+                color: #999999;
+
+                border-right: 1px solid rgba(245, 140, 0, 0.2);
+
+                &:last-of-type {
+                  border-right: none;
+                }
+
+                &:first-of-type {
+                  // border-top-left-radius: 9.46px;
+                }
+              }
+            }
+          }
+
+          tbody {
+            tr {
+              td {
+                width: 33%;
+                height: 46px;
+
+                /* 0x2323...W313 */
+
+                opacity: 1;
+
+                font-family: Raleway-Medium;
+                /* 0x2323...W313 */
+
+                font-size: 12px;
+                font-weight: 500;
+                line-height: normal;
+                text-transform: uppercase;
+                letter-spacing: 0em;
+
+                font-feature-settings: "kern" on;
+                color: #eaeaea;
+
+                border-right: 1px solid rgba(245, 140, 0, 0.2);
+
+                padding: 0 17px;
+
+                &:last-of-type {
+                  border-right: none;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
