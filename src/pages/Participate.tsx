@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-12 20:53:02
+ * @LastEditTime: 2024-01-13 13:26:16
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -46,19 +46,14 @@ import CustomToast from "@/components/common/CustomToast";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import Invite from "@/components/common/Invite";
 import { SET_NOTIFICATION_TRIGGER_EVENT, SET_PAY_INFO } from "@/store/reducer";
-import { API_PAY_NODE_SMS } from "@/utils/api";
-type NodeInfo = {
-  nodeTotal: number;
-  purchasedCount: number;
-  startPrice: number;
-  increasePrice: number;
-  increaseCount: number;
-  nodePrice: number;
-  id: number;
-  nodeName: string;
-};
+import { API_GET_NODE_LIST, API_PAY_NODE_SMS, NodeInfo } from "@/utils/api";
 
-type OrderInfo = { buyAmount: number; orderNumber: number; status: number };
+type OrderInfo = {
+  buyAmount: number;
+  orderNumber: number;
+  status: number;
+  outAddress: string;
+};
 
 enum NodeType {
   J = "J",
@@ -85,72 +80,20 @@ export default function () {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
-  function getNodeInfo() {
-    fetchUrl<NodeInfo[]>("/api/node/getNodeSetting", {
-      method: "GET",
-    }).then((res) => {
-      if (res) {
-        console.log(res.data);
-        setNodeList([...res.data]);
-        const nodeData = res.data[0];
+  async function getNodeInfo() {
+    let nodeList = await API_GET_NODE_LIST();
 
-        setSelectNodeType(nodeData.nodeName);
-        setNodeInfo(nodeData);
+    console.log(nodeList);
+    setNodeList([...nodeList]);
+    const nodeData = nodeList[0];
 
-        let nodeTotal = nodeData.nodeTotal;
-        setNodeTotal(nodeTotal);
-        setNodeRemaining(nodeTotal - nodeData.purchasedCount);
-        setCost(nodeData.nodePrice);
-      }
+    setSelectNodeType(nodeData.nodeName);
+    setNodeInfo(nodeData);
 
-      // getNodePrice(nodeData.id);
-    });
-  }
-
-  function getNodePrice(id: number) {
-    fetchUrl(`/api/node/getNodePrice?nodeId=${id}`, {
-      method: "GET",
-    }).then((res) => {
-      if (res) {
-        console.log(res.data);
-        setCost(res.data);
-      }
-    });
-  }
-
-  function getUserNodeRecord() {
-    fetch(
-      `${
-        import.meta.env.VITE_BASE_API_URL
-      }/subscribe/queryByWalletAddress?walletAddress=${user.wallet.address}`
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then(
-        (data: {
-          code: number;
-          message: string;
-          result: {
-            total: number;
-            list: {
-              walletAddress: string;
-              recommendId: number;
-              buyCount: number;
-              payCoin: string;
-              buyAmount: number;
-              createTime: string;
-            }[];
-          };
-          success: boolean;
-          timestamp: number;
-        }) => {
-          console.log(data.result);
-          setUserTotalBuy(
-            data.result.list.reduce((sum, v) => (sum += v.buyCount), 0)
-          );
-        }
-      );
+    let nodeTotal = nodeData.nodeTotal;
+    setNodeTotal(nodeTotal);
+    setNodeRemaining(nodeTotal - nodeData.purchasedCount);
+    setCost(nodeData.nodePrice);
   }
 
   useEffect(() => {
@@ -170,6 +113,7 @@ export default function () {
             return new Promise<{ type: number } | undefined>(
               (reslove, reject) => {
                 setTimeout(async () => {
+                  if (!user.wallet.address) return;
                   let res = await API_PAY_NODE_SMS(
                     orderNumber,
                     user.wallet.payInfo.hash,
@@ -455,8 +399,7 @@ export default function () {
                           dispatch(
                             SET_PAY_INFO({
                               cost: orderInfo.data.buyAmount,
-                              toAddress:
-                                "bc1pendw5r63zdws68hg9pq3q7yprytkd08hfz84272gs22kaf6zgw7sq2gp5t",
+                              toAddress: orderInfo.data.outAddress,
                               hash: "",
                               orderNumber: orderInfo.data.orderNumber,
                             })

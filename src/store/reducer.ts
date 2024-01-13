@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-01-12 16:50:22
+ * @LastEditTime: 2024-01-13 12:55:17
  * @Author: John
  */
 import { ConnectWallet_handleType } from "@/components/common/ConnectWallet";
@@ -25,6 +25,7 @@ export interface UserState {
     };
     thirdInviteCode: string;
   };
+  logInStatus: "LOGIN" | "LOG_OUT";
 }
 
 const initialState: UserState = {
@@ -45,6 +46,7 @@ const initialState: UserState = {
     },
     thirdInviteCode: "",
   },
+  logInStatus: "LOG_OUT",
 };
 
 export const userSlice = createSlice({
@@ -94,6 +96,12 @@ export const userSlice = createSlice({
     SET_THIRD_INVITE_CODE: (state, action: PayloadAction<string>) => {
       state.wallet.thirdInviteCode = action.payload;
     },
+    SET_LOGINSTATUS: (
+      state,
+      action: PayloadAction<UserState["logInStatus"]>
+    ) => {
+      state.logInStatus = action.payload;
+    },
   },
 });
 
@@ -109,6 +117,7 @@ export const {
   SET_WALLET_REF,
   SET_PAY_INFO,
   SET_THIRD_INVITE_CODE,
+  SET_LOGINSTATUS,
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   SET_ADDRESS,
   SET_CONNECTED,
+  SET_LOGINSTATUS,
   SET_THIRD_INVITE_CODE,
   SET_USER_INVITATION_CODE,
   SET_WALLET_CONNECTING,
@@ -12,7 +13,6 @@ import {
 import {
   BTC_Unit_Converter,
   UrlQueryParamsKey,
-  fetchUrl,
   getUrlQueryParam,
   isOKApp,
   localStorageKey,
@@ -95,12 +95,11 @@ const Okx = forwardRef<
         } catch (error) {
           return;
         }
-        signAnLogin(publicKey);
-        props.checkInputInviteCodeOk();
-        dispatch(
-          SET_ADDRESS(localStorage.getItem(localStorageKey.okx_address) || "")
-        );
-        dispatch(SET_CONNECTED(true));
+        let address = localStorage.getItem(localStorageKey.okx_address);
+        if (address) {
+          signAnLogin(publicKey, address);
+          props.checkInputInviteCodeOk();
+        }
       },
     };
   });
@@ -155,51 +154,14 @@ const Okx = forwardRef<
       okxwallet.bitcoin
         .connect()
         .then(async (result: Account) => {
-          // TODO 判断是否有token，没有则签名请求获取token✔
-          const roos_token = localStorage.getItem(localStorageKey.roos_token);
+          // TODO 钱包连接完就保存地址
           localStorage.setItem(localStorageKey.okx_address, result.address);
-          console.log("roos_token", roos_token);
 
-          if (!roos_token || roos_token?.split("=")[0] != result.address) {
-            // TODO 判断用户是否注册✔
-
-            // TODO 获取publickey 欧易app内无法获取？？？
-            let pk = "";
-            if (!isOKApp) {
-              pk = await okxwallet.bitcoin.getPublicKey();
-              if (!pk) {
-                CustomToast("get public key fail!");
-                return;
-              }
-              setPublicKey(pk);
-            }
-
-            if (!(await API_CHECT_EXIT(result.address))) {
-              // TODO 获取页面连接的invite code，弹窗提示，默认测试：NODE123✔
-              let urlInviteCode = getUrlQueryParam(
-                UrlQueryParamsKey.INVITE_CODE
-              );
-              if (!urlInviteCode) {
-                // TODO 弹窗提示输入邀请码
-                props.shouldIputInviteCode("");
-                // return CustomToast("the invitation code does not exist!");
-                return;
-              } else {
-                props.shouldIputInviteCode(urlInviteCode);
-                dispatch(SET_THIRD_INVITE_CODE(urlInviteCode));
-                return;
-              }
-            }
-
-            signAnLogin(pk);
+          let res = await checkToken(result.address);
+          if (res == "CONFIRM_THE_INVITATION_CODE") {
+            reslove();
+            return;
           }
-
-          // setAddress(result.address);
-          dispatch(SET_ADDRESS(result.address));
-          // setConnected(true);
-          dispatch(SET_CONNECTED(true));
-          // connecting = false;
-          // dispatch(SET_WALLET_CONNECTING(false));
           reslove();
         })
         .catch(handleCatch);
@@ -215,8 +177,8 @@ const Okx = forwardRef<
     }
   }
 
-  async function signAnLogin(publicKey: string) {
-    let address = localStorage.getItem(localStorageKey.okx_address);
+  async function signAnLogin(publicKey: string, address: string) {
+    // let address = localStorage.getItem(localStorageKey.okx_address);
     // TODO 签名✔
     // const nonce = "22a68408-fea7-4491-996c-a92fbf710a72";
     // const message = `Welcome to OKX!\n\nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${result.address}\n    \nNonce:\n${nonce}\n`;
@@ -235,8 +197,10 @@ const Okx = forwardRef<
           console.log(loginInfo);
           localStorage.setItem(
             localStorageKey.roos_token,
-            `${address}=${loginInfo.token}`
+            `${address}::::${loginInfo.token}`
           );
+          // TODO 只在这里写入用户数据
+          saveUserData(address);
 
           // TODO 查询用户邀请码✔
           let invitationCode = await API_CHECK_INVITE_CODE();
@@ -247,28 +211,64 @@ const Okx = forwardRef<
       .catch(handleCatch);
   }
 
+  async function checkToken(
+    address: string
+  ): Promise<"CONFIRM_THE_INVITATION_CODE" | void> {
+    const roos_token = localStorage.getItem(localStorageKey.roos_token);
+    console.log("roos_token", roos_token);
+    // TODO 判断是否有token，没有则签名请求获取token✔
+    if (!roos_token || roos_token?.split("::::")[0] != address) {
+      // TODO 判断用户是否注册✔
+
+      // TODO 获取publickey 欧易app内无法获取？？？
+      let pk = "";
+      if (!isOKApp) {
+        pk = await okxwallet.bitcoin.getPublicKey();
+        if (!pk) {
+          CustomToast("get public key fail!");
+          return;
+        }
+        setPublicKey(pk);
+      }
+
+      if (!(await API_CHECT_EXIT(address))) {
+        // TODO 获取页面连接的invite code，弹窗提示，默认测试：NODE123✔
+        let urlInviteCode = getUrlQueryParam(UrlQueryParamsKey.INVITE_CODE);
+        if (!urlInviteCode) {
+          // TODO 弹窗提示输入邀请码
+          props.shouldIputInviteCode("");
+          // return CustomToast("the invitation code does not exist!");
+        } else {
+          props.shouldIputInviteCode(urlInviteCode);
+          dispatch(SET_THIRD_INVITE_CODE(urlInviteCode));
+        }
+        return "CONFIRM_THE_INVITATION_CODE";
+      }
+
+      signAnLogin(pk, address);
+    } else {
+      // TODO 用户已经登录，直接保存数据
+      saveUserData(address);
+    }
+  }
+
   async function disConnect() {
     await okxwallet.bitcoin.disconnect();
-    // setAddress("");
-    dispatch(SET_ADDRESS(""));
-    // setConnected(false);
-    dispatch(SET_CONNECTED(false));
-    localStorage.removeItem(localStorageKey.okx_address);
+    clearUserData();
   }
 
   // 用户变化
-  function handleAccountsChanged(addressInfo: Account) {
-    if (addressInfo === null) {
-      // setConnected(false);
-      dispatch(SET_CONNECTED(false));
-      // setAddress("");
-      dispatch(SET_ADDRESS(""));
-      localStorage.removeItem(localStorageKey.okx_address);
-    } else {
+  async function handleAccountsChanged(addressInfo: Account) {
+    clearUserData();
+
+    if (addressInfo) {
       // setAddress(addressInfo.address);
       console.log("account change!", addressInfo.address);
-      connect();
-      dispatch(SET_ADDRESS(addressInfo.address));
+      // connect();
+      let res = await checkToken(addressInfo.address);
+      if (res == "CONFIRM_THE_INVITATION_CODE") {
+        return;
+      }
     }
   }
 
@@ -304,6 +304,19 @@ const Okx = forwardRef<
     });
   }
 
+  function saveUserData(address: string) {
+    dispatch(SET_LOGINSTATUS("LOGIN"));
+    dispatch(SET_CONNECTED(true));
+    dispatch(SET_ADDRESS(address));
+    localStorage.setItem(localStorageKey.okx_address, address);
+  }
+
+  function clearUserData() {
+    dispatch(SET_LOGINSTATUS("LOG_OUT"));
+    dispatch(SET_CONNECTED(false));
+    dispatch(SET_ADDRESS(""));
+    localStorage.removeItem(localStorageKey.okx_address);
+  }
   // 统一处理错误
   function handleCatch(e: { code: number; message: string }) {
     console.log(e);
@@ -314,6 +327,7 @@ const Okx = forwardRef<
       CustomToast(e.message);
     }
   }
+
   return <></>;
 });
 

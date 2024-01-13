@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-01-12 20:57:04
+ * @LastEditTime: 2024-01-13 13:13:31
  * @Author: John
  */
 import roosHomeBg from "@/assets/roos-home.mp4";
@@ -47,6 +47,7 @@ export default function () {
       {/* <video className="w-full h-full" /> */}
       {/* <Nav /> */}
       <ScrollArea className="content">
+        {/* <div className="nav_box"></div> */}
         <div className="content_1">
           <span>The First Bitcoin Layer2</span>
           <span>For The Bitcoiners.</span>

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-12 18:28:30
+ * @LastEditTime: 2024-01-13 12:50:08
  * @Author: John
  */
 import CustomToast from "@/components/common/CustomToast";
@@ -60,13 +60,17 @@ export const BaseUrl = import.meta.env.VITE_BASE_API_URL;
 export async function fetchUrl<D = any, P = any>(
   url: string,
   options: RequestOptions,
+  // address: string,
+  // token: string,
   params?: P
 ) {
   options.headers = {
     Authorization:
-      localStorage.getItem(localStorageKey.roos_token)?.split("=")[1] || "",
+      // token,
+      localStorage.getItem(localStorageKey.roos_token)?.split("::::")[1] || "",
     "Accept-Language": "zh-CN",
     address: localStorage.getItem(localStorageKey.okx_address) || "",
+    // address,
     "Content-Type": "application/json",
   };
   if (params) options.body = JSON.stringify(params);

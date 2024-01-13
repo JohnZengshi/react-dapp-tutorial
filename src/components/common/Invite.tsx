@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-01-12 10:04:26
+ * @LastEditTime: 2024-01-13 13:44:56
  * @Author: John
  */
 import "./Invite.scss";
@@ -10,12 +10,26 @@ import roos_logo from "@/assets/roos_logo.png";
 import copy from "@/assets/copy.png";
 import { useAppSelector } from "@/store/hooks";
 import roos_logo_big from "@/assets/roos_logo_big.png";
+import { useEffect, useState } from "react";
+import { API_GET_NODE_LIST, NodeInfo } from "@/utils/api";
+import { UrlQueryParamsKey, shortenString } from "@/utils";
 
 export default function () {
   const invitationCode = useAppSelector(
     (state) => state.user.wallet.invitationCode
   );
   const user = useAppSelector((state) => state.user);
+
+  const [nodeList, setNodeList] = useState<NodeInfo[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      let nodeList = await API_GET_NODE_LIST();
+      setNodeList([...nodeList]);
+    })();
+
+    return () => {};
+  }, []);
 
   return (
     <>
@@ -27,8 +41,15 @@ export default function () {
         <span className="font-[Raleway-Medium] text-[#EAEAEA]">
           {invitationCode && (
             <>
-              ·Invite the box to get contribution, J rewards XX, Q rewards XX, K
-              rewards XX.
+              ·Invite the box to get contribution,{" "}
+              {nodeList.map((v, i) => {
+                return (
+                  <>
+                    {v.nodeName} rewards {v.contribution}{" "}
+                    {i === nodeList.length - 1 ? "." : ","}{" "}
+                  </>
+                );
+              })}
             </>
           )}
           {!user.wallet.connected && (
@@ -38,8 +59,15 @@ export default function () {
         <span className="font-[Raleway-Medium] text-[#EAEAEA]">
           {invitationCode && (
             <>
-              ·Invite the box to get NFT fragments, J reward XX , Q reward XX, K
-              reward XX .
+              ·Invite the box to get NFT fragments,{" "}
+              {nodeList.map((v, i) => {
+                return (
+                  <>
+                    {v.nodeName} rewards {v.nftNumber}{" "}
+                    {i === nodeList.length - 1 ? "." : ","}{" "}
+                  </>
+                );
+              })}
             </>
           )}
 
@@ -51,7 +79,16 @@ export default function () {
           <div className="flex items-center">
             <span className="font-[Raleway-Medium] text-[#EAEAEA]">Link：</span>
             <span className="font-[Raleway-Medium] text-[#2B4ACB] underline">
-              {invitationCode && <>https://xxxx.com.....7V8M9</>}
+              {invitationCode && (
+                // TODO 邀请连接需要动态生成
+                <>
+                  {shortenString(
+                    `https://roos-test.fcaex.vip/#/participate?${UrlQueryParamsKey.INVITE_CODE}=${invitationCode}`,
+                    15,
+                    15
+                  )}
+                </>
+              )}
 
               {!user.wallet.connected && (
                 <>Connect wallet to receive invitation link.</>
@@ -68,7 +105,7 @@ export default function () {
           <div className="flex items-center">
             <span className="font-[Raleway-Medium] text-[#EAEAEA]">code：</span>
             <span className="font-[Raleway-Medium]  text-[#2B4ACB] underline">
-              {invitationCode && <>87V8M97S</>}
+              {invitationCode && <>{invitationCode}</>}
 
               {!user.wallet.connected && (
                 <>Connect wallet to receive invitation link.</>

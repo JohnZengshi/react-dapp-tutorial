@@ -14,14 +14,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { shortenString } from "@/utils";
-import { useEffect, useState } from "react";
+import { localStorageKey, shortenString } from "@/utils";
+import { Fragment, useEffect, useState } from "react";
 import {
   API_GET_CONTRIBUTION,
   API_GET_INVITE_VO_LIST,
+  API_QUERY_BOX_USER_HAS_PURCHASED,
+  BOX_USER_PURCHASED,
   CONTRIBUTION,
   INVITE_VO_LIST_ITEM,
 } from "@/utils/api";
+import { useAppSelector } from "@/store/hooks";
+import { useNavigate } from "react-router-dom";
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:25:43
@@ -31,7 +35,18 @@ import {
 export default function () {
   const [contributionDate, setContributionDate] = useState<CONTRIBUTION>();
   const [inviteList, setInviteList] = useState<INVITE_VO_LIST_ITEM[]>([]);
+  const [userBox, setUserBox] = useState<BOX_USER_PURCHASED>();
+
+  const user = useAppSelector((state) => state.user);
+  const navigate = useNavigate();
   useEffect(() => {
+    console.log("user.logInStatus", user.logInStatus);
+    if (user.logInStatus == "LOG_OUT") return;
+    (async () => {
+      let userBox = await API_QUERY_BOX_USER_HAS_PURCHASED();
+      setUserBox(userBox);
+    })();
+
     (async () => {
       // TODO 获取用户CONTRIBUTION相关数据
       let contributionDate = await API_GET_CONTRIBUTION();
@@ -45,7 +60,7 @@ export default function () {
     })();
 
     return () => {};
-  }, []);
+  }, [user.wallet.address, user.wallet.connected, user.logInStatus]);
 
   return (
     <>
@@ -57,9 +72,9 @@ export default function () {
               <img className="boxPng w-full h-full" src={roos_box} alt="" />
             </div>
             <div className="right bottom flex flex-col flex-auto">
-              {false && (
+              {!userBox && (
                 <>
-                  <span className="whitespace-nowrap">
+                  <span className="Equity">
                     Get ROOSBOX,you can enjoy the following benefits.
                   </span>
                   <div className="desBox">
@@ -79,15 +94,22 @@ export default function () {
                       interests
                     </p>
                   </div>
-                  <button className="getBoxBtn">Get ROOSBOX</button>
+                  <button
+                    className="getBoxBtn"
+                    onClick={() => {
+                      navigate("/participate");
+                    }}
+                  >
+                    Get ROOSBOX
+                  </button>
                 </>
               )}
 
-              {true && (
+              {userBox && (
                 <>
                   <div className="boxNamePrice">
-                    <span>J-BOX</span>
-                    <span>0.06</span>
+                    <span>{userBox?.nodeName}</span>
+                    <span>{userBox?.buyAmount}</span>
                     <span>btc</span>
                   </div>
                   <span className="Equity">ROOSBOX Equity</span>
@@ -136,41 +158,50 @@ export default function () {
                 <span>NFT Fragments</span>
               </li>
             </ul>
-            <span className="title">Buy List</span>
 
-            <Table className="buyList">
-              {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
-                    Bank
-                  </TableHead>
-                  <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
-                    Address
-                  </TableHead>
-                  <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
-                    ROOSBOX
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell className="text-center text-[#EAEAEA]">
-                    1
-                  </TableCell>
-                  <TableCell className="text-center text-[#EAEAEA]">
-                    {shortenString(
-                      "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk",
-                      6,
-                      5
-                    )}
-                  </TableCell>
-                  <TableCell className="text-center text-[#EAEAEA]">
-                    J
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+            {inviteList.length > 0 && (
+              <>
+                <span className="title">Buy List</span>
+
+                <Table className="buyList">
+                  {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
+                        Bank
+                      </TableHead>
+                      <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
+                        Address
+                      </TableHead>
+                      <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
+                        ROOSBOX
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {inviteList.map((v, i) => {
+                      return (
+                        <>
+                          <Fragment key={i}>
+                            <TableRow>
+                              <TableCell className="text-center text-[#EAEAEA]">
+                                {i + 1}
+                              </TableCell>
+                              <TableCell className="text-center text-[#EAEAEA]">
+                                {shortenString(v.address, 6, 5)}
+                              </TableCell>
+                              <TableCell className="text-center text-[#EAEAEA]">
+                                {v.status}
+                              </TableCell>
+                            </TableRow>
+                          </Fragment>
+                        </>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </>
+            )}
           </div>
 
           <Invite />

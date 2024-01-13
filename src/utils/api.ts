@@ -1,12 +1,30 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-10 10:15:30
- * @LastEditTime: 2024-01-12 15:21:53
+ * @LastEditTime: 2024-01-13 13:39:44
  * @Author: John
  */
+import store from "@/store/store";
 import { fetchUrl, localStorageKey } from ".";
 
-export function Login(sign: string) {}
+export type NodeInfo = {
+  nodeTotal: number;
+  purchasedCount: number;
+  startPrice: number;
+  increasePrice: number;
+  increaseCount: number;
+  nodePrice: number;
+  id: number;
+  nodeName: string;
+  contribution: number;
+  nftNumber: number;
+};
+export async function API_GET_NODE_LIST() {
+  let res = await fetchUrl<NodeInfo[]>("/api/node/getNodeSetting", {
+    method: "GET",
+  });
+  return res.data;
+}
 
 export async function API_CHECT_EXIT(address: string) {
   let res = await fetchUrl<{ exist: boolean }>(
@@ -29,7 +47,11 @@ export async function API_SIGNUP(
   >(
     `/api/account/signUp`,
     { method: "POST" },
-    { account: address, shareCode, publicKey }
+    {
+      account: address,
+      shareCode,
+      publicKey,
+    }
   );
   return res?.data;
 }
@@ -82,7 +104,7 @@ export type INVITE_VO_LIST_ITEM = {
 };
 export async function API_GET_INVITE_VO_LIST() {
   let res = await fetchUrl<INVITE_VO_LIST_ITEM[]>(
-    "/api/invite/getNodeSetting",
+    "/api/invite/findInviteVoList",
     { method: "GET" }
   );
 
@@ -98,6 +120,19 @@ export async function API_PAY_NODE_SMS(
     `/api/node/pay_node_sms?orderNumber=${orderNumber}&hash=${hash}&status=${status}`,
     { method: "GET" }
   );
+
+  return res?.data;
+}
+
+export type BOX_USER_PURCHASED = {
+  buyAmount: number;
+  illustrate: string;
+  nodeName: string;
+};
+export async function API_QUERY_BOX_USER_HAS_PURCHASED() {
+  let res = await fetchUrl<BOX_USER_PURCHASED>(`/api/node/getWOrdNode`, {
+    method: "GET",
+  });
 
   return res?.data;
 }
