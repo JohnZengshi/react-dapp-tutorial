@@ -365,16 +365,17 @@
                   color: #f58c00;
                   margin-top: 20px;
                 }
-                &:nth-child(2) {
-                  font-family: Raleway-Medium;
-                  font-size: 10px;
-                  font-weight: 500;
-                  line-height: 10.78px;
-                  letter-spacing: 0em;
-                  margin-top: 10.17px;
+              }
+              .rightsAndInterests {
+                font-family: Raleway-Medium;
+                font-size: 10px;
+                font-weight: 500;
+                line-height: 10.78px;
+                letter-spacing: 0em;
+                margin-top: 10.17px;
 
-                  font-feature-settings: "kern" on;
-                }
+                font-feature-settings: "kern" on;
+                white-space: normal !important;
               }
             }
           }
@@ -407,7 +408,7 @@
             font-feature-settings: "kern" on;
             color: #333333;
 
-            margin-top: 20px;
+            // margin-top: 20px;
           }
         }
       }

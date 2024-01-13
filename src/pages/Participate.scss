@@ -47,6 +47,7 @@
         .left {
           margin-right: 60px;
           flex: 1;
+
           /* 矩形 6 */
 
           .bulr-box {
@@ -269,6 +270,7 @@
           .rightContent {
             border-radius: 9.46px;
             border: 1px solid rgba(153, 153, 153, 0.5);
+            min-height: 645px;
 
             .boxselect {
               height: 95px;
@@ -308,9 +310,8 @@
                   line-height: normal;
                   letter-spacing: 0em;
                   font-feature-settings: "kern" on;
-                }
-                .btcPrice {
-                  // margin-top: 10px;
+
+                  margin-top: 10px;
                 }
                 .btcPrice .unit {
                   font-size: 25px;
@@ -330,14 +331,17 @@
                   color: #f58c00;
                   margin-top: 31px;
                 }
-                &:nth-child(2) {
-                  font-family: Raleway-Medium;
-                  font-size: 18px;
-                  font-weight: 500;
-                  line-height: 26.5px;
-                  letter-spacing: 0em;
-                  margin-top: 25px;
-                }
+              }
+
+              .rightsAndInterests {
+                min-width: 549px;
+                white-space: normal !important;
+                font-family: Raleway-Medium;
+                font-size: 18px;
+                font-weight: 500;
+                line-height: 26.5px;
+                letter-spacing: 0em;
+                margin-top: 25px;
               }
             }
           }
@@ -370,7 +374,7 @@
             font-feature-settings: "kern" on;
             color: #333333;
 
-            margin-top: 40px;
+            // margin-top: 40px;
           }
         }
       }

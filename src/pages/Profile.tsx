@@ -48,13 +48,13 @@ export default function () {
     })();
 
     (async () => {
-      // TODO 获取用户CONTRIBUTION相关数据
+      // TODO 获取用户CONTRIBUTION相关数据✔
       let contributionDate = await API_GET_CONTRIBUTION();
       setContributionDate(contributionDate);
     })();
 
     (async () => {
-      // TODO 获取推荐人列表
+      // TODO 获取推荐人列表✔
       let inviteList = await API_GET_INVITE_VO_LIST();
       if (inviteList && inviteList.length > 0) setInviteList([...inviteList]);
     })();
@@ -72,13 +72,16 @@ export default function () {
               <img className="boxPng w-full h-full" src={roos_box} alt="" />
             </div>
             <div className="right bottom flex flex-col flex-auto">
-              {!userBox && (
+              {userBox && !userBox.nodeName && (
                 <>
                   <span className="Equity">
                     Get ROOSBOX,you can enjoy the following benefits.
                   </span>
-                  <div className="desBox">
-                    <p>·25% of platform tokens</p>
+                  <div
+                    className="desBox"
+                    dangerouslySetInnerHTML={{ __html: userBox.illustrate }}
+                  >
+                    {/* <p>·25% of platform tokens</p>
                     <p>
                       ·Permanently enjoy network gas fee dividends (the initial
                       proportion is as high as 70%, and with the development of
@@ -92,7 +95,7 @@ export default function () {
                     <p>
                       ·A series of other ecological development rights and
                       interests
-                    </p>
+                    </p> */}
                   </div>
                   <button
                     className="getBoxBtn"
@@ -105,7 +108,7 @@ export default function () {
                 </>
               )}
 
-              {userBox && (
+              {userBox && userBox.nodeName && (
                 <>
                   <div className="boxNamePrice">
                     <span>{userBox?.nodeName}</span>
@@ -113,8 +116,11 @@ export default function () {
                     <span>btc</span>
                   </div>
                   <span className="Equity">ROOSBOX Equity</span>
-                  <div className="desBox">
-                    <p>·25% of platform tokens</p>
+                  <div
+                    className="desBox"
+                    dangerouslySetInnerHTML={{ __html: userBox.illustrate }}
+                  >
+                    {/* <p>·25% of platform tokens</p>
                     <p>
                       ·Permanently enjoy network gas fee dividends (the initial
                       proportion is as high as 70%, and with the development of
@@ -130,7 +136,7 @@ export default function () {
                       {" "}
                       ·A series of other ecological development rights and
                       interests
-                    </p>
+                    </p> */}
                   </div>
                 </>
               )}

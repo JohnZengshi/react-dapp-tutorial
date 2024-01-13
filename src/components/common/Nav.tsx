@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-12 20:59:16
+ * @LastEditTime: 2024-01-13 14:30:09
  * @Author: John
  */
 import { Button } from "../ui/button";
@@ -68,7 +68,11 @@ export default function (props: { connectBtn?: any }) {
           </div>
 
           <div className="nav_btn">
-            <button>
+            <button
+              onClick={() => {
+                window.open("https://info.rootsat.co", "_blank");
+              }}
+            >
               <span>BLOG</span>
             </button>
           </div>
@@ -76,24 +80,30 @@ export default function (props: { connectBtn?: any }) {
 
         <div
           className="nav_meun flex items-center"
-          onClick={() => {
-            setMeunOpen(!open);
-          }}
+          // onClick={() => {
+          //   setMeunOpen(!open);
+          // }}
         >
           {props.connectBtn}
 
-          <DropdownMenu open={meunOpen} onOpenChange={(o) => setMeunOpen(o)}>
+          <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <img src={meun} className="meun-icon" alt="" />
             </DropdownMenuTrigger>
-            {/* <DropdownMenuContent>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
-            </DropdownMenuContent> */}
+            <DropdownMenuContent className="DropdownMenuContent-meun">
+              <DropdownMenuItem>Roosbox</DropdownMenuItem>
+              <DropdownMenuItem>Ecosystems</DropdownMenuItem>
+              <DropdownMenuItem>Bridge</DropdownMenuItem>
+              <DropdownMenuItem>Airdrop</DropdownMenuItem>
+              <DropdownMenuItem>Journey</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  window.open("https://info.rootsat.co", "_blank");
+                }}
+              >
+                BLOG
+              </DropdownMenuItem>
+            </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>

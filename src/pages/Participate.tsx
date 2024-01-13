@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-13 13:26:16
+ * @LastEditTime: 2024-01-13 18:01:12
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -47,7 +47,9 @@ import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import Invite from "@/components/common/Invite";
 import { SET_NOTIFICATION_TRIGGER_EVENT, SET_PAY_INFO } from "@/store/reducer";
 import { API_GET_NODE_LIST, API_PAY_NODE_SMS, NodeInfo } from "@/utils/api";
-
+import boxT1 from "@/assets/boxT1.png";
+import boxT2 from "@/assets/boxT2.png";
+import boxT3 from "@/assets/boxT3.png";
 type OrderInfo = {
   buyAmount: number;
   orderNumber: number;
@@ -213,7 +215,9 @@ export default function () {
                   // </Canvas>
                 }
 
-                <img src={roos_box} alt="" />
+                {nodeInfo?.nodeName == "T1" && <img src={boxT1} alt="" />}
+                {nodeInfo?.nodeName == "T2" && <img src={boxT2} alt="" />}
+                {nodeInfo?.nodeName == "T3" && <img src={boxT3} alt="" />}
               </div>
             </div>
 
@@ -240,10 +244,7 @@ export default function () {
 
                 <div className="quantity">
                   <span>Enter quantity</span>
-                  <span>
-                    {/* TODO 小数位处理 */}
-                    Currently 1 node {cost} BTC
-                  </span>
+                  <span>Currently 1 node {cost} BTC</span>
                 </div>
 
                 <div className="input">
@@ -279,7 +280,6 @@ export default function () {
                   </div>
                 </div>
                 <div className="cost-total">
-                  {/* TODO 小数位处理 */}
                   <span>Cost：</span>
                   <span>{cost * (num || 0)} BTC</span>
                 </div>
@@ -331,10 +331,15 @@ export default function () {
                   </li>
                 </ul>
 
-                <div className="content-bottom flex flex-col">
+                <div className="content-bottom flex flex-col flex-auto">
                   <span className="text-[#F58C00]">Box Rights</span>
-                  <span className="text-[#EAEAEA]">
-                    <p>·25% of platform tokens</p>
+                  <div
+                    className="rightsAndInterests text-[#EAEAEA]"
+                    dangerouslySetInnerHTML={{
+                      __html: nodeInfo?.illustrate || "",
+                    }}
+                  >
+                    {/* <p>·25% of platform tokens</p>
                     <p>
                       ·Permanently enjoy network gas fee dividends (the initial
                       proportion is as high as 70%, and with the development of
@@ -346,11 +351,11 @@ export default function () {
                     <p>
                       ·A series of other ecological development rights and
                       interests
-                    </p>
-                  </span>
+                    </p> */}
+                  </div>
 
                   <Button
-                    className="buy-btn"
+                    className="buy-btn mt-auto"
                     disabled={user.wallet.connected && nodeRemaining <= 0}
                     onClick={async () => {
                       if (!user.wallet.address) {
@@ -390,10 +395,10 @@ export default function () {
                         if (orderInfo) {
                           // setOrderInfo(res.data);
 
-                          // TODO 重新处理钱包发送交易
+                          // TODO 重新处理钱包发送交易✔
                           // let hash = await connectWalletRef.current?._onSubmit(
                           //   orderInfo.data.buyAmount,
-                          //   "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk" // TODO 测试链接
+                          //   "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk"
                           // );
 
                           dispatch(

@@ -89,7 +89,7 @@ const Okx = forwardRef<
         return onSubmit(cost, toAddress);
       },
       async _comfireBinding(intiveCode) {
-        //TODO 用户输入邀请码后登录
+        //TODO 用户输入邀请码后登录✔
         try {
           await signUp(intiveCode);
         } catch (error) {
@@ -111,15 +111,18 @@ const Okx = forwardRef<
       await checkinstall();
       await connect();
       // 监听账户变化
+      // TODO 移动端无法触发？？？
+      console.log("绑定accountChanged事件");
       okxwallet.bitcoin?.on("accountChanged", handleAccountsChanged);
-    })();
 
-    return () => {
-      okxwallet?.bitcoin?.removeListener(
-        "accountsChanged",
-        handleAccountsChanged
-      );
-    };
+      return () => {
+        console.log("解绑accountChanged事件");
+        okxwallet?.bitcoin?.removeListener(
+          "accountChanged",
+          handleAccountsChanged
+        );
+      };
+    })();
   }, []);
 
   // useEffect(() => {
@@ -144,6 +147,7 @@ const Okx = forwardRef<
     });
   }
 
+  // 连接钱包
   async function connect() {
     return new Promise<void>(async (reslove, reject) => {
       await checkinstall();
@@ -154,7 +158,7 @@ const Okx = forwardRef<
       okxwallet.bitcoin
         .connect()
         .then(async (result: Account) => {
-          // TODO 钱包连接完就保存地址
+          // TODO 钱包连接完就保存地址✔
           localStorage.setItem(localStorageKey.okx_address, result.address);
 
           let res = await checkToken(result.address);
@@ -168,6 +172,7 @@ const Okx = forwardRef<
     });
   }
 
+  // 注册
   async function signUp(inviteCode: string) {
     // TODO 注册✔
     let address = localStorage.getItem(localStorageKey.okx_address);
@@ -177,6 +182,7 @@ const Okx = forwardRef<
     }
   }
 
+  // 签名并且登录
   async function signAnLogin(publicKey: string, address: string) {
     // let address = localStorage.getItem(localStorageKey.okx_address);
     // TODO 签名✔
@@ -199,7 +205,7 @@ const Okx = forwardRef<
             localStorageKey.roos_token,
             `${address}::::${loginInfo.token}`
           );
-          // TODO 只在这里写入用户数据
+          // TODO 只在这里写入用户数据✔
           saveUserData(address);
 
           // TODO 查询用户邀请码✔
@@ -211,6 +217,7 @@ const Okx = forwardRef<
       .catch(handleCatch);
   }
 
+  // 检测token
   async function checkToken(
     address: string
   ): Promise<"CONFIRM_THE_INVITATION_CODE" | void> {
@@ -229,13 +236,17 @@ const Okx = forwardRef<
           return;
         }
         setPublicKey(pk);
+      } else {
+        // TODO app内写死key
+        pk =
+          "0305ef2a74bff2e2d68764c557ce2daecac92caa7a9406e3a90c2cf7c5b444a154";
       }
 
       if (!(await API_CHECT_EXIT(address))) {
         // TODO 获取页面连接的invite code，弹窗提示，默认测试：NODE123✔
         let urlInviteCode = getUrlQueryParam(UrlQueryParamsKey.INVITE_CODE);
         if (!urlInviteCode) {
-          // TODO 弹窗提示输入邀请码
+          // TODO 弹窗提示输入邀请码✔
           props.shouldIputInviteCode("");
           // return CustomToast("the invitation code does not exist!");
         } else {
@@ -247,7 +258,7 @@ const Okx = forwardRef<
 
       signAnLogin(pk, address);
     } else {
-      // TODO 用户已经登录，直接保存数据
+      // TODO 用户已经登录，直接保存数据✔
       saveUserData(address);
     }
   }
@@ -258,13 +269,11 @@ const Okx = forwardRef<
   }
 
   // 用户变化
+  // Account
   async function handleAccountsChanged(addressInfo: Account) {
     clearUserData();
-
+    console.log("account change!", addressInfo);
     if (addressInfo) {
-      // setAddress(addressInfo.address);
-      console.log("account change!", addressInfo.address);
-      // connect();
       let res = await checkToken(addressInfo.address);
       if (res == "CONFIRM_THE_INVITATION_CODE") {
         return;

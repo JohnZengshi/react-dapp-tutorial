@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-09 14:57:52
- * @LastEditTime: 2024-01-09 18:27:54
+ * @LastEditTime: 2024-01-13 13:57:34
  * @Author: John
  */
 
@@ -33,7 +33,13 @@ export default function () {
           <img src={tuite} alt="" />
           <img src={telegram} alt="" />
           <img src={github} alt="" />
-          <img src={gitbook} alt="" />
+          <img
+            src={gitbook}
+            alt=""
+            onClick={() => {
+              window.open("https://roos.gitbook.io/roos-ntework/", "_blank");
+            }}
+          />
         </div>
       </div>
 
@@ -49,7 +55,13 @@ export default function () {
         <img src={tuite} alt="" />
         <img src={telegram} alt="" />
         <img src={github} alt="" />
-        <img src={gitbook} alt="" />
+        <img
+          src={gitbook}
+          alt=""
+          onClick={() => {
+            window.open("https://roos.gitbook.io/roos-ntework/", "_blank");
+          }}
+        />
       </div>
     </>
   );

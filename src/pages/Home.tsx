@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-01-13 13:13:31
+ * @LastEditTime: 2024-01-13 17:43:08
  * @Author: John
  */
 import roosHomeBg from "@/assets/roos-home.mp4";
@@ -17,6 +17,7 @@ import ConnectWallet, {
 } from "@/components/common/ConnectWallet";
 import ConnectUs from "@/components/common/ConnectUs";
 import { isMobile, isOKApp } from "@/utils";
+import videoBg from "@/assets/videoBg.png";
 export default function () {
   const navigate = useNavigate();
   const [installed, setInstalled] = useState(false);
@@ -40,9 +41,12 @@ export default function () {
         }
       /> */}
       <div className="videoBg">
-        <video muted loop autoPlay={!isMobile} width="100%" height="100%">
-          <source src={roosHomeBg} type="video/mp4" />
-        </video>
+        {!isMobile && (
+          <video muted loop autoPlay width="100%" height="100%">
+            <source src={roosHomeBg} type="video/mp4" />
+          </video>
+        )}
+        {isMobile && <img className="videoBg_img" src={videoBg} />}
       </div>
       {/* <video className="w-full h-full" /> */}
       {/* <Nav /> */}

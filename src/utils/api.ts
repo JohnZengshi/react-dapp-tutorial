@@ -18,6 +18,7 @@ export type NodeInfo = {
   nodeName: string;
   contribution: number;
   nftNumber: number;
+  illustrate: string;
 };
 export async function API_GET_NODE_LIST() {
   let res = await fetchUrl<NodeInfo[]>("/api/node/getNodeSetting", {

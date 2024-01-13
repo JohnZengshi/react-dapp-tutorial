@@ -9,46 +9,12 @@
     background-size: cover;
 
     .videoBg {
-      width: 636px;
-      height: 358px;
       position: absolute;
-      top: 10px;
+      top: 51px;
       left: 0;
 
-      transform: translateX(-200px) scale(1);
-      video {
-        overflow-clip-margin: content-box;
-        overflow: clip;
-
-        pointer-events: none;
-        user-select: none;
-        object-fit: fill;
-        display: block;
-
-        // &:first-of-type {
-        //   position: absolute;
-        //   top: 0;
-        //   left: 0;
-        //   pointer-events: none;
-        //   user-select: none;
-        //   display: block;
-        // }
-
-        // &:last-of-type {
-        //   position: absolute;
-        //   top: 0;
-        //   // zIndex: -9;
-        //   background: linear-gradient(
-        //     0deg,
-        //     rgb(0, 0, 0) 12%,
-        //     rgba(0, 0, 0, 0.75) 17%,
-        //     rgba(0, 0, 0, 0.4) 23%,
-        //     rgba(0, 0, 0, 0.28) 32%,
-        //     rgba(0, 0, 0, 0.12) 52%,
-        //     rgb(0, 0, 0) 100%
-        //   );
-        //   display: block;
-        // }
+      .videoBg_img {
+        width: 636px;
       }
     }
 

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-01-13 13:44:56
+ * @LastEditTime: 2024-01-13 18:17:15
  * @Author: John
  */
 import "./Invite.scss";
@@ -10,9 +10,10 @@ import roos_logo from "@/assets/roos_logo.png";
 import copy from "@/assets/copy.png";
 import { useAppSelector } from "@/store/hooks";
 import roos_logo_big from "@/assets/roos_logo_big.png";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { API_GET_NODE_LIST, NodeInfo } from "@/utils/api";
 import { UrlQueryParamsKey, shortenString } from "@/utils";
+import CustomToast from "./CustomToast";
 
 export default function () {
   const invitationCode = useAppSelector(
@@ -39,15 +40,15 @@ export default function () {
           Invite benefits
         </span>
         <span className="font-[Raleway-Medium] text-[#EAEAEA]">
-          {invitationCode && (
+          {user.wallet.connected && invitationCode && (
             <>
               ·Invite the box to get contribution,{" "}
               {nodeList.map((v, i) => {
                 return (
-                  <>
+                  <Fragment key={i}>
                     {v.nodeName} rewards {v.contribution}{" "}
                     {i === nodeList.length - 1 ? "." : ","}{" "}
-                  </>
+                  </Fragment>
                 );
               })}
             </>
@@ -57,15 +58,15 @@ export default function () {
           )}
         </span>
         <span className="font-[Raleway-Medium] text-[#EAEAEA]">
-          {invitationCode && (
+          {user.wallet.connected && invitationCode && (
             <>
               ·Invite the box to get NFT fragments,{" "}
               {nodeList.map((v, i) => {
                 return (
-                  <>
+                  <Fragment key={i}>
                     {v.nodeName} rewards {v.nftNumber}{" "}
                     {i === nodeList.length - 1 ? "." : ","}{" "}
-                  </>
+                  </Fragment>
                 );
               })}
             </>
@@ -75,50 +76,79 @@ export default function () {
             <>Purchase ROOSBOX to get invitation link.</>
           )}
         </span>
-        <div className="invite-bottom flex">
-          <div className="flex items-center">
-            <span className="font-[Raleway-Medium] text-[#EAEAEA]">Link：</span>
-            <span className="font-[Raleway-Medium] text-[#2B4ACB] underline">
-              {invitationCode && (
-                // TODO 邀请连接需要动态生成
-                <>
-                  {shortenString(
-                    `https://roos-test.fcaex.vip/#/participate?${UrlQueryParamsKey.INVITE_CODE}=${invitationCode}`,
-                    15,
-                    15
-                  )}
-                </>
-              )}
+        {user.wallet.connected && invitationCode && (
+          <div className="invite-bottom flex">
+            <div className="flex items-center">
+              <span className="font-[Raleway-Medium] text-[#EAEAEA]">
+                Link：
+              </span>
+              <span className="font-[Raleway-Medium] text-[#2B4ACB] underline">
+                {user.wallet.connected && invitationCode && (
+                  // TODO 邀请连接需要动态生成
+                  <>
+                    {shortenString(
+                      `https://roos-test.fcaex.vip/#/participate?${UrlQueryParamsKey.INVITE_CODE}=${invitationCode}`,
+                      15,
+                      15
+                    )}
+                  </>
+                )}
 
-              {!user.wallet.connected && (
-                <>Connect wallet to receive invitation link.</>
-              )}
-              {user.wallet.connected && !invitationCode && (
-                <>Purchase ROOSBOX to get invitation link.</>
-              )}
-            </span>
-            <button>
-              {" "}
-              <img src={copy} alt="" />
-            </button>
+                {/* {!user.wallet.connected && (
+              <>Connect wallet to receive invitation link.</>
+            )}
+            {user.wallet.connected && !invitationCode && (
+              <>Purchase ROOSBOX to get invitation link.</>
+            )} */}
+              </span>
+              <button>
+                {" "}
+                <img
+                  src={copy}
+                  alt=""
+                  onClick={() => {
+                    if (user.wallet.connected && invitationCode) {
+                      navigator.clipboard.writeText(
+                        `https://roos-test.fcaex.vip/#/participate?${UrlQueryParamsKey.INVITE_CODE}=${invitationCode}`
+                      );
+                      CustomToast("Copy Success");
+                    }
+                  }}
+                />
+              </button>
+            </div>
+            <div className="flex items-center">
+              <span className="font-[Raleway-Medium] text-[#EAEAEA]">
+                code：
+              </span>
+              <span className="font-[Raleway-Medium]  text-[#2B4ACB] underline">
+                {user.wallet.connected && invitationCode && (
+                  <>{invitationCode}</>
+                )}
+                {/* TODO 多余逻辑 */}
+                {!user.wallet.connected && (
+                  <>Connect wallet to receive invitation link.</>
+                )}
+                {user.wallet.connected && !invitationCode && (
+                  <>Purchase ROOSBOX to get invitation link.</>
+                )}
+              </span>
+              <button>
+                <img
+                  src={copy}
+                  alt=""
+                  onClick={() => {
+                    if (user.wallet.connected && invitationCode) {
+                      navigator.clipboard.writeText(invitationCode);
+                      CustomToast("Copy Success");
+                    }
+                  }}
+                />
+              </button>
+            </div>
           </div>
-          <div className="flex items-center">
-            <span className="font-[Raleway-Medium] text-[#EAEAEA]">code：</span>
-            <span className="font-[Raleway-Medium]  text-[#2B4ACB] underline">
-              {invitationCode && <>{invitationCode}</>}
+        )}
 
-              {!user.wallet.connected && (
-                <>Connect wallet to receive invitation link.</>
-              )}
-              {user.wallet.connected && !invitationCode && (
-                <>Purchase ROOSBOX to get invitation link.</>
-              )}
-            </span>
-            <button>
-              <img src={copy} alt="" />
-            </button>
-          </div>
-        </div>
         <img className="logo-big absolute" src={roos_logo_big} alt="" />
       </div>
     </>

@@ -20,4 +20,39 @@
       }
     }
   }
+
+  .DropdownMenuContent-meun {
+    /* 容器 57 */
+
+    /* 矩形 21 */
+
+    width: 375px;
+    border-radius: 2px;
+    opacity: 1;
+    background: #1f1f1f;
+    padding: 13px 16px;
+    > div {
+      height: 22px;
+
+      /* Roosbox */
+
+      /* 自动布局子元素 */
+      font-family: Raleway-Medium;
+      font-size: 10px;
+      font-weight: 500;
+      line-height: normal;
+      text-transform: uppercase;
+      letter-spacing: 0em;
+
+      font-feature-settings: "kern" on;
+      color: #eaeaea;
+
+      z-index: 0;
+
+      border-bottom: 0.5px solid #333333;
+      &:last-of-type {
+        border: none;
+      }
+    }
+  }
 }
