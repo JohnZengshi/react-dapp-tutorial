@@ -146,16 +146,16 @@ export default function () {
           <div className="contribution flex flex-col justify-between">
             <span className="title">Contribution</span>
             <ul className="flex items-center w-full justify-between">
-              <li className="flex flex-col items-center">
+              <li className="flex flex-col items-center justify-between">
                 <span>{contributionDate?.userNumber || 0}</span>
                 <span>Invite ROOSBOX</span>
               </li>
-              <li className="flex flex-col items-center">
+              <li className="flex flex-col items-center justify-between">
                 <span>{contributionDate?.contribution || 0}</span>
                 <span>Contribution</span>
               </li>
 
-              <li className="flex flex-col items-center">
+              <li className="flex flex-col items-center justify-between">
                 <div className="flex items-baseline">
                   <img src={flag} alt="" />
                   <span>x&nbsp;&nbsp;</span>
@@ -174,7 +174,7 @@ export default function () {
                   <TableHeader>
                     <TableRow>
                       <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
-                        Bank
+                        Rank
                       </TableHead>
                       <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
                         Address
@@ -197,7 +197,7 @@ export default function () {
                                 {shortenString(v.address, 6, 5)}
                               </TableCell>
                               <TableCell className="text-center text-[#EAEAEA]">
-                                {v.status}
+                                {v.nodeName}
                               </TableCell>
                             </TableRow>
                           </Fragment>

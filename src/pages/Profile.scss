@@ -85,6 +85,25 @@
             width: 668px;
           }
 
+          > .desBox,
+          p {
+            /* ·25% of platform tokens ·Permanently enjoy network gas fee dividends (the initial proportion is as high as 70%, and with the development of the ecosystem in the later period, the community will vote to determine the redistribution proportion) ·X% proportion of GAS fee airdrop activity rewards high weight voting rights ·A series of other ecological development rights and interests */
+
+            /* 自动布局子元素 */
+            opacity: 1;
+
+            font-family: Raleway-Medium;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 26.5px;
+            letter-spacing: 0em;
+
+            font-feature-settings: "kern" on;
+            color: #eaeaea;
+
+            z-index: 1;
+          }
+
           .boxNamePrice {
             > span {
               &:nth-of-type(1) {
@@ -153,24 +172,6 @@
             z-index: 0;
 
             margin-top: 50px;
-          }
-
-          p {
-            /* ·25% of platform tokens ·Permanently enjoy network gas fee dividends (the initial proportion is as high as 70%, and with the development of the ecosystem in the later period, the community will vote to determine the redistribution proportion) ·X% proportion of GAS fee airdrop activity rewards high weight voting rights ·A series of other ecological development rights and interests */
-
-            /* 自动布局子元素 */
-            opacity: 1;
-
-            font-family: Raleway-Medium;
-            font-size: 18px;
-            font-weight: 500;
-            line-height: 26.5px;
-            letter-spacing: 0em;
-
-            font-feature-settings: "kern" on;
-            color: #eaeaea;
-
-            z-index: 1;
           }
 
           .getBoxBtn {
@@ -247,6 +248,8 @@
 
         > ul {
           > li {
+            height: 177px;
+            justify-content: space-between;
             > span {
               &:last-of-type {
                 /* Invite ROOSBOX */
@@ -299,6 +302,7 @@
                 img {
                   width: 80px;
                   height: 80px;
+                  margin-top: 7px;
                 }
                 > span {
                   &:nth-of-type(1) {

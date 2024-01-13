@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-13 18:01:12
+ * @LastEditTime: 2024-01-13 19:42:17
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -45,8 +45,17 @@ import ConnectUs from "@/components/common/ConnectUs";
 import CustomToast from "@/components/common/CustomToast";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import Invite from "@/components/common/Invite";
-import { SET_NOTIFICATION_TRIGGER_EVENT, SET_PAY_INFO } from "@/store/reducer";
-import { API_GET_NODE_LIST, API_PAY_NODE_SMS, NodeInfo } from "@/utils/api";
+import {
+  SET_NOTIFICATION_TRIGGER_EVENT,
+  SET_PAY_INFO,
+  SET_USER_INVITATION_CODE,
+} from "@/store/reducer";
+import {
+  API_CHECK_INVITE_CODE,
+  API_GET_NODE_LIST,
+  API_PAY_NODE_SMS,
+  NodeInfo,
+} from "@/utils/api";
 import boxT1 from "@/assets/boxT1.png";
 import boxT2 from "@/assets/boxT2.png";
 import boxT3 from "@/assets/boxT3.png";
@@ -81,6 +90,13 @@ export default function () {
   const [selectNodeType, setSelectNodeType] = useState<string>("");
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+
+  let remaining = useMemo(() => {
+    if (nodeInfo) {
+      return nodeInfo?.nodeTotal - nodeInfo?.purchasedCount;
+    }
+    return 0;
+  }, [nodeInfo]);
 
   async function getNodeInfo() {
     let nodeList = await API_GET_NODE_LIST();
@@ -133,10 +149,17 @@ export default function () {
         }
         // TODO 是否可以查到orderNumber？？
         let ok = await checkSuccess(user.wallet.payInfo.orderNumber);
-        if (ok)
+        if (ok) {
           CustomToast(
-            "Paid, waiting for confirmation on the chain! Check it later in Personal Center."
+            "Paid, waiting for confirmation on the chain! Check it later in Personal Center.",
+            1000 * 5
           );
+
+          // TODO 查询用户邀请码✔
+          let invitationCode = await API_CHECK_INVITE_CODE();
+          if (invitationCode)
+            dispatch(SET_USER_INVITATION_CODE(invitationCode));
+        }
       }
     })();
 
@@ -317,9 +340,7 @@ export default function () {
                   </li>
                   <li className="flex flex-col items-center h-full justify-center">
                     <span className="uppercase text-[#EAEAEA]">Remaining</span>
-                    <span className="text-[#EAEAEA]">
-                      {nodeInfo?.nodeTotal || "0"}
-                    </span>
+                    <span className="text-[#EAEAEA]">{remaining}</span>
                   </li>
                   <li className="flex flex-col items-center h-full justify-center">
                     <span className="uppercase text-[#EAEAEA]">

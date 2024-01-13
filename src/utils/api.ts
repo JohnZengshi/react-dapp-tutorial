@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-10 10:15:30
- * @LastEditTime: 2024-01-13 13:39:44
+ * @LastEditTime: 2024-01-13 21:37:38
  * @Author: John
  */
 import store from "@/store/store";
@@ -102,6 +102,7 @@ export async function API_GET_CONTRIBUTION() {
 export type INVITE_VO_LIST_ITEM = {
   address: string;
   status: number;
+  nodeName: string;
 };
 export async function API_GET_INVITE_VO_LIST() {
   let res = await fetchUrl<INVITE_VO_LIST_ITEM[]>(

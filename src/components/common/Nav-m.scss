@@ -30,9 +30,11 @@
     border-radius: 2px;
     opacity: 1;
     background: #1f1f1f;
-    padding: 13px 16px;
+    padding: 0 30px;
+    padding-top: 11.67px;
+    padding-bottom: 37.7px;
     > div {
-      height: 22px;
+      height: 54px;
 
       /* Roosbox */
 
@@ -52,6 +54,41 @@
       border-bottom: 0.5px solid #333333;
       &:last-of-type {
         border: none;
+      }
+
+      &:focus {
+        /* Ecosystems */
+
+        /* 自动布局子元素 */
+
+        font-family: Raleway-Mediun;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: normal;
+        text-transform: uppercase;
+        letter-spacing: 0em;
+
+        font-feature-settings: "kern" on;
+        color: #f58c00;
+
+        z-index: 0;
+
+        border-bottom: 0.5px solid #f58c00;
+      }
+    }
+
+    .logo {
+      width: 75px;
+      height: 29.69px;
+    }
+
+    .iconList {
+      margin-top: 32px;
+      height: 30px;
+      > img {
+        width: 30px;
+        height: 30px;
+        margin-right: 30px;
       }
     }
   }

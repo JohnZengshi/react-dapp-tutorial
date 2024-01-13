@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-01-13 18:17:15
+ * @LastEditTime: 2024-01-13 19:42:58
  * @Author: John
  */
 import "./Invite.scss";
@@ -82,7 +82,7 @@ export default function () {
               <span className="font-[Raleway-Medium] text-[#EAEAEA]">
                 Link：
               </span>
-              <span className="font-[Raleway-Medium] text-[#2B4ACB] underline">
+              <span className="font-[Raleway-Medium] text-[#F58C00] underline">
                 {user.wallet.connected && invitationCode && (
                   // TODO 邀请连接需要动态生成
                   <>
@@ -121,7 +121,7 @@ export default function () {
               <span className="font-[Raleway-Medium] text-[#EAEAEA]">
                 code：
               </span>
-              <span className="font-[Raleway-Medium]  text-[#2B4ACB] underline">
+              <span className="font-[Raleway-Medium]  text-[#F58C00] underline">
                 {user.wallet.connected && invitationCode && (
                   <>{invitationCode}</>
                 )}

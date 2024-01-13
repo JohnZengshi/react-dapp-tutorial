@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-13 18:33:16
+ * @LastEditTime: 2024-01-13 21:11:09
  * @Author: John
  */
 import { Button } from "../ui/button";
@@ -22,6 +22,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 import { isMobile } from "@/utils";
+import tuite from "@/assets/tuite.png";
+import telegram from "@/assets/telegram.png";
+import github from "@/assets/github.png";
+import gitbook from "@/assets/gitbook.png";
+
+import tuite_y from "@/assets/tuite_y.png";
+import telegram_y from "@/assets/telegram_y.png";
+import github_y from "@/assets/github_y.png";
+import gitbook_y from "@/assets/gitbook_y.png";
+import CustomToast from "./CustomToast";
 
 export default function (props: { connectBtn?: any }) {
   const navigate = useNavigate();
@@ -40,31 +50,35 @@ export default function (props: { connectBtn?: any }) {
         {/* TODO 移动端适配菜单✔*/}
         <div className="nav_list flex items-center absolute left-1/2 translate-x-[-50%]">
           <div className="nav_btn">
-            <button>
+            <button
+              onClick={() => {
+                navigate("/participate");
+              }}
+            >
               <span>Roosbox</span>
             </button>
           </div>
 
           <div className="nav_btn">
-            <button>
+            <button onClick={() => CustomToast("coming soon")}>
               <span>Ecosystems</span>
             </button>
           </div>
 
           <div className="nav_btn">
-            <button>
+            <button onClick={() => CustomToast("coming soon")}>
               <span>Bridge</span>
             </button>
           </div>
 
           <div className="nav_btn">
-            <button>
+            <button onClick={() => CustomToast("coming soon")}>
               <span>Airdrop</span>
             </button>
           </div>
 
           <div className="nav_btn">
-            <button>
+            <button onClick={() => CustomToast("coming soon")}>
               <span>Journey</span>
             </button>
           </div>
@@ -97,11 +111,26 @@ export default function (props: { connectBtn?: any }) {
               )}
             </DropdownMenuTrigger>
             <DropdownMenuContent className="DropdownMenuContent-meun">
-              <DropdownMenuItem>Roosbox</DropdownMenuItem>
-              <DropdownMenuItem>Ecosystems</DropdownMenuItem>
-              <DropdownMenuItem>Bridge</DropdownMenuItem>
-              <DropdownMenuItem>Airdrop</DropdownMenuItem>
-              <DropdownMenuItem>Journey</DropdownMenuItem>
+              {/* <img className="logo" src={roosLogo}></img> */}
+              <DropdownMenuItem
+                onClick={() => {
+                  navigate("/participate");
+                }}
+              >
+                Roosbox
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => CustomToast("coming soon")}>
+                Ecosystems
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => CustomToast("coming soon")}>
+                Bridge
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => CustomToast("coming soon")}>
+                Airdrop
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => CustomToast("coming soon")}>
+                Journey
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
                   window.open("https://info.rootsat.co", "_blank");
@@ -109,6 +138,28 @@ export default function (props: { connectBtn?: any }) {
               >
                 BLOG
               </DropdownMenuItem>
+
+              <div className="iconList flex items-center">
+                <img
+                  src={tuite_y}
+                  onClick={() => {
+                    window.open("https://twitter.com/btcl2_roos", "_blank");
+                  }}
+                  alt=""
+                />
+                <img src={telegram_y} alt="" />
+                <img src={github_y} alt="" />
+                <img
+                  src={gitbook_y}
+                  alt=""
+                  onClick={() => {
+                    window.open(
+                      "https://roos.gitbook.io/roos-ntework/",
+                      "_blank"
+                    );
+                  }}
+                />
+              </div>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

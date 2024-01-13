@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-09 14:57:52
- * @LastEditTime: 2024-01-13 13:57:34
+ * @LastEditTime: 2024-01-13 21:07:28
  * @Author: John
  */
 
@@ -30,7 +30,13 @@ export default function () {
         </div>
         <div className="ContactUs">
           <span>Contact Us:</span>
-          <img src={tuite} alt="" />
+          <img
+            src={tuite}
+            onClick={() => {
+              window.open("https://twitter.com/btcl2_roos", "_blank");
+            }}
+            alt=""
+          />
           <img src={telegram} alt="" />
           <img src={github} alt="" />
           <img
@@ -52,7 +58,13 @@ export default function () {
             navigate("/");
           }}
         />
-        <img src={tuite} alt="" />
+        <img
+          src={tuite}
+          onClick={() => {
+            window.open("https://twitter.com/btcl2_roos", "_blank");
+          }}
+          alt=""
+        />
         <img src={telegram} alt="" />
         <img src={github} alt="" />
         <img
