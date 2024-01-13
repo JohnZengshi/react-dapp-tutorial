@@ -79,9 +79,9 @@ export default function () {
                   </span>
                   <div
                     className="desBox"
-                    dangerouslySetInnerHTML={{ __html: userBox.illustrate }}
+                    // dangerouslySetInnerHTML={{ __html: userBox.illustrate }}
                   >
-                    {/* <p>·25% of platform tokens</p>
+                    <p>·25% of platform tokens</p>
                     <p>
                       ·Permanently enjoy network gas fee dividends (the initial
                       proportion is as high as 70%, and with the development of
@@ -95,7 +95,7 @@ export default function () {
                     <p>
                       ·A series of other ecological development rights and
                       interests
-                    </p> */}
+                    </p>
                   </div>
                   <button
                     className="getBoxBtn"

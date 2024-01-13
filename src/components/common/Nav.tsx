@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-13 14:30:09
+ * @LastEditTime: 2024-01-13 18:33:16
  * @Author: John
  */
 import { Button } from "../ui/button";
@@ -10,6 +10,7 @@ import "./Nav-m.scss";
 import roosLogo from "@/assets/roos_logo.png";
 import { useNavigate } from "react-router-dom";
 import meun from "@/assets/meum.png";
+import meum_m from "@/assets/meum-m.png";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -20,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
+import { isMobile } from "@/utils";
 
 export default function (props: { connectBtn?: any }) {
   const navigate = useNavigate();
@@ -88,7 +90,11 @@ export default function (props: { connectBtn?: any }) {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <img src={meun} className="meun-icon" alt="" />
+              {isMobile ? (
+                <img src={meum_m} className="meun-icon"></img>
+              ) : (
+                <img src={meun} className="meun-icon" alt="" />
+              )}
             </DropdownMenuTrigger>
             <DropdownMenuContent className="DropdownMenuContent-meun">
               <DropdownMenuItem>Roosbox</DropdownMenuItem>

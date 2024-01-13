@@ -264,7 +264,7 @@ const ConnectWallet = forwardRef<
                   <span className="font-[Raleway-Bold]  text-[#fff]">OKX</span>
                 </button>
 
-                <button
+                {/* <button
                   className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
                   onClick={() => {
                     // setWalletType(Wallet.UniSat);
@@ -276,7 +276,7 @@ const ConnectWallet = forwardRef<
                   <span className="font-[Raleway-Bold]  text-[#fff]">
                     UniSat
                   </span>
-                </button>
+                </button> */}
               </div>
             </div>
           </DialogContent>
