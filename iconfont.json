@@ -1,0 +1,8 @@
+{
+  "symbol_url": "//at.alicdn.com/t/c/font_4014619_wgdn9jxfsg.js",
+  "use_typescript": true,
+  "save_dir": "./src/components/iconfont",
+  "trim_icon_prefix": "",
+  "unit": "px",
+  "default_icon_size": 18
+}
