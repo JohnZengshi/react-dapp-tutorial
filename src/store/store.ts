@@ -1,16 +1,18 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:25:34
- * @LastEditTime: 2024-01-12 13:44:19
+ * @LastEditTime: 2024-01-14 17:49:03
  * @Author: John
  */
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "@/store/reducer";
+import customComReducer from "@/store/customCom";
 // ...
 
 const store = configureStore({
   reducer: {
     user: userReducer,
+    customCom: customComReducer,
   },
 });
 

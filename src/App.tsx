@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 08:51:29
- * @LastEditTime: 2024-01-12 13:46:13
+ * @LastEditTime: 2024-01-14 17:43:59
  * @Author: John
  */
 // import "./App.css";
@@ -22,21 +22,8 @@ import ConnectWallet, {
 } from "./components/common/ConnectWallet";
 import { useAppDispatch } from "./store/hooks";
 import { SET_WALLET_REF } from "./store/reducer";
+import CustomDialog from "./components/common/CustomDialog";
 
-// const router = createHashRouter([
-//   {
-//     path: "/",
-//     element: <Home />,
-//   },
-//   {
-//     path: "/participate",
-//     element: <Participate />,
-//   },
-//   {
-//     path: "/profile",
-//     element: <Profile />,
-//   },
-// ]);
 const App = () => {
   const connectWalletRef = useRef<ConnectWallet_handleType>(null);
   const dispatch = useAppDispatch();
@@ -71,6 +58,7 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
       </Routes>
       <Toaster />
+      <CustomDialog />
     </div>
   );
 };

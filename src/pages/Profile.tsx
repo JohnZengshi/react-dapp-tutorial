@@ -17,8 +17,10 @@ import {
 import { localStorageKey, shortenString } from "@/utils";
 import { Fragment, useEffect, useState } from "react";
 import {
+  API_CHECK_INVITE_CODE,
   API_GET_CONTRIBUTION,
   API_GET_INVITE_VO_LIST,
+  API_PAY_NODE_SMS,
   API_QUERY_BOX_USER_HAS_PURCHASED,
   BOX_USER_PURCHASED,
   CONTRIBUTION,
@@ -28,6 +30,10 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useNavigate } from "react-router-dom";
 import { SET_USER_INVITATION_CODE } from "@/store/reducer";
 import CustomToast from "@/components/common/CustomToast";
+import { CUSTOM_DIALOG } from "@/store/customCom";
+import boxT1 from "@/assets/boxT1.png";
+import boxT2 from "@/assets/boxT2.png";
+import boxT3 from "@/assets/boxT3.png";
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:25:43
@@ -47,7 +53,16 @@ export default function () {
     if (user.logInStatus == "LOG_OUT") return;
     (async () => {
       let userBox = await API_QUERY_BOX_USER_HAS_PURCHASED();
-      setUserBox(userBox);
+      // TODO 判断用户正在购买的盒子的支付状态，如果支付未完成，提示等待
+      // CUSTOM_DIALOG({
+      //   content:
+      //     "Paid, waiting for confirmation on the chain! Check it later in Personal Center.",
+      // });
+      setUserBox({
+        buyAmount: userBox.buyAmount,
+        illustrate: userBox.illustrate,
+        nodeName: userBox.nodeName,
+      });
     })();
 
     (async () => {
@@ -69,14 +84,50 @@ export default function () {
     return () => {};
   }, [user.wallet.address, user.wallet.connected, user.logInStatus]);
 
+  useEffect(() => {
+    (async () => {
+      if (user.logInStatus == "LOG_OUT") return;
+      if (!user.wallet.payInfo.hash) return;
+      let res = await API_PAY_NODE_SMS(
+        user.wallet.payInfo.orderNumber,
+        user.wallet.payInfo.hash,
+        1
+      );
+      if (res.type == 1) {
+        // TODO 查询用户邀请码✔
+        let invitationCode = await API_CHECK_INVITE_CODE();
+        if (invitationCode) dispatch(SET_USER_INVITATION_CODE(invitationCode));
+      } else {
+        // TODO 支付未完成，提示等待
+        dispatch(
+          CUSTOM_DIALOG({
+            content:
+              "Paid, waiting for confirmation on the chain! Check it later in Personal Center.",
+          })
+        );
+      }
+    })();
+  }, [user.logInStatus, user.wallet.payInfo.hash]);
+
   return (
     <>
       <ScrollArea className="Profile box-border">
         <div className="content box-border">
           <span className="title">MY BOX</span>
           <div className="roosBox flex items-center">
-            <div className="left top">
-              <img className="boxPng w-full h-full" src={roos_box} alt="" />
+            <div className="left top flex items-center justify-center">
+              {userBox?.nodeName == "T1" && (
+                <img className="boxPng scale-[2]" src={boxT1} alt="" />
+              )}
+              {userBox?.nodeName == "T2" && (
+                <img className="boxPng scale-[2]" src={boxT2} alt="" />
+              )}
+              {userBox?.nodeName == "T3" && (
+                <img className="boxPng scale-[2]" src={boxT3} alt="" />
+              )}
+              {!userBox?.nodeName && (
+                <img className="boxPng w-full h-full" src={roos_box} alt="" />
+              )}
             </div>
             <div className="right bottom flex flex-col flex-auto">
               {userBox && !userBox.nodeName && (

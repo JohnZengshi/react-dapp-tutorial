@@ -1,0 +1,106 @@
+@include pq {
+  .dialog-content {
+    width: 512px;
+    height: 310px;
+
+    .warpper_box {
+      /* 矩形 9 */
+      /* 矩形 9 */
+
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 512px;
+      height: 310px;
+      border-radius: 5px;
+      opacity: 1;
+      border: 4px solid #f58c00;
+
+      filter: blur(10px);
+    }
+
+    .content_box {
+      /* 矩形 8 */
+
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 512px;
+      height: 310px;
+      border-radius: 5px;
+      opacity: 0.8;
+
+      background: #550935;
+
+      box-sizing: border-box;
+      border: 1px solid #f58c00;
+
+      padding: 0 74px;
+    }
+
+    .click_icon {
+      position: absolute;
+      left: 1px;
+      top: 0px;
+      width: 146px;
+      height: 146px;
+    }
+
+    .roos_logo {
+      width: 144.87px;
+      height: 57px;
+      opacity: 1;
+
+      z-index: 0;
+
+      margin-top: 43px;
+    }
+
+    .content_text {
+      /* Paid, waiting for confirmation on the chain! Check it later in Personal Center. */
+
+      /* 自动布局子元素 */
+
+      font-family: Raleway-Medium;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 26.5px;
+      letter-spacing: 0em;
+
+      font-feature-settings: "kern" on;
+      color: #eaeaea;
+
+      z-index: 0;
+
+      margin-top: 40px;
+    }
+
+    .ok_btn {
+      /* 组 92 */
+
+      /* 自动布局子元素 */
+      width: 307px;
+      height: 45px;
+      border-radius: 5px;
+      opacity: 1;
+
+      box-sizing: border-box;
+      border: 0.71px solid #f58c00;
+
+      z-index: 1;
+
+      /* OK */
+
+      font-family: Raleway-Bold;
+      font-size: 20px;
+      font-weight: bold;
+      line-height: normal;
+      letter-spacing: 0em;
+
+      font-feature-settings: "kern" on;
+      color: #f58c00;
+
+      margin-top: 30px;
+    }
+  }
+}
