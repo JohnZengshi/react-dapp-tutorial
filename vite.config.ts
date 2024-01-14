@@ -1,15 +1,13 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-12 15:27:54
+ * @LastEditTime: 2024-01-15 00:17:51
  * @Author: John
  */
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
-import basicSsl from "@vitejs/plugin-basic-ssl";
-import postCssPxToRem from "postcss-pxtorem";
-import autoprefixer from "autoprefixer";
+import viteCompression from "vite-plugin-compression";
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
@@ -23,7 +21,7 @@ export default defineConfig({
       },
     },
   },
-  plugins: [react()],
+  plugins: [react(), viteCompression({ deleteOriginFile: false })],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
