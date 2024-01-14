@@ -207,11 +207,6 @@ const Okx = forwardRef<
           );
           // TODO 只在这里写入用户数据✔
           saveUserData(address);
-
-          // TODO 查询用户邀请码✔
-          let invitationCode = await API_CHECK_INVITE_CODE();
-          if (invitationCode)
-            dispatch(SET_USER_INVITATION_CODE(invitationCode));
         }
       })
       .catch(handleCatch);
@@ -264,7 +259,9 @@ const Okx = forwardRef<
   }
 
   async function disConnect() {
-    await okxwallet.bitcoin.disconnect();
+    if (!isOKApp) {
+      await okxwallet.bitcoin.disconnect();
+    }
     clearUserData();
   }
 
@@ -325,6 +322,7 @@ const Okx = forwardRef<
     dispatch(SET_CONNECTED(false));
     dispatch(SET_ADDRESS(""));
     localStorage.removeItem(localStorageKey.okx_address);
+    localStorage.removeItem(localStorageKey.roos_token);
   }
   // 统一处理错误
   function handleCatch(e: { code: number; message: string }) {

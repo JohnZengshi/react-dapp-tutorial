@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-01-13 20:23:23
+ * @LastEditTime: 2024-01-14 16:33:05
  * @Author: John
  */
 import roosHomeBg from "@/assets/roos-home.mp4";
@@ -107,7 +107,10 @@ export default function () {
             >
               Get RoosBOX Now
             </button>
-            <img className="logo_big" src={roos_logo_medium} alt="" />
+            <div className="relative">
+              {/* <div className="logo_blur"></div> */}
+              <img className="logo_big" src={roos_logo_medium} alt="" />
+            </div>
             <span>Partners</span>
             <div className="bannerList flex items-center w-full justify-between">
               <img src={Bitmap} alt="" />

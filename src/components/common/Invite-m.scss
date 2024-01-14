@@ -25,27 +25,24 @@
         z-index: 0;
 
         margin-top: 15px;
-        margin-bottom: 15px;
+        // margin-bottom: 15px;
       }
 
-      &:nth-of-type(2),
-      &:nth-of-type(3) {
-        /* ·Invite the box to get contribution, J rewards XX, Q rewards XX, K rewards XX. */
+      /* ·Invite the box to get contribution, J rewards XX, Q rewards XX, K rewards XX. */
 
-        font-family: Raleway-Medium;
-        font-size: 12px;
-        font-weight: 500;
-        line-height: normal;
-        letter-spacing: 0em;
+      font-family: Raleway-Medium;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: 0em;
 
-        font-feature-settings: "kern" on;
-        color: #eaeaea;
+      font-feature-settings: "kern" on;
+      color: #eaeaea;
 
-        z-index: 0;
-      }
-      &:nth-of-type(3) {
+      z-index: 0;
+      &:last-of-type {
         margin-bottom: 15px;
-        margin-top: 7.5px;
+        // margin-top: 7.5px;
       }
     }
 
@@ -83,7 +80,6 @@
             text-decoration: underline;
 
             font-feature-settings: "kern" on;
-            color: #2b4acb;
 
             z-index: 0;
             // margin-top: 10px;

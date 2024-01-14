@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-13 19:42:17
+ * @LastEditTime: 2024-01-14 17:00:17
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -59,6 +59,7 @@ import {
 import boxT1 from "@/assets/boxT1.png";
 import boxT2 from "@/assets/boxT2.png";
 import boxT3 from "@/assets/boxT3.png";
+import { useNavigate } from "react-router-dom";
 type OrderInfo = {
   buyAmount: number;
   orderNumber: number;
@@ -90,6 +91,7 @@ export default function () {
   const [selectNodeType, setSelectNodeType] = useState<string>("");
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   let remaining = useMemo(() => {
     if (nodeInfo) {
@@ -154,11 +156,13 @@ export default function () {
             "Paid, waiting for confirmation on the chain! Check it later in Personal Center.",
             1000 * 5
           );
-
           // TODO 查询用户邀请码✔
           let invitationCode = await API_CHECK_INVITE_CODE();
           if (invitationCode)
             dispatch(SET_USER_INVITATION_CODE(invitationCode));
+
+          // TODO 购买成功跳转到个人页面
+          navigate("/profile");
         }
       }
     })();
@@ -202,10 +206,10 @@ export default function () {
       /> */}
       <ScrollArea className="Participate">
         <div className="content flex flex-col">
-          <div className="card bg-[#260217a1] m-0-auto flex ">
+          <div className="card m-0-auto flex ">
             <div className="left top relative">
-              <div className="bulr-box absolute bg-[#260217] box-border border-solid border-[#f58c00]"></div>
-              <div className="model flex justify-center items-center relative opacity-1 bg-[#260217] box-border border-solid border-[#f58c00]">
+              <div className="bulr-box absolute box-border border-solid border-[#f58c00]"></div>
+              <div className="model flex justify-center items-center relative opacity-1 box-border border-solid border-[#f58c00]">
                 {/* !isMobile && !isOKApp && */}
                 {
                   // <Canvas

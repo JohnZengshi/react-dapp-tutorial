@@ -37,6 +37,9 @@ import {
   UserState,
 } from "@/store/reducer";
 import { useNavigate } from "react-router-dom";
+import { IoMdExit } from "react-icons/io";
+import CustomToast from "./CustomToast";
+import { API_PAY_NODE_SMS } from "@/utils/api";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 14:40:57
@@ -98,24 +101,28 @@ const ConnectWallet = forwardRef<
         // );
         // TODO 发送交易✔
         (async () => {
-          let hash = "";
-          if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
-            hash = await uniSatRef.current._onSubmit(
-              user.wallet.payInfo.cost,
-              user.wallet.payInfo.toAddress
-            );
-          } else if (user.wallet.walletType === "OKX" && okxRef.current) {
-            hash = await okxRef.current._onSubmit(
-              user.wallet.payInfo.cost,
-              user.wallet.payInfo.toAddress
-            );
+          try {
+            let hash = "";
+            if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
+              hash = await uniSatRef.current._onSubmit(
+                user.wallet.payInfo.cost,
+                user.wallet.payInfo.toAddress
+              );
+            } else if (user.wallet.walletType === "OKX" && okxRef.current) {
+              hash = await okxRef.current._onSubmit(
+                user.wallet.payInfo.cost,
+                user.wallet.payInfo.toAddress
+              );
+            }
+
+            console.log("hash", hash);
+            if (hash)
+              dispatch(SET_PAY_INFO({ ...user.wallet.payInfo, hash: hash }));
+          } catch (error) {
+            // TODO 用户取消支付
+            CustomToast("user cancel payment");
+            API_PAY_NODE_SMS(user.wallet.payInfo.orderNumber, "123456789", 2);
           }
-
-          console.log("hash", hash);
-          if (hash)
-            dispatch(SET_PAY_INFO({ ...user.wallet.payInfo, hash: hash }));
-
-          // TODO 用户取消支付
         })();
         break;
 
@@ -289,19 +296,23 @@ const ConnectWallet = forwardRef<
             {" "}
             {user.wallet.address && shortenString(user.wallet.address, 6, 5)}
           </DropdownMenuTrigger>
-          {/* <DropdownMenuContent>
-            <DropdownMenuItem
-              onClick={() => {
-                if (walletType == Wallet.UniSat) {
-                  uniSatRef.current?._disConnect();
-                } else if (walletType == Wallet.OKX) {
-                  okxRef.current?._disConnect();
-                }
-              }}
-            >
-              Disconnect Wallet
+          <DropdownMenuContent className="DropdownMenuContent-disconnect flex items-center justify-center">
+            <DropdownMenuItem>
+              <button
+                onClick={() => {
+                  if (user.wallet.walletType == "UNISAT") {
+                    uniSatRef.current?._disConnect();
+                  } else if (user.wallet.walletType == "OKX") {
+                    okxRef.current?._disConnect();
+                  }
+                }}
+                className="disconnect flex items-center"
+              >
+                <IoMdExit className="exitIcon" />
+                Disconnect
+              </button>
             </DropdownMenuItem>
-          </DropdownMenuContent> */}
+          </DropdownMenuContent>
         </DropdownMenu>
       )}
 

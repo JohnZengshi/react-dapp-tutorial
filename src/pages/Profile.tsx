@@ -24,8 +24,10 @@ import {
   CONTRIBUTION,
   INVITE_VO_LIST_ITEM,
 } from "@/utils/api";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useNavigate } from "react-router-dom";
+import { SET_USER_INVITATION_CODE } from "@/store/reducer";
+import CustomToast from "@/components/common/CustomToast";
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:25:43
@@ -39,6 +41,7 @@ export default function () {
 
   const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     console.log("user.logInStatus", user.logInStatus);
     if (user.logInStatus == "LOG_OUT") return;
@@ -56,7 +59,11 @@ export default function () {
     (async () => {
       // TODO 获取推荐人列表✔
       let inviteList = await API_GET_INVITE_VO_LIST();
-      if (inviteList && inviteList.length > 0) setInviteList([...inviteList]);
+      if (inviteList && inviteList.length > 0) {
+        setInviteList([...inviteList]);
+      } else {
+        setInviteList([]);
+      }
     })();
 
     return () => {};
@@ -187,21 +194,19 @@ export default function () {
                   <TableBody>
                     {inviteList.map((v, i) => {
                       return (
-                        <>
-                          <Fragment key={i}>
-                            <TableRow>
-                              <TableCell className="text-center text-[#EAEAEA]">
-                                {i + 1}
-                              </TableCell>
-                              <TableCell className="text-center text-[#EAEAEA]">
-                                {shortenString(v.address, 6, 5)}
-                              </TableCell>
-                              <TableCell className="text-center text-[#EAEAEA]">
-                                {v.nodeName}
-                              </TableCell>
-                            </TableRow>
-                          </Fragment>
-                        </>
+                        <Fragment key={i}>
+                          <TableRow>
+                            <TableCell className="text-center text-[#EAEAEA]">
+                              {i + 1}
+                            </TableCell>
+                            <TableCell className="text-center text-[#EAEAEA]">
+                              {shortenString(v.address, 6, 5)}
+                            </TableCell>
+                            <TableCell className="text-center text-[#EAEAEA]">
+                              {v.nodeName}
+                            </TableCell>
+                          </TableRow>
+                        </Fragment>
                       );
                     })}
                   </TableBody>
