@@ -20,11 +20,13 @@ import {
   API_CHECK_INVITE_CODE,
   API_GET_CONTRIBUTION,
   API_GET_INVITE_VO_LIST,
+  API_GET_NODE_LIST,
   API_PAY_NODE_SMS,
   API_QUERY_BOX_USER_HAS_PURCHASED,
   BOX_USER_PURCHASED,
   CONTRIBUTION,
   INVITE_VO_LIST_ITEM,
+  NodeInfo,
 } from "@/utils/api";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useNavigate } from "react-router-dom";
@@ -44,6 +46,7 @@ export default function () {
   const [contributionDate, setContributionDate] = useState<CONTRIBUTION>();
   const [inviteList, setInviteList] = useState<INVITE_VO_LIST_ITEM[]>([]);
   const [userBox, setUserBox] = useState<BOX_USER_PURCHASED>();
+  const [T3nodeInfo, setT3NodeInfo] = useState<NodeInfo>();
 
   const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
@@ -73,8 +76,7 @@ export default function () {
         // TODO 支付未完成，提示等待
         dispatch(
           CUSTOM_DIALOG({
-            content:
-              "Paid, waiting for confirmation on the chain! Check it later in Personal Center.",
+            content: "Please wait, it is being confirmed on the chain! ",
           })
         );
       }
@@ -99,6 +101,12 @@ export default function () {
     return () => {};
   }, [user.wallet.address, user.wallet.connected, user.logInStatus]);
 
+  useEffect(() => {
+    (async () => {
+      let nodeList = await API_GET_NODE_LIST();
+      setT3NodeInfo(nodeList[2]);
+    })();
+  }, []);
   // useEffect(() => {
   //   (async () => {
   //     if (user.logInStatus == "LOG_OUT") return;
@@ -128,7 +136,7 @@ export default function () {
     <>
       <ScrollArea className="Profile box-border">
         <div className="content box-border">
-          <span className="title">MY BOX</span>
+          <span className="title">DASHBOARD</span>
           <div className="roosBox flex items-center">
             <div className="left top flex items-center justify-center">
               {userBox?.status == 1 && (
@@ -153,14 +161,14 @@ export default function () {
             <div className="right bottom flex flex-col flex-auto">
               {(userBox?.status == 2 || userBox?.status == 3) && (
                 <>
-                  <span className="Equity">
-                    Get ROOSBOX,you can enjoy the following benefits.
-                  </span>
+                  <span className="Equity">Potential future benefits</span>
                   <div
                     className="desBox"
-                    // dangerouslySetInnerHTML={{ __html: userBox.illustrate }}
+                    dangerouslySetInnerHTML={{
+                      __html: T3nodeInfo?.illustrate || "",
+                    }}
                   >
-                    <p>·25% of platform tokens</p>
+                    {/* <p>·25% of platform tokens</p>
                     <p>
                       ·Permanently enjoy network gas fee dividends (the initial
                       proportion is as high as 70%, and with the development of
@@ -174,7 +182,7 @@ export default function () {
                     <p>
                       ·A series of other ecological development rights and
                       interests
-                    </p>
+                    </p> */}
                   </div>
                   <button
                     className="getBoxBtn"
@@ -194,28 +202,29 @@ export default function () {
                     <span>{userBox?.buyAmount}</span>
                     <span>&nbsp;&nbsp;btc</span>
                   </div>
-                  <span className="Equity">ROOSBOX Equity</span>
+                  <span className="Equity">Potential future benefits</span>
                   <div
                     className="desBox"
-                    dangerouslySetInnerHTML={{ __html: userBox.illustrate }}
+                    // dangerouslySetInnerHTML={{ __html: userBox.illustrate }}
                   >
-                    {/* <p>·25% of platform tokens</p>
-                    <p>
-                      ·Permanently enjoy network gas fee dividends (the initial
-                      proportion is as high as 70%, and with the development of
-                      the ecosystem in the later period, the community will vote
-                      to determine the redistribution proportion)
+                    <p>·20% ROS Airdrop</p>
+                    <p>·Highest Weight ROOS Protocol Dividends</p>
+                    <p>·Highest Weight Staking Rewards</p>
+                    <p>·ROOS Genesis NFT</p>
+                    <p>Other Additional Variable Rewards</p>
+                    <p className="subTitle">
+                      RoosBOX Referrers Enjoy Additional Benefits:
                     </p>
                     <p>
-                      {" "}
-                      ·X% proportion of GAS fee airdrop activity rewards high
-                      weight voting rights
+                      - At the start of Journey MAP2, ROOS will initiate the
+                      Alpha mainnet through a Gas Fee Airdrop event, with a cap
+                      of $4.9 million. RoosBOX referrers will share the Gas Fee
+                      based on the weight of their ROOS SCORE.
                     </p>
                     <p>
-                      {" "}
-                      ·A series of other ecological development rights and
-                      interests
-                    </p> */}
+                      - Grants Program Developer Incentive Plan: This will be
+                      implemented during the Journey MAP2 phase.
+                    </p>
                   </div>
                 </>
               )}
@@ -223,15 +232,15 @@ export default function () {
           </div>
 
           <div className="contribution flex flex-col justify-between">
-            <span className="title">Contribution</span>
+            <span className="title">JOURNEY PROGRAM</span>
             <ul className="flex items-center w-full justify-between">
               <li className="flex flex-col items-center justify-between">
                 <span>{contributionDate?.userNumber || 0}</span>
-                <span>Invite ROOSBOX</span>
+                <span>REFERAL ROOSBOX</span>
               </li>
               <li className="flex flex-col items-center justify-between">
                 <span>{contributionDate?.contribution || 0}</span>
-                <span>Contribution</span>
+                <span>ROOS SCORE</span>
               </li>
 
               <li className="flex flex-col items-center justify-between">
@@ -246,7 +255,7 @@ export default function () {
 
             {inviteList.length > 0 && (
               <>
-                <span className="title">Buy List</span>
+                <span className="title">REFERAL ROOSBOX DETAILS</span>
 
                 <Table className="buyList">
                   {/* <TableCaption>A list of your recent invoices.</TableCaption> */}

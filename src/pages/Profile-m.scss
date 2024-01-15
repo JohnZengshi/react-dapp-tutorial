@@ -269,12 +269,13 @@
           z-index: 0;
           margin-top: 15px;
 
-          &:nth-of-type(2) {
-            margin-top: 15px;
+          &:first-of-type {
+            margin-top: 0;
           }
         }
 
         > ul {
+          margin-top: 15px;
           > li {
             height: 62px;
             > span {

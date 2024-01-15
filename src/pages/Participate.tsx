@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-15 15:40:24
+ * @LastEditTime: 2024-01-15 16:22:50
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -140,7 +140,7 @@ export default function () {
           dispatch(
             CUSTOM_DIALOG({
               content:
-                "Paid, waiting for confirmation on the chain! Check it later in Personal Center.",
+                "Paid, waiting for confirmation on the chain! Check out later on MY JOURNEY",
             })
           );
           // // TODO 查询用户邀请码✔
@@ -339,7 +339,7 @@ export default function () {
                   </li>
                   <li className="flex flex-col items-center h-full justify-center">
                     <span className="uppercase text-[#EAEAEA]">
-                      total amount
+                      TOTAL SUPPLY
                     </span>
                     <span className="text-[#EAEAEA]">
                       {nodeInfo?.nodeTotal || "0"}
@@ -348,7 +348,7 @@ export default function () {
                 </ul>
 
                 <div className="content-bottom flex flex-col flex-auto">
-                  <span className="text-[#F58C00]">Box Rights</span>
+                  <span className="text-[#F58C00]">Intro To RoosBOX</span>
                   <div
                     className="rightsAndInterests text-[#EAEAEA]"
                     dangerouslySetInnerHTML={{

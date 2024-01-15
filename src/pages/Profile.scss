@@ -40,7 +40,7 @@
         /* 矩形 3 */
 
         max-width: 1680px;
-        height: 486px;
+        min-height: 486px;
         border-radius: 9.46px;
         opacity: 0.8;
 
@@ -247,6 +247,7 @@
         }
 
         > ul {
+          margin-top: 60px;
           > li {
             height: 177px;
             justify-content: space-between;

@@ -234,7 +234,7 @@ const ConnectWallet = forwardRef<
             navigate("/profile");
           }}
         >
-          profile
+          MY JOURNEY
         </button>
       )}
       {!user.wallet.connected && (

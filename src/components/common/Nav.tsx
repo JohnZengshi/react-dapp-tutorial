@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-15 14:40:25
+ * @LastEditTime: 2024-01-15 16:23:14
  * @Author: John
  */
 import { Button } from "../ui/button";
@@ -88,11 +88,11 @@ export default function (props: { connectBtn?: any }) {
             </button>
           </div>
 
-          <div className="nav_btn">
+          {/* <div className="nav_btn">
             <button onClick={() => CustomToast("coming soon")}>
               <span>Journey</span>
             </button>
-          </div>
+          </div> */}
 
           <div className="nav_btn">
             <button
@@ -140,9 +140,9 @@ export default function (props: { connectBtn?: any }) {
               <DropdownMenuItem onClick={() => CustomToast("coming soon")}>
                 Airdrop
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => CustomToast("coming soon")}>
+              {/* <DropdownMenuItem onClick={() => CustomToast("coming soon")}>
                 Journey
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuItem
                 onClick={() => {
                   window.open("https://info.rootsat.co", "_blank");

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-01-15 10:00:41
+ * @LastEditTime: 2024-01-15 16:01:24
  * @Author: John
  */
 import "./Invite.scss";
@@ -60,7 +60,7 @@ export default function () {
       <div className="invite relative bg-[#26021798] box-border border-solid border-[rgb(245, 140, 0)] flex flex-col overflow-hidden">
         <img className="logo" src={roos_logo} alt="" />
         <span className="font-[Raleway-Bold] uppercase tracking-[0em] text-[#F58C00]">
-          Invite benefits
+          Get Rewards Through Referral
         </span>
         {/* <span className="font-[Raleway-Medium] text-[#EAEAEA]"> */}
         {/* {user.wallet.connected && invitationCode && ( */}
@@ -93,15 +93,16 @@ export default function () {
         {/* )} */}
         {/* </span> */}
         <span className="font-[Raleway-Medium] text-[#EAEAEA]">
-          Invitation to purchase ROOSBOX，Get Contribution and NFT Fragments.
+          Buy RoosBOX to obtain your referral code and share your referral code
+          with others to get referral rewards.
         </span>
         {!user.wallet.connected && (
-          <span className="font-[Raleway-Medium] text-[#EAEAEA]">
+          <span className="font-[Raleway-Medium] text-[#F58C00]">
             <>Connect wallet to receive invitation link.</>
           </span>
         )}
         {user.wallet.connected && !invitationCode && (
-          <span className="font-[Raleway-Medium] text-[#EAEAEA]">
+          <span className="font-[Raleway-Medium] text-[#F58C00]">
             <>Purchase ROOSBOX to get invitation link.</>
           </span>
         )}
@@ -153,12 +154,12 @@ export default function () {
                   <>{invitationCode}</>
                 )}
                 {/* TODO 多余逻辑 */}
-                {!user.wallet.connected && (
+                {/* {!user.wallet.connected && (
                   <>Connect wallet to receive invitation link.</>
                 )}
                 {user.wallet.connected && !invitationCode && (
                   <>Purchase ROOSBOX to get invitation link.</>
-                )}
+                )} */}
               </span>
               <button
                 onClick={() => {
