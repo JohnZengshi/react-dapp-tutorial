@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-01-15 14:25:39
+ * @LastEditTime: 2024-01-15 17:05:41
  * @Author: John
  */
 import roosHomeBg from "@/assets/roos-home.mp4";
@@ -20,6 +20,9 @@ import { isMobile, isOKApp } from "@/utils";
 import videoBg from "@/assets/videoBg.png";
 import yellowbar from "@/assets/bar.png";
 import roos_logo_medium from "@/assets/roos_logo_medium.png";
+
+import roos_logo_wrap from "@/assets/roos_logo_wrap.png";
+import roos_logo_inside from "@/assets/roos_logo_inside.png";
 import Bitmap from "@/assets/bitmap.svg";
 import StarkWare from "@/assets/StarkWare.png";
 import tuite_y from "@/assets/tuite_y.png";
@@ -112,10 +115,14 @@ export default function () {
             >
               Get RoosBOX Now
             </button>
-            <div className="relative">
+            <div className="logo_big relative">
               {/* <div className="logo_blur"></div> */}
-              <img className="logo_big" src={roos_logo_medium} alt="" />
+
+              {/* <img className="logo_big" src={roos_logo_medium} alt="" /> */}
+              <img className="wrap" src={roos_logo_wrap} alt="" />
+              <img className="inside" src={roos_logo_inside} alt="" />
             </div>
+            <div className="line"></div>
             <span>Partners</span>
             <div className="bannerList flex items-center w-full justify-between">
               <img src={Bitmap} alt="" />

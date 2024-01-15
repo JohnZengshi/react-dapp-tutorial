@@ -137,7 +137,7 @@ export default function () {
       <ScrollArea className="Profile box-border">
         <div className="content box-border">
           <span className="title">DASHBOARD</span>
-          <div className="roosBox flex items-center">
+          <div className="roosBox flex items-center bg-[#260217c7]">
             <div className="left top flex items-center justify-center">
               {userBox?.status == 1 && (
                 <>
@@ -231,7 +231,7 @@ export default function () {
             </div>
           </div>
 
-          <div className="contribution flex flex-col justify-between">
+          <div className="contribution flex flex-col justify-between bg-[#260217c7]">
             <span className="title">JOURNEY PROGRAM</span>
             <ul className="flex items-center w-full justify-between">
               <li className="flex flex-col items-center justify-between">

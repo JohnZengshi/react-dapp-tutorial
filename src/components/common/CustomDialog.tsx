@@ -1,3 +1,9 @@
+/*
+ * @LastEditors: John
+ * @Date: 2024-01-14 17:41:17
+ * @LastEditTime: 2024-01-15 16:56:22
+ * @Author: John
+ */
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -25,10 +31,7 @@ export default function () {
             <div className="content_box flex flex-col items-center absolute w-full h-full  border-solid border-[#F58C00] bg-[#550935] opacity-80 ">
               <img className="click_icon " src={clickIcon} alt="" />
               <img className="roos_logo" src={roosLogo} alt="" />
-              <span className="content_text">
-                Paid, waiting for confirmation on the chain! Check it later in
-                Personal Center.
-              </span>
+              <span className="content_text">{customCom.dialog.content}</span>
               <button
                 className="ok_btn"
                 onClick={() => {

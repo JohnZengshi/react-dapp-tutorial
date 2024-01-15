@@ -206,7 +206,7 @@
           /* ROOS Journey MAP1 */
 
           font-family: Raleway-Medium;
-          font-size: 24px;
+          font-size: 26px;
           font-weight: bold;
           line-height: normal;
           letter-spacing: 0em;
@@ -223,16 +223,16 @@
           /* Treasure Your Roosbox */
 
           /* 自动布局子元素 */
-          opacity: 0.6;
+          opacity: 0.5;
 
           font-family: Raleway-Medium;
-          font-size: 22.06px;
+          font-size: 16px;
           font-weight: bold;
           line-height: normal;
           letter-spacing: 0em;
 
           font-feature-settings: "kern" on;
-          -webkit-text-stroke: #f58c00 1px; /* 浏览器可能不支持 */
+          -webkit-text-stroke: #fff 1px; /* 浏览器可能不支持 */
 
           z-index: 1;
 
@@ -293,14 +293,16 @@
 
         opacity: 0.8;
 
+        text-align: center;
+
         &:first-of-type {
           margin-top: 20px;
         }
       }
 
       .bar {
-        width: 221px;
-        height: 20px;
+        width: 171px;
+        height: 10px;
         margin-top: 10px;
       }
 
@@ -319,7 +321,7 @@
         /* Get RoosBOX Now */
 
         font-family: Raleway-Bold;
-        font-size: 18px;
+        font-size: 14px;
         font-weight: bold;
         line-height: normal;
         text-transform: uppercase;
@@ -350,7 +352,25 @@
         width: 170px;
         height: 170px;
         margin-top: 19.92px;
-        animation: rotate 20s linear infinite; /* 持续旋转，时间为2秒 */
+
+        > img {
+          position: absolute;
+          top: 0;
+          &:first-of-type {
+            animation: rotate 20s linear infinite; /* 持续旋转，时间为2秒 */
+          }
+        }
+      }
+
+      .line {
+        /* 直线 26 */
+
+        width: 273px;
+        height: 0px;
+        opacity: 1;
+
+        border: 1px solid #351d01;
+        margin-top: 20px;
       }
 
       .bannerList {

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-15 16:22:50
+ * @LastEditTime: 2024-01-15 18:21:49
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -172,7 +172,7 @@ export default function () {
           className={`box-select-item active w-[33%] h-full ${
             props.active
               ? "text-[#F58C00] border-b-[#F58C00]"
-              : "text-[#333] border-b-[#333333]"
+              : "text-[#333] border-b-[#380522]"
           } flex border-solid justify-center items-center`}
         >
           <span className="uppercase">{props.content}</span>
@@ -199,8 +199,8 @@ export default function () {
         <div className="content flex flex-col">
           <div className="card m-0-auto flex ">
             <div className="left top relative">
-              <div className="bulr-box absolute box-border border-solid border-[#f58c00]"></div>
-              <div className="model flex justify-center items-center relative opacity-1 box-border border-solid border-[#f58c00]">
+              <div className="bulr-box absolute box-border border-solid"></div>
+              <div className="model flex justify-center items-center relative opacity-1 box-border border-solid">
                 {/* !isMobile && !isOKApp && */}
                 {
                   // <Canvas
@@ -239,7 +239,7 @@ export default function () {
               </div>
             </div>
 
-            <ScrollArea className="right bottom">
+            <div className="right bottom">
               <div className="inputContent">
                 <span className="title">NODEBOX</span>
                 <div className="num_tip">
@@ -323,7 +323,9 @@ export default function () {
 
                 <ul className="priceDes w-full flex items-center">
                   <li className="flex flex-col items-center h-full justify-center">
-                    <span className="uppercase text-[#EAEAEA]">price</span>
+                    <span className="uppercase text-[#D5D5D5] opacity-60">
+                      price
+                    </span>
                     <div className="btcPrice flex items-baseline">
                       <span className="price text-[#EAEAEA]">
                         {nodeInfo?.nodePrice || "0.00"}
@@ -333,12 +335,16 @@ export default function () {
                       </span>
                     </div>
                   </li>
+                  <div className="line"></div>
                   <li className="flex flex-col items-center h-full justify-center">
-                    <span className="uppercase text-[#EAEAEA]">Remaining</span>
+                    <span className="uppercase text-[#D5D5D5] opacity-60">
+                      Remaining
+                    </span>
                     <span className="text-[#EAEAEA]">{remaining}</span>
                   </li>
+                  <div className="line"></div>
                   <li className="flex flex-col items-center h-full justify-center">
-                    <span className="uppercase text-[#EAEAEA]">
+                    <span className="uppercase text-[#D5D5D5] opacity-60">
                       TOTAL SUPPLY
                     </span>
                     <span className="text-[#EAEAEA]">
@@ -440,7 +446,7 @@ export default function () {
                   </Button>
                 </div>
               </div>
-            </ScrollArea>
+            </div>
           </div>
 
           <Invite />

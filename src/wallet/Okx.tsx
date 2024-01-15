@@ -316,7 +316,7 @@ const Okx = forwardRef<
           .then((txid: { txhash: string }) => {
             console.log(txid);
 
-            CustomToast(`请求交易成功,txid值为：${txid.txhash}`);
+            // CustomToast(`请求交易成功,txid值为：${txid.txhash}`);
 
             reslove(txid.txhash);
           })
@@ -353,6 +353,7 @@ const Okx = forwardRef<
     // dispatch(SET_WALLET_CONNECTING(false));
     if (typeof e.message === "string") {
       console.warn(e.message);
+      if (/[\u4e00-\u9fa5]/.test(e.message)) return;
       CustomToast(e.message);
     }
   }

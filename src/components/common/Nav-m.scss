@@ -42,7 +42,7 @@
 
       /* 自动布局子元素 */
       font-family: Raleway-Medium;
-      font-size: 10px;
+      font-size: 14px;
       font-weight: 500;
       line-height: normal;
       text-transform: uppercase;
@@ -87,7 +87,8 @@
     .iconList {
       margin-top: 32px;
       height: 30px;
-      > .icon {
+      > img,
+      .icon {
         width: 30px !important;
         height: 30px !important;
         margin-right: 30px;

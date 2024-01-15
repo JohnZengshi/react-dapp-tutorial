@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-15 16:23:14
+ * @LastEditTime: 2024-01-15 16:39:25
  * @Author: John
  */
 import { Button } from "../ui/button";
@@ -116,9 +116,9 @@ export default function (props: { connectBtn?: any }) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               {isMobile || isSmallScreen ? (
-                // <img src={meum_m} className="meun-icon"></img>
-                <IconFont name="a-drop-downmenu" className="meun-icon" />
+                <img src={meum_m} className="meun-icon"></img>
               ) : (
+                // <IconFont name="a-drop-downmenu" className="meun-icon" />
                 <img src={meun} className="meun-icon" alt="" />
               )}
             </DropdownMenuTrigger>
@@ -152,13 +152,13 @@ export default function (props: { connectBtn?: any }) {
               </DropdownMenuItem>
 
               <div className="iconList flex items-center">
-                {/* <img
+                <img
                   src={tuite_y}
                   onClick={() => {
                     window.open("https://twitter.com/btcl2_roos", "_blank");
                   }}
                   alt=""
-                /> */}
+                />
                 {/* <IconFont
                   className="icon"
                   name="tuite"
