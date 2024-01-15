@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-10 10:15:30
- * @LastEditTime: 2024-01-13 21:37:38
+ * @LastEditTime: 2024-01-15 09:45:54
  * @Author: John
  */
 import store from "@/store/store";
@@ -130,6 +130,7 @@ export type BOX_USER_PURCHASED = {
   buyAmount: number;
   illustrate: string;
   nodeName: string;
+  status: 1 | 2 | 3;
 };
 export async function API_QUERY_BOX_USER_HAS_PURCHASED() {
   let res = await fetchUrl<BOX_USER_PURCHASED>(`/api/node/getWOrdNode`, {

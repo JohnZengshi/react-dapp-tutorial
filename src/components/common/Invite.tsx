@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-01-14 17:15:23
+ * @LastEditTime: 2024-01-15 10:00:41
  * @Author: John
  */
 import "./Invite.scss";
@@ -106,7 +106,7 @@ export default function () {
           </span>
         )}
         {user.wallet.connected && invitationCode && (
-          <div className="invite-bottom flex">
+          <div className="invite-bottom flex z-[2]">
             <div className="flex items-center">
               <span className="font-[Raleway-Medium] text-[#EAEAEA]">
                 Link：
@@ -130,20 +130,18 @@ export default function () {
               <>Purchase ROOSBOX to get invitation link.</>
             )} */}
               </span>
-              <button>
+              <button
+                onClick={() => {
+                  if (user.wallet.connected && invitationCode) {
+                    navigator.clipboard.writeText(
+                      `https://roos-test.fcaex.vip/#/participate?${UrlQueryParamsKey.INVITE_CODE}=${invitationCode}`
+                    );
+                    CustomToast("Copy Success");
+                  }
+                }}
+              >
                 {" "}
-                <img
-                  src={copy}
-                  alt=""
-                  onClick={() => {
-                    if (user.wallet.connected && invitationCode) {
-                      navigator.clipboard.writeText(
-                        `https://roos-test.fcaex.vip/#/participate?${UrlQueryParamsKey.INVITE_CODE}=${invitationCode}`
-                      );
-                      CustomToast("Copy Success");
-                    }
-                  }}
-                />
+                <img src={copy} alt="" />
               </button>
             </div>
             <div className="flex items-center">
@@ -162,23 +160,21 @@ export default function () {
                   <>Purchase ROOSBOX to get invitation link.</>
                 )}
               </span>
-              <button>
-                <img
-                  src={copy}
-                  alt=""
-                  onClick={() => {
-                    if (user.wallet.connected && invitationCode) {
-                      navigator.clipboard.writeText(invitationCode);
-                      CustomToast("Copy Success");
-                    }
-                  }}
-                />
+              <button
+                onClick={() => {
+                  if (user.wallet.connected && invitationCode) {
+                    navigator.clipboard.writeText(invitationCode);
+                    CustomToast("Copy Success");
+                  }
+                }}
+              >
+                <img src={copy} alt="" />
               </button>
             </div>
           </div>
         )}
 
-        <img className="logo-big absolute" src={roos_logo_big} alt="" />
+        <img className="logo-big absolute z-[1]" src={roos_logo_big} alt="" />
       </div>
     </>
   );

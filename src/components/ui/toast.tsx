@@ -21,9 +21,11 @@ const ToastViewport = React.forwardRef<
        max-h-screen 
        justify-center 
        items-center 
-       w-full 
        flex-col-reverse 
-       py-[42px]`,
+       py-[42px]
+       left-1/2
+       translate-x-[-50%]
+       `,
       className
     )}
     {...props}

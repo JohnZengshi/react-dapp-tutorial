@@ -227,7 +227,7 @@ const ConnectWallet = forwardRef<
     <>
       {user.wallet.connected && (
         <button
-          className="profile text-[#F58C00] uppercase"
+          className="profile text-[#F58C00] uppercase z-[101]"
           onClick={() => {
             navigate("/profile");
           }}
