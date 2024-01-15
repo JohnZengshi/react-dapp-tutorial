@@ -21,6 +21,7 @@ import {
 import {
   API_CHECK_INVITE_CODE,
   API_CHECT_EXIT,
+  API_GET_USER_SIGNATURE,
   API_LOGIN,
   API_SIGNUP,
 } from "@/utils/api";
@@ -33,7 +34,7 @@ import {
   useRef,
   useState,
 } from "react";
-
+import { Md5 } from "ts-md5";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
@@ -193,11 +194,20 @@ const Okx = forwardRef<
     okxwallet.bitcoin
       .signMessage(message, { from: address }) // OKX app 钱包新的签名方法传参（官网的方法传参不对）！！！！
       .then(async (sign: string) => {
-        console.log("get sign:", sign);
+        // console.log("get sign:", sign);
         if (!address) return;
 
+        // TODO MD5加密
+        let signature = await API_GET_USER_SIGNATURE(address);
+        const signStr = `${address}${signature.encryptedString}`;
+        console.log("signStr", signStr);
+
         // TODO 登录✔
-        let loginInfo = await API_LOGIN(address, sign, publicKey);
+        let loginInfo = await API_LOGIN(
+          address,
+          Md5.hashStr(signStr),
+          publicKey
+        );
 
         if (loginInfo) {
           console.log(loginInfo);

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-10 10:15:30
- * @LastEditTime: 2024-01-15 09:45:54
+ * @LastEditTime: 2024-01-15 11:39:04
  * @Author: John
  */
 import store from "@/store/store";
@@ -136,6 +136,17 @@ export async function API_QUERY_BOX_USER_HAS_PURCHASED() {
   let res = await fetchUrl<BOX_USER_PURCHASED>(`/api/node/getWOrdNode`, {
     method: "GET",
   });
+
+  return res?.data;
+}
+
+export async function API_GET_USER_SIGNATURE(address: string) {
+  let res = await fetchUrl<{ encryptedString: "" }>(
+    `/api/account/getUserSignature?account=${address}`,
+    {
+      method: "GET",
+    }
+  );
 
   return res?.data;
 }
