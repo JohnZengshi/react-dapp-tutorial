@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-14 19:36:59
+ * @LastEditTime: 2024-01-15 15:40:24
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -129,72 +129,37 @@ export default function () {
 
   useEffect(() => {
     (async () => {
-      if (user.wallet.payInfo.hash && user.wallet.address) {
-        console.log("hash", user.wallet.payInfo.hash);
+      if (user.wallet.payInfo?.hash && user.wallet.address) {
+        console.log("hash更新，去查询状态：", user.wallet.payInfo?.hash);
         let res = await API_PAY_NODE_SMS(
           user.wallet.payInfo.orderNumber,
           user.wallet.payInfo.hash,
           1
         );
         if (res.type == 1) {
-          // TODO 查询用户邀请码✔
-          let invitationCode = await API_CHECK_INVITE_CODE();
-          if (invitationCode)
-            dispatch(SET_USER_INVITATION_CODE(invitationCode));
-          // navigate("/profile");
-        } else {
           dispatch(
             CUSTOM_DIALOG({
               content:
                 "Paid, waiting for confirmation on the chain! Check it later in Personal Center.",
             })
           );
+          // // TODO 查询用户邀请码✔
+          // let invitationCode = await API_CHECK_INVITE_CODE();
+          // if (invitationCode)
+          //   dispatch(SET_USER_INVITATION_CODE(invitationCode));
+          // navigate("/profile");
+        } else {
+          CustomToast(
+            "The payment failed and the transaction may have been declined!"
+          );
         }
-        // // TODO 轮询购买是否成功✔
-        // let time = 0;
-        // async function checkSuccess(orderNumber: number): Promise<boolean> {
-        //   time++;
-        //   async function check() {
-        //     // // 模拟轮询
-        //     return new Promise<{ type: number } | undefined>(
-        //       (reslove, reject) => {
-        //         setTimeout(async () => {
-        //           if (!user.wallet.address) return;
-        //           let res = await API_PAY_NODE_SMS(
-        //             orderNumber,
-        //             user.wallet.payInfo.hash,
-        //             1
-        //           );
-        //           reslove(res);
-        //         }, 2000);
-        //       }
-        //     );
-        //   }
 
-        //   let ok = await check();
-        //   if (ok?.type == 1) return true;
-        //   return checkSuccess(orderNumber);
-        // }
-        // // TODO 是否可以查到orderNumber？？
-        // let ok = await checkSuccess(user.wallet.payInfo.orderNumber);
-        // if (ok) {
-        //   // CustomToast(
-        //   //   "Paid, waiting for confirmation on the chain! Check it later in Personal Center.",
-        //   //   1000 * 5
-        //   // );
-        //   // TODO 查询用户邀请码✔
-        //   let invitationCode = await API_CHECK_INVITE_CODE();
-        //   if (invitationCode)
-        //     dispatch(SET_USER_INVITATION_CODE(invitationCode));
-
-        //   // TODO 购买成功跳转到个人页面
-        //   navigate("/profile");
-        // }
+        dispatch(SET_PAY_INFO(null));
       }
     })();
 
     return () => {};
-  }, [user.wallet.payInfo.hash]);
+  }, [user.wallet.payInfo?.hash]);
 
   function ActiveButton(
     props: { content: string; active: boolean; key?: any } & ButtonProps

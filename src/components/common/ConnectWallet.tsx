@@ -101,6 +101,8 @@ const ConnectWallet = forwardRef<
         // );
         // TODO 发送交易✔
         (async () => {
+          if (!user.wallet.payInfo) return;
+
           try {
             let hash = "";
             if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
@@ -115,7 +117,7 @@ const ConnectWallet = forwardRef<
               );
             }
 
-            console.log("hash", hash);
+            console.log("调起支付成功，得到：hash", hash);
             if (hash)
               dispatch(SET_PAY_INFO({ ...user.wallet.payInfo, hash: hash }));
           } catch (error) {

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-15 13:08:22
+ * @LastEditTime: 2024-01-15 14:40:25
  * @Author: John
  */
 import { Button } from "../ui/button";
@@ -33,6 +33,7 @@ import github_y from "@/assets/github_y.png";
 import gitbook_y from "@/assets/gitbook_y.png";
 import CustomToast from "./CustomToast";
 import { useAppSelector } from "@/store/hooks";
+import IconFont from "@/components/iconfont";
 
 export default function (props: { connectBtn?: any }) {
   const isSmallScreen = useAppSelector((state) => state.sys.isSmallScreen);
@@ -41,14 +42,22 @@ export default function (props: { connectBtn?: any }) {
   return (
     <>
       <div className="nav fixed t-0 z-[10] flex flex-row items-center w-[100vw] justify-between bg-[#000000] ">
-        <img
+        {/* <img
           className="logo"
           src={roosLogo}
           alt=""
           onClick={() => {
             navigate("/");
           }}
+        /> */}
+        <IconFont
+          className="logo"
+          name="roos"
+          onClick={() => {
+            navigate("/");
+          }}
         />
+
         {/* TODO 移动端适配菜单✔*/}
         <div className="nav_list flex items-center absolute left-1/2 translate-x-[-50%]">
           <div className="nav_btn">
@@ -107,7 +116,8 @@ export default function (props: { connectBtn?: any }) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               {isMobile || isSmallScreen ? (
-                <img src={meum_m} className="meun-icon"></img>
+                // <img src={meum_m} className="meun-icon"></img>
+                <IconFont name="a-drop-downmenu" className="meun-icon" />
               ) : (
                 <img src={meun} className="meun-icon" alt="" />
               )}
@@ -142,13 +152,21 @@ export default function (props: { connectBtn?: any }) {
               </DropdownMenuItem>
 
               <div className="iconList flex items-center">
-                <img
+                {/* <img
                   src={tuite_y}
                   onClick={() => {
                     window.open("https://twitter.com/btcl2_roos", "_blank");
                   }}
                   alt=""
-                />
+                /> */}
+                {/* <IconFont
+                  className="icon"
+                  name="tuite"
+                  color="#F58C00"
+                  onClick={() => {
+                    window.open("https://twitter.com/btcl2_roos", "_blank");
+                  }}
+                /> */}
                 <img src={telegram_y} alt="" />
                 <img src={github_y} alt="" />
                 <img

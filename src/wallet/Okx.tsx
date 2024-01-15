@@ -5,6 +5,7 @@ import {
   SET_ADDRESS,
   SET_CONNECTED,
   SET_LOGINSTATUS,
+  SET_PAY_INFO,
   SET_THIRD_INVITE_CODE,
   SET_USER_INVITATION_CODE,
   SET_WALLET_CONNECTING,
@@ -300,23 +301,34 @@ const Okx = forwardRef<
       );
       // console.log(address, toAddress, cost * BTC_Unit_Converter);
       console.log("send", okxwallet.bitcoin.send);
-      okxwallet.bitcoin
-        .send({
-          from: user.wallet.address,
-          to: toAddress,
-          value: cost,
-        })
-        .then((txid: { txhash: string }) => {
-          console.log(txid);
+      // TODO 模拟用户交易成功
+      // if (user.wallet.payInfo)
+      //   dispatch(
+      //     SET_PAY_INFO({ ...user.wallet.payInfo, hash: "123213123" })
+      //   );
+      try {
+        okxwallet.bitcoin
+          .send({
+            from: user.wallet.address,
+            to: toAddress,
+            value: cost,
+          })
+          .then((txid: { txhash: string }) => {
+            console.log(txid);
 
-          CustomToast(`交易成功,txid值为：${txid.txhash}`);
+            CustomToast(`请求交易成功,txid值为：${txid.txhash}`);
 
-          reslove(txid.txhash);
-        })
-        .catch((e: any) => {
-          handleCatch(e);
-          reject("");
-        });
+            reslove(txid.txhash);
+          })
+          .catch((e: any) => {
+            console.log("用户取消交易");
+
+            handleCatch(e);
+            reject("");
+          });
+      } catch (error) {
+        console.log("okxwallet.bitcoin.send错误：", error);
+      }
     });
   }
 
