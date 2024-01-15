@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-01-15 13:07:15
+ * @LastEditTime: 2024-01-15 14:25:39
  * @Author: John
  */
 import roosHomeBg from "@/assets/roos-home.mp4";
@@ -20,13 +20,14 @@ import { isMobile, isOKApp } from "@/utils";
 import videoBg from "@/assets/videoBg.png";
 import yellowbar from "@/assets/bar.png";
 import roos_logo_medium from "@/assets/roos_logo_medium.png";
-import Bitmap from "@/assets/Bitmap.png";
+import Bitmap from "@/assets/bitmap.svg";
 import StarkWare from "@/assets/StarkWare.png";
 import tuite_y from "@/assets/tuite_y.png";
 import telegram_y from "@/assets/telegram_y.png";
 import github_y from "@/assets/github_y.png";
 import gitbook_y from "@/assets/gitbook_y.png";
 import { useAppSelector } from "@/store/hooks";
+import IconFont from "@/components/iconfont";
 export default function () {
   const isSmallScreen = useAppSelector((state) => state.sys.isSmallScreen);
   const navigate = useNavigate();
@@ -118,16 +119,30 @@ export default function () {
             <span>Partners</span>
             <div className="bannerList flex items-center w-full justify-between">
               <img src={Bitmap} alt="" />
-              <img src={StarkWare} alt="" />
+              {/* <img src={StarkWare} alt="" /> */}
+              <IconFont className="icon" name="StarkWare"></IconFont>
             </div>
             <span>Permissionless. Frictionless. Boundless.</span>
             <div className="iconList flex items-center w-full justify-between">
               <img src={tuite_y} alt="" />
-              <img src={telegram_y} alt="" />
-              <img src={github_y} alt="" />
-              <img
+              <IconFont className="icon" name="telegram" color="#F58C00" />
+              <IconFont className="icon" name="github" color="#F58C00" />
+              {/* <img src={telegram_y} alt="" />
+              <img src={github_y} alt="" /> */}
+              {/* <img
                 src={gitbook_y}
                 alt=""
+                onClick={() => {
+                  window.open(
+                    "https://roos.gitbook.io/roos-ntework/",
+                    "_blank"
+                  );
+                }}
+              /> */}
+              <IconFont
+                className="icon"
+                name="book"
+                color="#F58C00"
                 onClick={() => {
                   window.open(
                     "https://roos.gitbook.io/roos-ntework/",

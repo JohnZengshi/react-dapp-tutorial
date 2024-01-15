@@ -338,17 +338,27 @@
       //   opacity: 1;
       //   background-image: url("../assets/yuan_blur.png");
       // }
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
       .logo_big {
         width: 170px;
         height: 170px;
         margin-top: 19.92px;
+        animation: rotate 20s linear infinite; /* 持续旋转，时间为2秒 */
       }
 
       .bannerList {
         margin-top: 20px;
 
-        > img {
-          // width: 133.5px;
+        > img,
+        .icon {
+          width: 133.5px;
           height: 30px;
         }
       }
@@ -357,7 +367,8 @@
         margin-top: 20px;
         padding: 0 23px;
         padding-bottom: 48px;
-        > img {
+        > img,
+        .icon {
           width: 30px;
           height: 30px;
         }

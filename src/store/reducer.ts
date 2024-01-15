@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-01-13 12:55:17
+ * @LastEditTime: 2024-01-15 14:48:42
  * @Author: John
  */
 import { ConnectWallet_handleType } from "@/components/common/ConnectWallet";
@@ -22,7 +22,7 @@ export interface UserState {
       toAddress: string;
       hash: string;
       orderNumber: number;
-    };
+    } | null;
     thirdInviteCode: string;
   };
   logInStatus: "LOGIN" | "LOG_OUT";

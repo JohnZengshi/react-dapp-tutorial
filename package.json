@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "build:test": "tsc && vite build --mode test",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "iconfont": "npx iconfont-h5"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.3",

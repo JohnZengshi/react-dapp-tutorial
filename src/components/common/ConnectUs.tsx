@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-09 14:57:52
- * @LastEditTime: 2024-01-13 21:07:28
+ * @LastEditTime: 2024-01-15 14:33:52
  * @Author: John
  */
 
@@ -14,7 +14,7 @@ import gitbook from "@/assets/gitbook.png";
 import roosLogo from "@/assets/roos_logo.png";
 
 import Bitcoin from "@/assets/Bitcoin.png";
-import Bitmap from "@/assets/Bitmap.png";
+import Bitmap from "@/assets/bitmap.svg";
 import StarkWare from "@/assets/StarkWare.png";
 import { useNavigate } from "react-router-dom";
 export default function () {
