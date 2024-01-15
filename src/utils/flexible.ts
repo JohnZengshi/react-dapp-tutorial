@@ -1,10 +1,15 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-09 09:34:24
- * @LastEditTime: 2024-01-10 23:47:25
+ * @LastEditTime: 2024-01-15 13:00:12
  * @Author: John
  */
-export default function flexible(window: Window, document: Document) {
+
+export default function flexible(
+  window: Window,
+  document: Document,
+  isSmallScreenCallBack: (isSmall: boolean) => void
+) {
   var docEl = document.documentElement;
   var dpr = window.devicePixelRatio || 1;
 
@@ -22,10 +27,12 @@ export default function flexible(window: Window, document: Document) {
   function setRemUnit() {
     if (docEl.clientWidth > 1024) {
       docEl.style.fontSize = "16px";
+      isSmallScreenCallBack(false);
     } else {
       var rem = docEl.clientWidth / 10;
       // console.log("rem:", rem);
       docEl.style.fontSize = rem + "px";
+      isSmallScreenCallBack(true);
     }
   }
 

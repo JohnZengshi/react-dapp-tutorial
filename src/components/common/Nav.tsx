@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-13 21:11:09
+ * @LastEditTime: 2024-01-15 13:08:22
  * @Author: John
  */
 import { Button } from "../ui/button";
@@ -32,8 +32,10 @@ import telegram_y from "@/assets/telegram_y.png";
 import github_y from "@/assets/github_y.png";
 import gitbook_y from "@/assets/gitbook_y.png";
 import CustomToast from "./CustomToast";
+import { useAppSelector } from "@/store/hooks";
 
 export default function (props: { connectBtn?: any }) {
+  const isSmallScreen = useAppSelector((state) => state.sys.isSmallScreen);
   const navigate = useNavigate();
   const [meunOpen, setMeunOpen] = useState(false);
   return (
@@ -104,7 +106,7 @@ export default function (props: { connectBtn?: any }) {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              {isMobile ? (
+              {isMobile || isSmallScreen ? (
                 <img src={meum_m} className="meun-icon"></img>
               ) : (
                 <img src={meun} className="meun-icon" alt="" />

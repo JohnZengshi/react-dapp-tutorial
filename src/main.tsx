@@ -26,7 +26,6 @@ import { HashRouter } from "react-router-dom";
 if (getUrlQueryParam("vconsole") === "1") {
   new VConsole();
 }
-flexible(window, document);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <Provider store={store}>

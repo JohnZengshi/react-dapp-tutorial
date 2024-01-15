@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-01-14 16:33:05
+ * @LastEditTime: 2024-01-15 13:07:15
  * @Author: John
  */
 import roosHomeBg from "@/assets/roos-home.mp4";
@@ -26,7 +26,9 @@ import tuite_y from "@/assets/tuite_y.png";
 import telegram_y from "@/assets/telegram_y.png";
 import github_y from "@/assets/github_y.png";
 import gitbook_y from "@/assets/gitbook_y.png";
+import { useAppSelector } from "@/store/hooks";
 export default function () {
+  const isSmallScreen = useAppSelector((state) => state.sys.isSmallScreen);
   const navigate = useNavigate();
   const [installed, setInstalled] = useState(false);
   const [connected, setConnected] = useState(false);
@@ -48,20 +50,22 @@ export default function () {
           />
         }
       /> */}
-      {!isMobile && (
+      {
         <div className="videoBg">
-          {!isMobile && (
+          {!isMobile && !isSmallScreen && (
             <video muted loop autoPlay width="100%" height="100%">
               <source src={roosHomeBg} type="video/mp4" />
             </video>
           )}
-          {isMobile && <img className="videoBg_img" src={videoBg} />}
+          {/* {(isMobile || isSmallScreen) && (
+            <img className="videoBg_img" src={videoBg} />
+          )} */}
         </div>
-      )}
+      }
       {/* <video className="w-full h-full" /> */}
       {/* <Nav /> */}
       <ScrollArea className="content">
-        {!isMobile && (
+        {!isMobile && !isSmallScreen && (
           <>
             <div className="content_1">
               <span>The First Bitcoin Layer2</span>
@@ -86,7 +90,7 @@ export default function () {
             <ConnectUs />
           </>
         )}
-        {isMobile && (
+        {(isMobile || isSmallScreen) && (
           <div className="flex flex-col items-center">
             <span>The First Bitcoin Layer2</span>
             <span>for The bitcoiners.</span>

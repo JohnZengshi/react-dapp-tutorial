@@ -7,12 +7,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "@/store/reducer";
 import customComReducer from "@/store/customCom";
+import sysComReducer from "@/store/sys";
 // ...
 
 const store = configureStore({
   reducer: {
     user: userReducer,
     customCom: customComReducer,
+    sys: sysComReducer,
   },
 });
 

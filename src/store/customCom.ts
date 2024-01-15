@@ -1,10 +1,9 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-01-14 18:20:40
+ * @LastEditTime: 2024-01-15 12:55:45
  * @Author: John
  */
-import { ConnectWallet_handleType } from "@/components/common/ConnectWallet";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface CustomComState {

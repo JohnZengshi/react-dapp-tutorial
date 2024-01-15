@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 08:51:29
- * @LastEditTime: 2024-01-14 17:43:59
+ * @LastEditTime: 2024-01-15 13:03:22
  * @Author: John
  */
 // import "./App.css";
@@ -23,6 +23,8 @@ import ConnectWallet, {
 import { useAppDispatch } from "./store/hooks";
 import { SET_WALLET_REF } from "./store/reducer";
 import CustomDialog from "./components/common/CustomDialog";
+import flexible from "./utils/flexible";
+import { SET_IS_SMALL_SCREEN } from "./store/sys";
 
 const App = () => {
   const connectWalletRef = useRef<ConnectWallet_handleType>(null);
@@ -33,6 +35,10 @@ const App = () => {
   }, [connectWalletRef]);
 
   useEffect(() => {
+    flexible(window, document, (isSmall) => {
+      console.log("is small", isSmall);
+      dispatch(SET_IS_SMALL_SCREEN(isSmall));
+    });
     console.log("render");
   }, []);
   return (
