@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 08:51:29
- * @LastEditTime: 2024-01-15 13:03:22
+ * @LastEditTime: 2024-01-15 20:39:33
  * @Author: John
  */
 // import "./App.css";
@@ -39,6 +39,7 @@ const App = () => {
       console.log("is small", isSmall);
       dispatch(SET_IS_SMALL_SCREEN(isSmall));
     });
+    console.log("VITE_BASE_URL", import.meta.env.VITE_BASE_URL);
     console.log("render");
   }, []);
   return (

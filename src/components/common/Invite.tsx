@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-01-15 16:01:24
+ * @LastEditTime: 2024-01-15 20:41:18
  * @Author: John
  */
 import "./Invite.scss";
@@ -117,7 +117,9 @@ export default function () {
                   // TODO 邀请连接需要动态生成
                   <>
                     {shortenString(
-                      `https://roos-test.fcaex.vip/#/participate?${UrlQueryParamsKey.INVITE_CODE}=${invitationCode}`,
+                      `${import.meta.env.VITE_BASE_URL}/#/participate?${
+                        UrlQueryParamsKey.INVITE_CODE
+                      }=${invitationCode}`,
                       15,
                       15
                     )}
@@ -135,7 +137,9 @@ export default function () {
                 onClick={() => {
                   if (user.wallet.connected && invitationCode) {
                     navigator.clipboard.writeText(
-                      `https://roos-test.fcaex.vip/#/participate?${UrlQueryParamsKey.INVITE_CODE}=${invitationCode}`
+                      `${import.meta.env.VITE_BASE_URL}/#/participate?${
+                        UrlQueryParamsKey.INVITE_CODE
+                      }=${invitationCode}`
                     );
                     CustomToast("Copy Success");
                   }
