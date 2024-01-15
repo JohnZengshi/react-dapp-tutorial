@@ -370,7 +370,9 @@ const ConnectWallet = forwardRef<
                   type="text"
                   className="absolute w-full h-full t-0 l-0 opacity-0"
                   onChange={(e) => {
-                    setInviteCode(e.target.value.replace(" ", "").slice(0, 6));
+                    setInviteCode(
+                      e.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(0, 6)
+                    );
                   }}
                 />
 
