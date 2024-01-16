@@ -1,22 +1,16 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-09 14:57:52
- * @LastEditTime: 2024-01-15 14:33:52
+ * @LastEditTime: 2024-01-16 12:43:50
  * @Author: John
  */
 
 import "./ConnectUs.scss";
 import "./ConnectUs-m.scss";
-import tuite from "@/assets/tuite.png";
-import telegram from "@/assets/telegram.png";
-import github from "@/assets/github.png";
-import gitbook from "@/assets/gitbook.png";
-import roosLogo from "@/assets/roos_logo.png";
-
-import Bitcoin from "@/assets/Bitcoin.png";
+import tuite from "@/assets/tuite.svg";
 import Bitmap from "@/assets/bitmap.svg";
-import StarkWare from "@/assets/StarkWare.png";
 import { useNavigate } from "react-router-dom";
+import IconFont from "../iconfont";
 export default function () {
   const navigate = useNavigate();
   return (
@@ -24,24 +18,45 @@ export default function () {
       <div className="connect_btn">
         <div className="Partners">
           <span>Partners:</span>
-          <img src={Bitcoin} alt="" />
-          <img src={Bitmap} alt="" />
-          <img src={StarkWare} alt="" />
+          {/* <img className="icon" src={Bitcoin} alt="" /> */}
+          <IconFont className="icon" name="Bitcoin" />
+          <img className="icon" src={Bitmap} alt="" />
+          {/* <img className="icon" src={StarkWare} alt="" /> */}
+          <IconFont className="icon" name="StarkWare" />
         </div>
         <div className="ContactUs">
           <span>Contact Us:</span>
           <img
+            className="icon cursor-pointer"
             src={tuite}
             onClick={() => {
               window.open("https://twitter.com/btcl2_roos", "_blank");
             }}
             alt=""
           />
-          <img src={telegram} alt="" />
-          <img src={github} alt="" />
-          <img
+          {/* <img src={telegram} alt="" />
+          <img src={github} alt="" /> */}
+          {/* <img
             src={gitbook}
             alt=""
+            onClick={() => {
+              window.open("https://roos.gitbook.io/roos-ntework/", "_blank");
+            }}
+          /> */}
+          <IconFont
+            className="icon cursor-pointer"
+            name="telegram"
+            color="#fff"
+          />
+          <IconFont
+            className="icon cursor-pointer"
+            name="github"
+            color="#fff"
+          />
+          <IconFont
+            className="icon mr-0 cursor-pointer"
+            name="book"
+            color="#fff"
             onClick={() => {
               window.open("https://roos.gitbook.io/roos-ntework/", "_blank");
             }}
@@ -50,26 +65,45 @@ export default function () {
       </div>
 
       <div className="connect_btn-m">
-        <img
+        {/* <img
           className="logo"
           src={roosLogo}
           alt=""
           onClick={() => {
             navigate("/");
           }}
+        /> */}
+
+        <IconFont
+          className="logo"
+          name="roos"
+          onClick={() => {
+            navigate("/");
+          }}
         />
         <img
+          className="icon"
           src={tuite}
           onClick={() => {
             window.open("https://twitter.com/btcl2_roos", "_blank");
           }}
           alt=""
         />
-        <img src={telegram} alt="" />
+        {/* <img src={telegram} alt="" />
         <img src={github} alt="" />
         <img
           src={gitbook}
           alt=""
+          onClick={() => {
+            window.open("https://roos.gitbook.io/roos-ntework/", "_blank");
+          }}
+        /> */}
+        <IconFont className="icon" name="telegram" color="#fff" />
+        <IconFont className="icon" name="github" color="#fff" />
+        <IconFont
+          className="icon mr-0"
+          name="book"
+          color="#fff"
           onClick={() => {
             window.open("https://roos.gitbook.io/roos-ntework/", "_blank");
           }}

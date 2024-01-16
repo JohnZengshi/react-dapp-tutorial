@@ -19,15 +19,11 @@
       margin-right: auto;
     }
 
-    img {
+    .icon {
       width: 17.33px;
       height: 17.67px;
       opacity: 1;
       margin-right: 16px;
-
-      &:last-of-type {
-        margin-right: 0;
-      }
     }
   }
 }

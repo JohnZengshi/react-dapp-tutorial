@@ -1,23 +1,10 @@
 @include pq {
   .connect_btn {
-    // @media (max-width: 1024px) {
-    //   display: none;
-    // }
     /* 矩形 4 */
-
     width: 100vw;
-
     background: #2602175e;
-
-    // box-shadow: 0px 0px 64px 0px #570b36;
-
     padding: 34px 43px;
-
-    /* 矩形 4 */
-
     height: 120px;
-    // opacity: 0.5;
-
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -55,7 +42,7 @@
         margin-right: 40px;
       }
 
-      img {
+      .icon {
         /* gitbook.8b149653 */
 
         /* 自动布局子元素 */
@@ -63,16 +50,12 @@
         height: 52px;
         opacity: 1;
         margin-right: 50px;
-
-        &:last-of-type {
-          margin-right: 0;
-        }
       }
     }
 
     .Partners {
-      img {
-        width: auto;
+      .icon {
+        width: 151px;
         height: 40px;
       }
     }

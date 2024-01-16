@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 08:51:29
- * @LastEditTime: 2024-01-15 20:39:33
+ * @LastEditTime: 2024-01-16 10:37:47
  * @Author: John
  */
 // import "./App.css";
@@ -36,7 +36,7 @@ const App = () => {
 
   useEffect(() => {
     flexible(window, document, (isSmall) => {
-      console.log("is small", isSmall);
+      // console.log("is small", isSmall);
       dispatch(SET_IS_SMALL_SCREEN(isSmall));
     });
     console.log("VITE_BASE_URL", import.meta.env.VITE_BASE_URL);
@@ -44,10 +44,6 @@ const App = () => {
   }, []);
   return (
     <div className="App">
-      {/* <MetaMask/> */}
-      {/* <UniSat /> */}
-      {/* <Okx /> */}
-      {/* <ConnectWallet className="mt-10" /> */}
       <Nav
         connectBtn={
           <ConnectWallet
@@ -58,7 +54,6 @@ const App = () => {
           />
         }
       />
-      {/* <RouterProvider router={router} /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/participate" element={<Participate />} />

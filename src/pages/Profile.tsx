@@ -159,9 +159,10 @@ export default function () {
               )}
             </div>
             <div className="right bottom flex flex-col flex-auto">
+              {/* 未购买盒子 */}
               {(userBox?.status == 2 || userBox?.status == 3) && (
                 <>
-                  <span className="Equity">Potential future benefits</span>
+                  <span className="Equity">Intro to RoosBOX</span>
                   <div
                     className="desBox"
                     dangerouslySetInnerHTML={{
@@ -195,6 +196,7 @@ export default function () {
                 </>
               )}
 
+              {/* 已购买盒子 */}
               {userBox?.status == 1 && (
                 <>
                   <div className="boxNamePrice">
@@ -202,9 +204,11 @@ export default function () {
                     <span>{userBox?.buyAmount}</span>
                     <span>&nbsp;&nbsp;btc</span>
                   </div>
-                  <span className="Equity">Potential future benefits</span>
+                  <span className="Equity text-[#F58C00]">
+                    Potential future benefits
+                  </span>
                   <div
-                    className="desBox"
+                    className="desBox flex flex-col"
                     // dangerouslySetInnerHTML={{ __html: userBox.illustrate }}
                   >
                     <p>·20% ROS Airdrop</p>
@@ -212,17 +216,17 @@ export default function () {
                     <p>·Highest Weight Staking Rewards</p>
                     <p>·ROOS Genesis NFT</p>
                     <p>Other Additional Variable Rewards</p>
-                    <p className="subTitle">
+                    <span className="subTitle text-[#F58C00]">
                       RoosBOX Referrers Enjoy Additional Benefits:
-                    </p>
+                    </span>
                     <p>
-                      - At the start of Journey MAP2, ROOS will initiate the
+                      ·At the start of Journey MAP2, ROOS will initiate the
                       Alpha mainnet through a Gas Fee Airdrop event, with a cap
                       of $4.9 million. RoosBOX referrers will share the Gas Fee
                       based on the weight of their ROOS SCORE.
                     </p>
                     <p>
-                      - Grants Program Developer Incentive Plan: This will be
+                      ·Grants Program Developer Incentive Plan: This will be
                       implemented during the Journey MAP2 phase.
                     </p>
                   </div>

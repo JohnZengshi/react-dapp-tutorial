@@ -1,7 +1,7 @@
 @include mq {
   .Profile {
-    background-color: #000000;
-    // background-image: url("../assets/home_bg.png");
+    // background-color: #000000;
+    background-image: url("../assets/home_bg.png");
     height: 100vh;
     width: 100vw;
 
@@ -84,47 +84,45 @@
             letter-spacing: 0em;
 
             font-feature-settings: "kern" on;
-            color: #f58c00;
 
             z-index: 0;
           }
-          > .desBox,
-          p {
-            // width: 262px;
 
-            // /* 自动布局子元素 */
-            // opacity: 1;
-
-            // font-family: Raleway-Medium;
-            // /* ·25% of platform tokens ·Permanently enjoy network gas fee dividends (the initial proportion is as high as 70%, and with the development of the ecosystem in the later period, the community will vote to determine the redistribution proportion) ·X% proportion of GAS fee airdrop activity rewards high weight voting rights ·A series of other ecological development rights and interests */
-
-            // font-size: 10px;
-            // font-weight: 500;
-            // line-height: 13.25px;
-            // letter-spacing: 0em;
-
-            // font-feature-settings: "kern" on;
-            // color: #eaeaea;
-
-            // z-index: 1;
-
-            /* ·25% of platform tokens ·Permanently enjoy network gas fee dividends (the initial proportion is as high as 70%, and with the development of the ecosystem in the later period, the community will vote to determine the redistribution proportion) ·X% proportion of GAS fee airdrop activity rewards high weight voting rights ·A series of other ecological development rights and interests */
-
-            /* 自动布局子元素 */
-
-            font-family: Raleway-Medium;
-            font-size: 12px;
-            font-weight: 500;
-            line-height: normal;
-            letter-spacing: 0em;
-
-            font-feature-settings: "kern" on;
-            color: #eaeaea;
-
-            z-index: 1;
-          }
           > .desBox {
-            margin-top: 15px;
+            margin-top: 10px;
+
+            p {
+              /* ·25% of platform tokens ·Permanently enjoy network gas fee dividends (the initial proportion is as high as 70%, and with the development of the ecosystem in the later period, the community will vote to determine the redistribution proportion) ·X% proportion of GAS fee airdrop activity rewards high weight voting rights ·A series of other ecological development rights and interests */
+
+              /* 自动布局子元素 */
+
+              font-family: Raleway-Medium;
+              font-size: 12px;
+              font-weight: 500;
+              line-height: normal;
+              letter-spacing: 0em;
+
+              font-feature-settings: "kern" on;
+              color: #eaeaea;
+
+              z-index: 1;
+            }
+
+            .subTitle {
+              font-family: Raleway-Medium;
+              /* ROOSBOX Equity */
+
+              /* 自动布局子元素 */
+              font-size: 12px;
+              font-weight: bold;
+              line-height: normal;
+              letter-spacing: 0em;
+
+              font-feature-settings: "kern" on;
+
+              z-index: 0;
+              margin: 8px 0;
+            }
           }
 
           .boxNamePrice {
@@ -185,19 +183,12 @@
           .Equity {
             /* ROOSBOX Equity */
 
-            /* 自动布局子元素 */
-
-            font-family: Raleway-Medium;
-            /* ROOSBOX Equity */
-
-            /* 自动布局子元素 */
+            font-family: Raleway-Bold;
             font-size: 14px;
             font-weight: bold;
-            line-height: normal;
             letter-spacing: 0em;
 
             font-feature-settings: "kern" on;
-            color: #f58c00;
 
             z-index: 0;
             margin-top: 19px;

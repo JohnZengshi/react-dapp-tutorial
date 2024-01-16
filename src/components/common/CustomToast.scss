@@ -1,18 +1,13 @@
 @include pq {
   .custom-toast {
-    /* 5.反馈/1.Alert警告提示/暗色/默认-提示 */
-
-    /* 5.反馈/1.Alert警告提示/暗色/默认-提示 */
-
     width: 580px;
     height: 40px;
     border-radius: 2px;
     opacity: 1;
 
-    background: #550935;
-
     box-sizing: border-box;
-    border: 1px solid #15395b;
+    border-width: 1px;
+    padding: 6px 16px;
 
     /* 5.反馈/1.Alert警告提示/暗色/默认-提示 */
 
@@ -22,7 +17,6 @@
       width: 16px;
       height: 16px;
 
-      margin-left: 16px;
       margin-right: 7px;
     }
 
@@ -42,7 +36,7 @@
       letter-spacing: 0em;
 
       /* White/65% */
-      color: rgba(255, 255, 255, 0.65);
+      // color: rgba(255, 255, 255, 0.65);
     }
 
     > button {

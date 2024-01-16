@@ -1,36 +1,24 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-15 16:39:25
+ * @LastEditTime: 2024-01-16 10:17:14
  * @Author: John
  */
-import { Button } from "../ui/button";
 import "./Nav.scss";
 import "./Nav-m.scss";
-import roosLogo from "@/assets/roos_logo.png";
 import { useNavigate } from "react-router-dom";
 import meun from "@/assets/meum.png";
 import meum_m from "@/assets/meum-m.png";
-import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 import { isMobile } from "@/utils";
-import tuite from "@/assets/tuite.png";
-import telegram from "@/assets/telegram.png";
-import github from "@/assets/github.png";
-import gitbook from "@/assets/gitbook.png";
 
-import tuite_y from "@/assets/tuite_y.png";
-import telegram_y from "@/assets/telegram_y.png";
-import github_y from "@/assets/github_y.png";
-import gitbook_y from "@/assets/gitbook_y.png";
+import tuite_y from "@/assets/tuite_y.svg";
 import CustomToast from "./CustomToast";
 import { useAppSelector } from "@/store/hooks";
 import IconFont from "@/components/iconfont";
@@ -152,6 +140,26 @@ export default function (props: { connectBtn?: any }) {
               </DropdownMenuItem>
 
               <div className="iconList flex items-center">
+                {/* <img
+                  src={tuite_y}
+                  onClick={() => {
+                    window.open("https://twitter.com/btcl2_roos", "_blank");
+                  }}
+                  alt=""
+                />
+                <img src={telegram_y} alt="" />
+                <img src={github_y} alt="" />
+                <img
+                  src={gitbook_y}
+                  alt=""
+                  onClick={() => {
+                    window.open(
+                      "https://roos.gitbook.io/roos-ntework/",
+                      "_blank"
+                    );
+                  }}
+                /> */}
+
                 <img
                   src={tuite_y}
                   onClick={() => {
@@ -159,19 +167,12 @@ export default function (props: { connectBtn?: any }) {
                   }}
                   alt=""
                 />
-                {/* <IconFont
+                <IconFont className="icon" name="telegram" color="#F58C00" />
+                <IconFont className="icon" name="github" color="#F58C00" />
+                <IconFont
                   className="icon"
-                  name="tuite"
+                  name="book"
                   color="#F58C00"
-                  onClick={() => {
-                    window.open("https://twitter.com/btcl2_roos", "_blank");
-                  }}
-                /> */}
-                <img src={telegram_y} alt="" />
-                <img src={github_y} alt="" />
-                <img
-                  src={gitbook_y}
-                  alt=""
                   onClick={() => {
                     window.open(
                       "https://roos.gitbook.io/roos-ntework/",

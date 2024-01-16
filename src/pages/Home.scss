@@ -79,20 +79,11 @@
       }
 
       .content_1 {
-        display: flex;
-        flex-direction: column;
-        // justify-content: center;
-        box-sizing: border-box;
-        // padding: 0 120px;
-        // min-height: 100vh;
-        // padding-bottom: 20px;
         padding-top: 88px;
         margin-top: calc(239px - 88px);
         width: 87%;
-        flex: auto;
         > span {
           &:nth-child(1) {
-            /* The First Bitcoin Layer2 */
             opacity: 1;
 
             font-family: Raleway-ExtraBold;
@@ -104,7 +95,6 @@
 
             font-feature-settings: "kern" on;
             color: #f58c00;
-            // margin-top: 239px;
           }
 
           &:nth-child(2),
@@ -200,9 +190,5 @@
         }
       }
     }
-  }
-
-  .ScrollAreaThumb {
-    // display: none;
   }
 }

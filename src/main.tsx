@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-12 14:40:36
+ * @LastEditTime: 2024-01-16 11:22:24
  * @Author: John
  */
 /*
@@ -15,9 +15,9 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import "../app/globals.css";
+import "./variable.css";
 // import "amfe-flexible";
 import VConsole from "vconsole";
-import flexible from "./utils/flexible";
 import { getUrlQueryParam } from "./utils";
 import store from "@/store/store";
 import { Provider } from "react-redux";

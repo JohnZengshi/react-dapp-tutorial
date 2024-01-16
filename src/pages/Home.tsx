@@ -1,77 +1,44 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-01-15 17:05:41
+ * @LastEditTime: 2024-01-16 10:39:36
  * @Author: John
  */
 import roosHomeBg from "@/assets/roos-home.mp4";
-import { useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Nav from "@/components/common/Nav";
 import "./Home.scss";
 import "./Home-m.scss";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-import ConnectWallet, {
-  ConnectWallet_handleType,
-} from "@/components/common/ConnectWallet";
 import ConnectUs from "@/components/common/ConnectUs";
 import { isMobile, isOKApp } from "@/utils";
-import videoBg from "@/assets/videoBg.png";
 import yellowbar from "@/assets/bar.png";
-import roos_logo_medium from "@/assets/roos_logo_medium.png";
 
 import roos_logo_wrap from "@/assets/roos_logo_wrap.png";
 import roos_logo_inside from "@/assets/roos_logo_inside.png";
 import Bitmap from "@/assets/bitmap.svg";
-import StarkWare from "@/assets/StarkWare.png";
-import tuite_y from "@/assets/tuite_y.png";
-import telegram_y from "@/assets/telegram_y.png";
-import github_y from "@/assets/github_y.png";
-import gitbook_y from "@/assets/gitbook_y.png";
+import tuite_y from "@/assets/tuite_y.svg";
 import { useAppSelector } from "@/store/hooks";
 import IconFont from "@/components/iconfont";
 export default function () {
   const isSmallScreen = useAppSelector((state) => state.sys.isSmallScreen);
   const navigate = useNavigate();
-  const [installed, setInstalled] = useState(false);
-  const [connected, setConnected] = useState(false);
-  const [address, setAddress] = useState<string>();
-  const connectWalletRef = useRef<ConnectWallet_handleType>(null);
 
   return (
     <div className="Home">
-      {/* <Nav
-        connectBtn={
-          <ConnectWallet
-            ref={connectWalletRef}
-            onUpdate={(i, c, a) => {
-              console.log(a);
-              setConnected(c);
-              setInstalled(i);
-              setAddress(a);
-            }}
-          />
-        }
-      /> */}
       {
         <div className="videoBg">
-          {!isMobile && !isSmallScreen && (
+          {!isSmallScreen && (
             <video muted loop autoPlay width="100%" height="100%">
               <source src={roosHomeBg} type="video/mp4" />
             </video>
           )}
-          {/* {(isMobile || isSmallScreen) && (
-            <img className="videoBg_img" src={videoBg} />
-          )} */}
         </div>
       }
-      {/* <video className="w-full h-full" /> */}
-      {/* <Nav /> */}
       <ScrollArea className="content">
-        {!isMobile && !isSmallScreen && (
+        {!isSmallScreen && (
           <>
-            <div className="content_1">
+            <div className="content_1 flex flex-col box-border flex-auto">
               <span>The First Bitcoin Layer2</span>
               <span>For The Bitcoiners.</span>
               <span>By The Bitcoiners.</span>
@@ -94,7 +61,7 @@ export default function () {
             <ConnectUs />
           </>
         )}
-        {(isMobile || isSmallScreen) && (
+        {isSmallScreen && (
           <div className="flex flex-col items-center">
             <span>The First Bitcoin Layer2</span>
             <span>for The bitcoiners.</span>
@@ -116,9 +83,6 @@ export default function () {
               Get RoosBOX Now
             </button>
             <div className="logo_big relative">
-              {/* <div className="logo_blur"></div> */}
-
-              {/* <img className="logo_big" src={roos_logo_medium} alt="" /> */}
               <img className="wrap" src={roos_logo_wrap} alt="" />
               <img className="inside" src={roos_logo_inside} alt="" />
             </div>
@@ -126,26 +90,19 @@ export default function () {
             <span>Partners</span>
             <div className="bannerList flex items-center w-full justify-between">
               <img src={Bitmap} alt="" />
-              {/* <img src={StarkWare} alt="" /> */}
               <IconFont className="icon" name="StarkWare"></IconFont>
             </div>
             <span>Permissionless. Frictionless. Boundless.</span>
             <div className="iconList flex items-center w-full justify-between">
-              <img src={tuite_y} alt="" />
+              <img
+                src={tuite_y}
+                onClick={() => {
+                  window.open("https://twitter.com/btcl2_roos", "_blank");
+                }}
+                alt=""
+              />
               <IconFont className="icon" name="telegram" color="#F58C00" />
               <IconFont className="icon" name="github" color="#F58C00" />
-              {/* <img src={telegram_y} alt="" />
-              <img src={github_y} alt="" /> */}
-              {/* <img
-                src={gitbook_y}
-                alt=""
-                onClick={() => {
-                  window.open(
-                    "https://roos.gitbook.io/roos-ntework/",
-                    "_blank"
-                  );
-                }}
-              /> */}
               <IconFont
                 className="icon"
                 name="book"

@@ -2,7 +2,6 @@
   .Participate {
     position: relative;
     background-color: #000000;
-    // background-image: url("../assets/home_bg.png");
     height: 100vh;
     width: 100vw;
     background-repeat: no-repeat;
@@ -10,9 +9,6 @@
     box-sizing: border-box;
 
     > [data-radix-scroll-area-viewport] {
-      // display: flex;
-      // flex-direction: column;
-      // justify-content: center;
       > div {
         min-height: 100%;
         display: flex !important;
@@ -83,11 +79,7 @@
         }
 
         .right {
-          // width: 50%;
           flex: 1;
-          // [data-radix-scroll-area-viewport] {
-          // }
-
           .inputContent {
             // TODO
             display: none !important;

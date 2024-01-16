@@ -272,20 +272,6 @@ const ConnectWallet = forwardRef<
                   <img className="" src={okx_logo} alt="" />
                   <span className="font-[Raleway-Bold]  text-[#fff]">OKX</span>
                 </button>
-
-                {/* <button
-                  className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                  onClick={() => {
-                    // setWalletType(Wallet.UniSat);
-                    dispatch(SET_WALLET_TYPE("UNISAT"));
-                    uniSatRef.current?._connect();
-                  }}
-                >
-                  <img className="" src={unisat_logo} alt="" />
-                  <span className="font-[Raleway-Bold]  text-[#fff]">
-                    UniSat
-                  </span>
-                </button> */}
               </div>
             </div>
           </DialogContent>
@@ -298,7 +284,7 @@ const ConnectWallet = forwardRef<
             {" "}
             {user.wallet.address && shortenString(user.wallet.address, 6, 5)}
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="DropdownMenuContent-disconnect flex items-center justify-center">
+          <DropdownMenuContent className="DropdownMenuContent-disconnect flex items-center justify-center bg-[#000000]">
             <DropdownMenuItem>
               <button
                 onClick={() => {
@@ -308,7 +294,7 @@ const ConnectWallet = forwardRef<
                     okxRef.current?._disConnect();
                   }
                 }}
-                className="disconnect flex items-center"
+                className="disconnect flex items-center "
               >
                 <IoMdExit className="exitIcon" />
                 Disconnect
@@ -377,27 +363,6 @@ const ConnectWallet = forwardRef<
                     );
                   }}
                 />
-
-                {/* <li className="flex flex-col">
-                  <span className="value">8</span>
-                  <span className="line"></span>
-                </li>
-                <li className="flex flex-col">
-                  <span className="value hidden">8</span>
-                  <span className="line"></span>
-                </li>
-                <li className="flex flex-col">
-                  <span className="value hidden">8</span>
-                  <span className="line"></span>
-                </li>
-                <li className="flex flex-col">
-                  <span className="value hidden">8</span>
-                  <span className="line"></span>
-                </li>
-                <li className="flex flex-col">
-                  <span className="value hidden">8</span>
-                  <span className="line"></span>
-                </li> */}
               </ul>
               <button
                 className="confirm_btn"

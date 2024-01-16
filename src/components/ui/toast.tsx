@@ -22,7 +22,7 @@ const ToastViewport = React.forwardRef<
        justify-center 
        items-center 
        flex-col-reverse 
-       py-[42px]
+       py-[var(--toast-viewport-py)]
        left-1/2
        translate-x-[-50%]
        `,

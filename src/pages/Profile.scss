@@ -79,27 +79,34 @@
             z-index: 0;
           }
           > .desBox {
-            margin-top: 30px;
+            margin-top: 10px;
             width: 668px;
-          }
+            .subTitle {
+              font-family: Raleway-Medium;
+              font-size: 24px;
+              font-weight: 500;
+              line-height: normal;
+              letter-spacing: 0em;
+              font-feature-settings: "kern" on;
+              margin-top: 20px;
+              margin-bottom: 20px;
+            }
 
-          > .desBox,
-          p {
-            /* ·25% of platform tokens ·Permanently enjoy network gas fee dividends (the initial proportion is as high as 70%, and with the development of the ecosystem in the later period, the community will vote to determine the redistribution proportion) ·X% proportion of GAS fee airdrop activity rewards high weight voting rights ·A series of other ecological development rights and interests */
+            p {
+              /* ·25% of platform tokens ·Permanently enjoy network gas fee dividends (the initial proportion is as high as 70%, and with the development of the ecosystem in the later period, the community will vote to determine the redistribution proportion) ·X% proportion of GAS fee airdrop activity rewards high weight voting rights ·A series of other ecological development rights and interests */
 
-            /* 自动布局子元素 */
-            opacity: 1;
+              /* 自动布局子元素 */
+              opacity: 1;
 
-            font-family: Raleway-Medium;
-            font-size: 18px;
-            font-weight: 500;
-            line-height: 26.5px;
-            letter-spacing: 0em;
+              font-family: Raleway-Medium;
+              font-size: 18px;
+              font-weight: 500;
+              line-height: 26.5px;
+              letter-spacing: 0em;
 
-            font-feature-settings: "kern" on;
-            color: #eaeaea;
-
-            z-index: 1;
+              font-feature-settings: "kern" on;
+              color: #eaeaea;
+            }
           }
 
           .boxNamePrice {
@@ -165,8 +172,6 @@
             letter-spacing: 0em;
 
             font-feature-settings: "kern" on;
-            color: #f58c00;
-
             z-index: 0;
 
             margin-top: 50px;
@@ -373,10 +378,6 @@
 
                 &:last-of-type {
                   border-right: none;
-                }
-
-                &:first-of-type {
-                  // border-top-left-radius: 9.46px;
                 }
               }
             }

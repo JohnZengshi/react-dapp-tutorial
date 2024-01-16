@@ -1,61 +1,22 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-15 18:21:49
+ * @LastEditTime: 2024-01-16 11:29:54
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
 import "./Participate.scss";
 import "./Participate-m.scss";
 import { Button, ButtonProps } from "@/components/ui/button";
-import ConnectWallet, {
-  ConnectWallet_handleType,
-} from "@/components/common/ConnectWallet";
-import {
-  Fragment,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
-import { Progress } from "@/components/ui/progress";
-import Nav from "@/components/common/Nav";
-import zepoch from "@/assets/zepoch.mp4";
-import box from "@/assets/20240105-152907.png";
-
-import { Canvas } from "@react-three/fiber";
-import {
-  BakeShadows,
-  Environment,
-  Grid,
-  OrbitControls,
-  Stage,
-} from "@react-three/drei";
-import Shoe, { Env } from "@/components/common/Shoe";
-import {
-  Bloom,
-  EffectComposer,
-  ToneMapping,
-} from "@react-three/postprocessing";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { Wallet, fetchUrl, isMobile, isOKApp, localStorageKey } from "@/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import roos_box from "@/assets/roos_box.png";
 import ConnectUs from "@/components/common/ConnectUs";
 import CustomToast from "@/components/common/CustomToast";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import Invite from "@/components/common/Invite";
-import {
-  SET_NOTIFICATION_TRIGGER_EVENT,
-  SET_PAY_INFO,
-  SET_USER_INVITATION_CODE,
-} from "@/store/reducer";
-import {
-  API_CHECK_INVITE_CODE,
-  API_GET_NODE_LIST,
-  API_PAY_NODE_SMS,
-  NodeInfo,
-} from "@/utils/api";
+import { SET_NOTIFICATION_TRIGGER_EVENT, SET_PAY_INFO } from "@/store/reducer";
+import { API_GET_NODE_LIST, API_PAY_NODE_SMS, NodeInfo } from "@/utils/api";
 import boxT1 from "@/assets/boxT1.png";
 import boxT2 from "@/assets/boxT2.png";
 import boxT3 from "@/assets/boxT3.png";
@@ -67,16 +28,7 @@ type OrderInfo = {
   status: number;
   outAddress: string;
 };
-
-enum NodeType {
-  J = "J",
-  Q = "Q",
-  K = "K",
-}
 export default function () {
-  // const [installed, setInstalled] = useState(false);
-  // const [connected, setConnected] = useState(false);
-  // const [address, setAddress] = useState<string>();
   // TODO 重新处理connectWalletRef✔
   // const connectWalletRef = useRef<ConnectWallet_handleType>(null);
   const [num, setNum] = useState<number>(1);

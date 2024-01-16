@@ -9,10 +9,6 @@
     background-size: auto;
     box-sizing: border-box;
     > [data-radix-scroll-area-viewport] {
-      // display: flex;
-      // flex-direction: column;
-      // justify-content: center;
-
       > div {
         min-height: 100%;
         display: flex !important;
@@ -23,9 +19,7 @@
     }
 
     .content {
-      // padding: 0 50px;
       display: flex;
-      // align-items: center;
       box-sizing: border-box;
 
       flex: auto;
@@ -40,7 +34,6 @@
       .card {
         flex-direction: column;
         box-sizing: border-box;
-        padding: 9px 0px;
         margin-top: 38.67px;
         width: 100%;
         border-radius: 3.33px;
@@ -75,9 +68,6 @@
             border: 1px solid rgba(245, 140, 0, 0.2);
 
             img {
-              /* 1 */
-              // width: 258px;
-              // height: 254.67px;
               transform: scale(1.5);
               opacity: 1;
             }
@@ -87,11 +77,6 @@
         .bottom {
           margin-top: 30px;
           width: 318px;
-          // height: 302px;
-          // [data-radix-scroll-area-viewport] {
-          // > div {
-          // }
-          // }
 
           .inputContent {
             display: none !important;

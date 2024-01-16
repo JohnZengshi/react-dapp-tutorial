@@ -5,7 +5,6 @@ import {
   SET_ADDRESS,
   SET_CONNECTED,
   SET_LOGINSTATUS,
-  SET_PAY_INFO,
   SET_THIRD_INVITE_CODE,
   SET_USER_INVITATION_CODE,
   SET_WALLET_CONNECTING,
@@ -301,11 +300,6 @@ const Okx = forwardRef<
       );
       // console.log(address, toAddress, cost * BTC_Unit_Converter);
       console.log("send", okxwallet.bitcoin.send);
-      // TODO 模拟用户交易成功
-      // if (user.wallet.payInfo)
-      //   dispatch(
-      //     SET_PAY_INFO({ ...user.wallet.payInfo, hash: "123213123" })
-      //   );
       try {
         okxwallet.bitcoin
           .send({
