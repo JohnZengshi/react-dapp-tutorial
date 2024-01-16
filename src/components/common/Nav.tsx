@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-16 10:17:14
+ * @LastEditTime: 2024-01-16 14:58:36
  * @Author: John
  */
 import "./Nav.scss";
@@ -85,7 +85,7 @@ export default function (props: { connectBtn?: any }) {
           <div className="nav_btn">
             <button
               onClick={() => {
-                window.open("https://info.rootsat.co", "_blank");
+                window.open("https://info.roospro.com", "_blank");
               }}
             >
               <span>BLOG</span>
@@ -133,7 +133,7 @@ export default function (props: { connectBtn?: any }) {
               </DropdownMenuItem> */}
               <DropdownMenuItem
                 onClick={() => {
-                  window.open("https://info.rootsat.co", "_blank");
+                  window.open("https://info.roospro.com", "_blank");
                 }}
               >
                 BLOG

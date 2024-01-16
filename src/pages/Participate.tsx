@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-16 11:29:54
+ * @LastEditTime: 2024-01-16 14:41:25
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -185,9 +185,15 @@ export default function () {
                   // </Canvas>
                 }
 
-                {nodeInfo?.nodeName == "T1" && <img src={boxT1} alt="" />}
-                {nodeInfo?.nodeName == "T2" && <img src={boxT2} alt="" />}
-                {nodeInfo?.nodeName == "T3" && <img src={boxT3} alt="" />}
+                {nodeInfo?.nodeName == "T1" && (
+                  <img className="h-full" src={boxT1} alt="" />
+                )}
+                {nodeInfo?.nodeName == "T2" && (
+                  <img className="h-full" src={boxT2} alt="" />
+                )}
+                {nodeInfo?.nodeName == "T3" && (
+                  <img className="h-full" src={boxT3} alt="" />
+                )}
               </div>
             </div>
 

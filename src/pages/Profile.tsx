@@ -142,13 +142,13 @@ export default function () {
               {userBox?.status == 1 && (
                 <>
                   {userBox?.nodeName == "T1" && (
-                    <img className="boxPng scale-[2]" src={boxT1} alt="" />
+                    <img className="boxPng" src={boxT1} alt="" />
                   )}
                   {userBox?.nodeName == "T2" && (
-                    <img className="boxPng scale-[2]" src={boxT2} alt="" />
+                    <img className="boxPng" src={boxT2} alt="" />
                   )}
                   {userBox?.nodeName == "T3" && (
-                    <img className="boxPng scale-[2]" src={boxT3} alt="" />
+                    <img className="boxPng" src={boxT3} alt="" />
                   )}
                 </>
               )}
@@ -162,7 +162,9 @@ export default function () {
               {/* 未购买盒子 */}
               {(userBox?.status == 2 || userBox?.status == 3) && (
                 <>
-                  <span className="Equity">Intro to RoosBOX</span>
+                  <span className="Equity text-[#F58C00]">
+                    Intro to RoosBOX
+                  </span>
                   <div
                     className="desBox"
                     dangerouslySetInnerHTML={{

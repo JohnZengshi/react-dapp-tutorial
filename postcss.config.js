@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-09 09:16:54
- * @LastEditTime: 2024-01-09 20:42:29
+ * @LastEditTime: 2024-01-16 15:13:02
  * @Author: John
  */
 export default {
@@ -13,11 +13,11 @@ export default {
       propList: ["*"],
       exclude: (e) => {
         // console.log(e);
-        if (/.*-m\.scss$/.test(e)) {
+        if (!/.*-m\.scss$/.test(e)) {
           console.log(e);
-          return false;
+          return true;
         }
-        return true;
+        return false;
       },
     },
   },

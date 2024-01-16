@@ -14,3 +14,25 @@
   font-family: "Raleway-Medium";
   src: url('./assets/font/Raleway-Medium.ttf') format('truetype');
 }
+
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/* 
+@keyframes float {
+  0% {
+    transform: translateY(0)
+  }
+  50% {
+    transform: translateY(-50px)
+  }
+  100% {
+    transform: translateY(0)
+  }
+} */

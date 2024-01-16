@@ -68,8 +68,9 @@
             border: 1px solid rgba(245, 140, 0, 0.2);
 
             img {
-              transform: scale(1.5);
+              // transform: scale(1.5);
               opacity: 1;
+              animation: rotate 80s linear infinite;
             }
           }
         }
