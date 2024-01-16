@@ -1,14 +1,19 @@
+/*
+ * @LastEditors: John
+ * @Date: 2024-01-12 09:25:43
+ * @LastEditTime: 2024-01-16 17:04:01
+ * @Author: John
+ */
+import "./Profile-m.scss";
+import "./Profile.scss";
 import Invite from "@/components/common/Invite";
 import roos_box from "@/assets/roos_box.png";
 import flag from "@/assets/flag.png";
-import "./Profile.scss";
-import "./Profile-m.scss";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ConnectUs from "@/components/common/ConnectUs";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -21,7 +26,6 @@ import {
   API_GET_CONTRIBUTION,
   API_GET_INVITE_VO_LIST,
   API_GET_NODE_LIST,
-  API_PAY_NODE_SMS,
   API_QUERY_BOX_USER_HAS_PURCHASED,
   BOX_USER_PURCHASED,
   CONTRIBUTION,
@@ -31,17 +35,11 @@ import {
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useNavigate } from "react-router-dom";
 import { SET_USER_INVITATION_CODE } from "@/store/reducer";
-import CustomToast from "@/components/common/CustomToast";
 import { CUSTOM_DIALOG } from "@/store/customCom";
 import boxT1 from "@/assets/boxT1.png";
 import boxT2 from "@/assets/boxT2.png";
 import boxT3 from "@/assets/boxT3.png";
-/*
- * @LastEditors: John
- * @Date: 2024-01-12 09:25:43
- * @LastEditTime: 2024-01-12 11:15:19
- * @Author: John
- */
+
 export default function () {
   const [contributionDate, setContributionDate] = useState<CONTRIBUTION>();
   const [inviteList, setInviteList] = useState<INVITE_VO_LIST_ITEM[]>([]);
