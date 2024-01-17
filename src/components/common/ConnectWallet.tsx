@@ -58,39 +58,22 @@ import { Md5 } from "ts-md5";
  */
 export type ConnectWallet_handleType = {
   _onSubmit: (cost: number, toAddress: string) => Promise<string>;
-  _connect: () => void;
   _setWalletType: (type: WalletType) => void;
   _selectWallet: () => void;
 };
-const ConnectWallet = forwardRef<
-  ConnectWallet_handleType,
-  {
-    onUpdate: (
-      installed: boolean,
-      connected: boolean,
-      address: string | undefined
-    ) => void;
-  }
->(function (props, ref) {
+const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
+  props,
+  ref
+) {
   const [open, setOpen] = useState(false);
-
-  // const [walletType, setWalletType] = useState<Wallet | "">("");
 
   const okxRef = useRef<Okx_HandleType>(null);
   const uniSatRef = useRef<UniSat_handleType>(null);
-
-  // const [installed, setInstalled] = useState(false);
-  // const [connected, setConnected] = useState(false);
-  // const [address, setAddress] = useState<string>();
-
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
   const [inviteCodeDialogOpen, setInviteCodeDialogOpen] = useState(false);
-
   const [inviteCode, setInviteCode] = useState<string>("");
-
   const [publicKey, setPublicKey] = useState("");
 
   useEffect(() => {
@@ -131,9 +114,9 @@ const ConnectWallet = forwardRef<
             console.log("调起支付成功，得到：hash", hash);
             if (hash)
               dispatch(SET_PAY_INFO({ ...user.wallet.payInfo, hash: hash }));
-          } catch (error) {
+          } catch (hash) {
             // TODO 用户取消支付✔
-            CustomToast("user cancel payment");
+            // if (hash == "") CustomToast("user cancel payment");
             API_PAY_NODE_SMS(user.wallet.payInfo.orderNumber, "123456789", 2);
           }
         })();
@@ -156,13 +139,13 @@ const ConnectWallet = forwardRef<
         }
         return new Promise((reslove) => reslove(""));
       },
-      _connect() {
-        if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
-          return uniSatRef.current._connect();
-        } else if (user.wallet.walletType === "OKX" && okxRef.current) {
-          return okxRef.current._connect();
-        }
-      },
+      // _connect() {
+      //   if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
+      //     return uniSatRef.current._connect();
+      //   } else if (user.wallet.walletType === "OKX" && okxRef.current) {
+      //     return okxRef.current._connect();
+      //   }
+      // },
       _setWalletType(type: WalletType) {
         // setWalletType(type);
         dispatch(SET_WALLET_TYPE(type));
@@ -172,13 +155,6 @@ const ConnectWallet = forwardRef<
       },
     };
   });
-
-  function onUpdate(i: boolean, c: boolean, a: string | undefined) {
-    dispatch(SET_ADDRESS(a));
-    dispatch(SET_CONNECTED(c));
-    dispatch(SET_WALLET_INSTALL(i));
-    props.onUpdate(i, c, a);
-  }
 
   const okxwallet = window.okxwallet;
   const unisat = window.unisat;
@@ -220,11 +196,17 @@ const ConnectWallet = forwardRef<
   }
 
   // 签名并且登录
-  async function signAnLogin(
+  async function signAndLogin(
     publicKey: string,
     address: string
   ): Promise<"LOGIN_SUCCESS" | undefined> {
-    let sign = await okxRef.current?._sign(address);
+    const message = `userAddressSignature:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`;
+    let sign;
+    if (user.wallet.walletType == "OKX") {
+      sign = await okxRef.current?._sign(address, message);
+    } else {
+      sign = await uniSatRef.current?._sign(address, message);
+    }
     // TODO 暂时用不到sign
     // console.log("get sign:", sign);
     if (!address) return;
@@ -263,7 +245,7 @@ const ConnectWallet = forwardRef<
       let pk = "";
       if (!isOKApp) {
         if (user.wallet.walletType == "OKX") {
-          pk = await okxwallet.bitcoin.getPublicKey();
+          pk = await okxwallet?.bitcoin.getPublicKey();
           if (!pk) {
             CustomToast("get public key fail!");
             return;
@@ -287,7 +269,7 @@ const ConnectWallet = forwardRef<
         return "CONFIRM_THE_INVITATION_CODE";
       }
 
-      signAnLogin(pk, address);
+      signAndLogin(pk, address);
     } else {
       // TODO 用户已经登录，直接保存数据✔
       saveUserData(address);
@@ -300,6 +282,8 @@ const ConnectWallet = forwardRef<
     let address;
     if (type == "OKX") {
       address = await okxRef.current?._connect();
+    } else if (type == "UNISAT") {
+      address = await uniSatRef.current?._connect();
     }
     if (!address) return;
     // TODO 钱包连接完就保存地址✔
@@ -309,6 +293,19 @@ const ConnectWallet = forwardRef<
 
     if (res == "CONFIRM_THE_INVITATION_CODE") {
       return;
+    }
+  }
+
+  // 用户切换
+  async function handleAccountsChanged(address: string | undefined) {
+    clearUserData();
+    if (address) {
+      // TODO 钱包切换完就保存地址✔
+      localStorage.setItem(localStorageKey.okx_address, address);
+      let res = await checkToken(address);
+      if (res == "CONFIRM_THE_INVITATION_CODE") {
+        return;
+      }
     }
   }
 
@@ -377,10 +374,7 @@ const ConnectWallet = forwardRef<
 
                 <button
                   className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                  onClick={() => {
-                    dispatch(SET_WALLET_TYPE("UNISAT"));
-                    uniSatRef.current?._connect();
-                  }}
+                  onClick={() => connectWallet("UNISAT")}
                 >
                   <img className="" src={unisat_logo} alt="" />
                   <span className="font-[Raleway-Bold]  text-[#fff]">
@@ -402,12 +396,13 @@ const ConnectWallet = forwardRef<
           <DropdownMenuContent className="DropdownMenuContent-disconnect flex items-center justify-center bg-[#000000]">
             <DropdownMenuItem>
               <button
-                onClick={() => {
+                onClick={async () => {
                   if (user.wallet.walletType == "UNISAT") {
-                    uniSatRef.current?._disConnect();
+                    await uniSatRef.current?._disConnect();
                   } else if (user.wallet.walletType == "OKX") {
-                    okxRef.current?._disConnect();
+                    await okxRef.current?._disConnect();
                   }
+                  clearUserData();
                 }}
                 className="disconnect flex items-center "
               >
@@ -422,32 +417,22 @@ const ConnectWallet = forwardRef<
       {user.wallet.walletType === "OKX" && (
         <UseOkx
           ref={okxRef}
-          onUpdate={(i, c, a) => {
-            onUpdate(i, c, a);
-          }}
-          disConnect={() => clearUserData()}
           handleAccountsChanged={async (addressInfo) => {
-            console.log("account change!", addressInfo);
-            clearUserData();
-            if (addressInfo) {
-              let res = await checkToken(addressInfo.address);
-              if (res == "CONFIRM_THE_INVITATION_CODE") {
-                return;
-              }
-            }
+            console.log("okx account change!", addressInfo);
+            handleAccountsChanged(addressInfo?.address);
           }}
-          checkInstalled={async () => {
-            return connectWallet("OKX");
-          }}
+          checkInstalledOk={() => connectWallet("OKX")}
         />
       )}
       {/* unisat钱包占位 */}
       {user.wallet.walletType === "UNISAT" && (
         <UseUniSat
           ref={uniSatRef}
-          onUpdate={(i, c, a) => {
-            onUpdate(i, c, a);
+          handleAccountsChanged={async (accounts) => {
+            console.log("unisat account change!", accounts[0]);
+            handleAccountsChanged(accounts[0]);
           }}
+          checkInstalledOk={() => connectWallet("UNISAT")}
         />
       )}
 
@@ -502,7 +487,7 @@ const ConnectWallet = forwardRef<
                     return;
                   }
                   if (address) {
-                    let res = await signAnLogin(publicKey, address);
+                    let res = await signAndLogin(publicKey, address);
                     if (res == "LOGIN_SUCCESS") setInviteCodeDialogOpen(false);
                   }
                 }}

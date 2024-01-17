@@ -1,15 +1,31 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:22:01
- * @LastEditTime: 2024-01-15 20:38:43
+ * @LastEditTime: 2024-01-17 14:46:31
  * @Author: John
  */
 /// <reference types="vite/client" />
 
 interface Window {
   ethereum?: any;
-  okxwallet: any | undefined;
-  unisat: any;
+  okxwallet: { bitcoin: any } | undefined;
+  unisat:
+    | {
+        requestAccounts: () => Promise<string[]>;
+        getAccounts: () => Promise<string[]>;
+        getPublicKey: () => Promise<string>;
+        getBalance: () => Promise<{
+          confirmed: number;
+          unconfirmed: number;
+          total: number;
+        }>;
+        getNetwork: () => Promise<string>;
+        sendBitcoin: (to: string, coast: number) => Promise<string>;
+        signMessage: (message: string) => Promise<string>;
+        on: (event: string, handle: any) => void;
+        removeListener: (event: string, handle: any) => void;
+      }
+    | undefined;
 }
 
 interface ImportMetaEnv {

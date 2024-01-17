@@ -11,7 +11,7 @@ import {
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
- * @LastEditTime: 2024-01-10 12:50:32
+ * @LastEditTime: 2024-01-17 16:19:47
  * @Author: John
  */
 type Account = {
@@ -22,22 +22,16 @@ type Account = {
 // let connecting = false; // TODO 优化connecting状态✔
 export type Okx_HandleType = {
   _connect: () => Promise<string>;
-  _disConnect: () => void;
+  _disConnect: () => Promise<void>;
   _onSubmit: (cost: number, toAddress: string) => Promise<string>;
-  _sign: (address: string) => Promise<string>;
+  _sign: (address: string, message: string) => Promise<string>;
 };
 
 const Okx = forwardRef<
   Okx_HandleType,
   {
-    onUpdate: (
-      okxInstalled: boolean,
-      connected: boolean,
-      address: string | undefined
-    ) => void;
-    disConnect: () => void;
-    handleAccountsChanged: (addressInfo: Account) => void;
-    checkInstalled: () => Promise<void>;
+    handleAccountsChanged: (addressInfo: Account | null) => void;
+    checkInstalledOk: () => Promise<void>;
   }
 >(function (props, ref) {
   const [publicKey, setPublicKey] = useState("");
@@ -52,13 +46,13 @@ const Okx = forwardRef<
         return connect();
       },
       _disConnect() {
-        disConnect();
+        return disConnect();
       },
       _onSubmit(cost, toAddress) {
         return onSubmit(cost, toAddress);
       },
-      _sign(address) {
-        return sign(address);
+      _sign(address, message) {
+        return sign(address, message);
       },
     };
   });
@@ -68,20 +62,19 @@ const Okx = forwardRef<
   useLayoutEffect(() => {
     (async () => {
       await checkinstall();
-      await props.checkInstalled();
+      await props.checkInstalledOk();
       // 监听账户变化
       // TODO 移动端无法触发？？？
       console.log("绑定accountChanged事件");
-      okxwallet.bitcoin?.on("accountChanged", handleAccountsChanged);
-
-      return () => {
-        console.log("解绑accountChanged事件");
-        okxwallet?.bitcoin?.removeListener(
-          "accountChanged",
-          handleAccountsChanged
-        );
-      };
+      okxwallet?.bitcoin?.on("accountChanged", handleAccountsChanged);
     })();
+    return () => {
+      console.log("解绑accountChanged事件");
+      okxwallet?.bitcoin?.removeListener(
+        "accountChanged",
+        handleAccountsChanged
+      );
+    };
   }, []);
 
   // 检测是否安装okx
@@ -106,10 +99,7 @@ const Okx = forwardRef<
   async function connect() {
     return new Promise<string>(async (reslove, reject) => {
       await checkinstall();
-      // if (user.wallet.connecting) return;
-      // connecting = true;
-      // dispatch(SET_WALLET_CONNECTING(true));
-      okxwallet.bitcoin
+      okxwallet?.bitcoin
         .connect()
         .then(async (result: Account | null) => {
           console.log("okxwallet.bitcoin.connect", result);
@@ -120,12 +110,11 @@ const Okx = forwardRef<
     });
   }
 
+  // 断开连接
   async function disConnect() {
     if (!isOKApp) {
-      await okxwallet.bitcoin.disconnect();
+      await okxwallet?.bitcoin.disconnect();
     }
-    // clearUserData();
-    props.disConnect();
   }
 
   // 用户变化
@@ -139,8 +128,8 @@ const Okx = forwardRef<
   function onSubmit(cost: number, toAddress: string) {
     return new Promise<string>((reslove, reject) => {
       // reslove(false);
-      console.log("okxwallet.bitcoin", okxwallet.bitcoin);
-      if (typeof okxwallet.bitcoin === "undefined") return;
+      console.log("okxwallet.bitcoin", okxwallet?.bitcoin);
+      if (typeof okxwallet?.bitcoin === "undefined") return;
       console.log(
         "values.satoshis * BTC_Unit_Converter",
         cost * BTC_Unit_Converter
@@ -155,7 +144,7 @@ const Okx = forwardRef<
             value: cost,
           })
           .then((txid: { txhash: string }) => {
-            console.log(txid);
+            // console.log(txid);
 
             // CustomToast(`请求交易成功,txid值为：${txid.txhash}`);
 
@@ -163,9 +152,7 @@ const Okx = forwardRef<
           })
           .catch((e: any) => {
             console.log("用户取消交易");
-
             handleCatch(e);
-            reject("");
           });
       } catch (error) {
         console.log("okxwallet.bitcoin.send错误：", error);
@@ -175,9 +162,7 @@ const Okx = forwardRef<
 
   // 统一处理错误
   function handleCatch(e: { code: number; message: string }) {
-    console.log(e);
-    // connecting = false;
-    // dispatch(SET_WALLET_CONNECTING(false));
+    // console.log(e.code);
     if (typeof e.message === "string") {
       console.warn(e.message);
       if (/[\u4e00-\u9fa5]/.test(e.message)) return;
@@ -186,18 +171,18 @@ const Okx = forwardRef<
   }
 
   // 签名
-  async function sign(address: string): Promise<string> {
+  async function sign(address: string, message: string): Promise<string> {
     return new Promise((reslove, reject) => {
       // let address = localStorage.getItem(localStorageKey.okx_address);
       // TODO 签名✔
       // const nonce = "22a68408-fea7-4491-996c-a92fbf710a72";
       // const message = `Welcome to OKX!\n\nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${result.address}\n    \nNonce:\n${nonce}\n`;
-      const message = `userAddressSignature:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`;
       // const message = "need sign string";
       console.log("签名?");
-      okxwallet.bitcoin
+      okxwallet?.bitcoin
         .signMessage(message, { from: address }) // OKX app 钱包新的签名方法传参（官网的方法传参不对）！！！！
         .then(async (sign: string) => {
+          console.log("okx signature:", sign);
           reslove(sign);
         })
         .catch(handleCatch);

@@ -11,110 +11,54 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BTC_Unit_Converter } from "@/utils";
 import CustomToast from "@/components/common/CustomToast";
+import { useAppDispatch } from "@/store/hooks";
+import { SET_UNISAT_WALLET_INSTALL } from "@/store/reducer";
 
 const formSchema = z.object({
   toAddress: z.string(),
   satoshis: z.number().positive(),
 });
 
-let connecting = false;
 export type UniSat_handleType = {
-  _connect: () => void;
-  _disConnect: () => void;
+  _connect: () => Promise<string>;
+  _disConnect: () => Promise<void>;
   _onSubmit: (cost: number, toAddress: string) => Promise<string>;
+  _sign: (address: string, message: string) => Promise<string>;
 };
 const UniSat = forwardRef<
   UniSat_handleType,
   {
-    onUpdate: (
-      okxInstalled: boolean,
-      connected: boolean,
-      address: string | undefined
-    ) => void;
+    handleAccountsChanged: (_accounts: string[]) => void;
+    checkInstalledOk: () => Promise<void>;
   }
 >(function (props, ref) {
-  const [unisatInstalled, setUnisatInstalled] = useState(false);
-  const [connected, setConnected] = useState(false);
-  const [accounts, setAccounts] = useState<string[]>([]);
-  const [publicKey, setPublicKey] = useState("");
-  const [address, setAddress] = useState("");
-  const [balance, setBalance] = useState({
-    confirmed: 0,
-    unconfirmed: 0,
-    total: 0,
-  });
-  const [network, setNetwork] = useState("livenet");
-  const [open, setOpen] = useState(false);
-  const [sending, setSending] = useState<Boolean>(false);
-  // const [connecting, setConnecting] = useState<boolean>(false);
+  const unisat = window.unisat;
+  const dispatch = useAppDispatch();
 
   useImperativeHandle(ref, () => {
     return {
       _connect() {
-        connect();
+        return connect();
       },
       _disConnect() {
-        disConnect();
+        return disConnect();
       },
       _onSubmit(cost: number, toAddress: string) {
         return onSubmit(cost, toAddress);
       },
+      _sign(address, message) {
+        return sign(address, message);
+      },
     };
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      toAddress: "",
-      satoshis: 0,
-    },
-  });
-
-  useEffect(() => {
-    props.onUpdate(unisatInstalled, connected, address);
-  }, [unisatInstalled, connected, address]);
-
-  const getBasicInfo = async () => {
-    const unisat = (window as any).unisat;
-    const [address] = await unisat.getAccounts();
-    setAddress(address);
-
-    const publicKey = await unisat.getPublicKey();
-    setPublicKey(publicKey);
-
-    const balance = await unisat.getBalance();
-    setBalance(balance);
-
-    const network = await unisat.getNetwork();
-    setNetwork(network);
-  };
-
-  const selfRef = useRef<{ accounts: string[] }>({
-    accounts: [],
-  });
-  const self = selfRef.current;
+  // 切换钱包
   const handleAccountsChanged = (_accounts: string[]) => {
-    if (self.accounts[0] === _accounts[0]) {
-      // prevent from triggering twice
-      console.log("prevent from triggering twice");
-      // return;
-    }
-    self.accounts = _accounts;
-    console.log("_accounts", _accounts);
-    if (_accounts.length > 0) {
-      setAccounts(_accounts);
-      setConnected(true);
-      getBasicInfo();
-    } else {
-      setConnected(false);
-      disConnect(); // 手动触发
-    }
+    props.handleAccountsChanged(_accounts);
   };
 
-  const handleNetworkChanged = (network: string) => {
-    setNetwork(network);
-    getBasicInfo();
-  };
+  // 切换网络
+  const handleNetworkChanged = (network: string) => {};
 
   // 发送交易
   function onSubmit(cost: number, toAddress: string): Promise<string> {
@@ -122,138 +66,93 @@ const UniSat = forwardRef<
     // ✅ This will be type-safe and validated.
     return new Promise((reslove, reject) => {
       console.log(
-        "values.satoshis * BTC_Unit_Converter",
-        cost * BTC_Unit_Converter
+        "unisat send bitcoin:",
+        toAddress,
+        Math.round(cost * BTC_Unit_Converter)
       );
-      if (sending) return;
 
-      setSending(true);
       unisat
-        .sendBitcoin(
+        ?.sendBitcoin(
           toAddress, // Required except during contract publications.
           Math.round(cost * BTC_Unit_Converter)
         )
-        .then((txHash: string) => {
-          setSending(false);
-          console.log(txHash);
+        .then((txHash) => {
           // alert("Hash值为：" + txHash)
-          CustomToast(`交易成功,Hash值为：${txHash}`);
+          // CustomToast(`交易成功,Hash值为：${txHash}`);
 
           reslove(txHash);
-          setOpen(false);
         })
-        .catch((error: any) => {
-          setSending(false);
-          CustomToast(`${error.message}`);
-
-          // console.error(error);
+        .catch((error) => {
+          console.log("用户取消交易");
+          handleCatch(error);
+          reject("");
         });
     });
   }
 
-  async function connect() {
-    if (connecting) return;
-    await checkInstall();
-    // setConnecting(true);
-    connecting = true;
-    unisat
-      .requestAccounts()
-      .then(async (accounts: string[]) => {
-        console.log("request accounts", accounts);
-        if (accounts.length > 0) {
-          await signMessage(accounts[0]);
-          handleAccountsChanged(accounts);
-          connecting = false;
-        }
-      })
-      .catch(handleCatch);
-  }
-
-  function disConnect() {
-    console.log("dis connect");
-
-    setAccounts([]);
-    setConnected(false);
-    setAddress("");
-    setPublicKey("");
-    setBalance({
-      confirmed: 0,
-      unconfirmed: 0,
-      total: 0,
+  // 连接钱包
+  async function connect(): Promise<string> {
+    return new Promise<string>(async (reslove, reject) => {
+      await checkInstall();
+      unisat
+        ?.requestAccounts()
+        .then(async (accounts) => {
+          console.log("unisat.requestAccounts", accounts);
+          if (accounts.length == 0) return CustomToast("connect fail!");
+          reslove(accounts[0]);
+        })
+        .catch(handleCatch);
     });
-    setNetwork("livenet");
   }
 
-  function checkInstall() {
-    return new Promise<void>(async (reslove, reject) => {
-      let unisat = (window as any).unisat;
-
-      for (let i = 1; i < 5 && !unisat; i += 1) {
-        await new Promise((resolve) => setTimeout(resolve, 100 * i));
-        unisat = (window as any).unisat;
-      }
-
-      if (unisat) {
-        console.log("unisat is installed!!", unisat);
-        setUnisatInstalled(true);
-      } else if (!unisat) {
-        // 用户没有安装unisat插件
-        console.warn("unisat is not installed!!");
-        CustomToast("PLEASE INSTALL UNISAT WALLET");
-        reject();
-        return;
-      }
-
+  // 断开连接
+  function disConnect() {
+    return new Promise<void>((reslove, reject) => {
       reslove();
     });
   }
 
-  async function signMessage(address: string) {
-    return new Promise<void>(async (reslove, reject) => {
-      try {
-        const nonce = "22a68408-fea7-4491-996c-a92fbf710a72";
-        const message = `Welcome to UniSat!\n\nClick to sign in and accept the UniSat Terms of Service (https://unisat.io/terms-of-service.html) and Privacy Policy (https://unisat.io/privacy-policy.html).\n    \nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${address}\n    \nNonce:\n${nonce}\n`;
-        let res = await window.unisat.signMessage(message);
-        console.log("signature:", res);
-        // const pubkey = publicKey;
-        // const message = "abcdefghijk123456789";
-        // const signature = res;
-        // const result = verifyMessage(pubkey, message, signature);
-        // console.log("verifyMessage:", result);
+  // 检测是否安装unisat
+  function checkInstall(): Promise<void> {
+    return new Promise((reslove, reject) => {
+      if (typeof unisat !== "undefined") {
+        console.log("UNISAT is installed!");
+        dispatch(SET_UNISAT_WALLET_INSTALL(true));
         reslove();
-      } catch (e) {
-        console.log(e);
+      } else {
+        // 提示用户没有安装OKX插件
+        console.warn("UNISAT is not installed!!");
+        dispatch(SET_UNISAT_WALLET_INSTALL(false));
+        CustomToast("You haven't installed a wallet yet！");
+      }
+    });
+  }
+
+  // 签名
+  async function sign(address: string, message: string): Promise<string> {
+    return new Promise(async (reslove, reject) => {
+      try {
+        let sign = await unisat?.signMessage(message);
+        console.log("unisat signature:", sign);
+        if (sign) reslove(sign);
+      } catch (e: any) {
+        handleCatch(e);
       }
     });
   }
   useLayoutEffect(() => {
-    async function checkUnisat() {
+    (async () => {
       await checkInstall();
-      unisat
-        .getAccounts()
-        .then((accounts: string[]) => {
-          console.log("unisat accounts", accounts);
-          if (accounts.length > 0) {
-            handleAccountsChanged(accounts);
-          } else {
-            connect();
-          }
-        })
-        .catch(handleCatch);
+      await props.checkInstalledOk();
 
-      unisat.on("accountsChanged", handleAccountsChanged);
-      unisat.on("networkChanged", handleNetworkChanged);
-
-      return () => {
-        unisat.removeListener("accountsChanged", handleAccountsChanged);
-        unisat.removeListener("networkChanged", handleNetworkChanged);
-      };
-    }
-
-    checkUnisat().then();
+      unisat?.on("accountsChanged", handleAccountsChanged);
+      unisat?.on("networkChanged", handleNetworkChanged);
+    })();
+    return () => {
+      unisat?.removeListener("accountsChanged", handleAccountsChanged);
+      unisat?.removeListener("networkChanged", handleNetworkChanged);
+    };
   }, []);
-
-  const unisat = (window as any).unisat;
 
   function handleCatch(e: { code: number; message: string }) {
     // console.log(e);

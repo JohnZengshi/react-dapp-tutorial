@@ -1,10 +1,9 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-01-17 11:11:19
+ * @LastEditTime: 2024-01-17 14:18:58
  * @Author: John
  */
-import { ConnectWallet_handleType } from "@/components/common/ConnectWallet";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export type WalletType = "OKX" | "UNISAT" | "";
@@ -15,9 +14,9 @@ export interface UserState {
     invitationCode: string;
     connected: boolean;
     walletInstall: boolean;
+    unisatWalletInstalled: boolean;
     walletType: WalletType;
     notificationTriggerEvent: "CONNECT" | "TRANSACTION" | "SELECT_WALLET" | "";
-    walletRef: ConnectWallet_handleType | null;
     payInfo: {
       cost: number;
       toAddress: string;
@@ -36,9 +35,9 @@ const initialState: UserState = {
     invitationCode: "",
     connected: false,
     walletInstall: false,
+    unisatWalletInstalled: false,
     walletType: "",
     notificationTriggerEvent: "",
-    walletRef: null,
     payInfo: {
       cost: 0,
       toAddress: "",
@@ -69,6 +68,9 @@ export const userSlice = createSlice({
     SET_WALLET_INSTALL: (state, action: PayloadAction<boolean>) => {
       state.wallet.walletInstall = action.payload;
     },
+    SET_UNISAT_WALLET_INSTALL: (state, action: PayloadAction<boolean>) => {
+      state.wallet.unisatWalletInstalled = action.payload;
+    },
     SET_WALLET_TYPE: (
       state,
       action: PayloadAction<UserState["wallet"]["walletType"]>
@@ -80,12 +82,6 @@ export const userSlice = createSlice({
       action: PayloadAction<UserState["wallet"]["notificationTriggerEvent"]>
     ) => {
       state.wallet.notificationTriggerEvent = action.payload;
-    },
-    SET_WALLET_REF: (
-      state,
-      action: PayloadAction<UserState["wallet"]["walletRef"]>
-    ) => {
-      state.wallet.walletRef = action.payload;
     },
     SET_PAY_INFO: (
       state,
@@ -113,9 +109,9 @@ export const {
   SET_USER_INVITATION_CODE,
   SET_CONNECTED,
   SET_WALLET_INSTALL,
+  SET_UNISAT_WALLET_INSTALL,
   SET_WALLET_TYPE,
   SET_NOTIFICATION_TRIGGER_EVENT,
-  SET_WALLET_REF,
   SET_PAY_INFO,
   SET_THIRD_INVITE_CODE,
   SET_LOGINSTATUS,

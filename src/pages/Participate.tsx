@@ -29,8 +29,6 @@ type OrderInfo = {
   outAddress: string;
 };
 export default function () {
-  // TODO 重新处理connectWalletRef✔
-  // const connectWalletRef = useRef<ConnectWallet_handleType>(null);
   const [num, setNum] = useState<number>(1);
   const [cost, setCost] = useState(0);
   const [nodeTotal, setNodeTotal] = useState(0);
