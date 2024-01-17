@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-09 09:16:54
- * @LastEditTime: 2024-01-16 17:02:54
+ * @LastEditTime: 2024-01-17 16:22:57
  * @Author: John
  */
 export default {
@@ -14,7 +14,7 @@ export default {
       exclude: (e) => {
         // console.log(e);
         if (/.*-m\.scss$/.test(e)) {
-          console.log(e);
+          // console.log(e);
           return false;
         }
         return true;
