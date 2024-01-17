@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-16 14:41:25
+ * @LastEditTime: 2024-01-17 13:45:00
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -342,9 +342,6 @@ export default function () {
                         console.log(user.wallet.address);
 
                         // TODO 选择钱包弹窗✔
-                        // connectWalletRef.current?._setWalletType(Wallet.OKX);
-                        // connectWalletRef.current?._connect();
-                        // connectWalletRef.current?._selectWallet();
                         dispatch(
                           SET_NOTIFICATION_TRIGGER_EVENT("SELECT_WALLET")
                         );

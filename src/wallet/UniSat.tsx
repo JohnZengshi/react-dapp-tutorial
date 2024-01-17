@@ -1,21 +1,4 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { ToastAction } from "@/components/ui/toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReloadIcon } from "@radix-ui/react-icons";
 import {
   forwardRef,
   useEffect,
@@ -26,8 +9,6 @@ import {
 } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import sdk from "@unisat/wallet-sdk";
-import { verifyMessage } from "@unisat/wallet-utils";
 import { BTC_Unit_Converter } from "@/utils";
 import CustomToast from "@/components/common/CustomToast";
 

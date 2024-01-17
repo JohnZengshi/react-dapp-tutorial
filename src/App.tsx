@@ -27,13 +27,8 @@ import flexible from "./utils/flexible";
 import { SET_IS_SMALL_SCREEN } from "./store/sys";
 
 const App = () => {
-  const connectWalletRef = useRef<ConnectWallet_handleType>(null);
+  // const connectWalletRef = useRef<ConnectWallet_handleType>(null);
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    // dispatch(SET_WALLET_REF(connectWalletRef.current));
-    return () => {};
-  }, [connectWalletRef]);
-
   useEffect(() => {
     flexible(window, document, (isSmall) => {
       // console.log("is small", isSmall);
@@ -47,7 +42,7 @@ const App = () => {
       <Nav
         connectBtn={
           <ConnectWallet
-            ref={connectWalletRef}
+            // ref={connectWalletRef}
             onUpdate={(i, c, a) => {
               console.log(a);
             }}

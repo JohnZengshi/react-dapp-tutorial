@@ -1,12 +1,13 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-01-15 14:48:42
+ * @LastEditTime: 2024-01-17 11:11:19
  * @Author: John
  */
 import { ConnectWallet_handleType } from "@/components/common/ConnectWallet";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
+export type WalletType = "OKX" | "UNISAT" | "";
 export interface UserState {
   wallet: {
     address: string | undefined;
@@ -14,7 +15,7 @@ export interface UserState {
     invitationCode: string;
     connected: boolean;
     walletInstall: boolean;
-    walletType: "OKX" | "UNISAT" | "";
+    walletType: WalletType;
     notificationTriggerEvent: "CONNECT" | "TRANSACTION" | "SELECT_WALLET" | "";
     walletRef: ConnectWallet_handleType | null;
     payInfo: {
