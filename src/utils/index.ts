@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-13 12:50:08
+ * @LastEditTime: 2024-01-18 09:30:22
  * @Author: John
  */
 import CustomToast from "@/components/common/CustomToast";
@@ -48,6 +48,11 @@ export enum localStorageKey {
   roos_token = "roos_token",
 }
 
+export enum sessionStorageKey {
+  okx_address = "okx_address",
+  roos_token = "roos_token",
+}
+
 export enum UrlQueryParamsKey {
   INVITE_CODE = "inviteCode",
 }
@@ -67,9 +72,10 @@ export async function fetchUrl<D = any, P = any>(
   options.headers = {
     Authorization:
       // token,
-      localStorage.getItem(localStorageKey.roos_token)?.split("::::")[1] || "",
+      sessionStorage.getItem(sessionStorageKey.roos_token)?.split("::::")[1] ||
+      "",
     "Accept-Language": "zh-CN",
-    address: localStorage.getItem(localStorageKey.okx_address) || "",
+    address: sessionStorage.getItem(sessionStorageKey.okx_address) || "",
     // address,
     "Content-Type": "application/json",
   };

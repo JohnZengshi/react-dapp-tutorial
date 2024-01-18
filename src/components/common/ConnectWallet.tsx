@@ -15,6 +15,7 @@ import {
   getUrlQueryParam,
   isOKApp,
   localStorageKey,
+  sessionStorageKey,
   shortenString,
 } from "@/utils";
 import {
@@ -176,7 +177,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
       }
 
       if (okxwallet) {
-        if (localStorage.getItem(localStorageKey.okx_address)) {
+        if (sessionStorage.getItem(sessionStorageKey.okx_address)) {
           clearInterval(timer);
           console.log("user is connected okx!!");
           dispatch(SET_WALLET_TYPE("OKX"));
@@ -221,8 +222,8 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
 
     if (loginInfo) {
       console.log(loginInfo);
-      localStorage.setItem(
-        localStorageKey.roos_token,
+      sessionStorage.setItem(
+        sessionStorageKey.roos_token,
         `${address}::::${loginInfo.token}`
       );
       // TODO 用户登录,写入用户数据✔
@@ -235,7 +236,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
   async function checkToken(
     address: string
   ): Promise<"CONFIRM_THE_INVITATION_CODE" | void> {
-    const roos_token = localStorage.getItem(localStorageKey.roos_token);
+    const roos_token = sessionStorage.getItem(sessionStorageKey.roos_token);
     console.log("roos_token", roos_token);
     // TODO 判断是否有token，没有则签名请求获取token✔
     if (!roos_token || roos_token?.split("::::")[0] != address) {
@@ -281,13 +282,15 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     dispatch(SET_WALLET_TYPE(type));
     let address;
     if (type == "OKX") {
+      if (!okxRef.current) return;
       address = await okxRef.current?._connect();
     } else if (type == "UNISAT") {
+      if (!uniSatRef.current) return;
       address = await uniSatRef.current?._connect();
     }
     if (!address) return;
     // TODO 钱包连接完就保存地址✔
-    localStorage.setItem(localStorageKey.okx_address, address);
+    sessionStorage.setItem(sessionStorageKey.okx_address, address);
 
     let res = await checkToken(address);
 
@@ -301,7 +304,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     clearUserData();
     if (address) {
       // TODO 钱包切换完就保存地址✔
-      localStorage.setItem(localStorageKey.okx_address, address);
+      sessionStorage.setItem(sessionStorageKey.okx_address, address);
       let res = await checkToken(address);
       if (res == "CONFIRM_THE_INVITATION_CODE") {
         return;
@@ -322,8 +325,8 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     dispatch(SET_LOGINSTATUS("LOG_OUT"));
     dispatch(SET_CONNECTED(false));
     dispatch(SET_ADDRESS(""));
-    localStorage.removeItem(localStorageKey.okx_address);
-    localStorage.removeItem(localStorageKey.roos_token);
+    sessionStorage.removeItem(sessionStorageKey.okx_address);
+    sessionStorage.removeItem(sessionStorageKey.roos_token);
   }
 
   return (
@@ -478,8 +481,8 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
                 className="confirm_btn"
                 onClick={async () => {
                   //TODO 用户输入邀请码后登录✔
-                  let address = localStorage.getItem(
-                    localStorageKey.okx_address
+                  let address = sessionStorage.getItem(
+                    sessionStorageKey.okx_address
                   );
                   try {
                     if (address) await signUp(address, inviteCode);

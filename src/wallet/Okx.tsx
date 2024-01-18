@@ -11,7 +11,7 @@ import {
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
- * @LastEditTime: 2024-01-17 16:19:47
+ * @LastEditTime: 2024-01-18 09:41:02
  * @Author: John
  */
 type Account = {
@@ -103,7 +103,7 @@ const Okx = forwardRef<
         .connect()
         .then(async (result: Account | null) => {
           console.log("okxwallet.bitcoin.connect", result);
-          if (!result) return CustomToast("connect fail!");
+          if (!result) return CustomToast("The wallet does not support.");
           reslove(result.address);
         })
         .catch(handleCatch);
