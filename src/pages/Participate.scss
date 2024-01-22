@@ -266,6 +266,8 @@
             .boxselect {
               height: 95px;
               button {
+                justify-content: flex-start;
+                padding-left: 30px;
                 span {
                   font-family: Raleway-ExtraBold;
                   font-size: 50px;
@@ -283,8 +285,9 @@
               height: 127px;
               border-bottom: 1px solid #380522;
               li {
-                width: 33%;
-                > span:nth-child(1) {
+                // width: 33%;
+                flex: 1;
+                > span:nth-of-type(1) {
                   font-size: 18px;
                   font-weight: 500;
                   line-height: 21px;
@@ -292,9 +295,12 @@
                   font-family: Raleway-Medium;
 
                   font-feature-settings: "kern" on;
+
+                  justify-content: flex-start !important;
+                  padding-left: 30px;
                 }
 
-                > span:nth-child(2),
+                > span:nth-of-type(2),
                 .btcPrice .price,
                 .btcPrice .unit {
                   font-family: Raleway-Bold;
@@ -308,6 +314,8 @@
                 .btcPrice .unit {
                   font-size: 25px;
                 }
+
+                padding-left: 30px;
               }
               .line {
                 width: 1px;

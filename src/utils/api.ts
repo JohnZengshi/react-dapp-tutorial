@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-10 10:15:30
- * @LastEditTime: 2024-01-15 11:39:04
+ * @LastEditTime: 2024-01-22 09:33:16
  * @Author: John
  */
 import store from "@/store/store";
@@ -19,6 +19,7 @@ export type NodeInfo = {
   contribution: number;
   nftNumber: number;
   illustrate: string;
+  status: 1 | 2 | 3; // 1：认购中；2：已完成；3：待认购
 };
 export async function API_GET_NODE_LIST() {
   let res = await fetchUrl<NodeInfo[]>("/api/node/getNodeSetting", {

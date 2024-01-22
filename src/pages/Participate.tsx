@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-17 13:45:00
+ * @LastEditTime: 2024-01-22 18:58:07
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -119,11 +119,11 @@ export default function () {
         <button
           key={props.key}
           onClick={props.onClick}
-          className={`box-select-item active w-[33%] h-full ${
+          className={`box-select-item active h-full ${
             props.active
               ? "text-[#F58C00] border-b-[#F58C00]"
               : "text-[#333] border-b-[#380522]"
-          } flex border-solid justify-center items-center`}
+          } flex border-solid justify-center items-center flex-1`}
         >
           <span className="uppercase">{props.content}</span>
         </button>
@@ -183,13 +183,13 @@ export default function () {
                   // </Canvas>
                 }
 
-                {nodeInfo?.nodeName == "T1" && (
+                {nodeInfo?.id == 145 && (
                   <img className="h-full" src={boxT1} alt="" />
                 )}
-                {nodeInfo?.nodeName == "T2" && (
+                {nodeInfo?.id == 2 && (
                   <img className="h-full" src={boxT2} alt="" />
                 )}
-                {nodeInfo?.nodeName == "T3" && (
+                {nodeInfo?.id == 3 && (
                   <img className="h-full" src={boxT3} alt="" />
                 )}
               </div>
@@ -260,7 +260,7 @@ export default function () {
               </div>
 
               <div className="rightContent bottomContent w-full h-full box-border flex flex-col">
-                <div className="boxselect w-full flex items-center">
+                <div className="boxselect w-full flex items-center justify-between">
                   {nodeList.map((v, i) => {
                     return (
                       <Fragment key={i}>
@@ -268,6 +268,10 @@ export default function () {
                           content={v.nodeName}
                           active={selectNodeType == v.nodeName}
                           onClick={() => {
+                            if (v.status == 3) {
+                              CustomToast("Coming soon");
+                              return;
+                            }
                             setSelectNodeType(v.nodeName);
                             setNodeInfo(v);
                           }}
@@ -278,7 +282,7 @@ export default function () {
                 </div>
 
                 <ul className="priceDes w-full flex items-center">
-                  <li className="flex flex-col items-center h-full justify-center">
+                  <li className="flex flex-col h-full justify-center">
                     <span className="uppercase text-[#D5D5D5] opacity-60">
                       price
                     </span>
@@ -291,7 +295,7 @@ export default function () {
                       </span>
                     </div>
                   </li>
-                  <div className="line"></div>
+                  {/* <div className="line"></div>
                   <li className="flex flex-col items-center h-full justify-center">
                     <span className="uppercase text-[#D5D5D5] opacity-60">
                       Remaining
@@ -306,7 +310,7 @@ export default function () {
                     <span className="text-[#EAEAEA]">
                       {nodeInfo?.nodeTotal || "0"}
                     </span>
-                  </li>
+                  </li> */}
                 </ul>
 
                 <div className="content-bottom flex flex-col flex-auto">
