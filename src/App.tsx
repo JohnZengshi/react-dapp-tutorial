@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 08:51:29
- * @LastEditTime: 2024-01-17 16:21:25
+ * @LastEditTime: 2024-02-18 13:49:08
  * @Author: John
  */
 // import "./App.css";
@@ -22,6 +22,7 @@ import { useAppDispatch } from "./store/hooks";
 import CustomDialog from "./components/common/CustomDialog";
 import flexible from "./utils/flexible";
 import { SET_IS_SMALL_SCREEN } from "./store/sys";
+import Points from "./pages/Points";
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -40,6 +41,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/participate" element={<Participate />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/points" element={<Points />} />
       </Routes>
       <Toaster />
       <CustomDialog />

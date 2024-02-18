@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-01-17 14:18:58
+ * @LastEditTime: 2024-02-18 17:12:32
  * @Author: John
  */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
@@ -16,7 +16,12 @@ export interface UserState {
     walletInstall: boolean;
     unisatWalletInstalled: boolean;
     walletType: WalletType;
-    notificationTriggerEvent: "CONNECT" | "TRANSACTION" | "SELECT_WALLET" | "";
+    notificationTriggerEvent:
+      | "CONNECT" // 链接钱包
+      | "TRANSACTION" // 交易
+      | "SELECT_WALLET" // 选择钱包
+      | "SELECT_WALLET_MULTI_CHAIN" // 选择钱包（多种链）
+      | "";
     payInfo: {
       cost: number;
       toAddress: string;

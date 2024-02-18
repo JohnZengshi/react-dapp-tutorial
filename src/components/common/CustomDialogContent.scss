@@ -1,0 +1,43 @@
+@include pq {
+  .dialog-content {
+    width: 512px;
+    min-height: 310px;
+
+    .warpper_box {
+      /* 矩形 9 */
+      /* 矩形 9 */
+
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 512px;
+      // height: 310px;
+      height: 100%;
+      border-radius: 5px;
+      opacity: 1;
+      border: 4px solid #f58c00;
+
+      filter: blur(10px);
+    }
+
+    .content_box {
+      /* 矩形 8 */
+
+      position: relative;
+      // left: 0px;
+      // top: 0px;
+      width: 512px;
+      // height: 310px;
+      border-radius: 5px;
+      opacity: 0.8;
+
+      background: #550935;
+
+      box-sizing: border-box;
+      border: 1px solid #f58c00;
+
+      padding: 0 74px;
+      padding-bottom: 53px;
+    }
+  }
+}

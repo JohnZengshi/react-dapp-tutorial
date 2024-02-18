@@ -1,44 +1,5 @@
 @include mq {
-  .dialog-content {
-    width: 273px;
-    height: 166px;
-
-    .warpper_box {
-      /* 矩形 9 */
-      /* 矩形 9 */
-
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      width: 273px;
-      height: 166px;
-      border-radius: 2.66px;
-      opacity: 1;
-
-      border: 2.13px solid #f58c00;
-
-      filter: blur(5.33px);
-    }
-
-    .content_box {
-      /* 矩形 8 */
-
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      width: 273px;
-      height: 166px;
-      border-radius: 2.66px;
-      // opacity: 0.8;
-
-      background: #550935;
-
-      box-sizing: border-box;
-      border: 1px solid #f58c00;
-
-      padding: 0 32px;
-    }
-
+  .CustomDialog {
     .click_icon {
       position: absolute;
       left: 1px;

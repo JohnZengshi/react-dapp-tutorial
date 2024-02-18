@@ -51,6 +51,7 @@ import {
   API_SIGNUP,
 } from "@/utils/api";
 import { Md5 } from "ts-md5";
+import CustomDialogContent from "./CustomDialogContent";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 14:40:57
@@ -67,6 +68,9 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
   ref
 ) {
   const [open, setOpen] = useState(false);
+  const [connectWalletType, setConnectWalletType] = useState<
+    "MULTI_CHAIN" | "SINGLE"
+  >("SINGLE");
 
   const okxRef = useRef<Okx_HandleType>(null);
   const uniSatRef = useRef<UniSat_handleType>(null);
@@ -81,6 +85,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     switch (user.wallet.notificationTriggerEvent) {
       case "SELECT_WALLET": // 选择钱包
         dispatch(SET_NOTIFICATION_TRIGGER_EVENT(""));
+        setConnectWalletType("SINGLE");
         setOpen(true);
 
         break;
@@ -123,6 +128,12 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
         })();
         break;
 
+      case "SELECT_WALLET_MULTI_CHAIN": // 选择钱包（多链）
+        dispatch(SET_NOTIFICATION_TRIGGER_EVENT(""));
+        setConnectWalletType("MULTI_CHAIN");
+        setOpen(true);
+        break;
+
       default:
         break;
     }
@@ -152,6 +163,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
         dispatch(SET_WALLET_TYPE(type));
       },
       _selectWallet() {
+        setConnectWalletType("SINGLE");
         setOpen(true);
       },
     };
@@ -354,39 +366,65 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
             <button
               className="ConnectWallet hover:bg-[#F58C00] hover:text-[#FFFFFF]"
               onClick={() => {
+                setConnectWalletType("SINGLE");
                 setOpen(true);
               }}
             >
               CONNECT WALLET
             </button>
           </DialogTrigger>
-          <DialogContent className="dialog-content">
-            <div className="selectWallet w-full h-full">
-              <div className="warpper_box w-full h-full border-solid border-[#F58C00] blur-[10px] absolute"></div>
-              <div className="content_box flex flex-col items-center absolute w-full h-full  border-solid border-[#F58C00] bg-[#550935] opacity-80 ">
-                <span className="font-[Raleway-Bold] text-[#F58C00] uppercase ">
-                  Connect Wallet
-                </span>
-                <button
-                  className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                  onClick={() => connectWallet("OKX")}
-                >
-                  <img className="" src={okx_logo} alt="" />
-                  <span className="font-[Raleway-Bold]  text-[#fff]">OKX</span>
-                </button>
+          <CustomDialogContent>
+            <div className="selectWallet flex justify-center flex-col">
+              <span className="font-[Raleway-Bold] text-[#F58C00] uppercase ">
+                Connect Wallet
+              </span>
+              <span className="chainTitle flex flex-row items-center">
+                <span className="point"></span> Bitcoin Wallet
+              </span>
+              <button
+                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                onClick={() => connectWallet("OKX")}
+              >
+                <img className="" src={okx_logo} alt="" />
+                <span className="font-[Raleway-Bold]  text-[#fff]">OKX</span>
+              </button>
 
-                <button
-                  className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                  onClick={() => connectWallet("UNISAT")}
-                >
-                  <img className="" src={unisat_logo} alt="" />
-                  <span className="font-[Raleway-Bold]  text-[#fff]">
-                    UNISAT
+              <button
+                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                onClick={() => connectWallet("UNISAT")}
+              >
+                <img className="" src={unisat_logo} alt="" />
+                <span className="font-[Raleway-Bold]  text-[#fff]">UNISAT</span>
+              </button>
+
+              {connectWalletType == "MULTI_CHAIN" && (
+                <>
+                  <span className="chainTitle flex flex-row items-center">
+                    <span className="point"></span> Ethereum Wallet
                   </span>
-                </button>
-              </div>
+                  <button
+                    className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                    onClick={() => connectWallet("OKX")}
+                  >
+                    <img className="" src={okx_logo} alt="" />
+                    <span className="font-[Raleway-Bold]  text-[#fff]">
+                      OKX
+                    </span>
+                  </button>
+
+                  <button
+                    className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                    onClick={() => connectWallet("UNISAT")}
+                  >
+                    <img className="" src={unisat_logo} alt="" />
+                    <span className="font-[Raleway-Bold]  text-[#fff]">
+                      UNISAT
+                    </span>
+                  </button>
+                </>
+              )}
             </div>
-          </DialogContent>
+          </CustomDialogContent>
         </Dialog>
       )}
       {/* 连接钱包按钮 */}
@@ -446,60 +484,57 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
           setInviteCodeDialogOpen(v);
         }}
       >
-        <DialogContent className="dialog-content">
-          <div className="inviteCode w-full h-full">
-            <div className="warpper_box w-full h-full border-solid border-[#F58C00] blur-[10px] absolute"></div>
-            <div className="content_box flex flex-col items-center absolute w-full h-full  border-solid border-[#F58C00] bg-[#550935] opacity-80 ">
-              <span className="items-start">
-                Please enter the invitation code
-              </span>
-              <ul className="flex items-center relative">
-                {typeof inviteCode === "string" &&
-                  fillArray(inviteCode.split(""), 6).map((v, i) => {
-                    return (
-                      <Fragment key={i}>
-                        <li className="flex flex-col">
-                          <span className="value">{v}</span>
-                          <span className="line"></span>
-                        </li>
-                      </Fragment>
-                    );
-                  })}
-
-                <input
-                  value={inviteCode}
-                  type="text"
-                  className="absolute w-full h-full t-0 l-0 opacity-0"
-                  onChange={(e) => {
-                    setInviteCode(
-                      e.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(0, 6)
-                    );
-                  }}
-                />
-              </ul>
-              <button
-                className="confirm_btn"
-                onClick={async () => {
-                  //TODO 用户输入邀请码后登录✔
-                  let address = sessionStorage.getItem(
-                    sessionStorageKey.okx_address
+        <CustomDialogContent>
+          <div className="inviteCode flex justify-center flex-col items-center">
+            <span className="items-start">
+              Please enter the invitation code
+            </span>
+            <ul className="flex items-center relative">
+              {typeof inviteCode === "string" &&
+                fillArray(inviteCode.split(""), 6).map((v, i) => {
+                  return (
+                    <Fragment key={i}>
+                      <li className="flex flex-col">
+                        <span className="value">{v}</span>
+                        <span className="line"></span>
+                      </li>
+                    </Fragment>
                   );
-                  try {
-                    if (address) await signUp(address, inviteCode);
-                  } catch (error) {
-                    return;
-                  }
-                  if (address) {
-                    let res = await signAndLogin(publicKey, address);
-                    if (res == "LOGIN_SUCCESS") setInviteCodeDialogOpen(false);
-                  }
+                })}
+
+              <input
+                value={inviteCode}
+                type="text"
+                className="absolute w-full h-full t-0 l-0 opacity-0"
+                onChange={(e) => {
+                  setInviteCode(
+                    e.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(0, 6)
+                  );
                 }}
-              >
-                Confirm binding
-              </button>
-            </div>
+              />
+            </ul>
+            <button
+              className="confirm_btn"
+              onClick={async () => {
+                //TODO 用户输入邀请码后登录✔
+                let address = sessionStorage.getItem(
+                  sessionStorageKey.okx_address
+                );
+                try {
+                  if (address) await signUp(address, inviteCode);
+                } catch (error) {
+                  return;
+                }
+                if (address) {
+                  let res = await signAndLogin(publicKey, address);
+                  if (res == "LOGIN_SUCCESS") setInviteCodeDialogOpen(false);
+                }
+              }}
+            >
+              Confirm binding
+            </button>
           </div>
-        </DialogContent>
+        </CustomDialogContent>
       </Dialog>
     </>
   );

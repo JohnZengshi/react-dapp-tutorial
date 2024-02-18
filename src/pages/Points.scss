@@ -1,0 +1,245 @@
+@include pq {
+  .Points {
+    height: 100vh;
+    background: #0c0c0c;
+    > [data-radix-scroll-area-viewport] {
+      > div {
+        padding: 0 50px;
+        min-height: 100%;
+      }
+    }
+    .content {
+      padding-top: 88px;
+      max-width: 1420px;
+      margin: 0 auto;
+      .introduce {
+        background-image: url("../assets/points_introduce_bg.png");
+        background-size: cover;
+        height: 218px;
+
+        /* 容器 65 */
+
+        border-radius: 6px;
+        opacity: 1;
+
+        box-sizing: border-box;
+        border: 1px solid #2f2f2f;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 56px;
+        margin-top: 95px;
+
+        p {
+          &:nth-of-type(1) {
+            /* Earn Reward Points */
+
+            font-family: Raleway-Medium;
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 30px;
+            letter-spacing: 0em;
+
+            font-variation-settings: "opsz" auto;
+            color: #f0f0f0;
+          }
+
+          &:nth-of-type(2) {
+            /* Invite your friends to join a Bitcoin layer2 party. Earn points, get exclusive rewards and share the fun! Let's make the Bitcoin ecosystem a better place! */
+
+            opacity: 1;
+
+            font-family: Raleway-Medium;
+            font-size: 18px;
+            font-weight: normal;
+            line-height: 24px;
+            letter-spacing: 0em;
+
+            font-variation-settings: "opsz" auto;
+            font-feature-settings: "kern" on;
+            color: #f0f0f0;
+
+            width: 852px;
+            margin-top: 21px;
+          }
+        }
+      }
+      .title {
+        display: flex;
+        flex-direction: row;
+        margin-top: 79px;
+        margin-bottom: 32px;
+        span {
+          &:nth-of-type(1) {
+            /* My Points */
+            font-family: Raleway-Blod;
+            font-size: 36px;
+            font-weight: 600;
+            line-height: 30px;
+            letter-spacing: 0em;
+
+            font-variation-settings: "opsz" auto;
+            color: #f0f0f0;
+            margin-right: 52px;
+          }
+
+          &:nth-of-type(2) {
+            /* 0 */
+            opacity: 1;
+            font-family: Raleway-Blod;
+            font-size: 36px;
+            font-weight: 600;
+            line-height: 30px;
+            letter-spacing: 0em;
+
+            font-variation-settings: "opsz" auto;
+            color: #f58c00;
+          }
+        }
+      }
+      .taskPart {
+        /* 容器 45 */
+        max-width: 1420px;
+        border-radius: 6px;
+        opacity: 1;
+        background: rgba(25, 25, 27, 0);
+        box-sizing: border-box;
+        border: 1px solid #2f2f2f;
+
+        display: flex;
+        flex-direction: row;
+        padding: 14px 13px;
+        .coverimg {
+          /* 容器 44 */
+          border-radius: 6px;
+          background: rgb(29 29 32 / 75%);
+
+          width: 280px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 30px 0;
+          margin-right: 15px;
+          > img {
+          }
+          > span {
+            /* Know B² Network */
+            opacity: 1;
+
+            font-family: Raleway-Medium;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 30px;
+            letter-spacing: 0em;
+
+            font-variation-settings: "opsz" auto;
+            color: #f0f0f0;
+
+            margin-top: 30px;
+          }
+        }
+        .tasklist {
+          flex: auto;
+          .item {
+            /* 容器 35 */
+            border-radius: 6px;
+            background: rgb(29 29 32 / 75%);
+            padding: 26px 34px;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: 18px;
+            &:first-of-type {
+              margin-top: 0;
+            }
+            .appicon {
+              /* 圆形 1 */
+
+              width: 46px;
+              height: 46px;
+              opacity: 1;
+
+              background: #3d3d3d;
+
+              box-sizing: border-box;
+              border: 1px solid rgba(245, 140, 0, 0.2);
+              border-radius: 50%;
+
+              margin-right: 37px;
+            }
+
+            .taskName {
+              /* Send a Red Envelope and share it on Twitter */
+
+              width: 416px;
+              opacity: 1;
+
+              font-family: Raleway-Medium;
+              font-size: 20px;
+              font-weight: 600;
+              line-height: 30px;
+              letter-spacing: 0em;
+
+              font-variation-settings: "opsz" auto;
+              color: #f0f0f0;
+              margin-right: 20px;
+            }
+
+            .getpoints {
+              margin-left: auto;
+              margin-right: 90px;
+              span {
+                opacity: 1;
+
+                font-family: Raleway-Bold;
+                font-size: 20px;
+                font-weight: bold;
+                line-height: 30px;
+                letter-spacing: 0em;
+
+                font-variation-settings: "opsz" auto;
+                font-feature-settings: "kern" on;
+                &:nth-of-type(1) {
+                  /* +20 */
+                  color: #f58c00;
+                  margin-right: 10px;
+                }
+
+                &:nth-of-type(2) {
+                  /* +20 */
+                  color: #f0f0f0;
+                }
+              }
+            }
+            .btn {
+              /* 容器 36 */
+
+              width: 197px;
+              height: 55px;
+              border-radius: 5px;
+              opacity: 1;
+
+              background: #f58c00;
+
+              /* Get 50 Points */
+
+              font-family: Raleway-Bold;
+              font-size: 22px;
+              font-weight: bold;
+              line-height: 30px;
+              letter-spacing: 0em;
+
+              font-variation-settings: "opsz" auto;
+              font-feature-settings: "kern" on;
+              color: #000000;
+
+              margin-left: auto;
+            }
+          }
+        }
+      }
+    }
+  }
+}
