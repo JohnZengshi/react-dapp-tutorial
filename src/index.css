@@ -15,6 +15,12 @@
   src: url('./assets/font/Raleway-Medium.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: "DINPRO-MEDIUM";
+  src: url('./assets/font/DINPRO-MEDIUM.ttf') format('truetype');
+}
+
+
 
 @keyframes rotate {
   0% {

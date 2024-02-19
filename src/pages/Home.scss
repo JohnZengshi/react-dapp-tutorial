@@ -75,11 +75,11 @@
 
       .nav_box {
         width: 100%;
-        height: 88px;
+        height: var(--pc-nav-height);
       }
 
       .content_1 {
-        padding-top: 88px;
+        padding-top: var(--pc-nav-height);
         margin-top: calc(239px - 88px);
         width: 87%;
         > span {

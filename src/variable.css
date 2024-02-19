@@ -1,4 +1,6 @@
 :root {
   /* toast上下边距 */
-  --toast-viewport-py: 50px; 
+  --toast-viewport-py: 50px;
+
+  --pc-nav-height:88px
 }

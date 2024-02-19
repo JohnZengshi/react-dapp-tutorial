@@ -20,7 +20,7 @@
     .content {
       box-sizing: border-box;
       flex: auto;
-      padding-top: 88px;
+      padding-top: var(--pc-nav-height);
       margin-bottom: 81px;
 
       .card {

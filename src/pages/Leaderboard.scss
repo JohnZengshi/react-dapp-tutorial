@@ -1,0 +1,270 @@
+@include pq {
+  .Leaderboard {
+    height: 100vh;
+    // background-image: url("../assets/leaderboard_bg.png");
+    // background-size: cover;
+    background-color: #0c0c0c;
+    .round {
+      /* 圆形 1 */
+
+      position: absolute;
+      width: 358px;
+      height: 358px;
+      border-radius: 50%;
+      opacity: 1;
+
+      background: #61063b;
+
+      top: calc(var(--pc-nav-height) + 55px);
+
+      filter: blur(150px);
+    }
+    .content {
+      padding-top: var(--pc-nav-height);
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+
+      .list {
+        flex: auto;
+        // padding-bottom: 75px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        &:nth-of-type(1) {
+          border-right: 1px solid #2f2f2f;
+          .top {
+            .title {
+              margin-left: 139px;
+            }
+          }
+        }
+        &:nth-of-type(2) {
+          max-width: 334px;
+          .top {
+            .title {
+              margin-left: 23px;
+            }
+          }
+        }
+
+        .top {
+          min-height: 55px;
+          display: flex;
+          align-items: center;
+
+          border-top: 1px solid #2f2f2f;
+          border-bottom: 1px solid #2f2f2f;
+
+          .title {
+            /* Leaderboard */
+
+            font-family: Raleway-Bold;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: normal;
+            letter-spacing: 0em;
+
+            font-variation-settings: "opsz" auto;
+            font-feature-settings: "kern" on;
+            color: #f0f0f0;
+          }
+        }
+
+        .table_content {
+          max-width: 1171px;
+          width: 100%;
+          margin: 0 auto;
+
+          margin-top: 42px;
+          box-sizing: content-box;
+
+          > [data-radix-scroll-area-viewport] {
+            > div {
+              // padding: 0 25px;
+            }
+          }
+
+          thead {
+            /* 容器 21 */
+
+            height: 35px;
+            opacity: 1;
+
+            background: #2b2b2f;
+            tr {
+              border: none;
+            }
+            th {
+              /* RANK */
+
+              opacity: 1;
+
+              font-family: Raleway-Bold;
+              font-size: 12px;
+              font-weight: bold;
+              line-height: normal;
+              letter-spacing: 0em;
+
+              font-variation-settings: "opsz" auto;
+              font-feature-settings: "kern" on;
+              color: #989898;
+
+              z-index: 0;
+
+              padding: 0 21px;
+
+              border-right: none !important;
+
+              &:last-of-type {
+                text-align: right;
+              }
+            }
+          }
+
+          tbody {
+            tr {
+              border-color: rgba(47, 47, 47, 0.5);
+            }
+            td {
+              /* 1 */
+
+              opacity: 1;
+
+              font-family: DINPro;
+              font-size: 14px;
+              font-weight: 500;
+              line-height: normal;
+              letter-spacing: 0em;
+
+              font-variation-settings: "opsz" auto;
+              color: #f0f0f0;
+              padding: 0 21px;
+
+              height: 56px;
+
+              font-family: DINPRO-MEDIUM;
+
+              .name {
+                display: flex;
+                align-items: center;
+                .circular {
+                  /* 矩形 19 */
+
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 20px;
+                  opacity: 1;
+
+                  background: #373737;
+
+                  margin-right: 10px;
+                }
+              }
+            }
+          }
+        }
+
+        .recentJoinsList {
+          padding-left: 24px;
+          padding-right: 21px;
+          padding-top: 41px;
+          .recentJoinsItem {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-bottom: 14px;
+            margin-top: 18px;
+            &:first-of-type {
+              margin-top: 0;
+            }
+            .icon {
+              /* 矩形 12 */
+
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+              border-radius: 12px;
+              opacity: 1;
+
+              background: #373737;
+
+              box-sizing: border-box;
+              border: 1px solid rgba(245, 140, 0, 0.2);
+
+              margin-right: 14px;
+            }
+
+            .mid {
+              display: flex;
+              flex-direction: column;
+              span {
+                &:nth-of-type(1) {
+                  /* DorothyR16233 */
+
+                  opacity: 1;
+
+                  font-family: Raleway-Medium;
+                  font-size: 12px;
+                  font-weight: normal;
+                  line-height: normal;
+                  letter-spacing: 0em;
+
+                  font-variation-settings: "opsz" auto;
+                  font-feature-settings: "kern" on;
+                  color: #f58c00;
+                }
+
+                &:nth-of-type(2) {
+                  /* Invited by ThomasLisa98710 */
+
+                  opacity: 1;
+
+                  font-family: Raleway-Medium;
+                  font-size: 12px;
+                  font-weight: normal;
+                  line-height: normal;
+                  letter-spacing: 0em;
+
+                  font-variation-settings: "opsz" auto;
+                  font-feature-settings: "kern" on;
+                  color: #505050;
+
+                  margin-top: 2px;
+                }
+              }
+            }
+
+            .time {
+              /* 3 mins ago */
+
+              opacity: 1;
+
+              font-family: Raleway-Medium;
+              font-size: 12px;
+              font-weight: normal;
+              line-height: normal;
+              letter-spacing: 0em;
+
+              font-variation-settings: "opsz" auto;
+              font-feature-settings: "kern" on;
+              color: #989898;
+
+              margin-left: auto;
+            }
+          }
+
+          .line {
+            /* 直线 23 */
+            width: 100%;
+            height: 1px;
+            opacity: 1;
+
+            background-color: #1d1d1d;
+          }
+        }
+      }
+    }
+  }
+}

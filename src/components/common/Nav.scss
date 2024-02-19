@@ -1,9 +1,9 @@
 @include pq {
   .nav_display {
-    height: 88px;
+    height: var(--pc-nav-height);
   }
   .nav {
-    height: 88px;
+    height: var(--pc-nav-height);
 
     .logo {
       width: 96.58px;

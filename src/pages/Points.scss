@@ -9,7 +9,7 @@
       }
     }
     .content {
-      padding-top: 88px;
+      padding-top: var(--pc-nav-height);
       max-width: 1420px;
       margin: 0 auto;
       .introduce {
@@ -109,17 +109,18 @@
         display: flex;
         flex-direction: row;
         padding: 14px 13px;
+        margin-bottom: 30px;
         .coverimg {
           /* 容器 44 */
           border-radius: 6px;
           background: rgb(29 29 32 / 75%);
 
-          width: 280px;
+          min-width: 280px;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          padding: 30px 0;
+          // padding: 30px 0;
           margin-right: 15px;
           > img {
           }
@@ -151,6 +152,7 @@
             flex-direction: row;
             align-items: center;
             margin-top: 18px;
+
             &:first-of-type {
               margin-top: 0;
             }
@@ -170,10 +172,10 @@
               margin-right: 37px;
             }
 
-            .taskName {
+            .taskName,
+            .copyUrl {
               /* Send a Red Envelope and share it on Twitter */
 
-              width: 416px;
               opacity: 1;
 
               font-family: Raleway-Medium;
@@ -185,6 +187,9 @@
               font-variation-settings: "opsz" auto;
               color: #f0f0f0;
               margin-right: 20px;
+              &.taskName {
+                width: 416px;
+              }
             }
 
             .getpoints {
@@ -237,6 +242,103 @@
 
               margin-left: auto;
             }
+
+            .inviteFriend {
+              display: flex;
+              flex-direction: column;
+              > span {
+                &:nth-of-type(1) {
+                  /* You Have Invited */
+
+                  font-family: Raleway-Bold;
+                  font-size: 20px;
+                  font-weight: bold;
+                  line-height: 30px;
+                  letter-spacing: 0em;
+
+                  font-variation-settings: "opsz" auto;
+                  font-feature-settings: "kern" on;
+                  color: #f0f0f0;
+                }
+
+                &:nth-of-type(2) {
+                  /* Invited users, please complete Know B² Network tasks for a successful referral. Thank you! */
+
+                  opacity: 1;
+
+                  font-family: Raleway-Bold;
+                  font-size: 20px;
+                  font-weight: bold;
+                  line-height: 30px;
+                  letter-spacing: 0em;
+
+                  font-variation-settings: "opsz" auto;
+                  font-feature-settings: "kern" on;
+                  color: #ffffff;
+                }
+              }
+
+              > div {
+                display: flex;
+                align-items: center;
+
+                margin-top: 30px;
+                margin-bottom: 25px;
+                > span {
+                  /* * * * */
+
+                  &:nth-of-type(1) {
+                    opacity: 1;
+
+                    font-family: Raleway-Medium;
+                    font-size: 36px;
+                    font-weight: 900;
+                    line-height: 30px;
+                    letter-spacing: 0em;
+
+                    font-variation-settings: "opsz" auto;
+                    color: #f58c00;
+
+                    margin-right: 7px;
+                  }
+
+                  &:nth-of-type(2) {
+                    /* Friends */
+
+                    opacity: 1;
+
+                    font-family: Raleway-Bold;
+                    font-size: 20px;
+                    font-weight: bold;
+                    line-height: 30px;
+                    letter-spacing: 0em;
+
+                    font-variation-settings: "opsz" auto;
+                    font-feature-settings: "kern" on;
+                    color: #ffffff;
+                  }
+                }
+              }
+            }
+          }
+
+          .tasklist_des {
+            /* This task requires a Bitcoin address for completion. Please ensure that your Bitcoin address is connected before proceeding? */
+            display: block;
+            opacity: 1;
+
+            font-family: Raleway-Medium;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 30px;
+            letter-spacing: 0em;
+
+            font-variation-settings: "opsz" auto;
+            font-feature-settings: "kern" on;
+            color: #f0f0f0;
+            margin-top: 41px;
+            padding-left: 53px;
+            padding-bottom: 31px;
           }
         }
       }
