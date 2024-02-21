@@ -1,4 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useLayoutEffect,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { formatBalance, formatValue } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -30,6 +37,15 @@ import { Buffer } from "buffer";
 import { SiweMessage } from "siwe";
 import { BrowserProvider } from "ethers";
 import { useSDK } from "@metamask/sdk-react";
+import detectEthereumProvider from "@metamask/detect-provider";
+import CustomToast from "@/components/common/CustomToast";
+
+export type MetaMask_HandleType = {
+  _connect: () => Promise<string>;
+  _disConnect?: () => Promise<void>;
+  _onSubmit?: (cost: number, toAddress: string) => Promise<string>;
+  _sign?: (address: string, message: string) => Promise<string>;
+};
 
 const formSchema = z.object({
   to: z.custom((val: any) => /^0x[0-9,a-f,A-F]{40}$/.test(val)),
@@ -42,12 +58,35 @@ const formSchema = z.object({
   maxFeePerGas: z.number(),
 });
 
-const MetaMask = () => {
+const MetaMask = forwardRef<
+  MetaMask_HandleType,
+  {
+    handleAccountsChanged: (accounts: string) => void;
+    checkInstalledOk: () => Promise<void>;
+  }
+>((props, ref) => {
   const [open, setOpen] = useState(false);
   const [siweSignStr, setSiweSignStr] = useState<string>("");
   const [siweSignLoading, setSiweSignLoading] = useState<boolean>(false);
   const [sendingTransaction, setSendingTransaction] = useState<boolean>(false);
   const { toast } = useToast();
+
+  useImperativeHandle(ref, () => {
+    return {
+      _connect() {
+        return connect();
+      },
+      // _disConnect() {
+      //   // return disConnect(); TODO disConnect
+      // },
+      // _onSubmit(cost: number, toAddress: string) {
+      //   // return onSubmit(cost, toAddress); TODO onSubmit
+      // },
+      // _sign(address, message) {
+      //   // return sign(address, message); TODO sign
+      // },
+    };
+  });
 
   // 接入sdk
   const { sdk, account, balance, chainId, provider } = useSDK();
@@ -57,26 +96,17 @@ const MetaMask = () => {
     [balance]
   );
 
-  // 定义表单
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      to: "",
-      value: 0,
-      gas: 0,
-      // data: "",
-      gasPrice: 0,
-      maxPriorityFeePerGas: 0,
-      maxFeePerGas: 0,
-    },
-  });
   // 处理连接
   const connect = async () => {
-    try {
-      await sdk?.connect();
-    } catch (err) {
-      console.warn(`failed to connect..`, err);
-    }
+    return new Promise<string>(async (reslove, reject) => {
+      // await checkinstall();
+      try {
+        const res = await sdk?.connect();
+      } catch (err: any) {
+        console.warn(`failed to connect..`, err);
+        CustomToast(err.message);
+      }
+    });
   };
   // 发送交易
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -163,217 +193,52 @@ const MetaMask = () => {
     return siweMessage.prepareMessage();
   }
 
+  // // 检测是否安装okx
+  // function checkinstall(): Promise<void> {
+  //   return new Promise(async (reslove, reject) => {
+  //     const provider = await detectEthereumProvider();
+  //     if (provider) {
+  //       // From now on, this should always be true:
+  //       // provider === window.ethereum
+  //       if (provider !== window.ethereum) {
+  //         console.error("Do you have multiple wallets installed?");
+  //         return;
+  //       }
+  //       console.log("metaMask is installed!");
+  //       reslove();
+  //     } else {
+  //       CustomToast("You haven't installed a wallet yet！");
+  //       console.warn("metaMask is not installed!!");
+  //     }
+  //   });
+  // }
+
   useEffect(() => {}, [sdk]);
+  useEffect(() => {
+    if (account) props.handleAccountsChanged(account);
+  }, [account]);
+  const ethereum = window.ethereum;
+  useLayoutEffect(() => {
+    (async () => {
+      // await checkinstall();
+      // await props.checkInstalledOk(); // TODO checkInstalledOk
+      // 监听账户变化
+      console.log("绑定accountChanged事件");
+      ethereum?.on("accountChanged", handleAccountsChanged);
+    })();
+    return () => {
+      console.log("解绑accountChanged事件");
+      ethereum?.removeListener("accountChanged", handleAccountsChanged);
+    };
+  }, []);
 
-  return (
-    <>
-      {/* MetaMask */}
-      <div className="space-y-1">
-        <Separator className="my-4" />
-        <div className="flex items-center">
-          <Badge variant="default" className="mr-5">
-            MetaMask
-          </Badge>
-        </div>
-      </div>
+  // 用户变化
+  async function handleAccountsChanged(accounts: Array<string>) {
+    // console.log("accounts", accounts);
+    props.handleAccountsChanged(accounts[0]); // TODO handleAccountsChanged
+  }
 
-      {!account && (
-        <>
-          <Button className="mt-5" onClick={connect}>
-            Connect MetaMask
-          </Button>
-        </>
-      )}
-
-      {account && (
-        <>
-          <div>
-            <Separator className="my-4" />
-            <p className="text-sm text-muted-foreground">钱包信息：</p>
-            <Separator className="my-4" />
-
-            <div className="w-full flex h-5 items-center text-sm my-2">
-              <div>Wallet Accounts: </div>
-              <Separator className="mx-2" orientation="vertical" />
-              <div className="ml-auto"> {account}</div>
-            </div>
-
-            <div className="w-full flex h-5 items-center text-sm my-2">
-              <div>Wallet Balance:</div>
-              <Separator className="mx-2" orientation="vertical" />
-              <div className="ml-auto"> {formatBalanceValue}</div>
-            </div>
-
-            <div className="w-full flex h-5 items-center text-sm my-2">
-              <div>Hex ChainId:</div>
-              <Separator className="mx-2" orientation="vertical" />
-              <div className="ml-auto"> {chainId}</div>
-            </div>
-
-            <Separator className="my-4" />
-            <div className="flex items-center">
-              <p className="text-sm text-muted-foreground">发送交易:</p>
-              <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger className="ml-auto" asChild>
-                  <Button>send transactions</Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <ScrollArea className="h-[400px]">
-                    <Form {...form}>
-                      <form
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-1 p-5"
-                      >
-                        <FormField
-                          control={form.control}
-                          name="to"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{field.name + "（*必填）:"}</FormLabel>
-                              <FormControl>
-                                <Input {...field} type="text" />
-                              </FormControl>
-                              <FormDescription>
-                                交易的目标地址。
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="value"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>{field.name + "（*必填）:"}</FormLabel>
-                              <FormControl>
-                                {/* TIP */}
-                                {/* 所有 HTML 输入元素值都是字符串。该库输入组件是使用 Controller 编写为受控 RHF 输入的，这意味着您需要在提交之前自行转换输入值 onChange。 */}
-                                <Input
-                                  {...field}
-                                  value={isNaN(field.value) ? "" : field.value}
-                                  type="number"
-                                  onChange={(event) =>
-                                    field.onChange(
-                                      parseFloat(event.target.value)
-                                    )
-                                  }
-                                />
-                              </FormControl>
-                              <FormDescription>
-                                交易的价值。（以太币数量）
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <div className="pt-10">
-                          {sendingTransaction ? (
-                            <Button disabled>
-                              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                              Please wait
-                            </Button>
-                          ) : (
-                            <Button type="submit">Submit</Button>
-                          )}
-                        </div>
-                      </form>
-                    </Form>
-                  </ScrollArea>
-                </DialogContent>
-              </Dialog>
-            </div>
-            <Separator className="my-4" />
-
-            <div className="flex items-center">
-              <p className="text-sm text-muted-foreground">
-                Sign in with Ethereum:
-              </p>
-
-              {siweSignLoading ? (
-                <Button disabled className="ml-auto">
-                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                  Please wait
-                </Button>
-              ) : (
-                <Button
-                  className="ml-auto"
-                  onClick={async () => {
-                    const siweMessage = await createSiweMessage(
-                      "this is new statement!!"
-                    );
-                    siweSign(siweMessage);
-                  }}
-                >
-                  Sign in
-                </Button>
-              )}
-            </div>
-
-            {siweSignStr != "" && (
-              <>
-                <Separator className="my-4" />
-                <div className="w-full flex items-center text-sm my-2">
-                  <div>Sign: </div>
-                  <Separator className="mx-2" orientation="vertical" />
-                  <div
-                    className="ml-auto max-w-xs"
-                    style={{ overflowWrap: "break-word" }}
-                  >
-                    {" "}
-                    {siweSignStr}
-                  </div>
-                </div>
-              </>
-            )}
-            <Separator className="my-4" />
-            <div className="flex items-center">
-              <p className="text-sm text-muted-foreground">Get permissions:</p>
-
-              <Button
-                className="ml-auto"
-                onClick={async () => {
-                  provider
-                    ?.request({ method: "wallet_getPermissions" })
-                    .then((res) => {
-                      console.log(res);
-                    });
-                }}
-              >
-                Get Permission
-              </Button>
-            </div>
-            <Separator className="my-4" />
-            <div className="flex items-center">
-              <p className="text-sm text-muted-foreground">
-                Revoke permissions:
-              </p>
-
-              <Button
-                className="ml-auto"
-                onClick={async () => {
-                  provider
-                    ?.request({
-                      method: "wallet_revokePermissions",
-                      params: [{}],
-                    })
-                    .then((res) => {
-                      console.log(res);
-                    });
-                }}
-              >
-                Revoke Permission
-              </Button>
-            </div>
-            <Separator className="my-4" />
-          </div>
-        </>
-      )}
-      <Toaster />
-    </>
-  );
-};
+  return <></>;
+});
 
 export default MetaMask;
