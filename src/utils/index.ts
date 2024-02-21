@@ -1,11 +1,13 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-18 09:30:22
+ * @LastEditTime: 2024-02-21 18:32:01
  * @Author: John
  */
 import CustomToast from "@/components/common/CustomToast";
 import { Buffer } from "buffer";
+import { SIGNUP_CHAIN_TYPE } from "./api";
+import { ChainType } from "@/store/reducer";
 export const formatBalance = (rawBalance: string) => {
   // console.log("rawBalance:", rawBalance);
   const balance = (parseInt(rawBalance) / 1000000000000000000).toFixed(4);
@@ -50,6 +52,7 @@ export enum localStorageKey {
 
 export enum sessionStorageKey {
   okx_address = "okx_address",
+  metaMask_address = "metaMask_address",
   roos_token = "roos_token",
 }
 
@@ -75,7 +78,10 @@ export async function fetchUrl<D = any, P = any>(
       sessionStorage.getItem(sessionStorageKey.roos_token)?.split("::::")[1] ||
       "",
     "Accept-Language": "zh-CN",
-    address: sessionStorage.getItem(sessionStorageKey.okx_address) || "",
+    address:
+      sessionStorage.getItem(sessionStorageKey.okx_address) ||
+      sessionStorage.getItem(sessionStorageKey.metaMask_address) ||
+      "",
     // address,
     "Content-Type": "application/json",
   };
@@ -134,4 +140,30 @@ export function fillArray(inputArray: string[], length: number) {
     outputArray[i] = inputArray[i];
   }
   return outputArray;
+}
+
+export function getChainCode(type: ChainType) {
+  let chainType: SIGNUP_CHAIN_TYPE;
+  switch (type) {
+    case "BTC":
+      chainType = 1;
+      break;
+    case "ETHEREUM":
+      chainType = 2;
+      break;
+    case "POLYGON":
+      chainType = 3;
+      break;
+    case "BNB_CHAIN":
+      chainType = 4;
+      break;
+    case "Arbitrum One":
+      chainType = 5;
+      break;
+    default:
+      chainType = 2;
+      break;
+  }
+
+  return chainType;
 }

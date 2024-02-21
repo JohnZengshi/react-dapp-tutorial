@@ -1,11 +1,11 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-10 10:15:30
- * @LastEditTime: 2024-01-22 09:33:16
+ * @LastEditTime: 2024-02-21 19:06:37
  * @Author: John
  */
-import store from "@/store/store";
-import { fetchUrl, localStorageKey } from ".";
+import { fetchUrl, getChainCode, localStorageKey } from ".";
+import { ChainType } from "@/store/reducer";
 
 export type NodeInfo = {
   nodeTotal: number;
@@ -28,9 +28,11 @@ export async function API_GET_NODE_LIST() {
   return res.data;
 }
 
-export async function API_CHECT_EXIT(address: string) {
+export async function API_CHECT_EXIT(address: string, chainType: ChainType) {
   let res = await fetchUrl<{ exist: boolean }>(
-    `/api/account/exist?account=${address}`,
+    `/api/account/exist?account=${address}&chainType=${getChainCode(
+      chainType
+    )}`,
     {
       method: "GET",
     }
@@ -38,14 +40,21 @@ export async function API_CHECT_EXIT(address: string) {
   return res?.data.exist;
 }
 
+export type SIGNUP_CHAIN_TYPE = 1 | 2 | 3 | 4 | 5; // 1=Bitcoin 2=Ethereum 3=Polygon 4=BNB Chain 5=Arbitrum One
 export async function API_SIGNUP(
   address: string,
   shareCode: string,
-  publicKey: string
+  publicKey: string,
+  chainType: ChainType
 ) {
   let res = await fetchUrl<
     any,
-    { account: string; shareCode: string; publicKey: string }
+    {
+      account: string;
+      shareCode: string;
+      publicKey: string;
+      chainType: SIGNUP_CHAIN_TYPE;
+    }
   >(
     `/api/account/signUp`,
     { method: "POST" },
@@ -53,6 +62,7 @@ export async function API_SIGNUP(
       account: address,
       shareCode,
       publicKey,
+      chainType: getChainCode(chainType),
     }
   );
   return res?.data;
@@ -61,11 +71,17 @@ export async function API_SIGNUP(
 export async function API_LOGIN(
   address: string,
   sign: string,
-  publicKey: string
+  publicKey: string,
+  chainType: ChainType
 ) {
   let loginInfo = await fetchUrl<
     { token: string },
-    { account: string; password: string; publicKey: string }
+    {
+      account: string;
+      password: string;
+      publicKey: string;
+      chainType: SIGNUP_CHAIN_TYPE;
+    }
   >(
     "/api/account/signIn",
     {
@@ -75,6 +91,7 @@ export async function API_LOGIN(
       account: address,
       password: sign,
       publicKey,
+      chainType: getChainCode(chainType),
     }
   );
 
@@ -150,4 +167,26 @@ export async function API_GET_USER_SIGNATURE(address: string) {
   );
 
   return res?.data;
+}
+
+export async function API_BIND_OR_NOT() {
+  let res = await fetchUrl<{ result: boolean }>(`/api/account/bindOrNot`, {
+    method: "GET",
+  });
+
+  return res?.data.result;
+}
+
+export async function API_BINDING_RELATIONSHIP(shareCode: string) {
+  let res = await fetchUrl<{ result: boolean }, { shareCode: string }>(
+    `/api/account/bindingRelationship`,
+    {
+      method: "POST",
+    },
+    {
+      shareCode,
+    }
+  );
+
+  return res;
 }

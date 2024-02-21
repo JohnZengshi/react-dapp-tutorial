@@ -12,7 +12,7 @@ import {
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
- * @LastEditTime: 2024-02-21 17:17:57
+ * @LastEditTime: 2024-02-21 18:47:43
  * @Author: John
  */
 type Account = {
@@ -65,7 +65,7 @@ const Okx = forwardRef<
       await checkinstall();
       await props.checkInstalledOk();
       // 监听账户变化
-      // TODO 移动端无法触发？？？
+      // TODO 移动端无法触发？？？✔
       console.log("绑定accountChanged事件");
       if (user.wallet.chainType == "BTC") {
         okxwallet?.bitcoin?.on("accountChanged", handleAccountsChanged);
@@ -158,6 +158,8 @@ const Okx = forwardRef<
     // clearUserData();
     props.handleAccountsChanged(addressInfo);
   }
+
+  // TODO 监听用户切换链（需要重新登录）
 
   // 提交发送交易
   function onSubmit(cost: number, toAddress: string) {

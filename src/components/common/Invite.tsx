@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-01-15 20:41:18
+ * @LastEditTime: 2024-02-21 18:46:28
  * @Author: John
  */
 import "./Invite.scss";
@@ -157,13 +157,6 @@ export default function () {
                 {user.wallet.connected && invitationCode && (
                   <>{invitationCode}</>
                 )}
-                {/* TODO 多余逻辑 */}
-                {/* {!user.wallet.connected && (
-                  <>Connect wallet to receive invitation link.</>
-                )}
-                {user.wallet.connected && !invitationCode && (
-                  <>Purchase ROOSBOX to get invitation link.</>
-                )} */}
               </span>
               <button
                 onClick={() => {

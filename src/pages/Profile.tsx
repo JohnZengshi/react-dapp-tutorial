@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:25:43
- * @LastEditTime: 2024-01-16 17:04:01
+ * @LastEditTime: 2024-02-21 18:46:46
  * @Author: John
  */
 import "./Profile-m.scss";
@@ -71,7 +71,7 @@ export default function () {
         let invitationCode = await API_CHECK_INVITE_CODE();
         if (invitationCode) dispatch(SET_USER_INVITATION_CODE(invitationCode));
       } else if (userBox.status == 2) {
-        // TODO 支付未完成，提示等待
+        // TODO 支付未完成，提示等待✔
         dispatch(
           CUSTOM_DIALOG({
             content: "Please wait, it is being confirmed on the chain! ",
@@ -105,30 +105,6 @@ export default function () {
       setT3NodeInfo(nodeList[2]);
     })();
   }, []);
-  // useEffect(() => {
-  //   (async () => {
-  //     if (user.logInStatus == "LOG_OUT") return;
-  //     if (!user.wallet.payInfo.hash) return;
-  //     let res = await API_PAY_NODE_SMS(
-  //       user.wallet.payInfo.orderNumber,
-  //       user.wallet.payInfo.hash,
-  //       1
-  //     );
-  //     if (res.type == 1) {
-  //       // TODO 查询用户邀请码✔
-  //       let invitationCode = await API_CHECK_INVITE_CODE();
-  //       if (invitationCode) dispatch(SET_USER_INVITATION_CODE(invitationCode));
-  //     } else {
-  //       // TODO 支付未完成，提示等待
-  //       dispatch(
-  //         CUSTOM_DIALOG({
-  //           content:
-  //             "Paid, waiting for confirmation on the chain! Check it later in Personal Center.",
-  //         })
-  //       );
-  //     }
-  //   })();
-  // }, [user.logInStatus, user.wallet.payInfo.hash]);
 
   return (
     <>

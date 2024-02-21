@@ -51,10 +51,14 @@ import {
   API_LOGIN,
   API_PAY_NODE_SMS,
   API_SIGNUP,
+  API_BIND_OR_NOT,
+  SIGNUP_CHAIN_TYPE,
+  API_BINDING_RELATIONSHIP,
 } from "@/utils/api";
 import { Md5 } from "ts-md5";
 import CustomDialogContent from "./CustomDialogContent";
 import MetaMask, { MetaMask_HandleType } from "@/wallet/MetaMask";
+import detectEthereumProvider from "@metamask/detect-provider";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 14:40:57
@@ -73,7 +77,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
   const [open, setOpen] = useState(false);
   const [connectWalletType, setConnectWalletType] = useState<
     "MULTI_CHAIN" | "SINGLE"
-  >("SINGLE");
+  >("MULTI_CHAIN");
 
   const okxRef = useRef<Okx_HandleType>(null);
   const uniSatRef = useRef<UniSat_handleType>(null);
@@ -89,7 +93,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     switch (user.wallet.notificationTriggerEvent) {
       case "SELECT_WALLET": // 选择钱包
         dispatch(SET_NOTIFICATION_TRIGGER_EVENT(""));
-        setConnectWalletType("SINGLE");
+        setConnectWalletType("MULTI_CHAIN");
         setOpen(true);
 
         break;
@@ -101,7 +105,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
         dispatch(SET_NOTIFICATION_TRIGGER_EVENT(""));
         // let hash = await onSubmit(
         //   orderInfo.data.buyAmount,
-        //   "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk" // TODO 测试链接
+        //   "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk" // TODO 测试链接✔
         // );
         // TODO 发送交易✔
         (async () => {
@@ -167,7 +171,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
         dispatch(SET_WALLET_TYPE(type));
       },
       _selectWallet() {
-        setConnectWalletType("SINGLE");
+        setConnectWalletType("MULTI_CHAIN");
         setOpen(true);
       },
     };
@@ -198,6 +202,16 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
           return;
         }
       }
+
+      const metaMask = await detectEthereumProvider();
+      if (metaMask) {
+        if (sessionStorage.getItem(sessionStorageKey.metaMask_address)) {
+          clearInterval(timer);
+          console.log("user is connected metaMask!!");
+          dispatch(SET_WALLET_TYPE("MetaMask"));
+          return;
+        }
+      }
     }, 1000);
 
     return () => {
@@ -206,8 +220,13 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
   }, []);
 
   // TODO 注册✔
-  async function signUp(address: string, inviteCode: string) {
-    await API_SIGNUP(address, inviteCode, publicKey);
+  async function signUp(
+    address: string,
+    inviteCode: string,
+    publicKey: string,
+    chainType: ChainType
+  ) {
+    await API_SIGNUP(address, inviteCode, publicKey, chainType);
   }
 
   // 签名并且登录
@@ -232,7 +251,12 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     console.log("signStr", signStr);
 
     // TODO 登录✔
-    let loginInfo = await API_LOGIN(address, Md5.hashStr(signStr), publicKey);
+    let loginInfo = await API_LOGIN(
+      address,
+      Md5.hashStr(signStr),
+      publicKey,
+      user.wallet.chainType
+    );
 
     if (loginInfo) {
       console.log(loginInfo);
@@ -242,14 +266,24 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
       );
       // TODO 用户登录,写入用户数据✔
       saveUserData(address);
+
+      // TODO 判断用户是否绑定关系
+      if (!(await API_BIND_OR_NOT())) {
+        // TODO 获取页面连接的invite code，弹窗提示，默认测试：NODE123✔
+        let urlInviteCode = getUrlQueryParam(UrlQueryParamsKey.INVITE_CODE);
+        if (urlInviteCode) dispatch(SET_THIRD_INVITE_CODE(urlInviteCode));
+        // TODO 弹窗提示输入邀请码✔
+        setOpen(false);
+        setInviteCodeDialogOpen(true);
+        setInviteCode(urlInviteCode || "");
+      }
+
       return "LOGIN_SUCCESS";
     }
   }
 
   // 检测token
-  async function checkToken(
-    address: string
-  ): Promise<"CONFIRM_THE_INVITATION_CODE" | void> {
+  async function checkToken(address: string): Promise<void> {
     const roos_token = sessionStorage.getItem(sessionStorageKey.roos_token);
     console.log("roos_token", roos_token);
     // TODO 判断是否有token，没有则签名请求获取token✔
@@ -275,15 +309,9 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
           "0305ef2a74bff2e2d68764c557ce2daecac92caa7a9406e3a90c2cf7c5b444a154";
       }
 
-      if (!(await API_CHECT_EXIT(address))) {
-        // TODO 获取页面连接的invite code，弹窗提示，默认测试：NODE123✔
-        let urlInviteCode = getUrlQueryParam(UrlQueryParamsKey.INVITE_CODE);
-        if (urlInviteCode) dispatch(SET_THIRD_INVITE_CODE(urlInviteCode));
-        // TODO 弹窗提示输入邀请码✔
-        setOpen(false);
-        setInviteCodeDialogOpen(true);
-        setInviteCode(urlInviteCode || "");
-        return "CONFIRM_THE_INVITATION_CODE";
+      if (!(await API_CHECT_EXIT(address, user.wallet.chainType))) {
+        // TODO 邀请码未强制要求绑定✔
+        await signUp(address, inviteCode, pk, user.wallet.chainType);
       }
 
       signAndLogin(pk, address);
@@ -311,13 +339,12 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     }
     if (!address) return;
     // TODO 钱包连接完就保存地址✔
-    sessionStorage.setItem(sessionStorageKey.okx_address, address);
+    if (user.wallet.walletType == "OKX")
+      sessionStorage.setItem(sessionStorageKey.okx_address, address);
+    if (user.wallet.walletType == "MetaMask")
+      sessionStorage.setItem(sessionStorageKey.metaMask_address, address);
 
-    let res = await checkToken(address);
-
-    if (res == "CONFIRM_THE_INVITATION_CODE") {
-      return;
-    }
+    await checkToken(address);
   }
 
   // 用户切换
@@ -325,11 +352,11 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     clearUserData();
     if (address) {
       // TODO 钱包切换完就保存地址✔
-      sessionStorage.setItem(sessionStorageKey.okx_address, address);
-      let res = await checkToken(address);
-      if (res == "CONFIRM_THE_INVITATION_CODE") {
-        return;
-      }
+      if (user.wallet.walletType == "OKX")
+        sessionStorage.setItem(sessionStorageKey.okx_address, address);
+      if (user.wallet.walletType == "MetaMask")
+        sessionStorage.setItem(sessionStorageKey.metaMask_address, address);
+      await checkToken(address);
     }
   }
 
@@ -347,6 +374,8 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     dispatch(SET_CONNECTED(false));
     dispatch(SET_ADDRESS(""));
     sessionStorage.removeItem(sessionStorageKey.okx_address);
+    sessionStorage.removeItem(sessionStorageKey.metaMask_address);
+
     sessionStorage.removeItem(sessionStorageKey.roos_token);
   }
 
@@ -375,7 +404,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
             <button
               className="ConnectWallet hover:bg-[#F58C00] hover:text-[#FFFFFF]"
               onClick={() => {
-                setConnectWalletType("SINGLE");
+                setConnectWalletType("MULTI_CHAIN");
                 setOpen(true);
               }}
             >
@@ -586,18 +615,11 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
             <button
               className="confirm_btn"
               onClick={async () => {
-                //TODO 用户输入邀请码后登录✔
-                let address = sessionStorage.getItem(
-                  sessionStorageKey.okx_address
-                );
-                try {
-                  if (address) await signUp(address, inviteCode);
-                } catch (error) {
-                  return;
-                }
-                if (address) {
-                  let res = await signAndLogin(publicKey, address);
-                  if (res == "LOGIN_SUCCESS") setInviteCodeDialogOpen(false);
+                //TODO 用户绑定邀请码✔
+                let res = await API_BINDING_RELATIONSHIP(inviteCode);
+                if (res.data.result) {
+                  setInviteCodeDialogOpen(false);
+                  CustomToast(res.msg);
                 }
               }}
             >

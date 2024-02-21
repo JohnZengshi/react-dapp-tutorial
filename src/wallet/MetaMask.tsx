@@ -82,13 +82,13 @@ const MetaMask = forwardRef<
         return connect(chainType);
       },
       // _disConnect() {
-      //   // return disConnect(); TODO disConnect
+      //   // return disConnect(); TODO 补充disConnect
       // },
       // _onSubmit(cost: number, toAddress: string) {
-      //   // return onSubmit(cost, toAddress); TODO onSubmit
+      //   // return onSubmit(cost, toAddress); TODO 补充onSubmit
       // },
       // _sign(address, message) {
-      //   // return sign(address, message); TODO sign
+      //   // return sign(address, message); TODO 补充sign
       // },
     };
   });
@@ -240,7 +240,7 @@ const MetaMask = forwardRef<
   useLayoutEffect(() => {
     (async () => {
       await checkinstall();
-      await props.checkInstalledOk(); // TODO checkInstalledOk
+      await props.checkInstalledOk();
       // 监听账户变化
       console.log("绑定accountChanged事件");
       ethereum?.on("accountChanged", handleAccountsChanged);
@@ -253,9 +253,10 @@ const MetaMask = forwardRef<
 
   // 用户变化
   async function handleAccountsChanged(accounts: Array<string>) {
-    // console.log("accounts", accounts);
-    props.handleAccountsChanged(accounts[0]); // TODO handleAccountsChanged
+    props.handleAccountsChanged(accounts[0]);
   }
+
+  // TODO 监听用户切换链（需要重新登录）
 
   return <></>;
 });
