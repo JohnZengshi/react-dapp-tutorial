@@ -1,13 +1,19 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-02-21 11:22:31
+ * @LastEditTime: 2024-02-21 16:22:32
  * @Author: John
  */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export type WalletType = "OKX" | "UNISAT" | "MetaMask" | "";
-export type ChainType = "BTC" | "ETHEREUM" | "POLYGON" | "BNB_CHAIN" | "";
+export type ChainType =
+  | "BTC"
+  | "ETHEREUM"
+  | "POLYGON"
+  | "BNB_CHAIN"
+  | "Arbitrum One"
+  | "";
 export interface UserState {
   wallet: {
     address: string | undefined;

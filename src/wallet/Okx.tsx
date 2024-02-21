@@ -1,6 +1,7 @@
 import CustomToast from "@/components/common/CustomToast";
+import { WALLET_ARBITRUM_ONE, WALLET_ETHEREUM } from "@/constant/wallet";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { SET_WALLET_INSTALL } from "@/store/reducer";
+import { ChainType, SET_WALLET_INSTALL } from "@/store/reducer";
 import { BTC_Unit_Converter, isOKApp } from "@/utils";
 import {
   forwardRef,
@@ -11,7 +12,7 @@ import {
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
- * @LastEditTime: 2024-01-18 09:41:02
+ * @LastEditTime: 2024-02-21 17:17:57
  * @Author: John
  */
 type Account = {
@@ -21,7 +22,7 @@ type Account = {
 };
 // let connecting = false; // TODO 优化connecting状态✔
 export type Okx_HandleType = {
-  _connect: () => Promise<string>;
+  _connect: (chainType: ChainType) => Promise<string>;
   _disConnect: () => Promise<void>;
   _onSubmit: (cost: number, toAddress: string) => Promise<string>;
   _sign: (address: string, message: string) => Promise<string>;
@@ -42,8 +43,8 @@ const Okx = forwardRef<
 
   useImperativeHandle(ref, () => {
     return {
-      _connect() {
-        return connect();
+      _connect(chainType: ChainType) {
+        return connect(chainType);
       },
       _disConnect() {
         return disConnect();
@@ -66,14 +67,18 @@ const Okx = forwardRef<
       // 监听账户变化
       // TODO 移动端无法触发？？？
       console.log("绑定accountChanged事件");
-      okxwallet?.bitcoin?.on("accountChanged", handleAccountsChanged);
+      if (user.wallet.chainType == "BTC") {
+        okxwallet?.bitcoin?.on("accountChanged", handleAccountsChanged);
+      }
     })();
     return () => {
       console.log("解绑accountChanged事件");
-      okxwallet?.bitcoin?.removeListener(
-        "accountChanged",
-        handleAccountsChanged
-      );
+      if (user.wallet.chainType == "BTC") {
+        okxwallet?.bitcoin?.removeListener(
+          "accountChanged",
+          handleAccountsChanged
+        );
+      }
     };
   }, []);
 
@@ -96,17 +101,47 @@ const Okx = forwardRef<
   }
 
   // 连接钱包
-  async function connect() {
+  async function connect(chainType: ChainType) {
     return new Promise<string>(async (reslove, reject) => {
       await checkinstall();
-      okxwallet?.bitcoin
-        .connect()
-        .then(async (result: Account | null) => {
-          console.log("okxwallet.bitcoin.connect", result);
-          if (!result) return CustomToast("The wallet does not support.");
-          reslove(result.address);
-        })
-        .catch(handleCatch);
+      if (chainType == "BTC") {
+        okxwallet?.bitcoin
+          .connect()
+          .then(async (result: Account | null) => {
+            console.log("okxwallet.bitcoin.connect", result);
+            if (!result) return CustomToast("The wallet does not support.");
+            reslove(result.address);
+          })
+          .catch(handleCatch);
+      } else if (chainType == "ETHEREUM") {
+        okxwallet
+          ?.request({ method: "eth_requestAccounts" })
+          .then(async (result) => {
+            console.log("okx connect ETHEREUM :", result);
+            if (result.length == 0)
+              return CustomToast("The wallet does not support.");
+            // 切换以太链
+            await okxwallet?.request({
+              method: "wallet_switchEthereumChain",
+              params: [{ chainId: WALLET_ETHEREUM.chainId }],
+            });
+            reslove(result[0]);
+          });
+      } else if (chainType == "Arbitrum One") {
+        okxwallet
+          ?.request({ method: "eth_requestAccounts" })
+          .then(async (result) => {
+            console.log("okx connect Arbitrum One:", result);
+            if (result.length == 0)
+              return CustomToast("The wallet does not support.");
+            // 切换arb链
+            await okxwallet?.request({
+              method: "wallet_addEthereumChain",
+              params: [WALLET_ARBITRUM_ONE],
+            });
+            reslove(result[0]);
+          });
+      }
     });
   }
 
@@ -127,35 +162,36 @@ const Okx = forwardRef<
   // 提交发送交易
   function onSubmit(cost: number, toAddress: string) {
     return new Promise<string>((reslove, reject) => {
-      // reslove(false);
-      console.log("okxwallet.bitcoin", okxwallet?.bitcoin);
-      if (typeof okxwallet?.bitcoin === "undefined") return;
-      console.log(
-        "values.satoshis * BTC_Unit_Converter",
-        cost * BTC_Unit_Converter
-      );
-      // console.log(address, toAddress, cost * BTC_Unit_Converter);
-      console.log("send", okxwallet.bitcoin.send);
-      try {
-        okxwallet.bitcoin
-          .send({
-            from: user.wallet.address,
-            to: toAddress,
-            value: cost,
-          })
-          .then((txid: { txhash: string }) => {
-            // console.log(txid);
+      // console.log("okxwallet.bitcoin", okxwallet?.bitcoin);
+      if (user.wallet.chainType == "BTC") {
+        if (typeof okxwallet?.bitcoin === "undefined") return;
+        console.log(
+          "values.satoshis * BTC_Unit_Converter",
+          cost * BTC_Unit_Converter
+        );
+        // console.log(address, toAddress, cost * BTC_Unit_Converter);
+        console.log("send", okxwallet.bitcoin.send);
+        try {
+          okxwallet.bitcoin
+            .send({
+              from: user.wallet.address,
+              to: toAddress,
+              value: cost,
+            })
+            .then((txid: { txhash: string }) => {
+              // console.log(txid);
 
-            // CustomToast(`请求交易成功,txid值为：${txid.txhash}`);
+              // CustomToast(`请求交易成功,txid值为：${txid.txhash}`);
 
-            reslove(txid.txhash);
-          })
-          .catch((e: any) => {
-            console.log("用户取消交易");
-            handleCatch(e);
-          });
-      } catch (error) {
-        console.log("okxwallet.bitcoin.send错误：", error);
+              reslove(txid.txhash);
+            })
+            .catch((e: any) => {
+              console.log("用户取消交易");
+              handleCatch(e);
+            });
+        } catch (error) {
+          console.log("okxwallet.bitcoin.send错误：", error);
+        }
       }
     });
   }
@@ -179,13 +215,15 @@ const Okx = forwardRef<
       // const message = `Welcome to OKX!\n\nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${result.address}\n    \nNonce:\n${nonce}\n`;
       // const message = "need sign string";
       console.log("签名?");
-      okxwallet?.bitcoin
-        .signMessage(message, { from: address }) // OKX app 钱包新的签名方法传参（官网的方法传参不对）！！！！
-        .then(async (sign: string) => {
-          console.log("okx signature:", sign);
-          reslove(sign);
-        })
-        .catch(handleCatch);
+      if (user.wallet.chainType == "BTC") {
+        okxwallet?.bitcoin
+          .signMessage(message, { from: address }) // OKX app 钱包新的签名方法传参（官网的方法传参不对）！！！！
+          .then(async (sign: string) => {
+            console.log("okx signature:", sign);
+            reslove(sign);
+          })
+          .catch(handleCatch);
+      }
     });
   }
 

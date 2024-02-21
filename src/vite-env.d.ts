@@ -1,14 +1,40 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:22:01
- * @LastEditTime: 2024-01-18 09:40:08
+ * @LastEditTime: 2024-02-21 15:29:53
  * @Author: John
  */
 /// <reference types="vite/client" />
 
+type ethereum = {
+  on: any;
+  removeListener: any;
+  request: ({
+    method,
+  }: {
+    method:
+      | "eth_requestAccounts"
+      | "wallet_switchEthereumChain"
+      | "wallet_addEthereumChain";
+    params?: Partial<{
+      chainId: string;
+      rpcUrls: string[];
+      blockExplorerUrls: string[];
+      chainName: string;
+      nativeCurrency: {
+        symbol: string;
+        decimals: number;
+      };
+    }>[];
+  }) => Promise<string[]>;
+};
 interface Window {
-  ethereum?: any;
-  okxwallet: { bitcoin: any } | undefined;
+  ethereum?: ethereum;
+  okxwallet:
+    | ({
+        bitcoin: any;
+      } & ethereum)
+    | undefined;
   unisat:
     | {
         requestAccounts: () => Promise<string[]>;

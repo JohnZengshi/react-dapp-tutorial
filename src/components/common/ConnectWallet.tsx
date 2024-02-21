@@ -55,7 +55,6 @@ import {
 import { Md5 } from "ts-md5";
 import CustomDialogContent from "./CustomDialogContent";
 import MetaMask, { MetaMask_HandleType } from "@/wallet/MetaMask";
-import { MetaMaskProvider } from "@metamask/sdk-react";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 14:40:57
@@ -177,9 +176,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
   const okxwallet = window.okxwallet;
   const unisat = window.unisat;
 
-  useEffect(() => {
-    console.log("user", user);
-  }, [user]);
+  useEffect(() => {}, [user]);
   useEffect(() => {
     let timer = setInterval(async () => {
       if (unisat) {
@@ -261,13 +258,15 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
 
       // TODO 获取publickey 欧易app内无法获取？？？
       let pk = "";
-      if (!isOKApp) {
-        if (user.wallet.walletType == "OKX") {
-          pk = await okxwallet?.bitcoin.getPublicKey();
-          if (!pk) {
-            CustomToast("get public key fail!");
-            return;
-          }
+      if (
+        !isOKApp &&
+        user.wallet.walletType == "OKX" &&
+        user.wallet.chainType == "BTC"
+      ) {
+        pk = await okxwallet?.bitcoin.getPublicKey();
+        if (!pk) {
+          CustomToast("get public key fail!");
+          return;
         }
         setPublicKey(pk);
       } else {
@@ -296,18 +295,19 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
 
   // 连接钱包
   async function connectWallet(type: WalletType, chain: ChainType) {
+    console.log("chain check", chain);
     dispatch(SET_WALLET_TYPE(type));
     dispatch(SET_CHAIN_TYPE(chain));
     let address;
     if (type == "OKX") {
       if (!okxRef.current) return;
-      address = await okxRef.current?._connect();
+      address = await okxRef.current?._connect(chain);
     } else if (type == "UNISAT") {
       if (!uniSatRef.current) return;
       address = await uniSatRef.current?._connect();
     } else if (type == "MetaMask") {
       if (!metaMaskRef.current) return;
-      address = await metaMaskRef.current?._connect();
+      address = await metaMaskRef.current?._connect(chain);
     }
     if (!address) return;
     // TODO 钱包连接完就保存地址✔
@@ -408,6 +408,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
 
               {connectWalletType == "MULTI_CHAIN" && (
                 <>
+                  {/* Ethereum */}
                   <span className="chainTitle flex flex-row items-center">
                     <span className="point"></span> Ethereum Wallet
                   </span>
@@ -431,13 +432,39 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
                     </span>
                   </button>
 
-                  <span className="chainTitle flex flex-row items-center">
+                  {/* Polygon */}
+                  {/* <span className="chainTitle flex flex-row items-center">
                     <span className="point"></span> Polygon
                   </span>
 
                   <button
                     className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
                     onClick={() => connectWallet("MetaMask", "POLYGON")}
+                  >
+                    <img className="" src={unisat_logo} alt="" />
+                    <span className="font-[Raleway-Bold]  text-[#fff]">
+                      MetaMask
+                    </span>
+                  </button> */}
+
+                  {/* Arbitrum One */}
+                  <span className="chainTitle flex flex-row items-center">
+                    <span className="point"></span> Arbitrum One
+                  </span>
+
+                  <button
+                    className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                    onClick={() => connectWallet("OKX", "Arbitrum One")}
+                  >
+                    <img className="" src={okx_logo} alt="" />
+                    <span className="font-[Raleway-Bold]  text-[#fff]">
+                      OKX
+                    </span>
+                  </button>
+
+                  <button
+                    className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                    onClick={() => connectWallet("MetaMask", "Arbitrum One")}
                   >
                     <img className="" src={unisat_logo} alt="" />
                     <span className="font-[Raleway-Bold]  text-[#fff]">
@@ -503,22 +530,22 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
       )}
 
       {user.wallet.walletType === "MetaMask" && (
-        <MetaMaskProvider
-          sdkOptions={{
-            dappMetadata: {},
+        // <MetaMaskProvider
+        //   sdkOptions={{
+        //     dappMetadata: {},
+        //   }}
+        // >
+        <MetaMask
+          ref={metaMaskRef}
+          handleAccountsChanged={async (accounts) => {
+            console.log("MetaMask account change!", accounts);
+            handleAccountsChanged(accounts);
           }}
-        >
-          <MetaMask
-            ref={metaMaskRef}
-            handleAccountsChanged={async (accounts) => {
-              console.log("MetaMask account change!", accounts);
-              handleAccountsChanged(accounts);
-            }}
-            checkInstalledOk={() =>
-              connectWallet("MetaMask", user.wallet.chainType)
-            }
-          />
-        </MetaMaskProvider>
+          checkInstalledOk={() =>
+            connectWallet("MetaMask", user.wallet.chainType)
+          }
+        />
+        // </MetaMaskProvider>
       )}
       {/* 输入邀请码弹窗 */}
       <Dialog
