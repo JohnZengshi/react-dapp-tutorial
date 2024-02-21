@@ -1,12 +1,13 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-02-18 17:12:32
+ * @LastEditTime: 2024-02-21 11:22:31
  * @Author: John
  */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-export type WalletType = "OKX" | "UNISAT" | "";
+export type WalletType = "OKX" | "UNISAT" | "MetaMask" | "";
+export type ChainType = "BTC" | "ETHEREUM" | "POLYGON" | "BNB_CHAIN" | "";
 export interface UserState {
   wallet: {
     address: string | undefined;
@@ -29,6 +30,7 @@ export interface UserState {
       orderNumber: number;
     } | null;
     thirdInviteCode: string;
+    chainType: ChainType;
   };
   logInStatus: "LOGIN" | "LOG_OUT";
 }
@@ -50,6 +52,7 @@ const initialState: UserState = {
       orderNumber: 0,
     },
     thirdInviteCode: "",
+    chainType: "",
   },
   logInStatus: "LOG_OUT",
 };
@@ -104,6 +107,13 @@ export const userSlice = createSlice({
     ) => {
       state.logInStatus = action.payload;
     },
+
+    SET_CHAIN_TYPE: (
+      state,
+      action: PayloadAction<UserState["wallet"]["chainType"]>
+    ) => {
+      state.wallet.chainType = action.payload;
+    },
   },
 });
 
@@ -120,6 +130,7 @@ export const {
   SET_PAY_INFO,
   SET_THIRD_INVITE_CODE,
   SET_LOGINSTATUS,
+  SET_CHAIN_TYPE,
 } = userSlice.actions;
 
 export default userSlice.reducer;
