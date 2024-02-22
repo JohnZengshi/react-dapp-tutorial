@@ -6,7 +6,7 @@ import {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { formatBalance, formatValue } from "@/utils";
+import { Web3Utils } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -35,19 +35,22 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Buffer } from "buffer";
 import { SiweMessage } from "siwe";
-import { BrowserProvider } from "ethers";
+
 // import { useSDK } from "@metamask/sdk-react";
 import detectEthereumProvider from "@metamask/detect-provider";
 import CustomToast from "@/components/common/CustomToast";
-import { WALLET_ARBITRUM_ONE, WALLET_ETHEREUM } from "@/constant/wallet";
+import {
+  ETHEREUM_RPC,
+  WALLET_ARBITRUM_ONE,
+  WALLET_ETHEREUM,
+} from "@/constant/wallet";
 import { useAppSelector } from "@/store/hooks";
 import { ChainType } from "@/store/reducer";
-
 export type MetaMask_HandleType = {
   _connect: (chainType: ChainType) => Promise<string>;
   _disConnect?: () => Promise<void>;
-  _onSubmit?: (cost: number, toAddress: string) => Promise<string>;
-  _sign?: (address: string, message: string) => Promise<string>;
+  _onSubmit: (cost: number, toAddress: string) => Promise<string>;
+  _sign: (address: string, message: string) => Promise<string>;
 };
 
 const formSchema = z.object({
@@ -84,12 +87,12 @@ const MetaMask = forwardRef<
       // _disConnect() {
       //   // return disConnect(); TODO 补充disConnect
       // },
-      // _onSubmit(cost: number, toAddress: string) {
-      //   // return onSubmit(cost, toAddress); TODO 补充onSubmit
-      // },
-      // _sign(address, message) {
-      //   // return sign(address, message); TODO 补充sign
-      // },
+      _onSubmit(cost: number, toAddress: string) {
+        return onSubmit(cost, toAddress); //TODO 补充onSubmit✔
+      },
+      _sign(address, message) {
+        return sign(address, message); // TODO 补充sign
+      },
     };
   });
 
@@ -107,17 +110,17 @@ const MetaMask = forwardRef<
       // await checkinstall();
       try {
         let res = await ethereum?.request({
-          method: "eth_requestAccounts",
+          method: ETHEREUM_RPC.EthRequestAccounts,
         });
         if (res) {
           if (chainType == "ETHEREUM") {
             await ethereum?.request({
-              method: "wallet_switchEthereumChain",
+              method: ETHEREUM_RPC.WalletSwitchEthereumChain,
               params: [{ chainId: WALLET_ETHEREUM.chainId }],
             });
           } else if (chainType == "Arbitrum One") {
             await ethereum?.request({
-              method: "wallet_addEthereumChain",
+              method: ETHEREUM_RPC.WalletAddEthereumChain,
               params: [WALLET_ARBITRUM_ONE],
             });
           }
@@ -132,89 +135,48 @@ const MetaMask = forwardRef<
     });
   };
   // 发送交易
-  // function onSubmit(values: z.infer<typeof formSchema>) {
-  //   // Do something with the form values.
-  //   // ✅ This will be type-safe and validated.
-  //   console.log("form:", values);
-  //   if (sendingTransaction) return;
+  function onSubmit(cost: number, toAddress: string) {
+    return new Promise<string>((reslove, reject) => {
+      ethereum
+        ?.request({
+          method: ETHEREUM_RPC.EthSendTransaction,
+          params: [
+            {
+              from: user.wallet.address,
+              to: "0x21C4014fE3117e29acAE89F3DD5786b64000A02C",
+              // to: toAddress,
+              value: Web3Utils.toWei(cost, "ether"),
+            },
+          ],
+        })
+        .then((hash) => {
+          console.log("eth_sendTransaction success:", hash);
+          reslove(hash);
+        })
+        .catch((err) => {
+          handleCatch(err as any);
+        });
+    });
+  }
 
-  //   const params = [
-  //     {
-  //       from: account, // The user's active address.
-  //       to: values.to, // Required except during contract publications.
-  //       // value: utils.toWei(values.value, 'ether'), // Only required to send ether to the recipient from the initiating external account.
-  //       value: formatValue(values.value),
-  //     },
-  //   ];
-  //   console.log("params:", params);
-  //   setSendingTransaction(true);
-
-  //   provider
-  //     ?.request({ method: "eth_sendTransaction", params })
-  //     .then((txHash: any) => {
-  //       setSendingTransaction(false);
-  //       console.log(txHash);
-  //       // alert("Hash值为：" + txHash)
-  //       toast({
-  //         title: "交易处理中",
-  //         description: "Hash值为：" + txHash,
-  //       });
-
-  //       setOpen(false);
-  //     })
-  //     .catch((error: any) => {
-  //       setSendingTransaction(false);
-  //       toast({
-  //         variant: "destructive",
-  //         title: "Uh oh! Something went wrong.",
-  //         description: error.message,
-  //         action: <ToastAction altText="Try again">Try again</ToastAction>,
-  //       });
-  //       console.error(error);
-  //     });
-  // }
-  // 登录
-  // const siweSign = async (siweMessage: string) => {
-  //   setSiweSignLoading(true);
-  //   try {
-  //     const from = account;
-  //     const msg = `0x${Buffer.from(siweMessage, "utf8").toString("hex")}`;
-  //     const sign = await provider?.request({
-  //       method: "personal_sign",
-  //       params: [msg, from],
-  //     });
-  //     console.log(sign);
-  //     if (typeof sign == "string") setSiweSignStr(sign);
-  //     setSiweSignLoading(false);
-  //   } catch (err: any) {
-  //     console.error(err);
-  //     toast({
-  //       variant: "destructive",
-  //       title: "Uh oh! Something went wrong.",
-  //       description: err.message,
-  //       action: <ToastAction altText="Try again">Try again</ToastAction>,
-  //     });
-  //     setSiweSignLoading(false);
-  //   }
-  // };
-  // async function createSiweMessage(statement: string) {
-  //   const domain = window.location.host;
-  //   const origin = window.location.origin;
-  //   const provider = new BrowserProvider(window.ethereum);
-  //   const signer = await provider.getSigner();
-  //   const siweMessage = new SiweMessage({
-  //     domain,
-  //     address: signer.address,
-  //     statement,
-  //     uri: origin,
-  //     version: "1",
-  //     nonce: "32891757",
-  //     chainId: 1,
-  //   });
-
-  //   console.log(siweMessage);
-  //   return siweMessage.prepareMessage();
-  // }
+  // 签名
+  const sign = (address: string, message: string) => {
+    return new Promise<string>((reslove, reject) => {
+      ethereum
+        ?.request({
+          method: ETHEREUM_RPC.PERSONAL_SIGN,
+          params: [
+            `0x${Buffer.from(message, "utf8").toString("hex")}`,
+            address,
+          ],
+        })
+        .then((res) => {
+          console.log(res);
+          reslove(res);
+        })
+        .catch((err) => handleCatch(err));
+    });
+  };
 
   // // 检测是否安装okx
   function checkinstall(): Promise<void> {
@@ -254,6 +216,16 @@ const MetaMask = forwardRef<
   // 用户变化
   async function handleAccountsChanged(accounts: Array<string>) {
     props.handleAccountsChanged(accounts[0]);
+  }
+
+  // 统一处理错误
+  function handleCatch(e: { code: number; message: string }) {
+    // console.log(e.code);
+    if (typeof e.message === "string") {
+      console.warn(e.message);
+      if (/[\u4e00-\u9fa5]/.test(e.message)) return;
+      CustomToast(e.message);
+    }
   }
 
   // TODO 监听用户切换链（需要重新登录）

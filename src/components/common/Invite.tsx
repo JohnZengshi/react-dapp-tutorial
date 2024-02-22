@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-02-21 18:46:28
+ * @LastEditTime: 2024-02-22 14:13:01
  * @Author: John
  */
 import "./Invite.scss";
@@ -19,6 +19,7 @@ import {
 import { UrlQueryParamsKey, shortenString } from "@/utils";
 import CustomToast from "./CustomToast";
 import { SET_USER_INVITATION_CODE } from "@/store/reducer";
+import * as clipboard from "clipboard-polyfill";
 
 export default function () {
   const invitationCode = useAppSelector(
@@ -136,7 +137,7 @@ export default function () {
               <button
                 onClick={() => {
                   if (user.wallet.connected && invitationCode) {
-                    navigator.clipboard.writeText(
+                    clipboard.writeText(
                       `${import.meta.env.VITE_BASE_URL}/#/participate?${
                         UrlQueryParamsKey.INVITE_CODE
                       }=${invitationCode}`
@@ -160,8 +161,13 @@ export default function () {
               </span>
               <button
                 onClick={() => {
-                  if (user.wallet.connected && invitationCode) {
-                    navigator.clipboard.writeText(invitationCode);
+                  if (
+                    user.wallet.connected &&
+                    invitationCode &&
+                    user.wallet.address
+                  ) {
+                    // navigator.clipboard.writeText(invitationCode);
+                    clipboard.writeText(user.wallet.address);
                     CustomToast("Copy Success");
                   }
                 }}

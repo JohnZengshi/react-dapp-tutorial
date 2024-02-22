@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-18 10:16:20
+ * @LastEditTime: 2024-02-22 09:40:12
  * @Author: John
  */
 import { defineConfig, loadEnv } from "vite";
@@ -13,7 +13,7 @@ import { createHtmlPlugin } from "vite-plugin-html";
 export default ({ mode }) => {
   return defineConfig({
     server: {
-      // host: "192.168.10.167",
+      host: "192.168.10.167",
       // https: true,
       proxy: {
         "/dev": {

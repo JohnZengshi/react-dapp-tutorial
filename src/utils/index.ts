@@ -1,13 +1,15 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-02-21 18:32:01
+ * @LastEditTime: 2024-02-22 10:40:24
  * @Author: John
  */
 import CustomToast from "@/components/common/CustomToast";
 import { Buffer } from "buffer";
 import { SIGNUP_CHAIN_TYPE } from "./api";
 import { ChainType } from "@/store/reducer";
+import { Web3 } from "web3";
+
 export const formatBalance = (rawBalance: string) => {
   // console.log("rawBalance:", rawBalance);
   const balance = (parseInt(rawBalance) / 1000000000000000000).toFixed(4);
@@ -167,3 +169,7 @@ export function getChainCode(type: ChainType) {
 
   return chainType;
 }
+
+const web3 = new Web3();
+
+export const Web3Utils = web3.utils;

@@ -1,8 +1,12 @@
 import CustomToast from "@/components/common/CustomToast";
-import { WALLET_ARBITRUM_ONE, WALLET_ETHEREUM } from "@/constant/wallet";
+import {
+  ETHEREUM_RPC,
+  WALLET_ARBITRUM_ONE,
+  WALLET_ETHEREUM,
+} from "@/constant/wallet";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { ChainType, SET_WALLET_INSTALL } from "@/store/reducer";
-import { BTC_Unit_Converter, isOKApp } from "@/utils";
+import { BTC_Unit_Converter, Web3Utils, isOKApp } from "@/utils";
 import {
   forwardRef,
   useImperativeHandle,
@@ -12,7 +16,7 @@ import {
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
- * @LastEditTime: 2024-02-21 18:47:43
+ * @LastEditTime: 2024-02-22 11:51:24
  * @Author: John
  */
 type Account = {
@@ -115,28 +119,28 @@ const Okx = forwardRef<
           .catch(handleCatch);
       } else if (chainType == "ETHEREUM") {
         okxwallet
-          ?.request({ method: "eth_requestAccounts" })
+          ?.request({ method: ETHEREUM_RPC.EthRequestAccounts })
           .then(async (result) => {
             console.log("okx connect ETHEREUM :", result);
             if (result.length == 0)
               return CustomToast("The wallet does not support.");
             // 切换以太链
             await okxwallet?.request({
-              method: "wallet_switchEthereumChain",
+              method: ETHEREUM_RPC.WalletSwitchEthereumChain,
               params: [{ chainId: WALLET_ETHEREUM.chainId }],
             });
             reslove(result[0]);
           });
       } else if (chainType == "Arbitrum One") {
         okxwallet
-          ?.request({ method: "eth_requestAccounts" })
+          ?.request({ method: ETHEREUM_RPC.EthRequestAccounts })
           .then(async (result) => {
             console.log("okx connect Arbitrum One:", result);
             if (result.length == 0)
               return CustomToast("The wallet does not support.");
             // 切换arb链
             await okxwallet?.request({
-              method: "wallet_addEthereumChain",
+              method: ETHEREUM_RPC.WalletAddEthereumChain,
               params: [WALLET_ARBITRUM_ONE],
             });
             reslove(result[0]);
@@ -194,6 +198,23 @@ const Okx = forwardRef<
         } catch (error) {
           console.log("okxwallet.bitcoin.send错误：", error);
         }
+      } else {
+        okxwallet
+          ?.request({
+            method: ETHEREUM_RPC.EthSendTransaction,
+            params: [
+              {
+                from: user.wallet.address,
+                // to: toAddress,
+                to: "0x21C4014fE3117e29acAE89F3DD5786b64000A02C",
+                value: Web3Utils.toWei(cost, "ether"),
+              },
+            ],
+          })
+          .then((hash) => {
+            reslove(hash);
+          })
+          .catch((err) => handleCatch(err));
       }
     });
   }
@@ -225,6 +246,17 @@ const Okx = forwardRef<
             reslove(sign);
           })
           .catch(handleCatch);
+      } else {
+        okxwallet
+          ?.request({
+            method: ETHEREUM_RPC.EthSign,
+            params: [address, message],
+          })
+          .then((sign) => {
+            console.log(sign);
+            reslove(sign);
+          })
+          .catch((err) => handleCatch(err));
       }
     });
   }
