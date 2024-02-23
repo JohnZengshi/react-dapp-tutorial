@@ -17,7 +17,7 @@ export default ({ mode }) => {
       // https: true,
       proxy: {
         "/dev": {
-          target: "http://192.168.10.166:8086",
+          target: "http://192.168.10.166:8096",
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/dev/, ""),
         },

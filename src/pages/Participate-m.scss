@@ -2,7 +2,7 @@
   .Participate {
     position: relative;
     // background-color: #000000;
-    // background-image: url("../assets/home_bg.png");
+    background-image: url("../assets/home_bg.png");
     height: 100vh;
     width: 100vw;
     background-repeat: no-repeat;
@@ -70,7 +70,7 @@
               // transform: scale(1.5);
               width: 258px;
               opacity: 1;
-              // animation: rotate 40s linear infinite;
+              animation: rotate 40s linear infinite;
               margin: 0 auto;
               // margin-top: 18px;
             }
@@ -188,7 +188,7 @@
                 font-family: Raleway-Medium;
                 font-size: 37.86px;
                 font-weight: 600;
-                line-height: 24.82px;
+                line-height: 37.86px;
                 text-transform: uppercase;
                 letter-spacing: 0em;
 
@@ -429,6 +429,111 @@
 
                 margin-top: 15px;
               }
+
+              .custom_input {
+                /* 矩形 2 */
+                display: flex;
+                flex-direction: row;
+                height: 36px;
+
+                margin-top: 15px;
+
+                .reduce,
+                .add {
+                  /* - */
+                  /* 组 37 */
+                  text-align: center;
+
+                  width: 36px;
+                  height: 36px;
+
+                  opacity: 1;
+
+                  background: #f58c00;
+
+                  opacity: 1;
+
+                  font-family: Raleway-Medium;
+                  /* - */
+
+                  font-family: Raleway;
+                  font-size: 20px;
+                  font-weight: 600;
+                  line-height: normal;
+                  text-transform: uppercase;
+                  letter-spacing: 0em;
+
+                  font-feature-settings: "kern" on;
+                  color: #333333;
+                }
+
+                .reduce {
+                  border-radius: 3px 0px 0px 3px;
+                }
+
+                .add {
+                  border-radius: 0px 3px 3px 0px;
+                }
+                input {
+                  height: 100%;
+                  border-radius: 0;
+                  opacity: 1;
+                  background: rgba(245, 140, 0, 0.1);
+                  box-shadow: 0px 3.55px 35.49px -17px #633800;
+                  border-color: #f58c00;
+
+                  /* 2 */
+
+                  opacity: 1;
+                  font-family: DINPRO-MEDIUM;
+                  font-size: 16px;
+                  font-weight: 500;
+                  line-height: normal;
+                  text-transform: uppercase;
+                  letter-spacing: 0em;
+
+                  font-feature-settings: "kern" on;
+                  color: #f58c00;
+                  text-align: center;
+                  outline: none;
+                  padding: 0;
+                }
+              }
+
+              .totalCost {
+                margin-top: 10px;
+                margin-bottom: 15px;
+                span {
+                  &:nth-of-type(1) {
+                    /* Cost: */
+                    opacity: 0.5;
+
+                    font-family: Raleway-Medium;
+                    font-size: 14px;
+                    font-weight: 500;
+                    line-height: normal;
+                    letter-spacing: 0em;
+
+                    font-variation-settings: "opsz" auto;
+                    color: #f58c00;
+                  }
+
+                  &:nth-of-type(2) {
+                    /* 300USdt */
+
+                    font-family: DINPRO-MEDIUM;
+                    font-size: 14px;
+                    font-weight: bold;
+                    line-height: normal;
+                    text-transform: uppercase;
+                    letter-spacing: 0em;
+
+                    font-variation-settings: "opsz" auto;
+                    font-feature-settings: "kern" on;
+                    color: #f58c00;
+                  }
+                }
+              }
             }
           }
 
@@ -462,7 +567,6 @@
 
             /* 矩形 2 */
 
-            width: 240px;
             height: 33px;
             border-radius: 1.93px;
             opacity: 1;
@@ -485,10 +589,12 @@
 
             font-feature-settings: "kern" on;
             color: #333333;
-
-            margin-top: 20px;
           }
         }
+      }
+
+      .Participate-invite {
+        margin-top: 0;
       }
     }
   }

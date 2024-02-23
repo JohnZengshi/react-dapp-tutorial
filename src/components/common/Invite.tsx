@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-02-23 14:49:06
+ * @LastEditTime: 2024-02-23 16:39:03
  * @Author: John
  */
 import "./Invite.scss";
@@ -22,7 +22,7 @@ import {
   API_GET_NODE_LIST,
   NodeInfo,
 } from "@/utils/api";
-import { UrlQueryParamsKey, shortenString } from "@/utils";
+import { UrlQueryParamsKey, isMobile, shortenString } from "@/utils";
 import CustomToast from "./CustomToast";
 import { SET_USER_INVITATION_CODE } from "@/store/reducer";
 import * as clipboard from "clipboard-polyfill";

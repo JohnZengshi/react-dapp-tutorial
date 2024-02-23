@@ -199,32 +199,38 @@ const MetaMask = forwardRef<
       //   .on("receipt", function (receipt) {
       //     console.log(`Receipt: ${JSON.stringify(receipt)}`);
       //   });
-      const gasPrice = await web3.eth.getGasPrice(); // 获取预计转账费用
+      // const gasPrice = await web3.eth.getGasPrice(); // 获取预计转账费用
 
       const cost = 1000000;
-      usdtContract.methods
-        .approve(contractAddress, cost)
-        .send({ from: user.wallet.address })
-        .then((res) => {
-          console.log(res);
-          // return;
-          contract.methods
-            .ERC20SwapERC721(1, cost)
-            .send({
-              from: user.wallet.address,
-              gas: gasPrice.toString(),
-              // value: toWei("0.001", "ether"),
-              // value: "0",
-              // data: res.transactionHash,
-            })
-            .then(function (receipt) {
-              // other parts of code to use receipt
-              console.log("receipt", receipt);
-            })
-            .catch((err) => {
-              console.error(err);
-            });
-        });
+      return Promise.all([web3.eth.getGasPrice()]).then(async (data) => {
+        // @ts-ignore
+        let gasPrice = parseInt(data[0]);
+        usdtContract.methods
+          .approve(contractAddress, cost)
+          .send({ from: user.wallet.address })
+          .then((res) => {
+            console.log(res);
+            contract.methods
+              .ERC20SwapERC721(1, cost)
+              .estimateGas({ from: user.wallet.address })
+              .then((res) => {
+                contract.methods
+                  .ERC20SwapERC721(1, cost)
+                  .send({
+                    from: user.wallet.address,
+                    gas: parseInt(gasPrice * 1.2 + "") + "",
+                    gasPrice: parseInt(gasPrice * 1.2 + "") + "",
+                  })
+                  .then(function (receipt) {
+                    // other parts of code to use receipt
+                    console.log("receipt", receipt);
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                  });
+              });
+          });
+      });
     });
   }
 

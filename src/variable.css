@@ -2,5 +2,7 @@
   /* toast上下边距 */
   --toast-viewport-py: 50px;
 
-  --pc-nav-height:88px
+  --pc-nav-height:88px;
+
+  --mb-nav-height: 44px
 }
