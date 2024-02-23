@@ -24,6 +24,7 @@ import flexible from "./utils/flexible";
 import { SET_IS_SMALL_SCREEN } from "./store/sys";
 import Points from "./pages/Points";
 import Leaderboard from "./pages/Leaderboard";
+import Test from './pages/Test'
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -44,6 +45,7 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/points" element={<Points />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/test" element={<Test />} />
       </Routes>
       <Toaster />
       <CustomDialog />

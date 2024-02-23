@@ -1,0 +1,34 @@
+@include mq {
+    .GetNftBox {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 20px;
+
+        >div.content {
+            width: 100%;
+            background: #260217;
+            box-sizing: border-box;
+            border: 1px solid rgba(245, 140, 0, 0.2);
+            border-radius: 10px;
+            height: 248px;
+        }
+
+        >div.btn {
+            padding: 14px 45px;
+            background: #F58C00;
+            box-sizing: border-box;
+            border: 1px solid #F58C00;
+            border-radius: 9.46px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Raleway;
+            font-size: 14px;
+            font-weight: 500;
+            color: #000000;
+            cursor: pointer;
+        }
+    }
+}

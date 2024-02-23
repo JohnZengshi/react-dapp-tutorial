@@ -1,0 +1,116 @@
+@include mq {
+    .Test {
+        background-color: #000000;
+        height: 100vh;
+        width: 100vw;
+
+
+        // 页面1
+        .content {
+            padding: 0 25px;
+            padding-bottom: 48.5px;
+            padding-top: 44px;
+            display: flex;
+            gap: 15px;
+            flex-direction: column;
+
+            >.accessoriesContainer {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                gap: 15px;
+
+                >.title {
+                    font-family: Raleway-Bold;
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                }
+
+                >.header {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    gap: 15px;
+
+                    .accessories {
+                        width: 100%;
+                    }
+
+                    .mining {
+                        flex: 1;
+                        width: 100%;
+                    }
+                }
+            }
+
+            >.MachineContainer {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                gap: 15px;
+                width: 100%;
+
+                >.title {
+                    font-family: Raleway-Bold;
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                }
+            }
+
+        }
+
+        // 页面2
+        .content {
+            padding-bottom: 70px;
+            padding-top: var(--pc-nav-height);
+            padding-left: 10px;
+            padding-right: 10px;
+            display: flex;
+            gap: 25px;
+            flex-direction: column;
+
+            >.recommendationContainer {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                gap: 15px;
+
+                >.title {
+                    font-family: Raleway-Bold;
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                }
+            }
+
+            >.completionListContainer {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                gap: 15px;
+
+                >.title {
+                    font-family: Raleway-Bold;
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                }
+            }
+
+        }
+
+        // 页面3
+        .content {
+            padding-bottom: 70px;
+            padding-top: var(--pc-nav-height);
+            padding-left: 10px;
+            padding-right: 10px;
+            display: flex;
+            gap: 40px;
+            flex-direction: column;
+        }
+    }
+}
