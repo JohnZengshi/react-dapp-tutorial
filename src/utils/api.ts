@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-10 10:15:30
- * @LastEditTime: 2024-02-21 19:06:37
+ * @LastEditTime: 2024-02-22 18:37:37
  * @Author: John
  */
 import { fetchUrl, getChainCode, localStorageKey } from ".";
@@ -40,7 +40,7 @@ export async function API_CHECT_EXIT(address: string, chainType: ChainType) {
   return res?.data.exist;
 }
 
-export type SIGNUP_CHAIN_TYPE = 1 | 2 | 3 | 4 | 5; // 1=Bitcoin 2=Ethereum 3=Polygon 4=BNB Chain 5=Arbitrum One
+export type SIGNUP_CHAIN_TYPE = 1 | 2 | 3 | 4 | 5 | 6; // 1=Bitcoin 2=Ethereum 3=Polygon 4=BNB Chain 5=Arbitrum One
 export async function API_SIGNUP(
   address: string,
   shareCode: string,
@@ -71,8 +71,8 @@ export async function API_SIGNUP(
 export async function API_LOGIN(
   address: string,
   sign: string,
-  publicKey: string,
-  chainType: ChainType
+  publicKey: string
+  // chainType: ChainType
 ) {
   let loginInfo = await fetchUrl<
     { token: string },
@@ -91,7 +91,8 @@ export async function API_LOGIN(
       account: address,
       password: sign,
       publicKey,
-      chainType: getChainCode(chainType),
+      // chainType: getChainCode(chainType),
+      chainType: 1,
     }
   );
 

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-22 18:58:07
+ * @LastEditTime: 2024-02-23 14:50:08
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -108,7 +108,7 @@ export default function () {
       }
     })();
 
-    return () => {};
+    return () => { };
   }, [user.wallet.payInfo?.hash]);
 
   function ActiveButton(
@@ -119,11 +119,10 @@ export default function () {
         <button
           key={props.key}
           onClick={props.onClick}
-          className={`box-select-item active h-full ${
-            props.active
-              ? "text-[#F58C00] border-b-[#F58C00]"
-              : "text-[#333] border-b-[#380522]"
-          } flex border-solid justify-center items-center flex-1`}
+          className={`box-select-item active h-full ${props.active
+            ? "text-[#F58C00] border-b-[#F58C00]"
+            : "text-[#333] border-b-[#380522]"
+            } flex border-solid justify-center items-center flex-1`}
         >
           <span className="uppercase">{props.content}</span>
         </button>
@@ -132,66 +131,18 @@ export default function () {
   }
   return (
     <>
-      {/* <Nav
-        connectBtn={
-          <ConnectWallet
-            ref={connectWalletRef}
-            onUpdate={(i, c, a) => {
-              console.log(a);
-              // setConnected(c);
-              setInstalled(i);
-              setAddress(a);
-            }}
-          />
-        }
-      /> */}
       <ScrollArea className="Participate">
         <div className="content flex flex-col">
           <div className="card m-0-auto flex ">
             <div className="left top relative">
               <div className="bulr-box absolute box-border border-solid"></div>
-              <div className="model flex justify-center items-center relative opacity-1 box-border border-solid">
+              <div className="model flex flex-col relative opacity-1 box-border border-solid">
                 {/* !isMobile && !isOKApp && */}
-                {
-                  // <Canvas
-                  //   flat
-                  //   shadows
-                  //   camera={{ position: [-15, 0, 10], fov: 25 }}
-                  // >
-                  //   <Stage
-                  //     intensity={1}
-                  //     shadows={{
-                  //       type: "accumulative",
-                  //       bias: -0.001,
-                  //       intensity: Math.PI,
-                  //     }}
-                  //     adjustCamera={false}
-                  //   >
-                  //     <Shoe scale={2} rotation={[0, Math.PI, 0]} />
-                  //   </Stage>
-                  //   <OrbitControls
-                  //     autoRotate
-                  //     autoRotateSpeed={1}
-                  //     enableZoom={false}
-                  //     makeDefault
-                  //   />
-                  //   <EffectComposer disableNormalPass>
-                  //     <Bloom luminanceThreshold={2} mipmapBlur />
-                  //     <ToneMapping />
-                  //   </EffectComposer>
-                  //   <Env />
-                  // </Canvas>
-                }
+                <span className="box_title">ROOSBOX</span>
 
-                {nodeInfo?.id == 145 && (
-                  <img className="h-full" src={boxT1} alt="" />
-                )}
-                {nodeInfo?.id == 2 && (
-                  <img className="h-full" src={boxT2} alt="" />
-                )}
-                {nodeInfo?.id == 3 && (
-                  <img className="h-full" src={boxT3} alt="" />
-                )}
+                {nodeInfo?.id == 145 && <img src={boxT1} alt="" />}
+                {nodeInfo?.id == 2 && <img src={boxT2} alt="" />}
+                {nodeInfo?.id == 3 && <img src={boxT3} alt="" />}
               </div>
             </div>
 
@@ -260,58 +211,58 @@ export default function () {
               </div>
 
               <div className="rightContent bottomContent w-full h-full box-border flex flex-col">
-                <div className="boxselect w-full flex items-center justify-between">
-                  {nodeList.map((v, i) => {
-                    return (
-                      <Fragment key={i}>
-                        <ActiveButton
-                          content={v.nodeName}
-                          active={selectNodeType == v.nodeName}
-                          onClick={() => {
-                            if (v.status == 3) {
-                              CustomToast("Coming soon");
-                              return;
-                            }
-                            setSelectNodeType(v.nodeName);
-                            setNodeInfo(v);
-                          }}
-                        />
-                      </Fragment>
-                    );
-                  })}
-                </div>
+                <div className="top_box">
+                  <div className="boxselect w-full flex items-center justify-between">
+                    {nodeList.map((v, i) => {
+                      return (
+                        <Fragment key={i}>
+                          <ActiveButton
+                            content={v.nodeName}
+                            active={selectNodeType == v.nodeName}
+                            onClick={() => {
+                              if (v.status == 3) {
+                                CustomToast("Coming soon");
+                                return;
+                              }
+                              setSelectNodeType(v.nodeName);
+                              setNodeInfo(v);
+                            }}
+                          />
+                        </Fragment>
+                      );
+                    })}
+                  </div>
 
-                <ul className="priceDes w-full flex items-center">
-                  <li className="flex flex-col h-full justify-center">
-                    <span className="uppercase text-[#D5D5D5] opacity-60">
-                      price
-                    </span>
-                    <div className="btcPrice flex items-baseline">
-                      <span className="price text-[#EAEAEA]">
-                        {nodeInfo?.nodePrice || "0.00"}
+                  <ul className="priceDes w-full flex items-center">
+                    <li className="flex flex-col h-full justify-center items-center">
+                      <span className="uppercase text-[#D5D5D5] opacity-60">
+                        price
                       </span>
-                      <span className="unit text-[#EAEAEA]">
-                        &nbsp;&nbsp;BTC
+                      <div className="btcPrice flex items-baseline">
+                        <span className="price text-[#EAEAEA]">
+                          {nodeInfo?.nodePrice || "0.00"}
+                        </span>
+                        <span className="unit text-[#EAEAEA]">
+                          &nbsp;&nbsp;BTC
+                        </span>
+                      </div>
+                    </li>
+
+                    <li className="flex flex-col h-full justify-center items-center">
+                      <span className="uppercase text-[#D5D5D5] opacity-60">
+                        Remaining
                       </span>
-                    </div>
-                  </li>
-                  {/* <div className="line"></div>
-                  <li className="flex flex-col items-center h-full justify-center">
-                    <span className="uppercase text-[#D5D5D5] opacity-60">
-                      Remaining
-                    </span>
-                    <span className="text-[#EAEAEA]">{remaining}</span>
-                  </li>
-                  <div className="line"></div>
-                  <li className="flex flex-col items-center h-full justify-center">
-                    <span className="uppercase text-[#D5D5D5] opacity-60">
-                      TOTAL SUPPLY
-                    </span>
-                    <span className="text-[#EAEAEA]">
-                      {nodeInfo?.nodeTotal || "0"}
-                    </span>
-                  </li> */}
-                </ul>
+                      <span className="Remaining">50</span>
+                    </li>
+
+                    <li className="flex flex-col h-full justify-center items-center">
+                      <span className="uppercase text-[#D5D5D5] opacity-60">
+                        total amount
+                      </span>
+                      <span className="totalAmount">300</span>
+                    </li>
+                  </ul>
+                </div>
 
                 <div className="content-bottom flex flex-col flex-auto">
                   <span className="text-[#F58C00]">Intro To RoosBOX</span>
@@ -320,20 +271,44 @@ export default function () {
                     dangerouslySetInnerHTML={{
                       __html: nodeInfo?.illustrate || "",
                     }}
-                  >
-                    {/* <p>·25% of platform tokens</p>
-                    <p>
-                      ·Permanently enjoy network gas fee dividends (the initial
-                      proportion is as high as 70%, and with the development of
-                      the ecosystem in the later period, the community will vote
-                      to determine the redistribution proportion)
-                    </p>
-                    <p>·X% proportion of GAS fee airdrop activity</p>
-                    rewards high weight voting rights
-                    <p>
-                      ·A series of other ecological development rights and
-                      interests
-                    </p> */}
+                  ></div>
+
+                  <div className="custom_input">
+                    <div
+                      className="reduce cursor-pointer"
+                      onClick={() => {
+                        // if (num == 1) return;
+                        if (num) setNum(num - 1);
+                      }}
+                    >
+                      -
+                    </div>
+                    <Input
+                      type="text"
+                      value={num || ""}
+                      onChange={(e) => {
+                        setNum(parseInt(e.target.value));
+                        // setNum(1);
+                      }}
+                    />
+                    <div
+                      className="add cursor-pointer"
+                      onClick={() => {
+                        // if (num == 1) return;
+                        if (num) {
+                          setNum(num + 1);
+                        } else {
+                          setNum(1);
+                        }
+                      }}
+                    >
+                      +
+                    </div>
+                  </div>
+
+                  <div className="totalCost flex items-center ml-auto">
+                    <span>Cost:&nbsp;&nbsp;</span>
+                    <span>300USDT</span>
                   </div>
 
                   <Button
@@ -398,15 +373,15 @@ export default function () {
                     {!user.wallet.address
                       ? "Connent wallet"
                       : nodeRemaining > 0
-                      ? "Buy Now"
-                      : "Node Completed"}
+                        ? "Buy Now"
+                        : "Node Completed"}
                   </Button>
                 </div>
               </div>
             </div>
           </div>
 
-          <Invite />
+          <Invite className="Participate-invite" />
         </div>
         <ConnectUs />
       </ScrollArea>

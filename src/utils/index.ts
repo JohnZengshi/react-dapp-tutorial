@@ -1,13 +1,14 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-02-21 18:32:01
+ * @LastEditTime: 2024-02-22 18:29:38
  * @Author: John
  */
 import CustomToast from "@/components/common/CustomToast";
 import { Buffer } from "buffer";
 import { SIGNUP_CHAIN_TYPE } from "./api";
 import { ChainType } from "@/store/reducer";
+
 export const formatBalance = (rawBalance: string) => {
   // console.log("rawBalance:", rawBalance);
   const balance = (parseInt(rawBalance) / 1000000000000000000).toFixed(4);
@@ -159,6 +160,9 @@ export function getChainCode(type: ChainType) {
       break;
     case "Arbitrum One":
       chainType = 5;
+      break;
+    case "Arbitrum test":
+      chainType = 6;
       break;
     default:
       chainType = 2;

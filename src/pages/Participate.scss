@@ -20,6 +20,7 @@
     .content {
       box-sizing: border-box;
       flex: auto;
+      padding: 0 20px;
       padding-top: var(--pc-nav-height);
       margin-bottom: 81px;
 
@@ -27,7 +28,7 @@
         /* 矩形 3 */
         max-width: 1680px;
         min-width: 1393px;
-        height: 725px;
+        min-height: 725px;
         border-radius: 9.46px;
         margin-top: 50px;
 
@@ -37,7 +38,8 @@
 
         .left {
           margin-right: 60px;
-          flex: 1;
+          // flex: 1;
+          min-width: 733px;
 
           /* 矩形 6 */
 
@@ -70,11 +72,37 @@
 
             img {
               /* 1 */
-              // width: 617.07px;
-              // height: 608.95px;
+              width: 514px;
+              height: 514px;
               // transform: scale(1.5);
               opacity: 1;
+              margin: 0 auto;
+              margin-top: 22px;
               animation: rotate 40s linear infinite;
+            }
+
+            .box_title {
+              /* ROOSBOX */
+
+              font-family: Raleway-Medium;
+              font-size: 40px;
+              font-weight: 900;
+              line-height: normal;
+              text-transform: uppercase;
+              letter-spacing: 0em;
+
+              font-feature-settings: "kern" on;
+              color: #f58c00;
+
+              margin-left: 34px;
+
+              margin-top: 27px;
+
+              // position: absolute;
+
+              // top: 27px;
+              // left: 34px;
+              // z-index: 3;
             }
           }
         }
@@ -147,78 +175,6 @@
               justify-content: space-between;
             }
 
-            .input {
-              /* 矩形 2 */
-              display: flex;
-              flex-direction: row;
-              height: 60px;
-
-              margin-top: 20px;
-
-              .reduce,
-              .add {
-                /* - */
-                /* 组 37 */
-                text-align: center;
-
-                width: 78px;
-                height: 60px;
-
-                opacity: 1;
-
-                background: #f58c00;
-
-                opacity: 1;
-
-                font-family: Raleway-Medium;
-                font-size: 37.86px;
-                font-weight: 600;
-                line-height: 60px;
-                text-transform: uppercase;
-                letter-spacing: 0em;
-
-                font-feature-settings: "kern" on;
-                color: #ffffff;
-              }
-
-              .reduce {
-                border-radius: 4.73px 0px 0px 4.73px;
-              }
-
-              .add {
-                border-radius: 0px 4.73px 4.73px 0px;
-              }
-              input {
-                height: 100%;
-                border-radius: 0;
-                opacity: 1;
-
-                background: rgba(245, 140, 0, 0.1);
-
-                box-shadow: 0px 9.46px 94.64px -17px #633800;
-
-                border-color: #f58c00;
-
-                /* 2 */
-
-                opacity: 1;
-
-                font-family: Raleway-Medium;
-                font-size: 38px;
-                font-weight: 500;
-                line-height: normal;
-                text-transform: uppercase;
-                letter-spacing: 0em;
-
-                font-feature-settings: "kern" on;
-                color: #f58c00;
-
-                text-align: center;
-
-                outline: none;
-              }
-            }
-
             .cost-total {
               margin-top: 13px;
               display: flex;
@@ -258,75 +214,106 @@
           }
 
           .rightContent {
-            border-radius: 9.46px;
-            border: 1px solid rgba(153, 153, 153, 0.5);
             min-height: 645px;
 
-            .boxselect {
-              height: 95px;
-              button {
-                justify-content: flex-start;
-                padding-left: 30px;
-                span {
-                  font-family: Raleway-ExtraBold;
-                  font-size: 50px;
-                  font-weight: 900;
-                  line-height: normal;
-                }
+            .top_box {
+              border-radius: 9.46px;
+              border: 1px solid rgba(153, 153, 153, 0.5);
 
-                &.active {
-                  border-bottom-width: 1px;
-                }
-              }
-            }
-
-            .priceDes {
-              height: 127px;
-              border-bottom: 1px solid #380522;
-              li {
-                // width: 33%;
-                flex: 1;
-                > span:nth-of-type(1) {
-                  font-size: 18px;
-                  font-weight: 500;
-                  line-height: 21px;
-                  letter-spacing: 0em;
-                  font-family: Raleway-Medium;
-
-                  font-feature-settings: "kern" on;
-
-                  justify-content: flex-start !important;
+              .boxselect {
+                height: 69px;
+                button {
+                  // justify-content: flex-start;
                   padding-left: 30px;
-                }
+                  span {
+                    /* ROOSBOX T1 */
 
-                > span:nth-of-type(2),
-                .btcPrice .price,
-                .btcPrice .unit {
-                  font-family: Raleway-Bold;
-                  font-size: 50px;
-                  line-height: normal;
-                  letter-spacing: 0em;
-                  font-feature-settings: "kern" on;
+                    font-family: Raleway-Medium;
+                    font-size: 30px;
+                    font-weight: 600;
+                    line-height: normal;
+                    text-transform: uppercase;
+                    letter-spacing: 0em;
 
-                  margin-top: 10px;
-                }
-                .btcPrice .unit {
-                  font-size: 25px;
-                }
+                    font-variation-settings: "opsz" auto;
+                    color: #ffffff;
+                  }
 
-                padding-left: 30px;
+                  &.active {
+                    border-bottom-width: 1px;
+                  }
+                }
               }
-              .line {
-                width: 1px;
-                height: 106px;
-                opacity: 1;
-                background-color: #380522;
+
+              .priceDes {
+                height: 155px;
+                border-bottom: 1px solid #380522;
+                li {
+                  // width: 33%;
+                  flex: 1;
+                  > span:nth-of-type(1) {
+                    font-size: 18px;
+                    font-weight: 500;
+                    line-height: 21px;
+                    letter-spacing: 0em;
+                    font-family: Raleway-Medium;
+
+                    font-feature-settings: "kern" on;
+
+                    justify-content: flex-start !important;
+                    // padding-left: 30px;
+                  }
+
+                  > span:nth-of-type(2),
+                  .btcPrice .price,
+                  .btcPrice .unit {
+                    font-family: DINPRO-MEDIUM;
+                    font-size: 50px;
+                    line-height: normal;
+                    font-weight: bold;
+                    letter-spacing: 0em;
+                    font-feature-settings: "kern" on;
+
+                    margin-top: 10px;
+                  }
+                  .btcPrice .unit {
+                    font-weight: normal;
+                    font-size: 25px;
+                  }
+
+                  .Remaining,
+                  .totalAmount {
+                    /* 300 */
+
+                    /* 自动布局子元素 */
+
+                    font-family: DINPRO-MEDIUM;
+                    font-size: 40px;
+                    font-weight: bold;
+                    line-height: normal;
+                    text-transform: uppercase;
+                    letter-spacing: 0em;
+
+                    font-variation-settings: "opsz" auto;
+                    color: #eaeaea;
+
+                    z-index: 1;
+                  }
+
+                  // padding-left: 30px;
+                }
+                .line {
+                  width: 1px;
+                  height: 106px;
+                  opacity: 1;
+                  background-color: #380522;
+                }
               }
             }
 
             .content-bottom {
-              padding: 0 30px;
-              padding-bottom: 27.43px;
+              // padding: 0 30px;
+              // padding-bottom: 27.43px;
               > span {
                 &:nth-child(1) {
                   font-family: Raleway-Bold;
@@ -334,7 +321,8 @@
                   letter-spacing: 0em;
                   font-feature-settings: "kern" on;
                   color: #f58c00;
-                  margin-top: 31px;
+                  // margin-top: 31px;
+                  margin-top: 25px;
                 }
               }
 
@@ -346,7 +334,117 @@
                 font-weight: 500;
                 line-height: 26.5px;
                 letter-spacing: 0em;
-                margin-top: 25px;
+                // margin-top: 25px;
+                margin-top: 15px;
+              }
+
+              .totalCost {
+                margin-top: 15px;
+                margin-bottom: 25px;
+                span {
+                  &:nth-of-type(1) {
+                    /* Cost: */
+
+                    font-family: Raleway-Medium;
+                    font-size: 20px;
+                    font-weight: 500;
+                    line-height: normal;
+                    letter-spacing: 0em;
+
+                    font-variation-settings: "opsz" auto;
+                    color: #f58c00;
+                  }
+
+                  &:nth-of-type(2) {
+                    /* 300USdt */
+
+                    font-family: DINPRO-MEDIUM;
+                    font-size: 20px;
+                    font-weight: bold;
+                    line-height: normal;
+                    text-transform: uppercase;
+                    letter-spacing: 0em;
+
+                    font-variation-settings: "opsz" auto;
+                    font-feature-settings: "kern" on;
+                    color: #f58c00;
+                  }
+                }
+              }
+
+              .custom_input {
+                /* 矩形 2 */
+                display: flex;
+                flex-direction: row;
+                height: 60px;
+
+                margin-top: 20px;
+
+                .reduce,
+                .add {
+                  /* - */
+                  /* 组 37 */
+                  text-align: center;
+
+                  width: 78px;
+                  height: 60px;
+
+                  opacity: 1;
+
+                  background: #f58c00;
+
+                  opacity: 1;
+
+                  font-family: Raleway-Medium;
+                  /* - */
+
+                  font-family: Raleway;
+                  font-size: 37.86px;
+                  font-weight: 600;
+                  line-height: normal;
+                  text-transform: uppercase;
+                  letter-spacing: 0em;
+
+                  font-feature-settings: "kern" on;
+                  color: #333333;
+                }
+
+                .reduce {
+                  border-radius: 4.73px 0px 0px 4.73px;
+                }
+
+                .add {
+                  border-radius: 0px 4.73px 4.73px 0px;
+                }
+                input {
+                  height: 100%;
+                  border-radius: 0;
+                  opacity: 1;
+
+                  background: rgba(245, 140, 0, 0.1);
+
+                  box-shadow: 0px 9.46px 94.64px -17px #633800;
+
+                  border-color: #f58c00;
+
+                  /* 2 */
+
+                  opacity: 1;
+
+                  font-family: DINPRO-MEDIUM;
+                  font-size: 38px;
+                  font-weight: 500;
+                  line-height: normal;
+                  text-transform: uppercase;
+                  letter-spacing: 0em;
+
+                  font-feature-settings: "kern" on;
+                  color: #f58c00;
+
+                  text-align: center;
+
+                  outline: none;
+                }
               }
             }
           }
@@ -382,6 +480,10 @@
             // margin-top: 40px;
           }
         }
+      }
+
+      .Participate-invite {
+        margin-top: 50px;
       }
     }
   }

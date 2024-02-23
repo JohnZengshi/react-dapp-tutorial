@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:25:43
- * @LastEditTime: 2024-02-21 18:46:46
+ * @LastEditTime: 2024-02-23 14:57:15
  * @Author: John
  */
 import "./Profile-m.scss";
@@ -45,6 +45,8 @@ export default function () {
   const [inviteList, setInviteList] = useState<INVITE_VO_LIST_ITEM[]>([]);
   const [userBox, setUserBox] = useState<BOX_USER_PURCHASED>();
   const [T3nodeInfo, setT3NodeInfo] = useState<NodeInfo>();
+
+  const [currentNav, setCurrentNav] = useState(0);
 
   const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
@@ -108,137 +110,74 @@ export default function () {
 
   return (
     <>
-      <ScrollArea className="Profile box-border">
-        <div className="content box-border">
-          <span className="title">DASHBOARD</span>
-          <div className="roosBox flex items-center bg-[#260217c7]">
-            <div className="left top flex items-center justify-center">
-              {userBox?.status == 1 && (
-                <>
-                  {userBox?.nodeName == "T1" && (
-                    <img className="boxPng" src={boxT1} alt="" />
-                  )}
-                  {userBox?.nodeName == "T2" && (
-                    <img className="boxPng" src={boxT2} alt="" />
-                  )}
-                  {userBox?.nodeName == "T3" && (
-                    <img className="boxPng" src={boxT3} alt="" />
-                  )}
-                </>
-              )}
-              {(userBox?.status == 2 || userBox?.status == 3) && (
-                <>
-                  <img className="boxPng w-full h-full" src={roos_box} alt="" />
-                </>
-              )}
-            </div>
-            <div className="right bottom flex flex-col flex-auto">
-              {/* 未购买盒子 */}
-              {(userBox?.status == 2 || userBox?.status == 3) && (
-                <>
-                  <span className="Equity text-[#F58C00]">
-                    Intro to RoosBOX
-                  </span>
-                  <div
-                    className="desBox"
-                    dangerouslySetInnerHTML={{
-                      __html: T3nodeInfo?.illustrate || "",
-                    }}
-                  >
-                    {/* <p>·25% of platform tokens</p>
-                    <p>
-                      ·Permanently enjoy network gas fee dividends (the initial
-                      proportion is as high as 70%, and with the development of
-                      the ecosystem in the later period, the community will vote
-                      to determine the redistribution proportion)
-                    </p>
-                    <p>
-                      ·X% proportion of GAS fee airdrop activity rewards high
-                      weight voting rights{" "}
-                    </p>
-                    <p>
-                      ·A series of other ecological development rights and
-                      interests
-                    </p> */}
-                  </div>
-                  <button
-                    className="getBoxBtn"
-                    onClick={() => {
-                      navigate("/participate");
-                    }}
-                  >
-                    Get ROOSBOX
-                  </button>
-                </>
-              )}
+      <div className="Profile">
+        <ul className="nav">
+          <li
+            className={currentNav == 0 ? "active" : ""}
+            onClick={() => setCurrentNav(0)}
+          >
+            my node box
+          </li>
+          <li
+            className={currentNav == 1 ? "active" : ""}
+            onClick={() => setCurrentNav(1)}
+          >
+            Referral rewards
+          </li>
+          <li
+            className={currentNav == 2 ? "active" : ""}
+            onClick={() => setCurrentNav(2)}
+          >
+            NFT accessories
+          </li>
+          <li
+            className={currentNav == 3 ? "active" : ""}
+            onClick={() => setCurrentNav(3)}
+          >
+            Odyssey Points
+          </li>
+        </ul>
+        <ScrollArea className="content_scroll box-border">
+          <div className="content box-border">
+            {currentNav == 0 && (
+              <ul className="myNodeBox">
+                {Array.from({ length: 50 }).map((v, i) => (
+                  <li key={i} className="boxItem">
+                    <img src="" alt="" />
+                    <div className="boxDes">
+                      <span>ROOS NODEBOX</span>
+                      <span>#3756</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
 
-              {/* 已购买盒子 */}
-              {userBox?.status == 1 && (
-                <>
-                  <div className="boxNamePrice">
-                    <span>{userBox?.nodeName}</span>
-                    <span>{userBox?.buyAmount}</span>
-                    <span>&nbsp;&nbsp;btc</span>
-                  </div>
-                  <span className="Equity text-[#F58C00]">
-                    Potential future benefits
-                  </span>
-                  <div
-                    className="desBox flex flex-col"
-                    // dangerouslySetInnerHTML={{ __html: userBox.illustrate }}
-                  >
-                    <p>·20% ROS Airdrop</p>
-                    <p>·Highest Weight ROOS Protocol Dividends</p>
-                    <p>·Highest Weight Staking Rewards</p>
-                    <p>·ROOS Genesis NFT</p>
-                    <p>Other Additional Variable Rewards</p>
-                    <span className="subTitle text-[#F58C00]">
-                      RoosBOX Referrers Enjoy Additional Benefits:
-                    </span>
-                    <p>
-                      ·At the start of Journey MAP2, ROOS will initiate the
-                      Alpha mainnet through a Gas Fee Airdrop event, with a cap
-                      of $4.9 million. RoosBOX referrers will share the Gas Fee
-                      based on the weight of their ROOS SCORE.
-                    </p>
-                    <p>
-                      ·Grants Program Developer Incentive Plan: This will be
-                      implemented during the Journey MAP2 phase.
-                    </p>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
+            {currentNav == 1 && (
+              <div className="referralRewards">
+                <Invite />
+                <span className="title">My recommendation</span>
+                <ul className="recommendation">
+                  <li className="item">
+                    <span className="num">10</span>
+                    <span className="text">Leve1 NFTs</span>
+                  </li>
+                  <li className="item">
+                    <span className="num">10</span>
+                    <span className="text">Leve2 NFTs</span>
+                  </li>
+                  <li className="item">
+                    <span className="num">100</span>
+                    <span className="text">RBIT Points</span>
+                  </li>
+                  <li className="item">
+                    <span className="num">300</span>
+                    <span className="text">Back USDT</span>
+                  </li>
+                </ul>
+                <span className="title">Leve 1 Team Levl 2 Team</span>
 
-          <div className="contribution flex flex-col justify-between bg-[#260217c7]">
-            <span className="title">JOURNEY PROGRAM</span>
-            <ul className="flex items-center w-full justify-between">
-              <li className="flex flex-col items-center justify-between">
-                <span>{contributionDate?.userNumber || 0}</span>
-                <span>REFERAL ROOSBOX</span>
-              </li>
-              <li className="flex flex-col items-center justify-between">
-                <span>{contributionDate?.contribution || 0}</span>
-                <span>ROOS SCORE</span>
-              </li>
-
-              <li className="flex flex-col items-center justify-between">
-                <div className="flex items-baseline">
-                  <img src={flag} alt="" />
-                  <span>x&nbsp;&nbsp;</span>
-                  <span>{contributionDate?.nftNumer || 0}</span>
-                </div>
-                <span>NFT Fragments</span>
-              </li>
-            </ul>
-
-            {inviteList.length > 0 && (
-              <>
-                <span className="title">REFERAL ROOSBOX DETAILS</span>
-
-                <Table className="buyList">
-                  {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+                <Table className="rankList">
                   <TableHeader>
                     <TableRow>
                       <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
@@ -248,12 +187,15 @@ export default function () {
                         Address
                       </TableHead>
                       <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
-                        ROOSBOX
+                        NFTs
+                      </TableHead>
+                      <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
+                        Quantity
                       </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {inviteList.map((v, i) => {
+                    {/* {inviteList.map((v, i) => {
                       return (
                         <Fragment key={i}>
                           <TableRow>
@@ -269,17 +211,36 @@ export default function () {
                           </TableRow>
                         </Fragment>
                       );
+                    })} */}
+
+                    {Array.from({ length: 50 }).map((v, i) => {
+                      return (
+                        <Fragment key={i}>
+                          <TableRow>
+                            <TableCell className="text-center text-[#EAEAEA]">
+                              {i + 1}
+                            </TableCell>
+                            <TableCell className="text-center text-[#EAEAEA]">
+                              {/* {shortenString(v.address, 6, 5)} */}
+                              0x2323...W313
+                            </TableCell>
+                            <TableCell className="text-center text-[#EAEAEA]">
+                              T1
+                            </TableCell>
+                            <TableCell className="text-center text-[#EAEAEA]">
+                              1
+                            </TableCell>
+                          </TableRow>
+                        </Fragment>
+                      );
                     })}
                   </TableBody>
                 </Table>
-              </>
+              </div>
             )}
           </div>
-
-          <Invite />
-        </div>
-        <ConnectUs />
-      </ScrollArea>
+        </ScrollArea>
+      </div>
     </>
   );
 }
