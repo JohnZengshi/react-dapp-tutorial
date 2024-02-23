@@ -1,415 +1,341 @@
 @include pq {
   .Profile {
     background-color: #000000;
-    // background-image: url("../assets/home_bg.png");
     height: 100vh;
     width: 100vw;
 
-    > [data-radix-scroll-area-viewport] {
-      > div {
-        min-height: 100%;
-        display: flex !important;
-        flex-direction: column;
-        align-items: center;
-      }
-    }
-    .content {
-      padding-bottom: 70px;
-      padding-top: var(--pc-nav-height);
-      > .title {
-        /* MY BOX */
+    display: flex;
+    flex-direction: row;
+    padding-top: calc(var(--pc-nav-height));
 
-        /* 自动布局子元素 */
-        opacity: 1;
+    justify-content: center;
+    .nav {
+      /* 矩形 3 */
+
+      width: 210px;
+      height: 352px;
+      border-radius: 9.46px;
+
+      background: #260217;
+
+      box-sizing: border-box;
+      border: 1px solid rgba(245, 140, 0, 0.2);
+
+      margin-top: 46px;
+
+      li {
+        /* my node box */
 
         font-family: Raleway-Bold;
-        font-size: 40px;
+        font-size: 22px;
         font-weight: bold;
         line-height: normal;
+        text-transform: capitalize;
         letter-spacing: 0em;
+        font-variation-settings: "opsz" auto;
+        color: #999999;
 
-        font-feature-settings: "kern" on;
-        color: #f58c00;
+        border-bottom: 1px solid rgba(245, 140, 0, 0.2);
 
-        z-index: 0;
+        /* 矩形 4 */
 
-        margin-top: 50px;
-      }
-
-      .roosBox {
-        /* 矩形 3 */
-
-        max-width: 1680px;
-        min-height: 486px;
+        height: 88px;
         border-radius: 9.46px;
-        opacity: 0.8;
-
+        opacity: 1;
         box-sizing: border-box;
-        border: 1px solid rgba(245, 140, 0, 0.2);
+        text-align: center;
+        line-height: 88px;
 
-        padding: 27px 147px 57.43px 122px;
+        cursor: pointer;
 
-        margin-top: 50px;
-        .left {
-          margin-right: 191px;
-          width: 436px;
-          height: 431px;
-          opacity: 1;
-          .boxPng {
-            /* 1 */
-            width: 436px;
-            height: 431px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &.active {
+          /* 矩形 4 */
+          background: #f58c00;
+
+          border: 1px solid #f58c00;
+
+          color: #000000;
+          border-bottom: none;
+        }
+
+        &:last-of-type {
+          border-bottom: none;
+        }
+      }
+    }
+
+    .content_scroll {
+      // flex: auto;
+      max-width: 1430px;
+      flex: auto;
+      > [data-radix-scroll-area-viewport] {
+        > div {
+          width: 100%;
+          padding-top: 46px;
+        }
+      }
+      .content {
+        padding-bottom: 70px;
+        margin-left: 40px;
+
+        .myNodeBox {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          .boxItem {
+            display: flex;
+            flex-direction: column;
+            width: 25%;
+            box-sizing: border-box;
+            padding-right: 39px;
+            margin-bottom: 33px;
+            &:nth-of-type(4n) {
+              padding-right: 0;
+            }
+
+            > img {
+              /* 矩形 3 */
+
+              height: 390px;
+              border-radius: 10px;
+              opacity: 0.8;
+
+              background: #260217;
+
+              box-sizing: border-box;
+              border: 1.22px solid rgba(245, 140, 0, 0.2);
+            }
+            .boxDes {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding: 0 14px;
+              margin-top: 20px;
+              > span {
+                &:nth-of-type(1) {
+                  /* ROOS NODEBOX */
+
+                  /* 自动布局子元素 */
+                  font-family: Raleway-Bold;
+                  font-size: 24px;
+                  font-weight: bold;
+                  line-height: normal;
+                  letter-spacing: 0em;
+
+                  font-variation-settings: "opsz" auto;
+                  font-feature-settings: "kern" on;
+                  color: #eaeaea;
+
+                  z-index: 0;
+                }
+
+                &:nth-of-type(2) {
+                  /* #3756 */
+
+                  /* 自动布局子元素 */
+                  font-family: DINPRO-MEDIUM;
+                  font-size: 24px;
+                  font-weight: 500;
+                  line-height: normal;
+                  text-transform: capitalize;
+                  letter-spacing: 0em;
+
+                  font-variation-settings: "opsz" auto;
+                  color: #eaeaea;
+
+                  z-index: 1;
+                }
+              }
+            }
           }
         }
 
-        .right {
-          margin-top: 31px;
-          > span {
-            /* Get ROOSBOX,you can enjoy the following benefits. */
+        .referralRewards {
+          > .title {
+            /* My recommendation */
 
             /* 自动布局子元素 */
 
             font-family: Raleway-Bold;
-            font-size: 32px;
+            font-size: 30px;
             font-weight: bold;
             line-height: normal;
+            text-transform: capitalize;
             letter-spacing: 0em;
 
-            font-feature-settings: "kern" on;
-            color: #f58c00;
+            font-variation-settings: "opsz" auto;
+            color: #ffffff;
 
             z-index: 0;
-          }
-          > .desBox {
-            margin-top: 10px;
-            width: 668px;
-            .subTitle {
-              font-family: Raleway-Medium;
-              font-size: 24px;
-              font-weight: 500;
-              line-height: normal;
-              letter-spacing: 0em;
-              font-feature-settings: "kern" on;
-              margin-top: 20px;
-              margin-bottom: 20px;
-            }
+
+            display: block;
+            margin-top: 40px;
           }
 
-          > .desBox,
-          p {
-            /* ·25% of platform tokens ·Permanently enjoy network gas fee dividends (the initial proportion is as high as 70%, and with the development of the ecosystem in the later period, the community will vote to determine the redistribution proportion) ·X% proportion of GAS fee airdrop activity rewards high weight voting rights ·A series of other ecological development rights and interests */
+          .recommendation {
+            /* 矩形 3 */
 
-            /* 自动布局子元素 */
-            opacity: 1;
+            border-radius: 10px;
 
-            font-family: Raleway-Medium;
-            font-size: 18px;
-            font-weight: 500;
-            line-height: 26.5px;
-            letter-spacing: 0em;
-
-            font-feature-settings: "kern" on;
-            color: #eaeaea;
-          }
-
-          .boxNamePrice {
-            > span {
-              &:nth-of-type(1) {
-                /* J-BOX */
-
-                /* 自动布局子元素 */
-                opacity: 1;
-                font-family: Raleway-Bold;
-                font-size: 80px;
-                font-weight: bold;
-                line-height: normal;
-                letter-spacing: 0em;
-
-                font-feature-settings: "kern" on;
-                color: #f58c00;
-
-                z-index: 0;
-
-                margin-right: 60px;
-              }
-
-              &:nth-of-type(2) {
-                /* 0.06 */
-
-                font-family: Raleway-Medium;
-                font-size: 40px;
-                font-weight: 500;
-                line-height: normal;
-                text-transform: uppercase;
-                letter-spacing: 0em;
-
-                font-feature-settings: "kern" on;
-                color: #eaeaea;
-              }
-
-              &:nth-of-type(3) {
-                /* btc */
-
-                font-family: Raleway-Medium;
-                font-size: 20px;
-                font-weight: normal;
-                line-height: normal;
-                text-transform: uppercase;
-                letter-spacing: 0em;
-
-                font-feature-settings: "kern" on;
-                color: #eaeaea;
-              }
-            }
-          }
-
-          .Equity {
-            /* ROOSBOX Equity */
-
-            /* 自动布局子元素 */
-
-            font-family: Raleway-Medium;
-            font-size: 32px;
-            font-weight: 500;
-            line-height: normal;
-            letter-spacing: 0em;
-
-            font-feature-settings: "kern" on;
-            z-index: 0;
-
-            margin-top: 50px;
-          }
-
-          .getBoxBtn {
-            /* 矩形 8 */
-
-            width: 668.18px;
-            height: 59.57px;
-            border-radius: 4.73px;
-            opacity: 1;
-
-            background: #f58c00;
+            background: #260217;
 
             box-sizing: border-box;
-            border: 0.95px solid #f58c00;
+            border: 1px solid rgba(245, 140, 0, 0.2);
+            display: flex;
+            height: 202px;
+            margin-top: 30px;
 
-            box-shadow: 0px 9.46px 94.64px -17px #633800;
-
-            /* Get ROOSBOX */
-
-            opacity: 1;
-
-            font-family: Raleway-Medium;
-            font-size: 15.14px;
-            font-weight: 800;
-            line-height: normal;
-            text-transform: uppercase;
-            letter-spacing: 0em;
-
-            font-feature-settings: "kern" on;
-            color: #333333;
-
-            margin-top: 50px;
-          }
-        }
-      }
-
-      .contribution {
-        /* 矩形 4 */
-
-        max-width: 1680px;
-        // height: 377px;
-        border-radius: 9.46px;
-
-        box-sizing: border-box;
-        border: 1px solid rgba(245, 140, 0, 0.2);
-
-        margin-top: 50px;
-        padding: 50px 130px;
-
-        > .title {
-          /* Contribution */
-
-          /* 自动布局子元素 */
-          opacity: 1;
-
-          font-family: Raleway-Bold;
-          font-size: 34px;
-          font-weight: bold;
-          line-height: normal;
-          text-transform: uppercase;
-          letter-spacing: 0em;
-
-          font-feature-settings: "kern" on;
-          color: #f58c00;
-
-          z-index: 0;
-
-          &:nth-of-type(2) {
-            margin-top: 60px;
-          }
-        }
-
-        > ul {
-          margin-top: 60px;
-          > li {
-            height: 177px;
-            justify-content: space-between;
-            > span {
-              &:last-of-type {
-                /* Invite ROOSBOX */
+            > .item {
+              width: 25%;
+              border-right: 1px solid rgba(245, 140, 0, 0.2);
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              .num {
+                /* 10 */
 
                 /* 自动布局子元素 */
-                opacity: 1;
 
-                font-family: Raleway-Medium;
-                font-size: 34px;
+                font-family: DINPRO-MEDIUM;
+                font-size: 50px;
                 font-weight: 500;
                 line-height: normal;
                 text-transform: uppercase;
                 letter-spacing: 0em;
 
-                font-feature-settings: "kern" on;
-                color: #999999;
+                font-variation-settings: "opsz" auto;
+                color: #eaeaea;
+
+                z-index: 0;
+              }
+              .text {
+                /* Leve1 NFTs */
+
+                /* 自动布局子元素 */
+
+                font-family: Raleway-Medium;
+                font-size: 24px;
+                font-weight: 500;
+                line-height: 21px;
+                text-transform: uppercase;
+                letter-spacing: 0em;
+
+                font-variation-settings: "opsz" auto;
+                color: #d5d5d5;
 
                 z-index: 1;
+              }
+            }
+          }
 
-                margin-top: 20px;
+          .rankList {
+            /* 矩形 23 */
+
+            max-width: 1430px;
+            border-radius: 9.46px;
+            background: rgb(61 9 39 / 80%);
+            box-sizing: border-box;
+            border: 1px solid rgba(245, 140, 0, 0.2);
+            margin-top: 30px;
+
+            thead > tr,
+            tbody > tr {
+              position: relative;
+              border: none;
+              &::before {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                opacity: 0.8;
+                background-image: linear-gradient(
+                  270deg,
+                  rgba(55, 8, 35, 0) 0%,
+                  #671142 11%,
+                  #671142 87%,
+                  rgba(55, 8, 35, 0) 100%
+                );
               }
             }
 
-            &:nth-of-type(1),
-            &:nth-of-type(2) {
-              > span {
-                &:nth-of-type(1) {
-                  /* 0 */
+            thead > tr,
+            tbody > tr {
+              > td {
+                position: relative;
+                border: none;
+                &::before {
+                  content: "";
+                  position: absolute;
+                  top: 0;
+                  right: 0;
+                  width: 1px;
+                  height: 100%;
+                  opacity: 0.8;
+                  background-color: #671142;
+                }
+              }
 
-                  /* 自动布局子元素 */
-                  opacity: 1;
+              > th {
+                position: relative;
+                border: none;
+                &::before {
+                  content: "";
+                  position: absolute;
+                  top: 0;
+                  right: 0;
+                  width: 1px;
+                  height: 100%;
+                  opacity: 0.8;
+                  background-image: linear-gradient(
+                    to top,
+                    rgba(55, 8, 35, 0) 0%,
+                    #671142 11%,
+                    #671142 57%,
+                    rgba(55, 8, 35, 0) 100%
+                  );
+                }
+              }
+            }
 
-                  font-family: Raleway-Bold;
-                  font-size: 100px;
-                  font-weight: bold;
+            thead {
+              > tr {
+                height: 94px;
+
+                > th {
+                  font-family: Raleway-Medium;
+                  font-size: 34px;
+                  font-weight: 500;
+                  line-height: normal;
+                  letter-spacing: 0em;
+
+                  font-feature-settings: "kern" on;
+                  color: #999999;
+                }
+              }
+            }
+
+            tbody {
+              > tr {
+                height: 80px;
+                > td {
+                  /* 0x2323...W313 */
+
+                  font-family: Raleway-Medium;
+                  font-size: 34px;
+                  font-weight: 500;
                   line-height: normal;
                   text-transform: uppercase;
                   letter-spacing: 0em;
 
                   font-feature-settings: "kern" on;
                   color: #eaeaea;
-
-                  z-index: 0;
-                }
-              }
-            }
-
-            &:nth-of-type(3) {
-              > div {
-                img {
-                  width: 80px;
-                  height: 80px;
-                  margin-top: 7px;
-                }
-                > span {
-                  &:nth-of-type(1) {
-                    /* x */
-                    opacity: 1;
-
-                    font-family: Raleway-Medium;
-                    font-size: 20px;
-                    font-weight: 500;
-                    line-height: normal;
-                    text-transform: uppercase;
-                    letter-spacing: 0em;
-
-                    font-feature-settings: "kern" on;
-                    color: #ffffff;
-                  }
-
-                  &:nth-of-type(2) {
-                    /* 2 */
-
-                    font-family: Raleway-Medium;
-                    font-size: 50px;
-                    font-weight: 500;
-                    line-height: normal;
-                    text-transform: uppercase;
-                    letter-spacing: 0em;
-
-                    font-feature-settings: "kern" on;
-                    color: #ffffff;
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        .buyList {
-          margin-top: 60px;
-
-          /* 矩形 23 */
-
-          // border-radius: 9.46px;
-
-          background: #3d0927;
-
-          box-sizing: border-box;
-          border: 1px solid rgba(245, 140, 0, 0.2);
-
-          thead {
-            tr {
-              border-bottom: 1px solid rgba(245, 140, 0, 0.2);
-              // border-radius: 9.46px;
-              th {
-                width: 33%;
-                height: 94px;
-
-                /* Bank */
-
-                opacity: 1;
-
-                font-family: Raleway-Medium;
-                font-size: 34px;
-                font-weight: 500;
-                line-height: normal;
-                text-transform: uppercase;
-                letter-spacing: 0em;
-                font-feature-settings: "kern" on;
-                color: #999999;
-
-                border-right: 1px solid rgba(245, 140, 0, 0.2);
-
-                &:last-of-type {
-                  border-right: none;
-                }
-              }
-            }
-          }
-
-          tbody {
-            tr {
-              td {
-                width: 33%;
-                height: 94px;
-
-                /* 0x2323...W313 */
-
-                opacity: 1;
-
-                font-family: Raleway-Medium;
-                font-size: 34px;
-                font-weight: 500;
-                line-height: normal;
-                text-transform: uppercase;
-                letter-spacing: 0em;
-
-                font-feature-settings: "kern" on;
-                color: #eaeaea;
-
-                border-right: 1px solid rgba(245, 140, 0, 0.2);
-
-                &:last-of-type {
-                  border-right: none;
                 }
               }
             }

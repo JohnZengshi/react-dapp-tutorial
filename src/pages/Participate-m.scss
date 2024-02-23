@@ -1,8 +1,8 @@
 @include mq {
   .Participate {
     position: relative;
-    background-color: #000000;
-    background-image: url("../assets/home_bg.png");
+    // background-color: #000000;
+    // background-image: url("../assets/home_bg.png");
     height: 100vh;
     width: 100vw;
     background-repeat: no-repeat;
@@ -26,7 +26,7 @@
 
       flex-direction: column;
       width: 100vw;
-      padding: 0 25px;
+      padding: 0 15px;
       padding-top: 44px;
       padding-bottom: 102px;
       box-sizing: border-box;
@@ -39,7 +39,6 @@
         border-radius: 3.33px;
 
         .top {
-          width: 325px;
           height: 335px;
           .bulr-box {
             /* 矩形 4 */
@@ -69,15 +68,35 @@
 
             img {
               // transform: scale(1.5);
+              width: 258px;
               opacity: 1;
-              animation: rotate 40s linear infinite;
+              // animation: rotate 40s linear infinite;
+              margin: 0 auto;
+              // margin-top: 18px;
+            }
+
+            .box_title {
+              /* ROOSBOX */
+
+              font-family: Raleway-Medium;
+              font-size: 20px;
+              font-weight: 900;
+              line-height: normal;
+              text-transform: uppercase;
+              letter-spacing: 0em;
+
+              font-feature-settings: "kern" on;
+              color: #f58c00;
+
+              margin-top: 14px;
+              margin-left: 14px;
             }
           }
         }
 
         .bottom {
           margin-top: 30px;
-          width: 318px;
+          // width: 318px;
 
           .inputContent {
             display: none !important;
@@ -287,89 +306,110 @@
           }
 
           .bottomContent {
-            width: 325px;
+            // width: 325px;
             // height: 302px;
             border-radius: 9.46px;
-
-            background: #260217b2;
-
             box-sizing: border-box;
-            border: 1px solid rgba(245, 140, 0, 0.2);
 
-            .boxselect {
-              height: 38.61px;
-              button {
-                justify-content: flex-start;
-                padding-left: 15px;
-                span {
-                  font-family: Raleway-ExtraBold;
-                  font-size: 20px;
-                  font-weight: 900;
-                  line-height: normal;
-                }
+            .top_box {
+              /* 矩形 29 */
 
-                &.active {
-                  border-bottom-width: 1px;
+              border-radius: 5px;
+              background: rgb(38 2 23 / 80%);
+              box-sizing: border-box;
+              border: 1px solid rgba(245, 140, 0, 0.2);
+
+              .boxselect {
+                height: 39px;
+                button {
+                  // justify-content: flex-start;
+                  // padding-left: 15px;
+                  span {
+                    /* ROOSBOX T1 */
+                    font-family: Raleway-Medium;
+                    font-size: 18px;
+                    font-weight: 600;
+                    line-height: normal;
+                    text-transform: uppercase;
+                    letter-spacing: 0em;
+
+                    font-variation-settings: "opsz" auto;
+                    color: #ffffff;
+                  }
+
+                  &.active {
+                    border-bottom-width: 1px;
+                  }
                 }
               }
-            }
 
-            .priceDes {
-              height: 59.39px;
-              border-bottom: 1px solid #380522;
-              li {
-                // width: 33%;
-                flex: 1;
-                > span:nth-of-type(1) {
-                  font-size: 10px;
-                  font-weight: 500;
-                  line-height: 8.54px;
-                  letter-spacing: 0em;
-                  font-family: Raleway-Medium;
+              .priceDes {
+                height: 61px;
+                li {
+                  // width: 33%;
+                  flex: 1;
+                  > span:nth-of-type(1) {
+                    /* price */
 
-                  font-feature-settings: "kern" on;
+                    font-family: Raleway-Medium;
+                    font-size: 10px;
+                    font-weight: 500;
+                    line-height: 8.54px;
+                    text-transform: uppercase;
+                    letter-spacing: 0em;
 
-                  opacity: 0.5;
+                    font-feature-settings: "kern" on;
+                    color: #d5d5d5;
+
+                    z-index: 0;
+                  }
+
+                  > span:nth-of-type(2),
+                  .btcPrice .price,
+                  .btcPrice .unit {
+                    /* 50 */
+
+                    font-family: DINPRO-MEDIUM;
+                    font-size: 20px;
+                    font-weight: 500;
+                    line-height: normal;
+                    text-transform: uppercase;
+                    letter-spacing: 0em;
+
+                    font-variation-settings: "opsz" auto;
+                    color: #eaeaea;
+
+                    z-index: 1;
+
+                    margin-top: 5px;
+                  }
+
+                  .btcPrice .unit {
+                    font-size: 10px;
+                  }
+
+                  // padding-left: 15px;
                 }
-
-                > span:nth-of-type(2),
-                .btcPrice .price,
-                .btcPrice .unit {
-                  font-family: Raleway-Bold;
-                  font-size: 20px;
-                  line-height: normal;
-                  letter-spacing: 0em;
-                  font-feature-settings: "kern" on;
+                .line {
+                  width: 1px;
+                  height: 40px;
+                  opacity: 1;
+                  background-color: #380522;
                 }
-
-                .btcPrice {
-                  margin-top: 5px;
-                }
-                .btcPrice .unit {
-                  font-size: 10px;
-                }
-
-                padding-left: 15px;
-              }
-              .line {
-                width: 1px;
-                height: 40px;
-                opacity: 1;
-                background-color: #380522;
               }
             }
 
             .content-bottom {
-              padding: 0 15px;
+              // padding: 0 15px;
               padding-bottom: 25.32px;
               > span {
-                &:nth-child(1) {
+                &:nth-of-type(1) {
                   font-family: Raleway-Bold;
                   font-size: 14px;
                   letter-spacing: 0em;
                   font-feature-settings: "kern" on;
                   color: #f58c00;
-                  margin-top: 20px;
+                  margin-top: 15px;
                 }
               }
               .rightsAndInterests {

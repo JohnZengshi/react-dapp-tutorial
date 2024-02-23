@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-22 15:12:57
- * @LastEditTime: 2024-02-22 18:25:01
+ * @LastEditTime: 2024-02-23 10:56:10
  * @Author: John
  */
 // import { useReadContract } from "wagmi";
@@ -11,6 +11,7 @@ import { Contract } from "web3-eth-contract";
 import Web3 from "web3";
 import { ethers } from "ethers";
 import { UInt8 } from "@okxweb3/coin-bitcoin/dist/bitcoinjs-lib/types";
+import { Transaction, signTransaction } from "web3-eth-accounts";
 
 const USDTAddress = "0x54BdCcFb56f40F80022A5F47b2c3088d3940C5Dc";
 const piggybankBytecode =
@@ -111,6 +112,24 @@ export default function () {
 
   //   return () => {};
   // }, []);
+
+  useEffect(() => {
+    signTransaction(
+      new Transaction({
+        to: "0x118C2E5F57FD62C2B5b46a5ae9216F4FF4011a07",
+        value: "0x186A0",
+        gasLimit: "0x520812",
+        gasPrice: "0x09184e72a000",
+        data: "",
+        nonce: 0,
+      }),
+      "0x4c0883a69102937d6231471b5dbb6204fe5129617082792ae468d01a3f362318"
+    ).then((res) => {
+      console.log(res);
+    });
+
+    return () => {};
+  }, []);
 
   return <div className="pt-[var(--pc-nav-height)]">test</div>;
 }

@@ -1,7 +1,7 @@
 @include pq {
   .invite {
     padding: 34px 54px;
-    margin-top: 50px;
+    // margin-top: 50px;
     border-radius: 9.46px;
     border: 1px solid rgba(245, 140, 0, 0.2);
 
@@ -18,22 +18,63 @@
         font-feature-settings: "kern" on;
         margin-top: 30px;
         margin-bottom: 20px;
+
+        > span {
+          /* Referral NFTs and get 5% back. */
+
+          /* 自动布局子元素 */
+
+          font-family: Raleway-Medium;
+          font-size: 18px;
+          font-weight: 500;
+          line-height: normal;
+          letter-spacing: 0em;
+
+          font-feature-settings: "kern" on;
+          color: #999999;
+
+          z-index: 1;
+          margin-left: 80px;
+        }
       }
 
-      &:nth-of-type(2),
-      &:nth-of-type(3) {
+      &:nth-of-type(2) {
         font-size: 18px;
         font-weight: 500;
         line-height: normal;
       }
       &:nth-of-type(3) {
-        margin-bottom: 20px;
         margin-top: 15px;
+
+        /* Referral NFTs to get level 1 16% BRIT and 20% NFTs Accessories, get level 2 8% BRIT and 10% NFTs Accessories. */
+
+        font-family: Raleway-Medium;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: 0em;
+
+        font-feature-settings: "kern" on;
+        color: #999999;
+
+        z-index: 2;
       }
     }
 
     .invite-bottom {
       margin-top: 20px;
+      /* 矩形 11 */
+
+      border-radius: 9.46px;
+
+      background: rgb(38 2 23 / 80%);
+
+      box-sizing: border-box;
+      border: 1px solid rgba(245, 140, 0, 0.2);
+
+      padding: 17px 21px;
+      width: fit-content;
+
       > div {
         &:nth-child(1) {
           margin-right: 40px;

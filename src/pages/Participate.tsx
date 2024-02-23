@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-02-22 14:23:38
+ * @LastEditTime: 2024-02-23 14:50:08
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -137,18 +137,13 @@ export default function () {
           <div className="card m-0-auto flex ">
             <div className="left top relative">
               <div className="bulr-box absolute box-border border-solid"></div>
-              <div className="model flex justify-center items-center relative opacity-1 box-border border-solid">
+              <div className="model flex flex-col relative opacity-1 box-border border-solid">
                 {/* !isMobile && !isOKApp && */}
+                <span className="box_title">ROOSBOX</span>
 
-                {nodeInfo?.id == 145 && (
-                  <img className="h-full" src={boxT1} alt="" />
-                )}
-                {nodeInfo?.id == 2 && (
-                  <img className="h-full" src={boxT2} alt="" />
-                )}
-                {nodeInfo?.id == 3 && (
-                  <img className="h-full" src={boxT3} alt="" />
-                )}
+                {nodeInfo?.id == 145 && <img src={boxT1} alt="" />}
+                {nodeInfo?.id == 2 && <img src={boxT2} alt="" />}
+                {nodeInfo?.id == 3 && <img src={boxT3} alt="" />}
               </div>
             </div>
 
@@ -217,42 +212,58 @@ export default function () {
               </div>
 
               <div className="rightContent bottomContent w-full h-full box-border flex flex-col">
-                <div className="boxselect w-full flex items-center justify-between">
-                  {nodeList.map((v, i) => {
-                    return (
-                      <Fragment key={i}>
-                        <ActiveButton
-                          content={v.nodeName}
-                          active={selectNodeType == v.nodeName}
-                          onClick={() => {
-                            if (v.status == 3) {
-                              CustomToast("Coming soon");
-                              return;
-                            }
-                            setSelectNodeType(v.nodeName);
-                            setNodeInfo(v);
-                          }}
-                        />
-                      </Fragment>
-                    );
-                  })}
-                </div>
+                <div className="top_box">
+                  <div className="boxselect w-full flex items-center justify-between">
+                    {nodeList.map((v, i) => {
+                      return (
+                        <Fragment key={i}>
+                          <ActiveButton
+                            content={v.nodeName}
+                            active={selectNodeType == v.nodeName}
+                            onClick={() => {
+                              if (v.status == 3) {
+                                CustomToast("Coming soon");
+                                return;
+                              }
+                              setSelectNodeType(v.nodeName);
+                              setNodeInfo(v);
+                            }}
+                          />
+                        </Fragment>
+                      );
+                    })}
+                  </div>
 
-                <ul className="priceDes w-full flex items-center">
-                  <li className="flex flex-col h-full justify-center">
-                    <span className="uppercase text-[#D5D5D5] opacity-60">
-                      price
-                    </span>
-                    <div className="btcPrice flex items-baseline">
-                      <span className="price text-[#EAEAEA]">
-                        {nodeInfo?.nodePrice || "0.00"}
+                  <ul className="priceDes w-full flex items-center">
+                    <li className="flex flex-col h-full justify-center items-center">
+                      <span className="uppercase text-[#D5D5D5] opacity-60">
+                        price
                       </span>
-                      <span className="unit text-[#EAEAEA]">
-                        &nbsp;&nbsp;BTC
+                      <div className="btcPrice flex items-baseline">
+                        <span className="price text-[#EAEAEA]">
+                          {nodeInfo?.nodePrice || "0.00"}
+                        </span>
+                        <span className="unit text-[#EAEAEA]">
+                          &nbsp;&nbsp;BTC
+                        </span>
+                      </div>
+                    </li>
+
+                    <li className="flex flex-col h-full justify-center items-center">
+                      <span className="uppercase text-[#D5D5D5] opacity-60">
+                        Remaining
                       </span>
-                    </div>
-                  </li>
-                </ul>
+                      <span className="Remaining">50</span>
+                    </li>
+
+                    <li className="flex flex-col h-full justify-center items-center">
+                      <span className="uppercase text-[#D5D5D5] opacity-60">
+                        total amount
+                      </span>
+                      <span className="totalAmount">300</span>
+                    </li>
+                  </ul>
+                </div>
 
                 <div className="content-bottom flex flex-col flex-auto">
                   <span className="text-[#F58C00]">Intro To RoosBOX</span>
@@ -265,7 +276,7 @@ export default function () {
 
                   <div className="custom_input">
                     <div
-                      className="reduce"
+                      className="reduce cursor-pointer"
                       onClick={() => {
                         // if (num == 1) return;
                         if (num) setNum(num - 1);
@@ -282,7 +293,7 @@ export default function () {
                       }}
                     />
                     <div
-                      className="add"
+                      className="add cursor-pointer"
                       onClick={() => {
                         // if (num == 1) return;
                         if (num) {
@@ -294,6 +305,11 @@ export default function () {
                     >
                       +
                     </div>
+                  </div>
+
+                  <div className="totalCost flex items-center ml-auto">
+                    <span>Cost:&nbsp;&nbsp;</span>
+                    <span>300USDT</span>
                   </div>
 
                   <Button
@@ -366,7 +382,7 @@ export default function () {
             </div>
           </div>
 
-          <Invite />
+          <Invite className="Participate-invite" />
         </div>
         <ConnectUs />
       </ScrollArea>

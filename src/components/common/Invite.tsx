@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-02-22 14:13:01
+ * @LastEditTime: 2024-02-23 14:49:06
  * @Author: John
  */
 import "./Invite.scss";
@@ -10,7 +10,13 @@ import roos_logo from "@/assets/roos_logo.png";
 import copy from "@/assets/copy.png";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import roos_logo_big from "@/assets/roos_logo_big.png";
-import { Fragment, useEffect, useState } from "react";
+import {
+  Fragment,
+  HTMLAttributes,
+  PropsWithChildren,
+  useEffect,
+  useState,
+} from "react";
 import {
   API_CHECK_INVITE_CODE,
   API_GET_NODE_LIST,
@@ -21,7 +27,9 @@ import CustomToast from "./CustomToast";
 import { SET_USER_INVITATION_CODE } from "@/store/reducer";
 import * as clipboard from "clipboard-polyfill";
 
-export default function () {
+export default function (
+  props: PropsWithChildren<HTMLAttributes<HTMLDivElement>>
+) {
   const invitationCode = useAppSelector(
     (state) => state.user.wallet.invitationCode
   );
@@ -58,45 +66,20 @@ export default function () {
 
   return (
     <>
-      <div className="invite relative bg-[#26021798] box-border border-solid border-[rgb(245, 140, 0)] flex flex-col overflow-hidden">
+      <div
+        {...props}
+        className={`invite relative bg-[#26021798] box-border border-solid border-[rgb(245, 140, 0)] flex flex-col overflow-hidden ${props.className}`}
+      >
         <img className="logo" src={roos_logo} alt="" />
         <span className="font-[Raleway-Bold] uppercase tracking-[0em] text-[#F58C00]">
-          Get Rewards Through Referral
+          {/* Get Rewards Through Referral */}
+          referral Giveaway
+          <span>Referral NFTs and get 5% back.</span>
         </span>
-        {/* <span className="font-[Raleway-Medium] text-[#EAEAEA]"> */}
-        {/* {user.wallet.connected && invitationCode && ( */}
-        {/* <>
-            ·Invite the box to get contribution,{" "}
-            {nodeList.map((v, i) => {
-              return (
-                <Fragment key={i}>
-                  {v.nodeName} rewards {v.contribution}{" "}
-                  {i === nodeList.length - 1 ? "." : ","}{" "}
-                </Fragment>
-              );
-            })}
-          </> */}
-        {/* )} */}
-        {/* </span> */}
-        {/* <span className="font-[Raleway-Medium] text-[#EAEAEA]"> */}
-        {/* {user.wallet.connected && invitationCode && ( */}
-        {/* <>
-            ·Invite the box to get NFT fragments,{" "}
-            {nodeList.map((v, i) => {
-              return (
-                <Fragment key={i}>
-                  {v.nodeName} rewards {v.nftNumber}{" "}
-                  {i === nodeList.length - 1 ? "." : ","}{" "}
-                </Fragment>
-              );
-            })}
-          </> */}
-        {/* )} */}
-        {/* </span> */}
-        <span className="font-[Raleway-Medium] text-[#EAEAEA]">
+        {/* <span className="font-[Raleway-Medium] text-[#EAEAEA]">
           Buy RoosBOX to obtain your referral code and share your referral code
           with others to get referral rewards.
-        </span>
+        </span> */}
         {!user.wallet.connected && (
           <span className="font-[Raleway-Medium] text-[#F58C00]">
             <>Connect wallet to receive invitation link.</>
@@ -177,6 +160,11 @@ export default function () {
             </div>
           </div>
         )}
+
+        <span className="ReferralTip">
+          Referral NFTs to get level 1 16% BRIT and 20% NFTs Accessories, get
+          level 2 8% BRIT and 10% NFTs Accessories.
+        </span>
 
         <img className="logo-big absolute z-[1]" src={roos_logo_big} alt="" />
       </div>
