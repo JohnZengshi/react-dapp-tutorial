@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-21 15:31:59
- * @LastEditTime: 2024-02-22 13:42:38
+ * @LastEditTime: 2024-02-23 09:53:37
  * @Author: John
  */
 export const WALLET_ARBITRUM_ONE = {
@@ -9,6 +9,17 @@ export const WALLET_ARBITRUM_ONE = {
   rpcUrls: ["https://arbitrum.llamarpc.com"],
   blockExplorerUrls: ["https://arbiscan.io"],
   chainName: "Arbitrum One",
+  nativeCurrency: {
+    symbol: "ETH",
+    decimals: 18,
+  },
+};
+
+export const WALLET_TEST = {
+  chainId: "0x66eee", // 421614
+  rpcUrls: ["https://arbitrum-sepolia.blockpi.network/v1/rpc/public"],
+  blockExplorerUrls: ["https://arbitrum-sepolia.blockpi.network"],
+  chainName: "Arbitrum test",
   nativeCurrency: {
     symbol: "ETH",
     decimals: 18,
@@ -51,6 +62,8 @@ export type ethereum = {
           from: string;
           to: string;
           value: string;
+          data: string;
+          gas: string;
         }>[]
       : T extends ETHEREUM_RPC.EthSign
       ? [string, string]

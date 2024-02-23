@@ -3,16 +3,21 @@ import {
   ETHEREUM_RPC,
   WALLET_ARBITRUM_ONE,
   WALLET_ETHEREUM,
+  WALLET_TEST,
 } from "@/constant/wallet";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { ChainType, SET_WALLET_INSTALL } from "@/store/reducer";
-import { BTC_Unit_Converter, Web3Utils, isOKApp } from "@/utils";
+import { BTC_Unit_Converter, isOKApp } from "@/utils";
+import { ethers } from "ethers";
 import {
   forwardRef,
   useImperativeHandle,
   useLayoutEffect,
   useState,
 } from "react";
+import { toWei } from "web3-utils";
+import { abi } from "@/contract/ROOS.json";
+import { Contract } from "web3-eth-contract";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
@@ -138,11 +143,19 @@ const Okx = forwardRef<
             console.log("okx connect Arbitrum One:", result);
             if (result.length == 0)
               return CustomToast("The wallet does not support.");
-            // 切换arb链
-            await okxwallet?.request({
-              method: ETHEREUM_RPC.WalletAddEthereumChain,
-              params: [WALLET_ARBITRUM_ONE],
-            });
+
+            if (chainType == "Arbitrum One") {
+              // 切换arb链
+              await okxwallet?.request({
+                method: ETHEREUM_RPC.WalletAddEthereumChain,
+                params: [WALLET_ARBITRUM_ONE],
+              });
+            } else if (chainType == "Arbitrum test") {
+              await okxwallet?.request({
+                method: ETHEREUM_RPC.WalletAddEthereumChain,
+                params: [WALLET_TEST],
+              });
+            }
             reslove(result[0]);
           });
       }
@@ -199,15 +212,20 @@ const Okx = forwardRef<
           console.log("okxwallet.bitcoin.send错误：", error);
         }
       } else {
+        const contract = new Contract(abi);
+        console.log(contract);
+        const contractAddress = "0x54BdCcFb56f40F80022A5F47b2c3088d3940C5Dc";
         okxwallet
           ?.request({
             method: ETHEREUM_RPC.EthSendTransaction,
             params: [
               {
                 from: user.wallet.address,
-                // to: toAddress,
-                to: "0x21C4014fE3117e29acAE89F3DD5786b64000A02C",
-                value: Web3Utils.toWei(cost, "ether"),
+                to: contractAddress,
+                gas: "0x47888",
+                value: toWei(0.0001, "ether"),
+                // @ts-ignore
+                data: contract.methods.ERC20SwapERC721(1).encodeABI(),
               },
             ],
           })

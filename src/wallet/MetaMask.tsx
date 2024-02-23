@@ -6,10 +6,11 @@ import {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { Web3Utils } from "@/utils";
+import { toWei } from "web3-utils";
+import { ethRpcMethods } from "web3-rpc-methods";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-
+import { Contract } from "web3-eth-contract";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
@@ -43,9 +44,11 @@ import {
   ETHEREUM_RPC,
   WALLET_ARBITRUM_ONE,
   WALLET_ETHEREUM,
+  WALLET_TEST,
 } from "@/constant/wallet";
 import { useAppSelector } from "@/store/hooks";
 import { ChainType } from "@/store/reducer";
+import { abi } from "@/contract/ROOS.json";
 export type MetaMask_HandleType = {
   _connect: (chainType: ChainType) => Promise<string>;
   _disConnect?: () => Promise<void>;
@@ -123,6 +126,11 @@ const MetaMask = forwardRef<
               method: ETHEREUM_RPC.WalletAddEthereumChain,
               params: [WALLET_ARBITRUM_ONE],
             });
+          } else if (chainType == "Arbitrum test") {
+            await ethereum?.request({
+              method: ETHEREUM_RPC.WalletAddEthereumChain,
+              params: [WALLET_TEST],
+            });
           }
 
           reslove(res[0]);
@@ -136,16 +144,26 @@ const MetaMask = forwardRef<
   };
   // 发送交易
   function onSubmit(cost: number, toAddress: string) {
-    return new Promise<string>((reslove, reject) => {
+    const contractAddress = "0x54BdCcFb56f40F80022A5F47b2c3088d3940C5Dc";
+    // const web3 = new Web3(
+    //   // "https://arbitrum-sepolia.blockpi.network/v1/rpc/public"
+    //   ethereum
+    // );
+    const contract = new Contract(abi);
+    console.log(contract);
+
+    return new Promise<string>(async (reslove, reject) => {
       ethereum
         ?.request({
           method: ETHEREUM_RPC.EthSendTransaction,
           params: [
             {
               from: user.wallet.address,
-              to: "0x21C4014fE3117e29acAE89F3DD5786b64000A02C",
-              // to: toAddress,
-              value: Web3Utils.toWei(cost, "ether"),
+              to: contractAddress,
+              gas: "0x47888",
+              value: toWei(0.0001, "ether"),
+              // @ts-ignore
+              data: contract.methods.ERC20SwapERC721(1).encodeABI(),
             },
           ],
         })
@@ -156,6 +174,24 @@ const MetaMask = forwardRef<
         .catch((err) => {
           handleCatch(err as any);
         });
+
+      //Error because Contract doesn't know what methods exists
+      // await contract.methods.ERC20SwapERC721(contractAddress).call();
+
+      // await contract.methods
+      //   .ERC20SwapERC721(1)
+      //   .send({
+      //     from: user.wallet.address,
+      //     gas: "0x47888",
+      //     value: toWei("0.001", "ether"),
+      //   })
+      //   .then(function (receipt) {
+      //     // other parts of code to use receipt
+      //     console.log("receipt", receipt);
+      //   })
+      //   .catch((err) => {
+      //     console.error(err);
+      //   });
     });
   }
 

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-01-22 18:58:07
+ * @LastEditTime: 2024-02-22 14:23:38
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -132,19 +132,6 @@ export default function () {
   }
   return (
     <>
-      {/* <Nav
-        connectBtn={
-          <ConnectWallet
-            ref={connectWalletRef}
-            onUpdate={(i, c, a) => {
-              console.log(a);
-              // setConnected(c);
-              setInstalled(i);
-              setAddress(a);
-            }}
-          />
-        }
-      /> */}
       <ScrollArea className="Participate">
         <div className="content flex flex-col">
           <div className="card m-0-auto flex ">
@@ -152,36 +139,6 @@ export default function () {
               <div className="bulr-box absolute box-border border-solid"></div>
               <div className="model flex justify-center items-center relative opacity-1 box-border border-solid">
                 {/* !isMobile && !isOKApp && */}
-                {
-                  // <Canvas
-                  //   flat
-                  //   shadows
-                  //   camera={{ position: [-15, 0, 10], fov: 25 }}
-                  // >
-                  //   <Stage
-                  //     intensity={1}
-                  //     shadows={{
-                  //       type: "accumulative",
-                  //       bias: -0.001,
-                  //       intensity: Math.PI,
-                  //     }}
-                  //     adjustCamera={false}
-                  //   >
-                  //     <Shoe scale={2} rotation={[0, Math.PI, 0]} />
-                  //   </Stage>
-                  //   <OrbitControls
-                  //     autoRotate
-                  //     autoRotateSpeed={1}
-                  //     enableZoom={false}
-                  //     makeDefault
-                  //   />
-                  //   <EffectComposer disableNormalPass>
-                  //     <Bloom luminanceThreshold={2} mipmapBlur />
-                  //     <ToneMapping />
-                  //   </EffectComposer>
-                  //   <Env />
-                  // </Canvas>
-                }
 
                 {nodeInfo?.id == 145 && (
                   <img className="h-full" src={boxT1} alt="" />
@@ -295,22 +252,6 @@ export default function () {
                       </span>
                     </div>
                   </li>
-                  {/* <div className="line"></div>
-                  <li className="flex flex-col items-center h-full justify-center">
-                    <span className="uppercase text-[#D5D5D5] opacity-60">
-                      Remaining
-                    </span>
-                    <span className="text-[#EAEAEA]">{remaining}</span>
-                  </li>
-                  <div className="line"></div>
-                  <li className="flex flex-col items-center h-full justify-center">
-                    <span className="uppercase text-[#D5D5D5] opacity-60">
-                      TOTAL SUPPLY
-                    </span>
-                    <span className="text-[#EAEAEA]">
-                      {nodeInfo?.nodeTotal || "0"}
-                    </span>
-                  </li> */}
                 </ul>
 
                 <div className="content-bottom flex flex-col flex-auto">
@@ -320,20 +261,39 @@ export default function () {
                     dangerouslySetInnerHTML={{
                       __html: nodeInfo?.illustrate || "",
                     }}
-                  >
-                    {/* <p>·25% of platform tokens</p>
-                    <p>
-                      ·Permanently enjoy network gas fee dividends (the initial
-                      proportion is as high as 70%, and with the development of
-                      the ecosystem in the later period, the community will vote
-                      to determine the redistribution proportion)
-                    </p>
-                    <p>·X% proportion of GAS fee airdrop activity</p>
-                    rewards high weight voting rights
-                    <p>
-                      ·A series of other ecological development rights and
-                      interests
-                    </p> */}
+                  ></div>
+
+                  <div className="custom_input">
+                    <div
+                      className="reduce"
+                      onClick={() => {
+                        // if (num == 1) return;
+                        if (num) setNum(num - 1);
+                      }}
+                    >
+                      -
+                    </div>
+                    <Input
+                      type="text"
+                      value={num || ""}
+                      onChange={(e) => {
+                        setNum(parseInt(e.target.value));
+                        // setNum(1);
+                      }}
+                    />
+                    <div
+                      className="add"
+                      onClick={() => {
+                        // if (num == 1) return;
+                        if (num) {
+                          setNum(num + 1);
+                        } else {
+                          setNum(1);
+                        }
+                      }}
+                    >
+                      +
+                    </div>
                   </div>
 
                   <Button

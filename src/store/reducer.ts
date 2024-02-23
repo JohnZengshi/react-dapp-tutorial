@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-02-21 16:22:32
+ * @LastEditTime: 2024-02-22 18:28:39
  * @Author: John
  */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
@@ -13,6 +13,7 @@ export type ChainType =
   | "POLYGON"
   | "BNB_CHAIN"
   | "Arbitrum One"
+  | "Arbitrum test"
   | "";
 export interface UserState {
   wallet: {
