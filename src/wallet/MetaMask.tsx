@@ -52,6 +52,7 @@ import { abi } from "@/contract/ROOS.json";
 import { abi as usdt_abi } from "@/contract/USDT.json";
 import Web3 from "web3";
 import { signTransaction, Transaction } from "web3-eth-accounts";
+import { subimtByContract } from "@/utils/walletApi";
 
 export type MetaMask_HandleType = {
   _connect: (chainType: ChainType) => Promise<string>;
@@ -148,88 +149,7 @@ const MetaMask = forwardRef<
   };
   // 发送交易
   function onSubmit(cost: number, toAddress: string) {
-    const contractAddress = "0x0dAA2Df16Ad6DB497bD0370a36B4977e59bafa34";
-    const tokenAddress = "0xd8dc354620e102295C851a2Bb37a5a88b061f735";
-    const web3 = new Web3(
-      // "https://arbitrum-sepolia.blockpi.network/v1/rpc/public"
-      ethereum
-    );
-    const contract = new Contract(abi, contractAddress, web3);
-    const usdtContract = new Contract(usdt_abi, tokenAddress, web3);
-    console.log(contract);
-
-    return new Promise<string>(async (reslove, reject) => {
-      // ethereum
-      //   ?.request({
-      //     method: ETHEREUM_RPC.EthSendTransaction,
-      //     params: [
-      //       {
-      //         from: user.wallet.address,
-      //         to: contractAddress,
-      //         // gas: "0x47888",
-      //         gas: "0",
-      //         // value: toWei(0.0001, "ether"),
-      //         // @ts-ignore
-      //         data: contract.methods.ERC20SwapERC721(1).send({
-      //           from: user.wallet.address,
-      //           gas: "0x47888",
-      //           // value: toWei("0.001", "ether"),
-      //         }),
-      //       },
-      //     ],
-      //   })
-      //   .then((hash) => {
-      //     console.log("eth_sendTransaction success:", hash);
-      //     reslove(hash);
-      //   })
-      //   .catch((err) => {
-      //     handleCatch(err as any);
-      //   });
-      //Error because Contract doesn't know what methods exists
-      // await contract.methods.ERC20SwapERC721(contractAddress).call();
-      // const contractInstance = new web3.eth.Contract(usdt_abi, tokenAddress);
-      // const approvalAmount = 10; // 设置授权金额
-      // // 发送交易进行授权
-      // contractInstance.methods
-      //   .approve(contractAddress, approvalAmount)
-      //   .send({ from: user.wallet.address })
-      //   .on("transactionHash", function (hash) {
-      //     console.log(`Transaction hash: ${hash}`);
-      //   })
-      //   .on("receipt", function (receipt) {
-      //     console.log(`Receipt: ${JSON.stringify(receipt)}`);
-      //   });
-
-      const cost = 1000000;
-      return Promise.all([web3.eth.getGasPrice()]).then(async (data: any) => {
-        let gasPrice = parseInt(data[0]);
-        usdtContract.methods
-          .approve(contractAddress, cost)
-          .send({ from: user.wallet.address })
-          .then((res) => {
-            console.log(res);
-            contract.methods
-              .ERC20SwapERC721(1, cost)
-              .estimateGas({ from: user.wallet.address })
-              .then((res) => {
-                contract.methods
-                  .ERC20SwapERC721(1, cost)
-                  .send({
-                    from: user.wallet.address,
-                    gas: parseInt(gasPrice * 1.2 + "") + "",
-                    gasPrice: parseInt(gasPrice * 1.2 + "") + "",
-                  })
-                  .then(function (receipt) {
-                    // other parts of code to use receipt
-                    console.log("receipt", receipt);
-                  })
-                  .catch((err) => {
-                    console.error(err);
-                  });
-              });
-          });
-      });
-    });
+    return subimtByContract(1000000, "", ethereum, user.wallet.address);
   }
 
   // 签名

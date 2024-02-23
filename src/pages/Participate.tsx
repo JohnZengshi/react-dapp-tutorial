@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-02-23 14:50:08
+ * @LastEditTime: 2024-02-23 19:38:53
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,7 @@ import boxT2 from "@/assets/boxT2.png";
 import boxT3 from "@/assets/boxT3.png";
 import { useNavigate } from "react-router-dom";
 import { CUSTOM_DIALOG } from "@/store/customCom";
+import ReduceAddInput from "@/components/common/ReduceAddInput";
 type OrderInfo = {
   buyAmount: number;
   orderNumber: number;
@@ -108,7 +109,7 @@ export default function () {
       }
     })();
 
-    return () => { };
+    return () => {};
   }, [user.wallet.payInfo?.hash]);
 
   function ActiveButton(
@@ -119,10 +120,11 @@ export default function () {
         <button
           key={props.key}
           onClick={props.onClick}
-          className={`box-select-item active h-full ${props.active
-            ? "text-[#F58C00] border-b-[#F58C00]"
-            : "text-[#333] border-b-[#380522]"
-            } flex border-solid justify-center items-center flex-1`}
+          className={`box-select-item active h-full ${
+            props.active
+              ? "text-[#F58C00] border-b-[#F58C00]"
+              : "text-[#333] border-b-[#380522]"
+          } flex border-solid justify-center items-center flex-1`}
         >
           <span className="uppercase">{props.content}</span>
         </button>
@@ -273,38 +275,7 @@ export default function () {
                     }}
                   ></div>
 
-                  <div className="custom_input">
-                    <div
-                      className="reduce cursor-pointer"
-                      onClick={() => {
-                        // if (num == 1) return;
-                        if (num) setNum(num - 1);
-                      }}
-                    >
-                      -
-                    </div>
-                    <Input
-                      type="text"
-                      value={num || ""}
-                      onChange={(e) => {
-                        setNum(parseInt(e.target.value));
-                        // setNum(1);
-                      }}
-                    />
-                    <div
-                      className="add cursor-pointer"
-                      onClick={() => {
-                        // if (num == 1) return;
-                        if (num) {
-                          setNum(num + 1);
-                        } else {
-                          setNum(1);
-                        }
-                      }}
-                    >
-                      +
-                    </div>
-                  </div>
+                  <ReduceAddInput />
 
                   <div className="totalCost flex items-center ml-auto">
                     <span>Cost:&nbsp;&nbsp;</span>
@@ -373,8 +344,8 @@ export default function () {
                     {!user.wallet.address
                       ? "Connent wallet"
                       : nodeRemaining > 0
-                        ? "Buy Now"
-                        : "Node Completed"}
+                      ? "Buy Now"
+                      : "Node Completed"}
                   </Button>
                 </div>
               </div>

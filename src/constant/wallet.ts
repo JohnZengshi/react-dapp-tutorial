@@ -39,7 +39,7 @@ export enum ETHEREUM_RPC {
   PERSONAL_SIGN = "personal_sign",
 }
 
-export type ethereum = {
+export type Ethereum = {
   on: any;
   removeListener: any;
   request: <T extends ETHEREUM_RPC>({
@@ -84,11 +84,11 @@ export type ethereum = {
 
 declare global {
   interface Window {
-    ethereum?: ethereum;
+    ethereum?: Ethereum;
     okxwallet:
       | ({
           bitcoin: any;
-        } & ethereum)
+        } & Ethereum)
       | undefined;
     unisat:
       | {

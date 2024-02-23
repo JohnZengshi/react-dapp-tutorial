@@ -233,7 +233,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     publicKey: string,
     chainType: ChainType
   ) {
-    await API_SIGNUP(address, inviteCode, publicKey, chainType);
+    await API_SIGNUP(address, inviteCode, publicKey);
   }
 
   // 签名并且登录

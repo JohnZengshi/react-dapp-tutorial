@@ -18,6 +18,7 @@ import {
 import { toWei } from "web3-utils";
 import { abi } from "@/contract/ROOS.json";
 import { Contract } from "web3-eth-contract";
+import { subimtByContract } from "@/utils/walletApi";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
@@ -136,11 +137,11 @@ const Okx = forwardRef<
             });
             reslove(result[0]);
           });
-      } else if (chainType == "Arbitrum One") {
+      } else {
         okxwallet
           ?.request({ method: ETHEREUM_RPC.EthRequestAccounts })
           .then(async (result) => {
-            console.log("okx connect Arbitrum One:", result);
+            console.log("okx connect ethSys:", result);
             if (result.length == 0)
               return CustomToast("The wallet does not support.");
 
@@ -180,9 +181,10 @@ const Okx = forwardRef<
 
   // 提交发送交易
   function onSubmit(cost: number, toAddress: string) {
-    return new Promise<string>((reslove, reject) => {
-      // console.log("okxwallet.bitcoin", okxwallet?.bitcoin);
-      if (user.wallet.chainType == "BTC") {
+    if (user.wallet.chainType == "BTC") {
+      return new Promise<string>((reslove, reject) => {
+        // console.log("okxwallet.bitcoin", okxwallet?.bitcoin);
+
         if (typeof okxwallet?.bitcoin === "undefined") return;
         console.log(
           "values.satoshis * BTC_Unit_Converter",
@@ -211,30 +213,10 @@ const Okx = forwardRef<
         } catch (error) {
           console.log("okxwallet.bitcoin.send错误：", error);
         }
-      } else {
-        const contract = new Contract(abi);
-        console.log(contract);
-        const contractAddress = "0x54BdCcFb56f40F80022A5F47b2c3088d3940C5Dc";
-        okxwallet
-          ?.request({
-            method: ETHEREUM_RPC.EthSendTransaction,
-            params: [
-              {
-                from: user.wallet.address,
-                to: contractAddress,
-                gas: "0x47888",
-                value: toWei(0.0001, "ether"),
-                // @ts-ignore
-                data: contract.methods.ERC20SwapERC721(1).encodeABI(),
-              },
-            ],
-          })
-          .then((hash) => {
-            reslove(hash);
-          })
-          .catch((err) => handleCatch(err));
-      }
-    });
+      });
+    } else {
+      return subimtByContract(1000000, "", okxwallet, user.wallet.address);
+    }
   }
 
   // 统一处理错误

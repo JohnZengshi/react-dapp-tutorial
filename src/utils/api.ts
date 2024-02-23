@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-10 10:15:30
- * @LastEditTime: 2024-02-22 18:37:37
+ * @LastEditTime: 2024-02-23 18:59:18
  * @Author: John
  */
 import { fetchUrl, getChainCode, localStorageKey } from ".";
@@ -44,8 +44,8 @@ export type SIGNUP_CHAIN_TYPE = 1 | 2 | 3 | 4 | 5 | 6; // 1=Bitcoin 2=Ethereum 3
 export async function API_SIGNUP(
   address: string,
   shareCode: string,
-  publicKey: string,
-  chainType: ChainType
+  publicKey: string
+  // chainType: ChainType
 ) {
   let res = await fetchUrl<
     any,
@@ -62,7 +62,8 @@ export async function API_SIGNUP(
       account: address,
       shareCode,
       publicKey,
-      chainType: getChainCode(chainType),
+      // chainType: getChainCode(chainType),
+      chainType: 1,
     }
   );
   return res?.data;

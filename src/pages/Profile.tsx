@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:25:43
- * @LastEditTime: 2024-02-23 14:57:15
+ * @LastEditTime: 2024-02-23 19:55:30
  * @Author: John
  */
 import "./Profile-m.scss";
@@ -39,6 +39,12 @@ import { CUSTOM_DIALOG } from "@/store/customCom";
 import boxT1 from "@/assets/boxT1.png";
 import boxT2 from "@/assets/boxT2.png";
 import boxT3 from "@/assets/boxT3.png";
+import NftsAccessories from "./ProfileCom/NftsAccessories";
+import MiningMachine from "./ProfileCom/MiningMachine";
+import Machine from "./ProfileCom/Machine";
+import Recommend from "./ProfileCom/Recommend";
+import CompletionList from "./ProfileCom/CompletionList";
+import GetNftBox from "./ProfileCom/GetNftBox";
 
 export default function () {
   const [contributionDate, setContributionDate] = useState<CONTRIBUTION>();
@@ -111,91 +117,93 @@ export default function () {
   return (
     <>
       <div className="Profile">
-        <ul className="nav">
-          <li
-            className={currentNav == 0 ? "active" : ""}
-            onClick={() => setCurrentNav(0)}
-          >
-            my node box
-          </li>
-          <li
-            className={currentNav == 1 ? "active" : ""}
-            onClick={() => setCurrentNav(1)}
-          >
-            Referral rewards
-          </li>
-          <li
-            className={currentNav == 2 ? "active" : ""}
-            onClick={() => setCurrentNav(2)}
-          >
-            NFT accessories
-          </li>
-          <li
-            className={currentNav == 3 ? "active" : ""}
-            onClick={() => setCurrentNav(3)}
-          >
-            Odyssey Points
-          </li>
-        </ul>
-        <ScrollArea className="content_scroll box-border">
-          <div className="content box-border">
-            {currentNav == 0 && (
-              <ul className="myNodeBox">
-                {Array.from({ length: 50 }).map((v, i) => (
-                  <li key={i} className="boxItem">
-                    <img src="" alt="" />
-                    <div className="boxDes">
-                      <span>ROOS NODEBOX</span>
-                      <span>#3756</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
+        {true && (
+          <>
+            <ul className="nav">
+              <li
+                className={currentNav == 0 ? "active" : ""}
+                onClick={() => setCurrentNav(0)}
+              >
+                my node box
+              </li>
+              <li
+                className={currentNav == 1 ? "active" : ""}
+                onClick={() => setCurrentNav(1)}
+              >
+                Referral rewards
+              </li>
+              <li
+                className={currentNav == 2 ? "active" : ""}
+                onClick={() => setCurrentNav(2)}
+              >
+                NFT accessories
+              </li>
+              <li
+                className={currentNav == 3 ? "active" : ""}
+                onClick={() => setCurrentNav(3)}
+              >
+                Odyssey Points
+              </li>
+            </ul>
+            <ScrollArea className="content_scroll box-border">
+              <div className="content box-border">
+                {currentNav == 0 && (
+                  <ul className="myNodeBox">
+                    {Array.from({ length: 50 }).map((v, i) => (
+                      <li key={i} className="boxItem">
+                        <img src="" alt="" />
+                        <div className="boxDes">
+                          <span>ROOS NODEBOX</span>
+                          <span>#3756</span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
 
-            {currentNav == 1 && (
-              <div className="referralRewards">
-                <Invite />
-                <span className="title">My recommendation</span>
-                <ul className="recommendation">
-                  <li className="item">
-                    <span className="num">10</span>
-                    <span className="text">Leve1 NFTs</span>
-                  </li>
-                  <li className="item">
-                    <span className="num">10</span>
-                    <span className="text">Leve2 NFTs</span>
-                  </li>
-                  <li className="item">
-                    <span className="num">100</span>
-                    <span className="text">RBIT Points</span>
-                  </li>
-                  <li className="item">
-                    <span className="num">300</span>
-                    <span className="text">Back USDT</span>
-                  </li>
-                </ul>
-                <span className="title">Leve 1 Team Levl 2 Team</span>
+                {currentNav == 1 && (
+                  <div className="referralRewards">
+                    <Invite className="Profile-invite" />
+                    <span className="title">My recommendation</span>
+                    <ul className="recommendation">
+                      <li className="item">
+                        <span className="num">10</span>
+                        <span className="text">Leve1 NFTs</span>
+                      </li>
+                      <li className="item">
+                        <span className="num">10</span>
+                        <span className="text">Leve2 NFTs</span>
+                      </li>
+                      <li className="item">
+                        <span className="num">100</span>
+                        <span className="text">RBIT Points</span>
+                      </li>
+                      <li className="item">
+                        <span className="num">300</span>
+                        <span className="text">Back USDT</span>
+                      </li>
+                    </ul>
+                    <span className="title">Leve 1 Team Levl 2 Team</span>
 
-                <Table className="rankList">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
-                        Rank
-                      </TableHead>
-                      <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
-                        Address
-                      </TableHead>
-                      <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
-                        NFTs
-                      </TableHead>
-                      <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
-                        Quantity
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {/* {inviteList.map((v, i) => {
+                    <Table className="rankList">
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
+                            Rank
+                          </TableHead>
+                          <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
+                            Address
+                          </TableHead>
+                          <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
+                            NFTs
+                          </TableHead>
+                          <TableHead className="text-center uppercase text-[#999999] font-[Raleway-Medium]">
+                            Quantity
+                          </TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {/* {inviteList.map((v, i) => {
                       return (
                         <Fragment key={i}>
                           <TableRow>
@@ -213,33 +221,81 @@ export default function () {
                       );
                     })} */}
 
-                    {Array.from({ length: 50 }).map((v, i) => {
-                      return (
-                        <Fragment key={i}>
-                          <TableRow>
-                            <TableCell className="text-center text-[#EAEAEA]">
-                              {i + 1}
-                            </TableCell>
-                            <TableCell className="text-center text-[#EAEAEA]">
-                              {/* {shortenString(v.address, 6, 5)} */}
-                              0x2323...W313
-                            </TableCell>
-                            <TableCell className="text-center text-[#EAEAEA]">
-                              T1
-                            </TableCell>
-                            <TableCell className="text-center text-[#EAEAEA]">
-                              1
-                            </TableCell>
-                          </TableRow>
-                        </Fragment>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+                        {Array.from({ length: 50 }).map((v, i) => {
+                          return (
+                            <Fragment key={i}>
+                              <TableRow>
+                                <TableCell className="text-center text-[#EAEAEA]">
+                                  {i + 1}
+                                </TableCell>
+                                <TableCell className="text-center text-[#EAEAEA]">
+                                  {/* {shortenString(v.address, 6, 5)} */}
+                                  0x2323...W313
+                                </TableCell>
+                                <TableCell className="text-center text-[#EAEAEA]">
+                                  T1
+                                </TableCell>
+                                <TableCell className="text-center text-[#EAEAEA]">
+                                  1
+                                </TableCell>
+                              </TableRow>
+                            </Fragment>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+
+                {currentNav == 2 && (
+                  <div className="nftAccessories box-border">
+                    <div className="accessoriesContainer">
+                      <p className="title">My NFT accessories</p>
+                      <div className="header">
+                        <div className="accessories">
+                          <NftsAccessories />
+                        </div>
+                        <div className="mining">
+                          <MiningMachine />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="MachineContainer">
+                      <p className="title">My mining machine</p>
+                      <Machine />
+                    </div>
+                  </div>
+                )}
+
+                {currentNav == 3 && (
+                  <div className="odysseyPoints box-border">
+                    <div className="recommendationContainer">
+                      <p className="title">My recommendation</p>
+                      <Recommend />
+                    </div>
+                    <div className="completionListContainer">
+                      <p className="title">
+                        Odyssey recommended completion list
+                      </p>
+                      <CompletionList />
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </ScrollArea>
+            </ScrollArea>
+          </>
+        )}
+
+        {false && (
+          <>
+            {/* 页面3 */}
+            <div className="getNftBox box-border">
+              <div className="GetNftsContainer">
+                <GetNftBox />
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
