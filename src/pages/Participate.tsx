@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-02-23 19:38:53
+ * @LastEditTime: 2024-02-23 20:28:15
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -174,38 +174,7 @@ export default function () {
                   <span>Currently 1 node {cost} BTC</span>
                 </div>
 
-                <div className="input">
-                  <div
-                    className="reduce"
-                    onClick={() => {
-                      // if (num == 1) return;
-                      if (num) setNum(num - 1);
-                    }}
-                  >
-                    -
-                  </div>
-                  <Input
-                    type="text"
-                    value={num || ""}
-                    onChange={(e) => {
-                      setNum(parseInt(e.target.value));
-                      // setNum(1);
-                    }}
-                  />
-                  <div
-                    className="add"
-                    onClick={() => {
-                      // if (num == 1) return;
-                      if (num) {
-                        setNum(num + 1);
-                      } else {
-                        setNum(1);
-                      }
-                    }}
-                  >
-                    +
-                  </div>
-                </div>
+                <ReduceAddInput />
                 <div className="cost-total">
                   <span>Cost：</span>
                   <span>{cost * (num || 0)} BTC</span>
@@ -254,14 +223,17 @@ export default function () {
                       <span className="uppercase text-[#D5D5D5] opacity-60">
                         Remaining
                       </span>
-                      <span className="Remaining">50</span>
+                      <span className="Remaining">
+                        {(nodeInfo?.nodeTotal || 0) -
+                          (nodeInfo?.purchasedCount || 0)}
+                      </span>
                     </li>
 
                     <li className="flex flex-col h-full justify-center items-center">
                       <span className="uppercase text-[#D5D5D5] opacity-60">
                         total amount
                       </span>
-                      <span className="totalAmount">300</span>
+                      <span className="totalAmount">{nodeInfo?.nodeTotal}</span>
                     </li>
                   </ul>
                 </div>
@@ -275,11 +247,13 @@ export default function () {
                     }}
                   ></div>
 
-                  <ReduceAddInput />
+                  <ReduceAddInput onChange={(val) => setNum(val)} />
 
                   <div className="totalCost flex items-center ml-auto">
                     <span>Cost:&nbsp;&nbsp;</span>
-                    <span>300USDT</span>
+                    <span>
+                      {num * cost}&nbsp;{nodeInfo?.buyCoinName}
+                    </span>
                   </div>
 
                   <Button

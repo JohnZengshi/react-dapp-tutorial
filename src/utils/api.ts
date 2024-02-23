@@ -20,6 +20,7 @@ export type NodeInfo = {
   nftNumber: number;
   illustrate: string;
   status: 1 | 2 | 3; // 1：认购中；2：已完成；3：待认购
+  buyCoinName: string;
 };
 export async function API_GET_NODE_LIST() {
   let res = await fetchUrl<NodeInfo[]>("/api/node/getNodeSetting", {

@@ -274,6 +274,10 @@
     display: flex;
     flex-direction: column;
 
+    [data-radix-collection-item] {
+      width: 100%;
+    }
+
     .item {
       font-family: Raleway-Bold;
       font-size: 10px;
