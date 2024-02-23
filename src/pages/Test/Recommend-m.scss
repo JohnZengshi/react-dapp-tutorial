@@ -1,0 +1,42 @@
+@include mq {
+    .Recommend {
+        height: 88px;
+        background: #260217;
+        border-radius: 10px;
+        box-sizing: border-box;
+        border: 1px solid rgba(245, 140, 0, 0.2);
+        display: flex;
+        justify-content: space-between;
+
+        >div.item {
+            width: auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            text-align: center;
+
+            >span:first-child {
+                font-family: DINPro;
+                font-size: 22px;
+                font-weight: bold;
+                color: #EAEAEA;
+            }
+
+            >span:last-child {
+                font-family: Raleway-Medium;
+                font-size: 10px;
+                color: #8c8187;
+            }
+        }
+
+        >div.line {
+            width: 1px;
+            height: 100%;
+            background-color: rgba(245, 140, 0, 0.2);
+            ;
+        }
+    }
+}

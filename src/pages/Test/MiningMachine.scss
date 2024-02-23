@@ -1,0 +1,66 @@
+@include pq {
+    .MiningMachineBox {
+        padding: 24px 29px;
+        height: 257px;
+        border-radius: 10px;
+        box-sizing: border-box;
+        border: 1px solid rgba(245, 140, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        background: #260217;
+
+        .title {
+            font-family: Raleway-Bold;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #fff;
+            text-align: left;
+            width: 100%;
+        }
+
+        .footer {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+
+            .costBox {
+                display: flex;
+                justify-content: flex-start;
+                align-items: baseline;
+                gap: 15px;
+
+                .sub {
+                    font-family: Raleway-Bold;
+                    font-size: 20px;
+                    font-weight: normal;
+                    color: #FFFFFF;
+                }
+
+                .sup {
+                    font-family: DINPro;
+                    font-size: 50px;
+                    font-weight: bold;
+                    color: #F58C00;
+                }
+            }
+
+            .submitBtn {
+                padding: 22px 26px;
+                background: #F58C00;
+                box-sizing: border-box;
+                border: 1px solid #F58C00;
+                border-radius: 9.46px;
+                font-family: Raleway-Bold;
+                font-size: 20px;
+                font-weight: 500;
+                color: #000000;
+                cursor: pointer;
+            }
+        }
+
+    }
+}

@@ -108,7 +108,7 @@ export default function () {
       }
     })();
 
-    return () => {};
+    return () => { };
   }, [user.wallet.payInfo?.hash]);
 
   function ActiveButton(
@@ -119,11 +119,10 @@ export default function () {
         <button
           key={props.key}
           onClick={props.onClick}
-          className={`box-select-item active h-full ${
-            props.active
-              ? "text-[#F58C00] border-b-[#F58C00]"
-              : "text-[#333] border-b-[#380522]"
-          } flex border-solid justify-center items-center flex-1`}
+          className={`box-select-item active h-full ${props.active
+            ? "text-[#F58C00] border-b-[#F58C00]"
+            : "text-[#333] border-b-[#380522]"
+            } flex border-solid justify-center items-center flex-1`}
         >
           <span className="uppercase">{props.content}</span>
         </button>
@@ -374,8 +373,8 @@ export default function () {
                     {!user.wallet.address
                       ? "Connent wallet"
                       : nodeRemaining > 0
-                      ? "Buy Now"
-                      : "Node Completed"}
+                        ? "Buy Now"
+                        : "Node Completed"}
                   </Button>
                 </div>
               </div>

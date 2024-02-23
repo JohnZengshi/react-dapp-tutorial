@@ -1,0 +1,47 @@
+@include pq {
+    ul.CompletionListBox {
+        border-radius: 9.5px;
+        background: #3D0927;
+        box-sizing: border-box;
+        border: 1px solid rgba(245, 140, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 100%;
+        // border-image: url(blur-border.png) 10% round; // 边缘模糊处理
+
+        >li {
+            border-bottom: 1px solid #520f35;
+            height: 94px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-family: Raleway;
+            font-size: 34px;
+            font-weight: 500;
+            color: #EAEAEA;
+
+            &.header {
+                font-family: Raleway;
+                font-size: 34px;
+                font-weight: 500;
+                color: #999999;
+            }
+
+            >div.item {
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex: 1;
+
+            }
+
+            >div.line {
+                width: 1px;
+                height: 100%;
+                background-color: #520f35;
+            }
+        }
+    }
+}

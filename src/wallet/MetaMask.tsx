@@ -199,11 +199,9 @@ const MetaMask = forwardRef<
       //   .on("receipt", function (receipt) {
       //     console.log(`Receipt: ${JSON.stringify(receipt)}`);
       //   });
-      // const gasPrice = await web3.eth.getGasPrice(); // 获取预计转账费用
 
       const cost = 1000000;
-      return Promise.all([web3.eth.getGasPrice()]).then(async (data) => {
-        // @ts-ignore
+      return Promise.all([web3.eth.getGasPrice()]).then(async (data: any) => {
         let gasPrice = parseInt(data[0]);
         usdtContract.methods
           .approve(contractAddress, cost)

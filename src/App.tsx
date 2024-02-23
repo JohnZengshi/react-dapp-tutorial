@@ -24,7 +24,7 @@ import flexible from "./utils/flexible";
 import { SET_IS_SMALL_SCREEN } from "./store/sys";
 import Points from "./pages/Points";
 import Leaderboard from "./pages/Leaderboard";
-import Test from "./pages/Test";
+import Test from './pages/Test'
 
 const App = () => {
   const dispatch = useAppDispatch();
