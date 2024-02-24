@@ -193,3 +193,43 @@ export async function API_BINDING_RELATIONSHIP(shareCode: string) {
 
   return res;
 }
+
+export type BOX_MY_POINT = {
+  iveFinished: string,
+  myIntegral: string,
+  recommend: string,
+  recommendationPoints: string
+};
+export async function API_GET_MY_POINT() {
+  let res = await fetchUrl<BOX_MY_POINT>(`/api/task/myBonusPoints`, {
+    method: "GET",
+  });
+  return res?.data;
+}
+
+export type API_RECOMMEND_LIST_PARAMS = {
+  page: number,
+  size: number,
+};
+
+export type API_RECOMMEND_LIST_ITEM = {
+  address: string,
+  number: string,
+  type: 1 | 2 | 3 | 4 | 5
+};
+
+export async function API_RECOMMEND_LIST(params: API_RECOMMEND_LIST_PARAMS) {
+  const { page, size } = params
+  let res = await fetchUrl<Array<API_RECOMMEND_LIST_ITEM>>(`/api/task/recommendedCompletionList?page=${page}&size=${size}`, {
+    method: "GET",
+  });
+  return res?.data;
+}
+
+export async function API_GET_ACCESSORIES_NUM() {
+  let res = await fetchUrl<{ result: number }>(`/api/user/minerFittings`, {
+    method: "GET",
+  });
+  return res?.data;
+}
+
