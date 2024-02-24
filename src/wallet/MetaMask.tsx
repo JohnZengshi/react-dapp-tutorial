@@ -57,7 +57,7 @@ import { subimtByContract } from "@/utils/walletApi";
 export type MetaMask_HandleType = {
   _connect: (chainType: ChainType) => Promise<string>;
   _disConnect?: () => Promise<void>;
-  _onSubmit: (cost: number, toAddress: string) => Promise<string>;
+  _onSubmit: (buyAmount: string, buyCount: number) => Promise<string>;
   _sign: (address: string, message: string) => Promise<string>;
 };
 
@@ -95,8 +95,8 @@ const MetaMask = forwardRef<
       // _disConnect() {
       //   // return disConnect(); TODO 补充disConnect
       // },
-      _onSubmit(cost: number, toAddress: string) {
-        return onSubmit(cost, toAddress); //TODO 补充onSubmit✔
+      _onSubmit(buyAmount: string, buyCount: number) {
+        return onSubmit(buyAmount, buyCount); //TODO 补充onSubmit✔
       },
       _sign(address, message) {
         return sign(address, message); // TODO 补充sign
@@ -148,8 +148,8 @@ const MetaMask = forwardRef<
     });
   };
   // 发送交易
-  function onSubmit(cost: number, toAddress: string) {
-    return subimtByContract(1000000, "", ethereum, user.wallet.address);
+  function onSubmit(buyAmount: string, buyCount: number) {
+    return subimtByContract(buyAmount, buyCount, ethereum, user.wallet.address);
   }
 
   // 签名

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-02-23 20:28:15
+ * @LastEditTime: 2024-02-24 11:17:17
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -24,7 +24,8 @@ import { useNavigate } from "react-router-dom";
 import { CUSTOM_DIALOG } from "@/store/customCom";
 import ReduceAddInput from "@/components/common/ReduceAddInput";
 type OrderInfo = {
-  buyAmount: number;
+  buyAmount: string;
+  buyCount: number;
   orderNumber: number;
   status: number;
   outAddress: string;
@@ -88,17 +89,13 @@ export default function () {
           1
         );
         if (res.type == 1) {
+          //TODO 支付后的状态轮询
           dispatch(
             CUSTOM_DIALOG({
               content:
                 "Paid, waiting for confirmation on the chain! Check out later on MY JOURNEY",
             })
           );
-          // // TODO 查询用户邀请码✔
-          // let invitationCode = await API_CHECK_INVITE_CODE();
-          // if (invitationCode)
-          //   dispatch(SET_USER_INVITATION_CODE(invitationCode));
-          // navigate("/profile");
         } else {
           CustomToast(
             "The payment failed and the transaction may have been declined!"
@@ -239,7 +236,7 @@ export default function () {
                 </div>
 
                 <div className="content-bottom flex flex-col flex-auto">
-                  <span className="text-[#F58C00]">Intro To RoosBOX</span>
+                  <span className="text-[#F58C00]">{nodeInfo?.title}</span>
                   <div
                     className="rightsAndInterests text-[#EAEAEA]"
                     dangerouslySetInnerHTML={{
@@ -302,7 +299,8 @@ export default function () {
 
                           dispatch(
                             SET_PAY_INFO({
-                              cost: orderInfo.data.buyAmount,
+                              buyAmount: orderInfo.data.buyAmount,
+                              buyCount: orderInfo.data.buyCount,
                               toAddress: orderInfo.data.outAddress,
                               hash: "",
                               orderNumber: orderInfo.data.orderNumber,

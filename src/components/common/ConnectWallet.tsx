@@ -69,7 +69,7 @@ import * as clipboard from "clipboard-polyfill";
  * @Author: John
  */
 export type ConnectWallet_handleType = {
-  _onSubmit: (cost: number, toAddress: string) => Promise<string>;
+  // _onSubmit: (cost: number, toAddress: string) => Promise<string>;
   _setWalletType: (type: WalletType) => void;
   _selectWallet: () => void;
 };
@@ -114,12 +114,13 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
             let hash = "";
             if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
               hash = await uniSatRef.current._onSubmit(
-                user.wallet.payInfo.cost,
+                user.wallet.payInfo.buyCount,
                 user.wallet.payInfo.toAddress
               );
             } else if (user.wallet.walletType === "OKX" && okxRef.current) {
               hash = await okxRef.current._onSubmit(
-                user.wallet.payInfo.cost,
+                user.wallet.payInfo.buyAmount,
+                user.wallet.payInfo.buyCount,
                 user.wallet.payInfo.toAddress
               );
             } else if (
@@ -127,8 +128,8 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
               metaMaskRef.current
             ) {
               hash = await metaMaskRef.current._onSubmit(
-                user.wallet.payInfo.cost,
-                user.wallet.payInfo.toAddress
+                user.wallet.payInfo.buyAmount,
+                user.wallet.payInfo.buyCount
               );
             }
 
@@ -158,14 +159,14 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
 
   useImperativeHandle(ref, () => {
     return {
-      _onSubmit(cost: number, toAddress: string) {
-        if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
-          return uniSatRef.current._onSubmit(cost, toAddress);
-        } else if (user.wallet.walletType === "OKX" && okxRef.current) {
-          return okxRef.current._onSubmit(cost, toAddress);
-        }
-        return new Promise((reslove) => reslove(""));
-      },
+      // _onSubmit(cost: number, toAddress: string) {
+      //   if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
+      //     return uniSatRef.current._onSubmit(cost, toAddress);
+      //   } else if (user.wallet.walletType === "OKX" && okxRef.current) {
+      //     return okxRef.current._onSubmit(cost, toAddress);
+      //   }
+      //   return new Promise((reslove) => reslove(""));
+      // },
       // _connect() {
       //   if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
       //     return uniSatRef.current._connect();
@@ -318,7 +319,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
           "0305ef2a74bff2e2d68764c557ce2daecac92caa7a9406e3a90c2cf7c5b444a154";
       }
 
-      if (!(await API_CHECT_EXIT(address, user.wallet.chainType))) {
+      if (!(await API_CHECT_EXIT(address))) {
         // TODO 邀请码未强制要求绑定✔
         await signUp(address, inviteCode, pk, user.wallet.chainType);
       }

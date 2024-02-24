@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-02-22 18:28:39
+ * @LastEditTime: 2024-02-24 10:48:50
  * @Author: John
  */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
@@ -31,7 +31,8 @@ export interface UserState {
       | "SELECT_WALLET_MULTI_CHAIN" // 选择钱包（多种链）
       | "";
     payInfo: {
-      cost: number;
+      buyCount: number; // 认购数量,
+      buyAmount: string; // 支付金额
       toAddress: string;
       hash: string;
       orderNumber: number;
@@ -53,7 +54,8 @@ const initialState: UserState = {
     walletType: "",
     notificationTriggerEvent: "",
     payInfo: {
-      cost: 0,
+      buyCount: 0,
+      buyAmount: "",
       toAddress: "",
       hash: "",
       orderNumber: 0,

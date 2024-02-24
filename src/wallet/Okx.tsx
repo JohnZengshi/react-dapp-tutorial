@@ -34,7 +34,11 @@ type Account = {
 export type Okx_HandleType = {
   _connect: (chainType: ChainType) => Promise<string>;
   _disConnect: () => Promise<void>;
-  _onSubmit: (cost: number, toAddress: string) => Promise<string>;
+  _onSubmit: (
+    buyAmount: string,
+    buyCount: number,
+    toAddress: string
+  ) => Promise<string>;
   _sign: (address: string, message: string) => Promise<string>;
 };
 
@@ -59,8 +63,8 @@ const Okx = forwardRef<
       _disConnect() {
         return disConnect();
       },
-      _onSubmit(cost, toAddress) {
-        return onSubmit(cost, toAddress);
+      _onSubmit(buyAmount, buyCount, toAddress) {
+        return onSubmit(buyAmount, buyCount, toAddress);
       },
       _sign(address, message) {
         return sign(address, message);
@@ -180,7 +184,7 @@ const Okx = forwardRef<
   // TODO 监听用户切换链（需要重新登录）
 
   // 提交发送交易
-  function onSubmit(cost: number, toAddress: string) {
+  function onSubmit(buyAmount: string, buyCount: number, toAddress?: string) {
     if (user.wallet.chainType == "BTC") {
       return new Promise<string>((reslove, reject) => {
         // console.log("okxwallet.bitcoin", okxwallet?.bitcoin);
@@ -188,7 +192,7 @@ const Okx = forwardRef<
         if (typeof okxwallet?.bitcoin === "undefined") return;
         console.log(
           "values.satoshis * BTC_Unit_Converter",
-          cost * BTC_Unit_Converter
+          buyCount * BTC_Unit_Converter
         );
         // console.log(address, toAddress, cost * BTC_Unit_Converter);
         console.log("send", okxwallet.bitcoin.send);
@@ -197,7 +201,7 @@ const Okx = forwardRef<
             .send({
               from: user.wallet.address,
               to: toAddress,
-              value: cost,
+              value: buyCount,
             })
             .then((txid: { txhash: string }) => {
               // console.log(txid);
@@ -215,7 +219,12 @@ const Okx = forwardRef<
         }
       });
     } else {
-      return subimtByContract(1000000, "", okxwallet, user.wallet.address);
+      return subimtByContract(
+        buyAmount,
+        buyCount,
+        okxwallet,
+        user.wallet.address
+      );
     }
   }
 

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-10 10:15:30
- * @LastEditTime: 2024-02-23 18:59:18
+ * @LastEditTime: 2024-02-24 10:31:04
  * @Author: John
  */
 import { fetchUrl, getChainCode, localStorageKey } from ".";
@@ -20,7 +20,13 @@ export type NodeInfo = {
   nftNumber: number;
   illustrate: string;
   status: 1 | 2 | 3; // 1：认购中；2：已完成；3：待认购
-  buyCoinName: string;
+  buyCoinName: string; // 认购币种
+  nftOne: string; // 1级NFT配件奖励比例
+  nftTwo: string; // 2级NFT配件奖励比例
+  rbitOne: string; // 1级rbit奖励比例
+  rebateRatio: string; // 推荐NFT并获得 5% 的返利
+  rebateTwo: string; // 2级rbit奖励比例
+  title: string;
 };
 export async function API_GET_NODE_LIST() {
   let res = await fetchUrl<NodeInfo[]>("/api/node/getNodeSetting", {
@@ -29,11 +35,9 @@ export async function API_GET_NODE_LIST() {
   return res.data;
 }
 
-export async function API_CHECT_EXIT(address: string, chainType: ChainType) {
+export async function API_CHECT_EXIT(address: string) {
   let res = await fetchUrl<{ exist: boolean }>(
-    `/api/account/exist?account=${address}&chainType=${getChainCode(
-      chainType
-    )}`,
+    `/api/account/exist?account=${address}&chainType=1`,
     {
       method: "GET",
     }

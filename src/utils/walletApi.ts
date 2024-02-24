@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-23 18:47:07
- * @LastEditTime: 2024-02-23 18:50:43
+ * @LastEditTime: 2024-02-24 11:01:55
  * @Author: John
  */
 import Web3 from "web3";
@@ -11,11 +11,12 @@ import { abi as usdt_abi } from "@/contract/USDT.json";
 import { Ethereum } from "@/constant/wallet";
 
 export function subimtByContract(
-  cost: number,
-  toAddress: string,
+  buyAmount: string, // 支付金额
+  buyCount: number, // 认购数量
   ethereum?: Ethereum,
   fromAddress?: string
 ) {
+  console.log("pay buy contract params", { buyAmount, buyCount, fromAddress });
   const contractAddress = "0x0dAA2Df16Ad6DB497bD0370a36B4977e59bafa34";
   const tokenAddress = "0xd8dc354620e102295C851a2Bb37a5a88b061f735";
   const web3 = new Web3(
@@ -33,17 +34,17 @@ export function subimtByContract(
         console.log("get gas price:", gasData);
         let gasPrice = parseInt(gasData[0]);
         usdtContract.methods
-          .approve(contractAddress, cost)
+          .approve(contractAddress, buyAmount)
           .send({ from: fromAddress })
           .then((res: any) => {
             console.log("approve function:", res);
             contract.methods
-              .ERC20SwapERC721(1, cost)
+              .ERC20SwapERC721(buyCount, buyAmount)
               .estimateGas({ from: fromAddress })
               .then((res) => {
                 console.log("ERC20SwapERC721 estimateGas:", res);
                 contract.methods
-                  .ERC20SwapERC721(1, cost)
+                  .ERC20SwapERC721(buyCount, buyAmount)
                   .send({
                     from: fromAddress,
                     gas: parseInt(gasPrice * 1.2 + "") + "",

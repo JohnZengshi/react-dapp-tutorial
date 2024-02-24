@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-02-23 16:39:03
+ * @LastEditTime: 2024-02-24 10:11:03
  * @Author: John
  */
 import "./Invite.scss";
@@ -37,11 +37,13 @@ export default function (
   const dispatch = useAppDispatch();
 
   const [nodeList, setNodeList] = useState<NodeInfo[]>([]);
+  const [nodeInfo, setNodeInfo] = useState<NodeInfo>();
 
   useEffect(() => {
     (async () => {
       let nodeList = await API_GET_NODE_LIST();
       setNodeList([...nodeList]);
+      setNodeInfo(nodeList[0]);
     })();
 
     return () => {};
@@ -74,7 +76,7 @@ export default function (
         <span className="font-[Raleway-Bold] uppercase tracking-[0em] text-[#F58C00]">
           {/* Get Rewards Through Referral */}
           referral Giveaway
-          <span>Referral NFTs and get 5% back.</span>
+          <span>Referral NFTs and get {nodeInfo?.rebateRatio}% back.</span>
         </span>
         {/* <span className="font-[Raleway-Medium] text-[#EAEAEA]">
           Buy RoosBOX to obtain your referral code and share your referral code
@@ -162,8 +164,9 @@ export default function (
         )}
 
         <span className="ReferralTip">
-          Referral NFTs to get level 1 16% BRIT and 20% NFTs Accessories, get
-          level 2 8% BRIT and 10% NFTs Accessories.
+          Referral NFTs to get level 1 {nodeInfo?.rbitOne}% BRIT and{" "}
+          {nodeInfo?.nftOne}% NFTs Accessories, get level 2{" "}
+          {nodeInfo?.rebateTwo}% BRIT and {nodeInfo?.nftTwo}% NFTs Accessories.
         </span>
 
         <img className="logo-big absolute z-[1]" src={roos_logo_big} alt="" />
