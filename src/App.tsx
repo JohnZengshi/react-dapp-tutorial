@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 08:51:29
- * @LastEditTime: 2024-02-22 16:50:09
+ * @LastEditTime: 2024-02-25 19:33:01
  * @Author: John
  */
 // import "./App.css";
@@ -24,13 +24,12 @@ import flexible from "./utils/flexible";
 import { SET_IS_SMALL_SCREEN } from "./store/sys";
 import Points from "./pages/Points";
 import Leaderboard from "./pages/Leaderboard";
-import Test from './pages/Test'
+import Test from "./pages/Test";
 
 const App = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     flexible(window, document, (isSmall) => {
-      // console.log("is small", isSmall);
       dispatch(SET_IS_SMALL_SCREEN(isSmall));
     });
     console.log("VITE_BASE_URL", import.meta.env.VITE_BASE_URL);
