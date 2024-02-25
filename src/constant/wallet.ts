@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-21 15:31:59
- * @LastEditTime: 2024-02-23 09:53:37
+ * @LastEditTime: 2024-02-25 11:30:06
  * @Author: John
  */
 export const WALLET_ARBITRUM_ONE = {
@@ -35,7 +35,7 @@ export enum ETHEREUM_RPC {
   WalletSwitchEthereumChain = "wallet_switchEthereumChain",
   WalletAddEthereumChain = "wallet_addEthereumChain",
   EthSendTransaction = "eth_sendTransaction",
-  EthSign = "eth_sign",
+  EthSign = "eth_sign", // OKX
   PERSONAL_SIGN = "personal_sign",
 }
 

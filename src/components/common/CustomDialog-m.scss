@@ -37,6 +37,44 @@
       margin-top: 20px;
     }
 
+    @keyframes loading {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading {
+      width: 24px;
+      height: 24px;
+      animation: loading 5s linear infinite;
+
+      margin-top: 15px;
+    }
+
+    .hash {
+      /* Txn：0x12214...2534324 */
+
+      font-family: Raleway-Medium;
+      /* Txn：0x12214...2534324 */
+      font-size: 12px;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: 0em;
+      text-decoration: underline;
+
+      font-feature-settings: "kern" on;
+      color: #f58c00;
+
+      z-index: 1;
+
+      margin-top: 5px;
+
+      cursor: pointer;
+    }
+
     .ok_btn {
       /* 组 92 */
 

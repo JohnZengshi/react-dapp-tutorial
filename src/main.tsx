@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-01-16 15:11:14
+ * @LastEditTime: 2024-02-25 11:25:48
  * @Author: John
  */
 /*
@@ -15,7 +15,10 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import "../app/globals.css";
-import "./variable.css";
+import "./variable.scss";
+import "./variable-m.scss";
+import "./custom.scss";
+import "./custom-m.scss";
 // import "amfe-flexible";
 import VConsole from "vconsole";
 import { getUrlQueryParam } from "./utils";

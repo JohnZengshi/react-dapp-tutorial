@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-02-24 10:48:50
+ * @LastEditTime: 2024-02-25 16:18:25
  * @Author: John
  */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
@@ -36,6 +36,10 @@ export interface UserState {
       toAddress: string;
       hash: string;
       orderNumber: number;
+
+      address: number; // 上级地址 (数字)
+      num: number; // 随机数
+      rebateRatio: number; // 返佣比例
     } | null;
     thirdInviteCode: string;
     chainType: ChainType;
@@ -59,6 +63,10 @@ const initialState: UserState = {
       toAddress: "",
       hash: "",
       orderNumber: 0,
+
+      address: 0, // 上级地址 (数字)
+      num: 0, // 随机数
+      rebateRatio: 0, // 返佣比例
     },
     thirdInviteCode: "",
     chainType: "",

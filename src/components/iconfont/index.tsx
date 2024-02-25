@@ -2,6 +2,9 @@
 /* eslint-disable */
 
 import React, { SVGAttributes, FunctionComponent } from 'react';
+import Wushuju1 from './Wushuju1';
+import Metamask from './Metamask';
+import Jiazai from './Jiazai';
 import GantanhaoYuankuang from './GantanhaoYuankuang';
 import Book from './Book';
 import Bitcoin from './Bitcoin';
@@ -10,6 +13,9 @@ import Roos from './Roos';
 import ADropDownmenu from './ADropDownmenu';
 import Telegram from './Telegram';
 import Github from './Github';
+export { default as Wushuju1 } from './Wushuju1';
+export { default as Metamask } from './Metamask';
+export { default as Jiazai } from './Jiazai';
 export { default as GantanhaoYuankuang } from './GantanhaoYuankuang';
 export { default as Book } from './Book';
 export { default as Bitcoin } from './Bitcoin';
@@ -19,7 +25,7 @@ export { default as ADropDownmenu } from './ADropDownmenu';
 export { default as Telegram } from './Telegram';
 export { default as Github } from './Github';
 
-export type IconNames = 'gantanhao-yuankuang' | 'book' | 'Bitcoin' | 'StarkWare' | 'roos' | 'a-drop-downmenu' | 'telegram' | 'github';
+export type IconNames = 'wushuju1' | 'metamask' | 'jiazai' | 'gantanhao-yuankuang' | 'book' | 'Bitcoin' | 'StarkWare' | 'roos' | 'a-drop-downmenu' | 'telegram' | 'github';
 
 interface Props extends Omit<SVGAttributes<SVGElement>, 'color'> {
   name: IconNames;
@@ -29,6 +35,12 @@ interface Props extends Omit<SVGAttributes<SVGElement>, 'color'> {
 
 const IconFont: FunctionComponent<Props> = ({ name, ...rest }) => {
   switch (name) {
+    case 'wushuju1':
+      return <Wushuju1 {...rest} />;
+    case 'metamask':
+      return <Metamask {...rest} />;
+    case 'jiazai':
+      return <Jiazai {...rest} />;
     case 'gantanhao-yuankuang':
       return <GantanhaoYuankuang {...rest} />;
     case 'book':

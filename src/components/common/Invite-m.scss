@@ -104,6 +104,21 @@
       }
     }
 
+    .ReferralTip {
+      /* Referral NFTs and get 5% back. */
+
+      font-family: Raleway-Medium;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: 0em;
+
+      font-feature-settings: "kern" on;
+      color: #999999;
+
+      z-index: 0;
+    }
+
     .logo-big {
       width: 185.66px;
       height: 185.49px;

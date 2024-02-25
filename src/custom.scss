@@ -1,0 +1,123 @@
+.STYLE_CUSTOM_TABLE {
+  @include pq {
+    /* 矩形 23 */
+
+    max-width: 1430px;
+    border-radius: 9.46px;
+    background: rgb(61 9 39 / 80%);
+    box-sizing: border-box;
+    border: 1px solid rgba(245, 140, 0, 0.2);
+    margin-top: 30px;
+
+    thead > tr,
+    tbody > tr {
+      position: relative;
+      border: none;
+      &::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        opacity: 0.8;
+        background-image: linear-gradient(
+          270deg,
+          rgba(55, 8, 35, 0) 0%,
+          #671142 11%,
+          #671142 87%,
+          rgba(55, 8, 35, 0) 100%
+        );
+      }
+    }
+
+    thead > tr,
+    tbody > tr {
+      > td {
+        position: relative;
+        border: none;
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 1px;
+          height: 100%;
+          opacity: 0.8;
+          background-color: #671142;
+        }
+
+        &:last-of-type {
+          &::before {
+            display: none;
+          }
+        }
+      }
+
+      > th {
+        position: relative;
+        border: none;
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 1px;
+          height: 100%;
+          opacity: 0.8;
+          background-image: linear-gradient(
+            to top,
+            rgba(55, 8, 35, 0) 0%,
+            #671142 11%,
+            #671142 57%,
+            rgba(55, 8, 35, 0) 100%
+          );
+        }
+
+        &:last-of-type {
+          &::before {
+            display: none;
+          }
+        }
+      }
+    }
+
+    thead {
+      > tr {
+        height: 94px;
+
+        > th {
+          font-size: 34px;
+          font-weight: 500;
+          line-height: normal;
+          letter-spacing: 0em;
+
+          font-feature-settings: "kern" on;
+          color: #999999;
+        }
+      }
+    }
+
+    tbody {
+      > tr {
+        height: 80px;
+        > td {
+          font-size: 34px;
+          font-weight: 500;
+          line-height: normal;
+          text-transform: uppercase;
+          letter-spacing: 0em;
+
+          font-feature-settings: "kern" on;
+          color: #eaeaea;
+        }
+
+        &:last-of-type {
+          &::before {
+            opacity: 0;
+          }
+        }
+      }
+    }
+  }
+}

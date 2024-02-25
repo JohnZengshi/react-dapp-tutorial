@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-23 19:34:01
- * @LastEditTime: 2024-02-23 20:33:24
+ * @LastEditTime: 2024-02-25 14:57:17
  * @Author: John
  */
 import "./ReduceAddInput.scss";
@@ -12,7 +12,6 @@ import { PropsWithChildren, useState } from "react";
 export default function (
   props: PropsWithChildren<{ onChange?: (value: number) => void }>
 ) {
-
   const [num, setNum] = useState<number>(1);
 
   return (
@@ -22,9 +21,9 @@ export default function (
         onClick={() => {
           if (num == 1) return;
           if (num) {
-            setNum(num - 1)
-            props.onChange?.(num - 1)
-          };
+            setNum(num - 1);
+            props.onChange?.(num - 1);
+          }
         }}
       >
         -
@@ -35,8 +34,9 @@ export default function (
           value={num || ""}
           onChange={(e) => {
             let val = parseInt(e.target.value);
-            if (val <= 0) val = 1;
             setNum(val);
+            if (val <= 0 || Number.isNaN(val)) return;
+            console.log("val", val);
             props.onChange?.(val);
             // setNum(1);
           }}
@@ -48,7 +48,7 @@ export default function (
           // if (num == 1) return;
           if (num) {
             setNum(num + 1);
-            props.onChange?.(num + 1)
+            props.onChange?.(num + 1);
           } else {
             setNum(1);
           }

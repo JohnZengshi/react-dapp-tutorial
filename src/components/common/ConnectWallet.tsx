@@ -61,6 +61,7 @@ import MetaMask, { MetaMask_HandleType } from "@/wallet/MetaMask";
 import detectEthereumProvider from "@metamask/detect-provider";
 import copy from "@/assets/copy.png";
 import * as clipboard from "clipboard-polyfill";
+import IconFont from "../iconfont";
 
 /*
  * @LastEditors: John
@@ -121,6 +122,9 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
               hash = await okxRef.current._onSubmit(
                 user.wallet.payInfo.buyAmount,
                 user.wallet.payInfo.buyCount,
+                user.wallet.payInfo.num,
+                user.wallet.payInfo.rebateRatio,
+                user.wallet.payInfo.address,
                 user.wallet.payInfo.toAddress
               );
             } else if (
@@ -129,7 +133,10 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
             ) {
               hash = await metaMaskRef.current._onSubmit(
                 user.wallet.payInfo.buyAmount,
-                user.wallet.payInfo.buyCount
+                user.wallet.payInfo.buyCount,
+                user.wallet.payInfo.num,
+                user.wallet.payInfo.rebateRatio,
+                user.wallet.payInfo.address
               );
             }
 
@@ -139,6 +146,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
           } catch (hash) {
             // TODO 用户取消支付✔
             // if (hash == "") CustomToast("user cancel payment");
+            // CustomToast("cancel payment");
             API_PAY_NODE_SMS(user.wallet.payInfo.orderNumber, "123456789", 2);
           }
         })();
@@ -277,16 +285,8 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
       // TODO 用户登录,写入用户数据✔
       saveUserData(address);
 
-      // TODO 判断用户是否绑定关系
-      if (!(await API_BIND_OR_NOT())) {
-        // TODO 获取页面连接的invite code，弹窗提示，默认测试：NODE123✔
-        let urlInviteCode = getUrlQueryParam(UrlQueryParamsKey.INVITE_CODE);
-        if (urlInviteCode) dispatch(SET_THIRD_INVITE_CODE(urlInviteCode));
-        // TODO 弹窗提示输入邀请码✔
-        setOpen(false);
-        setInviteCodeDialogOpen(true);
-        setInviteCode(urlInviteCode || "");
-      }
+      // TODO 判断用户是否绑定关系✔
+      await checkUserBind();
 
       return "LOGIN_SUCCESS";
     }
@@ -351,6 +351,8 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     // TODO 钱包连接完就保存地址✔
     if (user.wallet.walletType == "OKX")
       sessionStorage.setItem(sessionStorageKey.okx_address, address);
+    if (user.wallet.walletType == "UNISAT")
+      sessionStorage.setItem(sessionStorageKey.unisat_address, address);
     if (user.wallet.walletType == "MetaMask")
       sessionStorage.setItem(sessionStorageKey.metaMask_address, address);
 
@@ -364,6 +366,8 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
       // TODO 钱包切换完就保存地址✔
       if (user.wallet.walletType == "OKX")
         sessionStorage.setItem(sessionStorageKey.okx_address, address);
+      if (user.wallet.walletType == "UNISAT")
+        sessionStorage.setItem(sessionStorageKey.unisat_address, address);
       if (user.wallet.walletType == "MetaMask")
         sessionStorage.setItem(sessionStorageKey.metaMask_address, address);
       await checkToken(address);
@@ -384,9 +388,25 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     dispatch(SET_CONNECTED(false));
     dispatch(SET_ADDRESS(""));
     sessionStorage.removeItem(sessionStorageKey.okx_address);
+    sessionStorage.removeItem(sessionStorageKey.unisat_address);
     sessionStorage.removeItem(sessionStorageKey.metaMask_address);
 
     sessionStorage.removeItem(sessionStorageKey.roos_token);
+  }
+
+  async function checkUserBind() {
+    if (!(await API_BIND_OR_NOT())) {
+      // TODO 获取页面连接的invite code，弹窗提示，默认测试：NODE123✔
+      let urlInviteCode = getUrlQueryParam(UrlQueryParamsKey.INVITE_CODE);
+      if (urlInviteCode) dispatch(SET_THIRD_INVITE_CODE(urlInviteCode));
+      // TODO 弹窗提示输入邀请码✔
+      setOpen(false);
+      setInviteCodeDialogOpen(true);
+      setInviteCode(urlInviteCode || "");
+      return;
+    }
+
+    CustomToast("User has been bound!");
   }
 
   return (
@@ -426,24 +446,6 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
               <span className="font-[Raleway-Bold] text-[#F58C00] uppercase ">
                 Connect Wallet
               </span>
-              <span className="chainTitle flex flex-row items-center">
-                <span className="point"></span> Bitcoin Wallet
-              </span>
-              <button
-                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                onClick={() => connectWallet("OKX", "BTC")}
-              >
-                <img className="" src={okx_logo} alt="" />
-                <span className="font-[Raleway-Bold]  text-[#fff]">OKX</span>
-              </button>
-
-              <button
-                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                onClick={() => connectWallet("UNISAT", "BTC")}
-              >
-                <img className="" src={unisat_logo} alt="" />
-                <span className="font-[Raleway-Bold]  text-[#fff]">UNISAT</span>
-              </button>
 
               {connectWalletType == "MULTI_CHAIN" && (
                 <>
@@ -488,7 +490,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
 
                   {/* Arbitrum One */}
                   <span className="chainTitle flex flex-row items-center">
-                    <span className="point"></span> Arbitrum One
+                    <span className="point"></span> Etherscan Wallet
                   </span>
 
                   <button
@@ -505,7 +507,8 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
                     className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
                     onClick={() => connectWallet("MetaMask", "Arbitrum One")}
                   >
-                    <img className="" src={unisat_logo} alt="" />
+                    {/* <img className="" src={unisat_logo} alt="" /> */}
+                    <IconFont className="walletIcon" name="metamask" />
                     <span className="font-[Raleway-Bold]  text-[#fff]">
                       MetaMask
                     </span>
@@ -530,13 +533,33 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
                     className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
                     onClick={() => connectWallet("MetaMask", "Arbitrum test")}
                   >
-                    <img className="" src={unisat_logo} alt="" />
+                    {/* <img className="" src={unisat_logo} alt="" /> */}
+                    <IconFont className="walletIcon" name="metamask" />
                     <span className="font-[Raleway-Bold]  text-[#fff]">
                       MetaMask
                     </span>
                   </button>
                 </>
               )}
+
+              <span className="chainTitle flex flex-row items-center">
+                <span className="point"></span> Bitcoin Wallet
+              </span>
+              <button
+                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                onClick={() => connectWallet("OKX", "BTC")}
+              >
+                <img className="" src={okx_logo} alt="" />
+                <span className="font-[Raleway-Bold]  text-[#fff]">OKX</span>
+              </button>
+
+              <button
+                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                onClick={() => connectWallet("UNISAT", "BTC")}
+              >
+                <img className="" src={unisat_logo} alt="" />
+                <span className="font-[Raleway-Bold]  text-[#fff]">UNISAT</span>
+              </button>
             </div>
           </CustomDialogContent>
         </Dialog>
@@ -568,7 +591,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
             <DropdownMenuItem>
               <button
                 onClick={async () => {
-                  setInviteCodeDialogOpen(true);
+                  await checkUserBind();
                 }}
                 className="item flex items-center "
               >

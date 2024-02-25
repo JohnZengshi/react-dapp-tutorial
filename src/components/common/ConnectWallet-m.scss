@@ -81,7 +81,7 @@
 
         .point {
           /* 矩形 12 */
-          display: block;
+          display: none;
 
           width: 10px;
           height: 10px;
@@ -116,7 +116,8 @@
       // margin-top: 35.23px;
       margin-bottom: 11.99px;
 
-      > img {
+      > img,
+      .walletIcon {
         width: 14.63px;
         height: 15px;
         margin-left: 13px;

@@ -5,7 +5,7 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    padding-top: calc(var(--mb-nav-height));
+    padding-top: var(--mb-nav-height);
     .nav {
       display: flex;
       flex-direction: row;
@@ -27,6 +27,7 @@
         z-index: 0;
 
         text-wrap: nowrap;
+        white-space: nowrap;
         padding: 0 15px;
 
         &.active {
@@ -57,9 +58,10 @@
             flex-direction: column;
             width: 50%;
             box-sizing: border-box;
-            padding-right: 15px;
+            padding-right: 7px;
             margin-bottom: 15px;
             &:nth-of-type(2n) {
+              padding-left: 7px;
               padding-right: 0;
             }
 
@@ -67,7 +69,8 @@
               /* 矩形 3 */
 
               /* 矩形 3 */
-              height: 173px;
+              width: 165px;
+              aspect-ratio: 165 / 152.42;
               border-radius: 5px;
               opacity: 0.8;
 
@@ -148,6 +151,16 @@
             margin-top: 0;
           }
 
+          .teamTab {
+            > span {
+              &.active {
+                font-family: Raleway-Bold;
+                color: #f58c00;
+                border-bottom: 1px solid #f58c00;
+              }
+            }
+          }
+
           .recommendation {
             /* 矩形 3 */
             display: flex;
@@ -205,111 +218,9 @@
                 z-index: 1;
                 margin-top: 5px;
               }
-            }
-          }
 
-          .rankList {
-            /* 矩形 23 */
-
-            border-radius: 9.46px;
-            background: rgb(61 9 39 / 80%);
-            box-sizing: border-box;
-            border: 1px solid rgba(245, 140, 0, 0.2);
-
-            thead > tr,
-            tbody > tr {
-              position: relative;
-              border: none;
-              &::before {
-                content: "";
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 1px;
-                opacity: 0.8;
-                background-image: linear-gradient(
-                  270deg,
-                  rgba(55, 8, 35, 0) 0%,
-                  #671142 11%,
-                  #671142 87%,
-                  rgba(55, 8, 35, 0) 100%
-                );
-              }
-            }
-
-            thead > tr,
-            tbody > tr {
-              > td {
-                position: relative;
-                border: none;
-                &::before {
-                  content: "";
-                  position: absolute;
-                  top: 0;
-                  right: 0;
-                  width: 1px;
-                  height: 100%;
-                  opacity: 0.8;
-                  background-color: #671142;
-                }
-              }
-
-              > th {
-                position: relative;
-                border: none;
-                &::before {
-                  content: "";
-                  position: absolute;
-                  top: 0;
-                  right: 0;
-                  width: 1px;
-                  height: 100%;
-                  opacity: 0.8;
-                  background-image: linear-gradient(
-                    to top,
-                    rgba(55, 8, 35, 0) 0%,
-                    #671142 11%,
-                    #671142 57%,
-                    rgba(55, 8, 35, 0) 100%
-                  );
-                }
-              }
-            }
-
-            thead {
-              > tr {
-                height: 46px;
-
-                > th {
-                  font-family: Raleway-Medium;
-                  /* Bank */
-                  font-size: 12px;
-                  font-weight: 500;
-                  line-height: normal;
-                  text-transform: capitalize;
-                  letter-spacing: 0em;
-
-                  font-feature-settings: "kern" on;
-                  color: #999999;
-                }
-              }
-            }
-
-            tbody {
-              > tr {
-                height: 36px;
-                > td {
-                  font-family: DINPRO-MEDIUM;
-                  font-size: 12px;
-                  font-weight: 500;
-                  line-height: normal;
-                  text-transform: uppercase;
-                  letter-spacing: 0em;
-
-                  font-variation-settings: "opsz" auto;
-                  color: #eaeaea;
-                }
+              &:last-of-type {
+                border-right: none;
               }
             }
           }
@@ -350,6 +261,42 @@
               .mining {
                 flex: 1;
                 width: 100%;
+                display: flex;
+                flex-direction: column;
+
+                > span {
+                  font-family: Raleway-Bold;
+                  /* Box Rights */
+                  font-size: 14px;
+                  font-weight: bold;
+                  line-height: normal;
+                  text-transform: uppercase;
+                  letter-spacing: 0em;
+
+                  font-feature-settings: "kern" on;
+                  color: #f58c00;
+
+                  z-index: 0;
+                }
+
+                .rightsAndInterests {
+                  max-width: 85%;
+                  position: static;
+                  opacity: 1;
+
+                  font-family: Raleway-Medium;
+                  font-size: 12px;
+                  font-weight: 500;
+                  line-height: normal;
+                  letter-spacing: 0em;
+
+                  font-feature-settings: "kern" on;
+                  color: #eaeaea;
+
+                  z-index: 1;
+
+                  margin-top: 10px;
+                }
               }
             }
           }
@@ -410,9 +357,9 @@
     }
 
     .getNftBox {
-      padding-bottom: 70px;
-      padding-left: 10px;
-      padding-right: 10px;
+      // padding-bottom: 70px;
+      // padding-left: 10px;
+      // padding-right: 10px;
       padding-top: 25px;
       display: flex;
       gap: 40px;

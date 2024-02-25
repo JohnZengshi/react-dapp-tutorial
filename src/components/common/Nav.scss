@@ -34,6 +34,10 @@
             color: #eaeaea;
 
             z-index: 0;
+
+            &:hover {
+              color: #f58c00;
+            }
           }
         }
       }

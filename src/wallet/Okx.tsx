@@ -37,7 +37,10 @@ export type Okx_HandleType = {
   _onSubmit: (
     buyAmount: string,
     buyCount: number,
-    toAddress: string
+    randomNumber: number, // 随机数
+    rebateRatio: number, // 返佣比例,
+    pAddress: number,
+    toAddress?: string
   ) => Promise<string>;
   _sign: (address: string, message: string) => Promise<string>;
 };
@@ -63,8 +66,22 @@ const Okx = forwardRef<
       _disConnect() {
         return disConnect();
       },
-      _onSubmit(buyAmount, buyCount, toAddress) {
-        return onSubmit(buyAmount, buyCount, toAddress);
+      _onSubmit(
+        buyAmount,
+        buyCount,
+        randomNumber, // 随机数
+        rebateRatio, // 返佣比例,
+        pAddress,
+        toAddress
+      ) {
+        return onSubmit(
+          buyAmount,
+          buyCount,
+          randomNumber,
+          rebateRatio,
+          pAddress,
+          toAddress
+        );
       },
       _sign(address, message) {
         return sign(address, message);
@@ -83,7 +100,15 @@ const Okx = forwardRef<
       console.log("绑定accountChanged事件");
       if (user.wallet.chainType == "BTC") {
         okxwallet?.bitcoin?.on("accountChanged", handleAccountsChanged);
+        return;
       }
+      okxwallet?.on("accountsChanged", (accounts: string[]) => {
+        handleAccountsChanged({
+          address: accounts[0],
+          compressedPublicKey: "",
+          publicKey: "",
+        });
+      });
     })();
     return () => {
       console.log("解绑accountChanged事件");
@@ -92,7 +117,9 @@ const Okx = forwardRef<
           "accountChanged",
           handleAccountsChanged
         );
+        return;
       }
+      okxwallet?.removeListener("accountsChanged", handleAccountsChanged);
     };
   }, []);
 
@@ -184,7 +211,14 @@ const Okx = forwardRef<
   // TODO 监听用户切换链（需要重新登录）
 
   // 提交发送交易
-  function onSubmit(buyAmount: string, buyCount: number, toAddress?: string) {
+  function onSubmit(
+    buyAmount: string,
+    buyCount: number,
+    randomNumber: number, // 随机数
+    rebateRatio: number, // 返佣比例,
+    pAddress: number,
+    toAddress?: string
+  ) {
     if (user.wallet.chainType == "BTC") {
       return new Promise<string>((reslove, reject) => {
         // console.log("okxwallet.bitcoin", okxwallet?.bitcoin);
@@ -196,32 +230,32 @@ const Okx = forwardRef<
         );
         // console.log(address, toAddress, cost * BTC_Unit_Converter);
         console.log("send", okxwallet.bitcoin.send);
-        try {
-          okxwallet.bitcoin
-            .send({
-              from: user.wallet.address,
-              to: toAddress,
-              value: buyCount,
-            })
-            .then((txid: { txhash: string }) => {
-              // console.log(txid);
+        okxwallet.bitcoin
+          .send({
+            from: user.wallet.address,
+            to: toAddress,
+            value: buyCount,
+          })
+          .then((txid: { txhash: string }) => {
+            // console.log(txid);
 
-              // CustomToast(`请求交易成功,txid值为：${txid.txhash}`);
+            // CustomToast(`请求交易成功,txid值为：${txid.txhash}`);
 
-              reslove(txid.txhash);
-            })
-            .catch((e: any) => {
-              console.log("用户取消交易");
-              handleCatch(e);
-            });
-        } catch (error) {
-          console.log("okxwallet.bitcoin.send错误：", error);
-        }
+            reslove(txid.txhash);
+          })
+          .catch((e: any) => {
+            console.log("用户取消交易");
+            handleCatch(e);
+            reject(e);
+          });
       });
     } else {
       return subimtByContract(
-        buyAmount,
+        BigInt(buyAmount),
         buyCount,
+        randomNumber,
+        rebateRatio,
+        pAddress,
         okxwallet,
         user.wallet.address
       );
@@ -246,7 +280,7 @@ const Okx = forwardRef<
       // const nonce = "22a68408-fea7-4491-996c-a92fbf710a72";
       // const message = `Welcome to OKX!\n\nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${result.address}\n    \nNonce:\n${nonce}\n`;
       // const message = "need sign string";
-      console.log("签名?");
+      console.log("签名?", user.wallet.chainType);
       if (user.wallet.chainType == "BTC") {
         okxwallet?.bitcoin
           .signMessage(message, { from: address }) // OKX app 钱包新的签名方法传参（官网的方法传参不对）！！！！

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-10 10:15:30
- * @LastEditTime: 2024-02-24 10:31:04
+ * @LastEditTime: 2024-02-25 13:55:36
  * @Author: John
  */
 import { fetchUrl, getChainCode, localStorageKey } from ".";
@@ -199,10 +199,10 @@ export async function API_BINDING_RELATIONSHIP(shareCode: string) {
 }
 
 export type BOX_MY_POINT = {
-  iveFinished: string,
-  myIntegral: string,
-  recommend: string,
-  recommendationPoints: string
+  iveFinished: string;
+  myIntegral: string;
+  recommend: string;
+  recommendationPoints: string;
 };
 export async function API_GET_MY_POINT() {
   let res = await fetchUrl<BOX_MY_POINT>(`/api/task/myBonusPoints`, {
@@ -212,21 +212,24 @@ export async function API_GET_MY_POINT() {
 }
 
 export type API_RECOMMEND_LIST_PARAMS = {
-  page: number,
-  size: number,
+  page: number;
+  size: number;
 };
 
 export type API_RECOMMEND_LIST_ITEM = {
-  address: string,
-  number: string,
-  type: 1 | 2 | 3 | 4 | 5
+  address: string;
+  number: string;
+  type: 1 | 2 | 3 | 4 | 5;
 };
 
 export async function API_RECOMMEND_LIST(params: API_RECOMMEND_LIST_PARAMS) {
-  const { page, size } = params
-  let res = await fetchUrl<Array<API_RECOMMEND_LIST_ITEM>>(`/api/task/recommendedCompletionList?page=${page}&size=${size}`, {
-    method: "GET",
-  });
+  const { page, size } = params;
+  let res = await fetchUrl<Array<API_RECOMMEND_LIST_ITEM>>(
+    `/api/task/recommendedCompletionList?page=${page}&size=${size}`,
+    {
+      method: "GET",
+    }
+  );
   return res?.data;
 }
 
@@ -237,3 +240,64 @@ export async function API_GET_ACCESSORIES_NUM() {
   return res?.data;
 }
 
+export async function API_GET_ORDER_STATE_BY_HASH(hash: string) {
+  let res = await fetchUrl<{ nftIds: null | "0" | string }>(
+    `/api/node/getOrderStateByHash?hash=${hash}`,
+    {
+      method: "GET",
+    }
+  );
+  return res?.data;
+}
+
+export type REFERRAL_REWARD = {
+  bitAmount: string;
+  invitationCode: string;
+  oneBrit: string;
+  oneNft: string;
+  oneNftAmount: string;
+  rebate: string;
+  twoBrit: string;
+  twoNft: string;
+  twoNftAmount: string;
+  usdtAmount: string;
+};
+export async function API_REFERRAL_REWARD() {
+  let res = await fetchUrl<REFERRAL_REWARD>(`/api/user/referralReward`, {
+    method: "GET",
+  });
+  return res?.data;
+}
+
+export type TEAM_LIST_ITEM = { address: string; number: string };
+export async function API_TEAM_LIST(grade: 1 | 2) {
+  let res = await fetchUrl<TEAM_LIST_ITEM[]>(
+    `/api/user/teamList?grade=${grade}`,
+    {
+      method: "GET",
+    }
+  );
+  return res?.data;
+}
+
+export type W_ORD_NODE_PRO_ITEM = {
+  buyAmount: string;
+  id: number;
+  illustrate: string;
+  nodeGrade: number;
+  nodeName: string;
+  status: number;
+};
+export async function API_GET_W_ORD_NODE_PRO() {
+  let res = await fetchUrl<W_ORD_NODE_PRO_ITEM[]>(`/api/node/getWOrdNodePro`, {
+    method: "GET",
+  });
+  return res?.data;
+}
+
+export async function API_CONTRACT_ADDRESS() {
+  let res = await fetchUrl<{ address: string }>(`/api/node/contractAddress`, {
+    method: "GET",
+  });
+  return res?.data.address;
+}

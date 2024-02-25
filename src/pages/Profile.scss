@@ -6,6 +6,7 @@
 
     display: flex;
     flex-direction: row;
+    padding: 0 20px;
     padding-top: calc(var(--pc-nav-height));
 
     justify-content: center;
@@ -40,7 +41,7 @@
         /* 矩形 4 */
 
         height: 88px;
-        border-radius: 9.46px;
+
         opacity: 1;
         box-sizing: border-box;
         text-align: center;
@@ -55,6 +56,7 @@
         &.active {
           /* 矩形 4 */
           background: #f58c00;
+          border-radius: 9.46px;
 
           border: 1px solid #f58c00;
 
@@ -78,7 +80,7 @@
           padding-top: 46px;
         }
       }
-      .content {
+      [data-radix-scroll-area-viewport] > div > .content {
         padding-bottom: 70px;
         margin-left: 40px;
 
@@ -94,14 +96,16 @@
             box-sizing: border-box;
             padding-right: 39px;
             margin-bottom: 33px;
-            &:nth-of-type(4n) {
-              padding-right: 0;
-            }
+            // &:nth-of-type(4n) {
+            // padding-right: 0;
+            // }
 
             > img {
               /* 矩形 3 */
 
-              height: 390px;
+              width: 100%;
+              // height: 304px;
+              aspect-ratio: 327 / 304;
               border-radius: 10px;
               opacity: 0.8;
 
@@ -177,6 +181,16 @@
             margin-top: 40px;
           }
 
+          .teamTab {
+            > span {
+              &.active {
+                font-family: Raleway-Bold;
+                color: #f58c00;
+                border-bottom: 1px solid #f58c00;
+              }
+            }
+          }
+
           .recommendation {
             /* 矩形 3 */
 
@@ -231,113 +245,9 @@
 
                 z-index: 1;
               }
-            }
-          }
 
-          .rankList {
-            /* 矩形 23 */
-
-            max-width: 1430px;
-            border-radius: 9.46px;
-            background: rgb(61 9 39 / 80%);
-            box-sizing: border-box;
-            border: 1px solid rgba(245, 140, 0, 0.2);
-            margin-top: 30px;
-
-            thead > tr,
-            tbody > tr {
-              position: relative;
-              border: none;
-              &::before {
-                content: "";
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 1px;
-                opacity: 0.8;
-                background-image: linear-gradient(
-                  270deg,
-                  rgba(55, 8, 35, 0) 0%,
-                  #671142 11%,
-                  #671142 87%,
-                  rgba(55, 8, 35, 0) 100%
-                );
-              }
-            }
-
-            thead > tr,
-            tbody > tr {
-              > td {
-                position: relative;
-                border: none;
-                &::before {
-                  content: "";
-                  position: absolute;
-                  top: 0;
-                  right: 0;
-                  width: 1px;
-                  height: 100%;
-                  opacity: 0.8;
-                  background-color: #671142;
-                }
-              }
-
-              > th {
-                position: relative;
-                border: none;
-                &::before {
-                  content: "";
-                  position: absolute;
-                  top: 0;
-                  right: 0;
-                  width: 1px;
-                  height: 100%;
-                  opacity: 0.8;
-                  background-image: linear-gradient(
-                    to top,
-                    rgba(55, 8, 35, 0) 0%,
-                    #671142 11%,
-                    #671142 57%,
-                    rgba(55, 8, 35, 0) 100%
-                  );
-                }
-              }
-            }
-
-            thead {
-              > tr {
-                height: 94px;
-
-                > th {
-                  font-family: Raleway-Medium;
-                  font-size: 34px;
-                  font-weight: 500;
-                  line-height: normal;
-                  letter-spacing: 0em;
-
-                  font-feature-settings: "kern" on;
-                  color: #999999;
-                }
-              }
-            }
-
-            tbody {
-              > tr {
-                height: 80px;
-                > td {
-                  /* 0x2323...W313 */
-
-                  font-family: Raleway-Medium;
-                  font-size: 34px;
-                  font-weight: 500;
-                  line-height: normal;
-                  text-transform: uppercase;
-                  letter-spacing: 0em;
-
-                  font-feature-settings: "kern" on;
-                  color: #eaeaea;
-                }
+              &:last-of-type {
+                border-right: none;
               }
             }
           }
@@ -371,11 +281,40 @@
               gap: 35px;
 
               .accessories {
-                width: 270px;
+                // width: 270px;
               }
 
               .mining {
                 flex: 1;
+                display: flex;
+                flex-direction: column;
+
+                > span {
+                  font-family: Raleway-Bold;
+                  font-size: 32px;
+                  letter-spacing: 0em;
+                  font-feature-settings: "kern" on;
+                  color: #f58c00;
+                }
+
+                .rightsAndInterests {
+                  max-width: 85%;
+                  position: static;
+                  opacity: 1;
+
+                  font-family: Raleway-Medium;
+                  font-size: 18px;
+                  font-weight: 500;
+                  line-height: normal;
+                  letter-spacing: 0em;
+
+                  font-feature-settings: "kern" on;
+                  color: #eaeaea;
+
+                  z-index: 1;
+
+                  margin-top: 15px;
+                }
               }
             }
           }
@@ -435,12 +374,11 @@
     }
 
     .getNftBox {
-      padding-bottom: 70px;
-      padding-left: 10px;
-      padding-right: 10px;
-      padding-top: 116px;
+      // padding-bottom: 70px;
+      // padding-left: 10px;
+      // padding-right: 10px;
+      // padding-top: 116px;
       display: flex;
-      gap: 40px;
       flex-direction: column;
     }
   }

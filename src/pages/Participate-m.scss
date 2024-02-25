@@ -66,13 +66,41 @@
             box-sizing: border-box;
             border: 1px solid rgba(245, 140, 0, 0.2);
 
+            position: relative;
+            overflow: hidden;
+            z-index: 4;
+
             img {
               // transform: scale(1.5);
-              width: 258px;
+              // width: 258px;
+              width: 100%;
               opacity: 1;
               animation: rotate 40s linear infinite;
               margin: 0 auto;
               // margin-top: 18px;
+              z-index: 2;
+            }
+
+            .boxBg {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-image: url("../assets/participate_bg.png");
+              background-size: cover;
+              z-index: 1;
+            }
+
+            .boxFornt {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-image: url("../assets/participate_front.png");
+              background-size: cover;
+              z-index: 3;
             }
 
             .box_title {
@@ -88,8 +116,13 @@
               font-feature-settings: "kern" on;
               color: #f58c00;
 
-              margin-top: 14px;
-              margin-left: 14px;
+              // margin-top: 14px;
+              // margin-left: 14px;
+              position: absolute;
+
+              top: 14px;
+              left: 14px;
+              z-index: 4;
             }
           }
         }

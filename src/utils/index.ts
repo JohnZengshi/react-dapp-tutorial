@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-02-22 18:29:38
+ * @LastEditTime: 2024-02-25 18:06:30
  * @Author: John
  */
 import CustomToast from "@/components/common/CustomToast";
@@ -53,6 +53,7 @@ export enum localStorageKey {
 
 export enum sessionStorageKey {
   okx_address = "okx_address",
+  unisat_address = "unisat_address",
   metaMask_address = "metaMask_address",
   roos_token = "roos_token",
 }

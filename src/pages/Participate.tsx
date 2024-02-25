@@ -1,25 +1,38 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-02-24 11:17:17
+ * @LastEditTime: 2024-02-25 18:32:58
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
 import "./Participate.scss";
 import "./Participate-m.scss";
 import { Button, ButtonProps } from "@/components/ui/button";
-import { Fragment, useEffect, useMemo, useState } from "react";
-import { Wallet, fetchUrl, isMobile, isOKApp, localStorageKey } from "@/utils";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Wallet,
+  fetchUrl,
+  isMobile,
+  isOKApp,
+  localStorageKey,
+  shortenString,
+} from "@/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ConnectUs from "@/components/common/ConnectUs";
 import CustomToast from "@/components/common/CustomToast";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import Invite from "@/components/common/Invite";
 import { SET_NOTIFICATION_TRIGGER_EVENT, SET_PAY_INFO } from "@/store/reducer";
-import { API_GET_NODE_LIST, API_PAY_NODE_SMS, NodeInfo } from "@/utils/api";
+import {
+  API_GET_NODE_LIST,
+  API_GET_ORDER_STATE_BY_HASH,
+  API_PAY_NODE_SMS,
+  NodeInfo,
+} from "@/utils/api";
 import boxT1 from "@/assets/boxT1.png";
 import boxT2 from "@/assets/boxT2.png";
 import boxT3 from "@/assets/boxT3.png";
+import participate_box from "@/assets/participate_box.png";
 import { useNavigate } from "react-router-dom";
 import { CUSTOM_DIALOG } from "@/store/customCom";
 import ReduceAddInput from "@/components/common/ReduceAddInput";
@@ -29,6 +42,9 @@ type OrderInfo = {
   orderNumber: number;
   status: number;
   outAddress: string;
+  address: number; // 上级地址 (数字)
+  num: number; // 随机数
+  rebateRatio: number; // 返佣比例
 };
 export default function () {
   const [num, setNum] = useState<number>(1);
@@ -45,6 +61,9 @@ export default function () {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const { buyNftIds, startPollingCheckBuyStatus, stopPollingCheckBuyStatus } =
+    usePollingCheckBuyStatus();
 
   let remaining = useMemo(() => {
     if (nodeInfo) {
@@ -68,6 +87,48 @@ export default function () {
     setNodeRemaining(nodeTotal - nodeData.purchasedCount);
     setCost(nodeData.nodePrice);
   }
+  // const hash =
+  //   "0x0d29d77accc9c8b943aac42211b15facd3681b2b6cca3afcba52b01d4e2066c3";
+
+  useEffect(() => {
+    const hash = user.wallet.payInfo?.hash;
+    if (!hash) return;
+    if (buyNftIds == null) {
+      // 确认中
+      dispatch(
+        CUSTOM_DIALOG({
+          content: "Please wait in Mint",
+          cannotClose: true,
+          loading: true,
+          hash: `Txn: ${shortenString(hash, 7, 7)}`,
+        })
+      );
+    } else if (buyNftIds === "0") {
+      // 失败
+      dispatch(
+        CUSTOM_DIALOG({
+          content: "Mint failed",
+          hash: `Txn: ${shortenString(hash, 7, 7)}`,
+          showConfirmBtn: true,
+        })
+      );
+      stopPollingCheckBuyStatus();
+    } else {
+      // 成功
+      dispatch(
+        CUSTOM_DIALOG({
+          content: "Mint is successful",
+          hash: `You ROOS NFTs ${buyNftIds}`, // TODO nft id
+          showConfirmBtn: true,
+          confirmBtnText: "Check My NFTs",
+          confirmBtnCallBack: () => navigate("/profile"),
+        })
+      );
+      stopPollingCheckBuyStatus();
+    }
+
+    return () => {};
+  }, [buyNftIds, user.wallet.payInfo?.hash]);
 
   useEffect(() => {
     // dispatch(
@@ -82,7 +143,7 @@ export default function () {
   useEffect(() => {
     (async () => {
       if (user.wallet.payInfo?.hash && user.wallet.address) {
-        console.log("hash更新，去查询状态：", user.wallet.payInfo?.hash);
+        console.log("hash更新，去查询状态：", user.wallet.payInfo.hash);
         let res = await API_PAY_NODE_SMS(
           user.wallet.payInfo.orderNumber,
           user.wallet.payInfo.hash,
@@ -90,12 +151,13 @@ export default function () {
         );
         if (res.type == 1) {
           //TODO 支付后的状态轮询
-          dispatch(
-            CUSTOM_DIALOG({
-              content:
-                "Paid, waiting for confirmation on the chain! Check out later on MY JOURNEY",
-            })
-          );
+          // dispatch(
+          //   CUSTOM_DIALOG({
+          //     content:
+          //       "Paid, waiting for confirmation on the chain! Check out later on MY JOURNEY",
+          //   })
+          // );
+          startPollingCheckBuyStatus(user.wallet.payInfo.hash);
         } else {
           CustomToast(
             "The payment failed and the transaction may have been declined!"
@@ -132,52 +194,23 @@ export default function () {
     <>
       <ScrollArea className="Participate">
         <div className="content flex flex-col">
-          <div className="card m-0-auto flex ">
+          <div className="card m-0-auto">
             <div className="left top relative">
               <div className="bulr-box absolute box-border border-solid"></div>
               <div className="model flex flex-col relative opacity-1 box-border border-solid">
                 {/* !isMobile && !isOKApp && */}
-                <span className="box_title">ROOSBOX</span>
+                {/* <span className="box_title">ROOSBOX</span> */}
 
-                {nodeInfo?.id == 145 && <img src={boxT1} alt="" />}
+                {/* {nodeInfo?.id == 145 && <img src={boxT1} alt="" />}
                 {nodeInfo?.id == 2 && <img src={boxT2} alt="" />}
-                {nodeInfo?.id == 3 && <img src={boxT3} alt="" />}
+                {nodeInfo?.id == 3 && <img src={boxT3} alt="" />} */}
+                <div className="boxBg"></div>
+                <div className="boxFornt"></div>
+                <img src={participate_box} alt="" />
               </div>
             </div>
 
             <div className="right bottom">
-              <div className="inputContent">
-                <span className="title">NODEBOX</span>
-                <div className="num_tip">
-                  <span>Total Supply:&nbsp;{nodeTotal}&nbsp;&nbsp;</span>
-                  <span>Remaining:&nbsp;{nodeRemaining}</span>
-                </div>
-                <span className="des">
-                  GoWrap is a cutting-edge cross-chain DeFi protocol tailored
-                  for BRC20. It's designed to integrate BRC20 seamlessly into
-                  the broader blockchain ecosystem by offering features like AMM
-                  swapping, liquidity mining, and lending. The goal is to enable
-                  cross-chain interoperability for BRC20 and provide a
-                  comprehensive suite of decentralized financial services,
-                  enhancing their functionality and utility across various
-                  blockchain networks. OG PASS Whitelists are granted to
-                  Gowrap's early community supporters. OG PASS holders are
-                  entitled to a portion of the 1% $GWGW airdrop from the total
-                  supply and enjoy fee discounts on all Gowrap products.
-                </span>
-
-                <div className="quantity">
-                  <span>Enter quantity</span>
-                  <span>Currently 1 node {cost} BTC</span>
-                </div>
-
-                <ReduceAddInput />
-                <div className="cost-total">
-                  <span>Cost：</span>
-                  <span>{cost * (num || 0)} BTC</span>
-                </div>
-              </div>
-
               <div className="rightContent bottomContent w-full h-full box-border flex flex-col">
                 <div className="top_box">
                   <div className="boxselect w-full flex items-center justify-between">
@@ -211,7 +244,7 @@ export default function () {
                           {nodeInfo?.nodePrice || "0.00"}
                         </span>
                         <span className="unit text-[#EAEAEA]">
-                          &nbsp;&nbsp;BTC
+                          &nbsp;&nbsp;{nodeInfo?.buyCoinName}
                         </span>
                       </div>
                     </li>
@@ -230,7 +263,9 @@ export default function () {
                       <span className="uppercase text-[#D5D5D5] opacity-60">
                         total amount
                       </span>
-                      <span className="totalAmount">{nodeInfo?.nodeTotal}</span>
+                      <span className="totalAmount">
+                        {nodeInfo?.nodeTotal || 0}
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -265,6 +300,11 @@ export default function () {
                           SET_NOTIFICATION_TRIGGER_EVENT("SELECT_WALLET")
                         );
 
+                        return;
+                      }
+
+                      if (user.wallet.chainType == "BTC") {
+                        CustomToast("MINT Please Switch To Etherscan Wallet !");
                         return;
                       }
                       if (typeof num === "number") {
@@ -304,6 +344,10 @@ export default function () {
                               toAddress: orderInfo.data.outAddress,
                               hash: "",
                               orderNumber: orderInfo.data.orderNumber,
+
+                              address: orderInfo.data.address,
+                              num: orderInfo.data.num,
+                              rebateRatio: orderInfo.data.rebateRatio,
                             })
                           );
                           dispatch(
@@ -316,7 +360,8 @@ export default function () {
                     {!user.wallet.address
                       ? "Connent wallet"
                       : nodeRemaining > 0
-                      ? "Buy Now"
+                      ? // ? "Buy Now"
+                        "Mint"
                       : "Node Completed"}
                   </Button>
                 </div>
@@ -330,4 +375,39 @@ export default function () {
       </ScrollArea>
     </>
   );
+}
+
+function usePollingCheckBuyStatus() {
+  const [buyNftIds, setBuyNftIds] = useState<string | null>();
+  const stop = useRef(false);
+
+  function startPollingCheckBuyStatus(hash: string) {
+    polling(hash);
+  }
+
+  const checkStatus = async (hash: string) => {
+    return new Promise<void>(async (reslove, reject) => {
+      let res = await API_GET_ORDER_STATE_BY_HASH(hash);
+      setBuyNftIds(res.nftIds);
+      setTimeout(() => {
+        reslove();
+      }, 2000);
+    });
+  };
+
+  const polling = async (hash: string) => {
+    await checkStatus(hash);
+    if (stop.current) return;
+    polling(hash);
+  };
+
+  function stopPollingCheckBuyStatus() {
+    stop.current = true;
+  }
+
+  return {
+    buyNftIds,
+    startPollingCheckBuyStatus,
+    stopPollingCheckBuyStatus,
+  };
 }

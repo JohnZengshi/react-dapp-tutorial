@@ -57,7 +57,13 @@ import { subimtByContract } from "@/utils/walletApi";
 export type MetaMask_HandleType = {
   _connect: (chainType: ChainType) => Promise<string>;
   _disConnect?: () => Promise<void>;
-  _onSubmit: (buyAmount: string, buyCount: number) => Promise<string>;
+  _onSubmit: (
+    buyAmount: string,
+    buyCount: number,
+    randomNumber: number, // 随机数
+    rebateRatio: number, // 返佣比例,
+    pAddress: number
+  ) => Promise<string>;
   _sign: (address: string, message: string) => Promise<string>;
 };
 
@@ -95,8 +101,20 @@ const MetaMask = forwardRef<
       // _disConnect() {
       //   // return disConnect(); TODO 补充disConnect
       // },
-      _onSubmit(buyAmount: string, buyCount: number) {
-        return onSubmit(buyAmount, buyCount); //TODO 补充onSubmit✔
+      _onSubmit(
+        buyAmount,
+        buyCount,
+        randomNumber, // 随机数
+        rebateRatio, // 返佣比例,
+        pAddress
+      ) {
+        return onSubmit(
+          buyAmount,
+          buyCount,
+          randomNumber,
+          rebateRatio,
+          pAddress
+        ); //TODO 补充onSubmit✔
       },
       _sign(address, message) {
         return sign(address, message); // TODO 补充sign
@@ -148,8 +166,22 @@ const MetaMask = forwardRef<
     });
   };
   // 发送交易
-  function onSubmit(buyAmount: string, buyCount: number) {
-    return subimtByContract(buyAmount, buyCount, ethereum, user.wallet.address);
+  function onSubmit(
+    buyAmount: string,
+    buyCount: number,
+    randomNumber: number, // 随机数
+    rebateRatio: number, // 返佣比例,
+    pAddress: number
+  ) {
+    return subimtByContract(
+      BigInt(buyAmount),
+      buyCount,
+      randomNumber,
+      rebateRatio,
+      pAddress,
+      ethereum,
+      user.wallet.address
+    );
   }
 
   // 签名
@@ -198,11 +230,11 @@ const MetaMask = forwardRef<
       await props.checkInstalledOk();
       // 监听账户变化
       console.log("绑定accountChanged事件");
-      ethereum?.on("accountChanged", handleAccountsChanged);
+      ethereum?.on("accountsChanged", handleAccountsChanged);
     })();
     return () => {
-      console.log("解绑accountChanged事件");
-      ethereum?.removeListener("accountChanged", handleAccountsChanged);
+      // console.log("解绑accountChanged事件");
+      // ethereum?.removeListener("accountChanged", handleAccountsChanged);
     };
   }, []);
 
