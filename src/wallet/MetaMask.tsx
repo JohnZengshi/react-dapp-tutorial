@@ -48,8 +48,6 @@ import {
 } from "@/constant/wallet";
 import { useAppSelector } from "@/store/hooks";
 import { ChainType } from "@/store/reducer";
-import { abi } from "@/contract/ROOS.json";
-import { abi as usdt_abi } from "@/contract/USDT.json";
 import Web3 from "web3";
 import { signTransaction, Transaction } from "web3-eth-accounts";
 import { subimtByContract } from "@/utils/walletApi";

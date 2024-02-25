@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-23 18:47:07
- * @LastEditTime: 2024-02-25 20:04:43
+ * @LastEditTime: 2024-02-25 22:05:25
  * @Author: John
  */
 import Web3 from "web3";
@@ -103,17 +103,51 @@ export async function subimtByContract(
         await authorizedU(buyAmount);
       }
 
+      console.log(
+        "参数:",
+        buyCount,
+        buyAmount,
+        randomNumber,
+        rebateRatio,
+        pAddress
+      );
+
+      // contract.methods
+      //   .withdraw()
+      //   .estimateGas({ from: fromAddress })
+      //   .then((gas: bigint) => {
+      //     contract.methods
+      //       .withdraw()
+      //       .send({
+      //         from: fromAddress,
+      //         gas: (gas * 120n).toString(),
+      //         gasPrice: (gas * 120n).toString(),
+      //       })
+      //       .then(function (receipt) {
+      //         // other parts of code to use receipt
+      //         console.log("withdraw send:", receipt);
+      //         // reslove(receipt.transactionHash);
+      //       });
+      //   });
+
+      // return;
+
       contract.methods
         .buyNFTNew(buyCount, buyAmount, randomNumber, rebateRatio, pAddress)
         .estimateGas({ from: fromAddress })
-        .then((ERC20SwapERC721Res) => {
-          console.log("buyNFTNew estimateGas:", ERC20SwapERC721Res);
+        .then((gas: bigint) => {
+          console.log("buyNFTNew estimateGas:", gas);
+
           contract.methods
             .buyNFTNew(buyCount, buyAmount, randomNumber, rebateRatio, pAddress)
             .send({
               from: fromAddress,
-              gas: parseInt(gasPrice * 1.2 + "") + "",
-              gasPrice: parseInt(gasPrice * 1.2 + "") + "",
+              gas: (gas * 120n).toString(),
+              gasPrice: (gas * 120n).toString(),
+            })
+            .on("transactionHash", function (hash) {
+              console.log("Transaction Hash:", hash);
+              // 这里可以对交易哈希进行处理，比如显示在页面上
             })
             .then(function (receipt) {
               // other parts of code to use receipt

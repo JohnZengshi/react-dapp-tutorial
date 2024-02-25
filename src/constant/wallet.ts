@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-21 15:31:59
- * @LastEditTime: 2024-02-25 19:46:08
+ * @LastEditTime: 2024-02-25 21:56:13
  * @Author: John
  */
 export const WALLET_ARBITRUM_ONE = {
@@ -17,9 +17,7 @@ export const WALLET_ARBITRUM_ONE = {
 
 export const WALLET_TEST = {
   chainId: "0xaa36a7", // 11155111
-  rpcUrls: [
-    "https://eth-sepolia.g.alchemy.com/v2/zYrR0qdbrShWH-WCrxftANAnThsz5VDA",
-  ],
+  rpcUrls: ["https://ethereum-sepolia-rpc.publicnode.com/"],
   blockExplorerUrls: ["https://eth-sepolia.g.alchemy.com"],
   chainName: "Arbitrum test",
   nativeCurrency: {
