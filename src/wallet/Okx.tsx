@@ -16,7 +16,6 @@ import {
   useState,
 } from "react";
 import { toWei } from "web3-utils";
-import { abi } from "@/contract/ROOS.json";
 import { Contract } from "web3-eth-contract";
 import { subimtByContract } from "@/utils/walletApi";
 /*
@@ -39,7 +38,7 @@ export type Okx_HandleType = {
     buyCount: number,
     randomNumber: number, // 随机数
     rebateRatio: number, // 返佣比例,
-    pAddress: number,
+    pAddress: string,
     toAddress?: string
   ) => Promise<string>;
   _sign: (address: string, message: string) => Promise<string>;
@@ -154,39 +153,42 @@ const Okx = forwardRef<
             reslove(result.address);
           })
           .catch(handleCatch);
-      } else if (chainType == "ETHEREUM") {
+      } else {
         okxwallet
           ?.request({ method: ETHEREUM_RPC.EthRequestAccounts })
           .then(async (result) => {
             console.log("okx connect ETHEREUM :", result);
             if (result.length == 0)
               return CustomToast("The wallet does not support.");
-            // 切换以太链
-            await okxwallet?.request({
-              method: ETHEREUM_RPC.WalletSwitchEthereumChain,
-              params: [{ chainId: WALLET_ETHEREUM.chainId }],
-            });
-            reslove(result[0]);
-          });
-      } else {
-        okxwallet
-          ?.request({ method: ETHEREUM_RPC.EthRequestAccounts })
-          .then(async (result) => {
-            console.log("okx connect ethSys:", result);
-            if (result.length == 0)
-              return CustomToast("The wallet does not support.");
-
-            if (chainType == "Arbitrum One") {
+            if (chainType == "ETHEREUM") {
+              // 切换以太链
+              await okxwallet?.request({
+                method: ETHEREUM_RPC.WalletSwitchEthereumChain,
+                params: [{ chainId: WALLET_ETHEREUM.chainId }],
+              });
+            } else if (chainType == "Arbitrum One") {
               // 切换arb链
               await okxwallet?.request({
                 method: ETHEREUM_RPC.WalletAddEthereumChain,
                 params: [WALLET_ARBITRUM_ONE],
               });
             } else if (chainType == "Arbitrum test") {
-              await okxwallet?.request({
-                method: ETHEREUM_RPC.WalletAddEthereumChain,
-                params: [WALLET_TEST],
-              });
+              try {
+                await okxwallet?.request({
+                  method: ETHEREUM_RPC.WalletSwitchEthereumChain,
+                  params: [{ chainId: WALLET_TEST.chainId }],
+                });
+                console.log("切换Arbitrum test成功");
+              } catch (error: any) {
+                console.log("切换失败", error);
+                if (error.code === 4902) {
+                  console.log("添加链");
+                  await okxwallet?.request({
+                    method: ETHEREUM_RPC.WalletAddEthereumChain,
+                    params: [WALLET_TEST],
+                  });
+                }
+              }
             }
             reslove(result[0]);
           });
@@ -216,7 +218,7 @@ const Okx = forwardRef<
     buyCount: number,
     randomNumber: number, // 随机数
     rebateRatio: number, // 返佣比例,
-    pAddress: number,
+    pAddress: string,
     toAddress?: string
   ) {
     if (user.wallet.chainType == "BTC") {

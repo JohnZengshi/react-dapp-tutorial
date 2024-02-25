@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-21 15:31:59
- * @LastEditTime: 2024-02-25 21:56:13
+ * @LastEditTime: 2024-02-26 00:18:48
  * @Author: John
  */
 export const WALLET_ARBITRUM_ONE = {
@@ -17,12 +17,13 @@ export const WALLET_ARBITRUM_ONE = {
 
 export const WALLET_TEST = {
   chainId: "0xaa36a7", // 11155111
-  rpcUrls: ["https://ethereum-sepolia-rpc.publicnode.com/"],
-  blockExplorerUrls: ["https://eth-sepolia.g.alchemy.com"],
-  chainName: "Arbitrum test",
+  // rpcUrls: ["https://ethereum-sepolia-rpc.publicnode.com/"],
+  rpcUrls: ["https://rpc.sepolia.org"],
+  blockExplorerUrls: ["https://sepolia.etherscan.io"],
+  chainName: "Sepolia test network",
   nativeCurrency: {
-    symbol: "ETH",
-    decimals: 18,
+    symbol: "SepoliaETH",
+    // decimals: 18,
   },
 };
 
@@ -54,7 +55,7 @@ export type Ethereum = {
           chainName: string;
           nativeCurrency: {
             symbol: string;
-            decimals: number;
+            decimals?: number;
           };
         }>[]
       : T extends ETHEREUM_RPC.EthSendTransaction

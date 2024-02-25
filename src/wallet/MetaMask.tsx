@@ -60,7 +60,7 @@ export type MetaMask_HandleType = {
     buyCount: number,
     randomNumber: number, // 随机数
     rebateRatio: number, // 返佣比例,
-    pAddress: number
+    pAddress: string
   ) => Promise<string>;
   _sign: (address: string, message: string) => Promise<string>;
 };
@@ -169,7 +169,7 @@ const MetaMask = forwardRef<
     buyCount: number,
     randomNumber: number, // 随机数
     rebateRatio: number, // 返佣比例,
-    pAddress: number
+    pAddress: string
   ) {
     return subimtByContract(
       BigInt(buyAmount),

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-23 18:47:07
- * @LastEditTime: 2024-02-25 22:05:25
+ * @LastEditTime: 2024-02-26 01:30:05
  * @Author: John
  */
 import Web3 from "web3";
@@ -19,7 +19,7 @@ export async function subimtByContract(
   buyCount: number, // 认购数量
   randomNumber: number, // 随机数
   rebateRatio: number, // 返佣比例,
-  pAddress: number, // 上级地址
+  pAddress: string, // 上级地址
   ethereum?: Ethereum,
   fromAddress?: string
 ) {
@@ -142,8 +142,14 @@ export async function subimtByContract(
             .buyNFTNew(buyCount, buyAmount, randomNumber, rebateRatio, pAddress)
             .send({
               from: fromAddress,
-              gas: (gas * 120n).toString(),
-              gasPrice: (gas * 120n).toString(),
+              gas: (gas * 10n).toString(),
+              gasPrice: (gas * 10n).toString(),
+
+              // gas: gasPrice.toString(),
+              // gasPrice: gasPrice.toString(),
+
+              // gas: parseInt(Number(gas) * 1.2 + ""),
+              // gasPrice: parseInt(gasPrice * 1.2 + ""),
             })
             .on("transactionHash", function (hash) {
               console.log("Transaction Hash:", hash);
