@@ -32,6 +32,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   ChainType,
   SET_ADDRESS,
+  SET_BUY_LOADING,
   SET_CHAIN_TYPE,
   SET_CONNECTED,
   SET_LOGINSTATUS,
@@ -112,6 +113,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
           if (!user.wallet.payInfo) return;
 
           try {
+            dispatch(SET_BUY_LOADING(true));
             let hash = "";
             if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
               hash = await uniSatRef.current._onSubmit(
@@ -143,7 +145,9 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
             console.log("调起支付成功，得到：hash", hash);
             if (hash)
               dispatch(SET_PAY_INFO({ ...user.wallet.payInfo, hash: hash }));
-          } catch (hash) {
+          } catch (err) {
+            console.log(err);
+            dispatch(SET_BUY_LOADING(false));
             // TODO 用户取消支付✔
             // if (hash == "") CustomToast("user cancel payment");
             // CustomToast("cancel payment");
@@ -387,6 +391,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     dispatch(SET_LOGINSTATUS("LOG_OUT"));
     dispatch(SET_CONNECTED(false));
     dispatch(SET_ADDRESS(""));
+    dispatch(SET_BUY_LOADING(false));
     sessionStorage.removeItem(sessionStorageKey.okx_address);
     sessionStorage.removeItem(sessionStorageKey.unisat_address);
     sessionStorage.removeItem(sessionStorageKey.metaMask_address);

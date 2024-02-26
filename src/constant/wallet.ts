@@ -1,10 +1,22 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-21 15:31:59
- * @LastEditTime: 2024-02-26 00:18:48
+ * @LastEditTime: 2024-02-26 15:55:23
  * @Author: John
  */
-export const WALLET_ARBITRUM_ONE = {
+
+type chainType = {
+  chainId: string;
+  rpcUrls: string[];
+  blockExplorerUrls: string[];
+  chainName: string;
+  nativeCurrency: {
+    symbol: string;
+    decimals?: number;
+  };
+};
+
+export const WALLET_ARBITRUM_ONE: chainType = {
   chainId: "0xa4b1", // 42161
   rpcUrls: ["https://arbitrum.llamarpc.com"],
   blockExplorerUrls: ["https://arbiscan.io"],
@@ -15,19 +27,18 @@ export const WALLET_ARBITRUM_ONE = {
   },
 };
 
-export const WALLET_TEST = {
+export const WALLET_TEST: chainType = {
   chainId: "0xaa36a7", // 11155111
-  // rpcUrls: ["https://ethereum-sepolia-rpc.publicnode.com/"],
   rpcUrls: ["https://rpc.sepolia.org"],
   blockExplorerUrls: ["https://sepolia.etherscan.io"],
   chainName: "Sepolia test network",
   nativeCurrency: {
-    symbol: "SepoliaETH",
-    // decimals: 18,
+    symbol: "ETH",
+    decimals: 18,
   },
 };
 
-export const WALLET_ETHEREUM = {
+export const WALLET_ETHEREUM: Pick<chainType, "chainId"> = {
   chainId: "0x1",
 };
 
@@ -47,7 +58,9 @@ export type Ethereum = {
     method,
   }: {
     method: T;
-    params?: T extends ETHEREUM_RPC.WalletAddEthereumChain
+    params?: T extends
+      | ETHEREUM_RPC.WalletAddEthereumChain
+      | ETHEREUM_RPC.WalletSwitchEthereumChain
       ? Partial<{
           chainId: string;
           rpcUrls: string[];

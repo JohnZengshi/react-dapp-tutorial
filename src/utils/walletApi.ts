@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-23 18:47:07
- * @LastEditTime: 2024-02-26 01:30:05
+ * @LastEditTime: 2024-02-26 16:46:42
  * @Author: John
  */
 import Web3 from "web3";
@@ -56,7 +56,8 @@ export async function subimtByContract(
         })
         .catch((err: any) => {
           console.log("approve error", isMobile ? err.error : err);
-          handleCatch(isMobile ? err.error : err, reslove, reject);
+          reject(isMobile ? err.error : err);
+          // handleCatch(isMobile ? err.error : err, reslove, reject);
         });
     });
   };
@@ -77,8 +78,9 @@ export async function subimtByContract(
           resolve(res);
         })
         .catch((err: any) => {
-          console.log("err", err);
-          handleCatch(isMobile ? err.error : err, resolve, reject);
+          console.log("get approve usdt err", err);
+          // handleCatch(isMobile ? err.error : err, resolve, reject);
+          reject(isMobile ? err.error : err);
         });
     });
   };
@@ -88,87 +90,71 @@ export async function subimtByContract(
       console.log("get gas price:", gasData);
       let gasPrice = parseInt(gasData[0]);
 
-      let approvedU = await getApproveUsdt();
+      try {
+        let approvedU = await getApproveUsdt();
 
-      console.log("当前要授权的U:", buyAmount, "上次授权的U:", approvedU);
+        console.log("当前要授权的U:", buyAmount, "上次授权的U:", approvedU);
 
-      if (typeof approvedU == "undefined") {
-        // 获取授权U失败
-        CustomToast("get approve usdt error!");
-        return;
+        if (typeof approvedU == "undefined") {
+          // 获取授权U失败
+          CustomToast("get approve usdt error!");
+          return;
+        }
+
+        if (approvedU < buyAmount) {
+          // const diffU = buyAmount - approvedU;
+          await authorizedU(buyAmount);
+        }
+
+        console.log(
+          "参数:",
+          buyCount,
+          buyAmount,
+          randomNumber,
+          rebateRatio,
+          pAddress
+        );
+
+        contract.methods
+          .buyNFTNew(buyCount, buyAmount, randomNumber, rebateRatio, pAddress)
+          .estimateGas({ from: fromAddress })
+          .then((gas: bigint) => {
+            console.log("buyNFTNew estimateGas:", gas);
+
+            contract.methods
+              .buyNFTNew(
+                buyCount,
+                buyAmount,
+                randomNumber,
+                rebateRatio,
+                pAddress
+              )
+              .send({
+                from: fromAddress,
+                gas: (gas * 10n).toString(),
+                gasPrice: (gas * 10n).toString(),
+
+                // gas: gasPrice.toString(),
+                // gasPrice: gasPrice.toString(),
+
+                // gas: parseInt(Number(gas) * 1.2 + ""),
+                // gasPrice: parseInt(gasPrice * 1.2 + ""),
+              })
+              .on("transactionHash", function (hash) {
+                console.log("Transaction Hash:", hash);
+                reslove(hash);
+                // 这里可以对交易哈希进行处理，比如显示在页面上
+              });
+            // .then(function (receipt) {
+            //   // other parts of code to use receipt
+            //   console.log("buyNFTNew send:", receipt);
+            //   reslove(receipt.transactionHash);
+            // });
+          });
+      } catch (err: any) {
+        reject(err);
+        handleCatch(isMobile ? err.error : err, reslove, reject);
       }
-
-      if (approvedU < buyAmount) {
-        // const diffU = buyAmount - approvedU;
-        await authorizedU(buyAmount);
-      }
-
-      console.log(
-        "参数:",
-        buyCount,
-        buyAmount,
-        randomNumber,
-        rebateRatio,
-        pAddress
-      );
-
-      // contract.methods
-      //   .withdraw()
-      //   .estimateGas({ from: fromAddress })
-      //   .then((gas: bigint) => {
-      //     contract.methods
-      //       .withdraw()
-      //       .send({
-      //         from: fromAddress,
-      //         gas: (gas * 120n).toString(),
-      //         gasPrice: (gas * 120n).toString(),
-      //       })
-      //       .then(function (receipt) {
-      //         // other parts of code to use receipt
-      //         console.log("withdraw send:", receipt);
-      //         // reslove(receipt.transactionHash);
-      //       });
-      //   });
-
-      // return;
-
-      contract.methods
-        .buyNFTNew(buyCount, buyAmount, randomNumber, rebateRatio, pAddress)
-        .estimateGas({ from: fromAddress })
-        .then((gas: bigint) => {
-          console.log("buyNFTNew estimateGas:", gas);
-
-          contract.methods
-            .buyNFTNew(buyCount, buyAmount, randomNumber, rebateRatio, pAddress)
-            .send({
-              from: fromAddress,
-              gas: (gas * 10n).toString(),
-              gasPrice: (gas * 10n).toString(),
-
-              // gas: gasPrice.toString(),
-              // gasPrice: gasPrice.toString(),
-
-              // gas: parseInt(Number(gas) * 1.2 + ""),
-              // gasPrice: parseInt(gasPrice * 1.2 + ""),
-            })
-            .on("transactionHash", function (hash) {
-              console.log("Transaction Hash:", hash);
-              // 这里可以对交易哈希进行处理，比如显示在页面上
-            })
-            .then(function (receipt) {
-              // other parts of code to use receipt
-              console.log("buyNFTNew send:", receipt);
-              reslove(receipt.transactionHash);
-            })
-            .catch((err) => {
-              console.log("buyNFTNew error", isMobile ? err.error : err);
-              handleCatch(isMobile ? err.error : err, reslove, reject);
-            });
-        })
-        .catch((err) => {
-          console.log("buyNFTNew error", isMobile ? err.error : err);
-          handleCatch(isMobile ? err.error : err, reslove, reject);
-        });
     });
   });
 }

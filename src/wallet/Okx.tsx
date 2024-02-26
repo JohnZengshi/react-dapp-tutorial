@@ -168,10 +168,22 @@ const Okx = forwardRef<
               });
             } else if (chainType == "Arbitrum One") {
               // 切换arb链
-              await okxwallet?.request({
-                method: ETHEREUM_RPC.WalletAddEthereumChain,
-                params: [WALLET_ARBITRUM_ONE],
-              });
+              try {
+                await okxwallet?.request({
+                  method: ETHEREUM_RPC.WalletSwitchEthereumChain,
+                  params: [{ chainId: WALLET_ARBITRUM_ONE.chainId }],
+                });
+                console.log("切换Arbitrum One成功");
+              } catch (error: any) {
+                console.log("切换失败", error);
+                if (error.code === 4902) {
+                  console.log("添加链");
+                  await okxwallet?.request({
+                    method: ETHEREUM_RPC.WalletAddEthereumChain,
+                    params: [WALLET_ARBITRUM_ONE],
+                  });
+                }
+              }
             } else if (chainType == "Arbitrum test") {
               try {
                 await okxwallet?.request({

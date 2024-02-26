@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-14 17:41:17
- * @LastEditTime: 2024-02-24 12:56:39
+ * @LastEditTime: 2024-02-26 15:35:04
  * @Author: John
  */
 import "./CustomDialog.scss";
@@ -43,7 +43,12 @@ export default function () {
             )}
             <span className="content_text">{customCom.dialog.content}</span>
             {customCom.dialog.hash && (
-              <span className="hash">{customCom.dialog.hash}</span>
+              <span
+                className="hash"
+                onClick={() => customCom.dialog.clickHashCallBack?.()}
+              >
+                {customCom.dialog.hash}
+              </span>
             )}
             {customCom.dialog.showConfirmBtn && (
               <button

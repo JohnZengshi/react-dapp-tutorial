@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-02-24 10:11:03
+ * @LastEditTime: 2024-02-26 16:26:07
  * @Author: John
  */
 import "./Invite.scss";
@@ -151,8 +151,7 @@ export default function (
                     invitationCode &&
                     user.wallet.address
                   ) {
-                    // navigator.clipboard.writeText(invitationCode);
-                    clipboard.writeText(user.wallet.address);
+                    clipboard.writeText(invitationCode);
                     CustomToast("Copy Success");
                   }
                 }}

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:25:34
- * @LastEditTime: 2024-01-14 17:49:03
+ * @LastEditTime: 2024-02-26 15:45:00
  * @Author: John
  */
 import { configureStore } from "@reduxjs/toolkit";
@@ -16,6 +16,8 @@ const store = configureStore({
     customCom: customComReducer,
     sys: sysComReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

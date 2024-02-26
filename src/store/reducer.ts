@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-02-25 16:18:25
+ * @LastEditTime: 2024-02-26 13:53:50
  * @Author: John
  */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
@@ -37,7 +37,7 @@ export interface UserState {
       hash: string;
       orderNumber: number;
 
-      address: number; // 上级地址 (数字)
+      address: string; // 上级地址 (数字)
       num: number; // 随机数
       rebateRatio: number; // 返佣比例
     } | null;
@@ -45,6 +45,7 @@ export interface UserState {
     chainType: ChainType;
   };
   logInStatus: "LOGIN" | "LOG_OUT";
+  buyLoading: boolean;
 }
 
 const initialState: UserState = {
@@ -64,7 +65,7 @@ const initialState: UserState = {
       hash: "",
       orderNumber: 0,
 
-      address: 0, // 上级地址 (数字)
+      address: "", // 上级地址
       num: 0, // 随机数
       rebateRatio: 0, // 返佣比例
     },
@@ -72,6 +73,7 @@ const initialState: UserState = {
     chainType: "",
   },
   logInStatus: "LOG_OUT",
+  buyLoading: false,
 };
 
 export const userSlice = createSlice({
@@ -131,6 +133,13 @@ export const userSlice = createSlice({
     ) => {
       state.wallet.chainType = action.payload;
     },
+
+    SET_BUY_LOADING: (
+      state,
+      action: PayloadAction<UserState["buyLoading"]>
+    ) => {
+      state.buyLoading = action.payload;
+    },
   },
 });
 
@@ -148,6 +157,7 @@ export const {
   SET_THIRD_INVITE_CODE,
   SET_LOGINSTATUS,
   SET_CHAIN_TYPE,
+  SET_BUY_LOADING,
 } = userSlice.actions;
 
 export default userSlice.reducer;

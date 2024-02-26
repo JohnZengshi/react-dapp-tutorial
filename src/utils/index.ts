@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-02-25 18:06:30
+ * @LastEditTime: 2024-02-26 14:20:56
  * @Author: John
  */
 import CustomToast from "@/components/common/CustomToast";
@@ -107,6 +107,7 @@ export async function fetchUrl<D = any, P = any>(
     throw new Error(`error!: ${data.msg}`);
   } catch (error) {
     console.error("Error during fetch:", error);
+    CustomToast("Server Error!");
     throw error;
   }
 }

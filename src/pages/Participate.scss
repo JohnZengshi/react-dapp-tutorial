@@ -337,6 +337,13 @@
 
             font-feature-settings: "kern" on;
             color: #333333;
+
+            .loadingIcon {
+              margin-right: 20px;
+              width: 30px;
+              height: 30px;
+              animation: loading 5s linear infinite;
+            }
           }
         }
       }

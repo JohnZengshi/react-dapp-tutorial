@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-02-25 18:32:58
+ * @LastEditTime: 2024-02-26 16:11:19
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -22,7 +22,11 @@ import ConnectUs from "@/components/common/ConnectUs";
 import CustomToast from "@/components/common/CustomToast";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import Invite from "@/components/common/Invite";
-import { SET_NOTIFICATION_TRIGGER_EVENT, SET_PAY_INFO } from "@/store/reducer";
+import {
+  SET_BUY_LOADING,
+  SET_NOTIFICATION_TRIGGER_EVENT,
+  SET_PAY_INFO,
+} from "@/store/reducer";
 import {
   API_GET_NODE_LIST,
   API_GET_ORDER_STATE_BY_HASH,
@@ -36,13 +40,14 @@ import participate_box from "@/assets/participate_box.png";
 import { useNavigate } from "react-router-dom";
 import { CUSTOM_DIALOG } from "@/store/customCom";
 import ReduceAddInput from "@/components/common/ReduceAddInput";
+import Iconfont from "@/components/iconfont";
 type OrderInfo = {
   buyAmount: string;
   buyCount: number;
   orderNumber: number;
   status: number;
   outAddress: string;
-  address: number; // 上级地址 (数字)
+  address: string; // 上级地址 (数字)
   num: number; // 随机数
   rebateRatio: number; // 返佣比例
 };
@@ -87,8 +92,6 @@ export default function () {
     setNodeRemaining(nodeTotal - nodeData.purchasedCount);
     setCost(nodeData.nodePrice);
   }
-  // const hash =
-  //   "0x0d29d77accc9c8b943aac42211b15facd3681b2b6cca3afcba52b01d4e2066c3";
 
   useEffect(() => {
     const hash = user.wallet.payInfo?.hash;
@@ -101,6 +104,11 @@ export default function () {
           cannotClose: true,
           loading: true,
           hash: `Txn: ${shortenString(hash, 7, 7)}`,
+          clickHashCallBack: () => {
+            window.open(
+              `${import.meta.env.VITE_CHECK_TRANSACTION_DETAILS_URL}${hash}`
+            );
+          },
         })
       );
     } else if (buyNftIds === "0") {
@@ -112,6 +120,7 @@ export default function () {
           showConfirmBtn: true,
         })
       );
+      dispatch(SET_PAY_INFO(null));
       stopPollingCheckBuyStatus();
     } else {
       // 成功
@@ -124,19 +133,15 @@ export default function () {
           confirmBtnCallBack: () => navigate("/profile"),
         })
       );
+      dispatch(SET_PAY_INFO(null));
       stopPollingCheckBuyStatus();
     }
 
+    dispatch(SET_BUY_LOADING(false));
     return () => {};
   }, [buyNftIds, user.wallet.payInfo?.hash]);
 
   useEffect(() => {
-    // dispatch(
-    //   CUSTOM_DIALOG({
-    //     content:
-    //       "Paid, waiting for confirmation on the chain! Check it later in Personal Center.",
-    //   })
-    // );
     getNodeInfo();
   }, []);
 
@@ -163,8 +168,6 @@ export default function () {
             "The payment failed and the transaction may have been declined!"
           );
         }
-
-        dispatch(SET_PAY_INFO(null));
       }
     })();
 
@@ -279,7 +282,10 @@ export default function () {
                     }}
                   ></div>
 
-                  <ReduceAddInput onChange={(val) => setNum(val)} />
+                  <ReduceAddInput
+                    disable={user.buyLoading}
+                    onChange={(val) => setNum(val)}
+                  />
 
                   <div className="totalCost flex items-center ml-auto">
                     <span>Cost:&nbsp;&nbsp;</span>
@@ -289,8 +295,14 @@ export default function () {
                   </div>
 
                   <Button
-                    className="buy-btn mt-auto"
-                    disabled={user.wallet.connected && nodeRemaining <= 0}
+                    className={`buy-btn mt-auto ${
+                      user.buyLoading ? "cursor-not-allowed" : ""
+                    }`}
+                    disabled={
+                      user.wallet.connected &&
+                      nodeRemaining <= 0 &&
+                      user.buyLoading
+                    }
                     onClick={async () => {
                       if (!user.wallet.address) {
                         console.log(user.wallet.address);
@@ -302,11 +314,13 @@ export default function () {
 
                         return;
                       }
-
                       if (user.wallet.chainType == "BTC") {
                         CustomToast("MINT Please Switch To Etherscan Wallet !");
                         return;
                       }
+
+                      if (user.buyLoading) return;
+
                       if (typeof num === "number") {
                         if (!nodeInfo) return;
                         // TODO 购买节点✔
@@ -357,6 +371,13 @@ export default function () {
                       }
                     }}
                   >
+                    {user.buyLoading && (
+                      <Iconfont
+                        name="jiazai"
+                        className="loadingIcon"
+                        color="#333333"
+                      />
+                    )}
                     {!user.wallet.address
                       ? "Connent wallet"
                       : nodeRemaining > 0
@@ -389,6 +410,7 @@ function usePollingCheckBuyStatus() {
     return new Promise<void>(async (reslove, reject) => {
       let res = await API_GET_ORDER_STATE_BY_HASH(hash);
       setBuyNftIds(res.nftIds);
+      console.log("得到nft ids:", res.nftIds);
       setTimeout(() => {
         reslove();
       }, 2000);

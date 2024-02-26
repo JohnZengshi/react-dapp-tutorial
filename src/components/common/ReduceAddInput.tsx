@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-23 19:34:01
- * @LastEditTime: 2024-02-25 14:57:17
+ * @LastEditTime: 2024-02-26 14:55:28
  * @Author: John
  */
 import "./ReduceAddInput.scss";
@@ -10,15 +10,21 @@ import { Input, InputProps } from "@/components/ui/input";
 import { PropsWithChildren, useState } from "react";
 
 export default function (
-  props: PropsWithChildren<{ onChange?: (value: number) => void }>
+  props: PropsWithChildren<{
+    onChange?: (value: number) => void;
+    disable?: boolean;
+  }>
 ) {
   const [num, setNum] = useState<number>(1);
 
   return (
     <div className="ReduceAddInput">
       <div
-        className="reduce cursor-pointer"
+        className={`reduce cursor-pointer ${
+          props.disable ? "cursor-not-allowed" : ""
+        }`}
         onClick={() => {
+          if (props.disable) return;
           if (num == 1) return;
           if (num) {
             setNum(num - 1);
@@ -30,6 +36,7 @@ export default function (
       </div>
       <div className="input-Content flex-auto">
         <Input
+          disabled={props.disable}
           type="text"
           value={num || ""}
           onChange={(e) => {
@@ -43,9 +50,11 @@ export default function (
         />
       </div>
       <div
-        className="add cursor-pointer"
+        className={`add cursor-pointer ${
+          props.disable ? "cursor-not-allowed" : ""
+        }`}
         onClick={() => {
-          // if (num == 1) return;
+          if (props.disable) return;
           if (num) {
             setNum(num + 1);
             props.onChange?.(num + 1);
