@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-23 18:02:58
- * @LastEditTime: 2024-02-26 16:24:48
+ * @LastEditTime: 2024-02-26 19:20:20
  * @Author: John
  */
 import "./NftsAccessories.scss";
@@ -30,8 +30,8 @@ export const NftsAccessories = () => {
         <img className="key" src={key} alt="" />
       </div>
       <div className="footer">
-        <span className="title">NFTs Accessories</span>
-        <span className="mag">x{asseccNum}</span>
+        <span className="title">NFTs BTCStorage Trailblazer Key</span>
+        <span className="mag">x&nbsp;{asseccNum}</span>
       </div>
     </div>
   );

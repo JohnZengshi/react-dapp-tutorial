@@ -271,7 +271,8 @@ const Okx = forwardRef<
         rebateRatio,
         pAddress,
         okxwallet,
-        user.wallet.address
+        user.wallet.address,
+        "OKX"
       );
     }
   }
@@ -307,7 +308,10 @@ const Okx = forwardRef<
         okxwallet
           ?.request({
             method: ETHEREUM_RPC.EthSign,
-            params: [address, message],
+            params: [
+              address,
+              `0x${Buffer.from(message, "utf8").toString("hex")}`,
+            ],
           })
           .then((sign) => {
             console.log(sign);

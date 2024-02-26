@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:25:43
- * @LastEditTime: 2024-02-26 16:24:56
+ * @LastEditTime: 2024-02-26 19:40:18
  * @Author: John
  */
 import "./Profile-m.scss";
@@ -52,6 +52,7 @@ import Machine from "./ProfileCom/Machine";
 import Recommend from "./ProfileCom/Recommend";
 import CompletionList from "./ProfileCom/CompletionList";
 import GetNftBox from "./ProfileCom/GetNftBox";
+import CustomToast from "@/components/common/CustomToast";
 
 export default function () {
   const [contributionDate, setContributionDate] = useState<CONTRIBUTION>();
@@ -155,25 +156,26 @@ export default function () {
               className={currentNav == 0 ? "active" : ""}
               onClick={() => setCurrentNav(0)}
             >
-              my node box
+              My KeyBOX
             </li>
             <li
               className={currentNav == 1 ? "active" : ""}
               onClick={() => setCurrentNav(1)}
             >
-              Referral rewards
+              Referral Rewards
             </li>
             <li
               className={currentNav == 2 ? "active" : ""}
               onClick={() => setCurrentNav(2)}
             >
-              NFT accessories
+              NFT Key Accessory
             </li>
             <li
               className={currentNav == 3 ? "active" : ""}
-              onClick={() => setCurrentNav(3)}
+              // onClick={() => setCurrentNav(3)}
+              onClick={() => CustomToast("coming soon")}
             >
-              Odyssey Points
+              EcoWave Points
             </li>
           </ul>
           <ScrollArea className="content_scroll box-border">
@@ -217,31 +219,31 @@ export default function () {
               {currentNav == 1 && (
                 <div className="referralRewards">
                   <Invite className="Profile-invite" />
-                  <span className="title">My recommendation</span>
+                  <span className="title">Team Contribution</span>
                   <ul className="recommendation">
                     <li className="item">
                       <span className="num">
                         {referralReward?.oneNftAmount || "-"}
                       </span>
-                      <span className="text">Leve1 NFTs</span>
+                      <span className="text">LEV1 NFTKEYS</span>
                     </li>
                     <li className="item">
                       <span className="num">
                         {referralReward?.twoNftAmount || "-"}
                       </span>
-                      <span className="text">Leve2 NFTs</span>
+                      <span className="text">LEV2 NFTKEYS</span>
                     </li>
                     <li className="item">
                       <span className="num">
                         {referralReward?.bitAmount || "-"}
                       </span>
-                      <span className="text">RBIT Points</span>
+                      <span className="text">GASBIT POINTS</span>
                     </li>
                     <li className="item">
                       <span className="num">
                         {referralReward?.usdtAmount || "-"}
                       </span>
-                      <span className="text">Back USDT</span>
+                      <span className="text">USDT Rebat</span>
                     </li>
                   </ul>
                   <div className="teamTab title flex items-center">
@@ -254,7 +256,7 @@ export default function () {
                         changeList([1]);
                       }}
                     >
-                      Leve 1 Team
+                      Level1 Team Member
                     </span>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <span
@@ -266,7 +268,7 @@ export default function () {
                         changeList([2]);
                       }}
                     >
-                      Levl 2 Team
+                      Level2 Team Member
                     </span>
                   </div>
 
@@ -312,21 +314,30 @@ export default function () {
               {currentNav == 2 && (
                 <div className="nftAccessories box-border">
                   <div className="accessoriesContainer">
-                    <p className="title">My NFT accessories</p>
+                    <p className="title">My BTCStorage Trailblazer Key</p>
                     <div className="header">
                       <div className="accessories">
                         <NftsAccessories />
                       </div>
                       <div className="mining">
                         <span className="text-[#F58C00]">
-                          {nodeInfo?.title}
+                          {/* {nodeInfo?.title} */}
+                          Synthesis Rules And Functions
                         </span>
                         <div
                           className="rightsAndInterests text-[#EAEAEA]"
-                          dangerouslySetInnerHTML={{
-                            __html: nodeInfo?.illustrate || "",
-                          }}
-                        ></div>
+                          // dangerouslySetInnerHTML={{
+                          //   __html: nodeInfo?.illustrate || "",
+                          // }}
+                        >
+                          Holding one KeyBOX entitles you to 10 BTCStorage
+                          Trailblazer Keys. Combining 10 Keys can create a
+                          "Bitcoin Modular NFT," which unlocks various scenarios
+                          and benefits, and can be directly traded on the
+                          secondary NFT market. The trading of Modular NFTs will
+                          commence during the testnet phase, with specific
+                          timing to be announced later.
+                        </div>
                         {/* <MiningMachine /> */}
                       </div>
                     </div>

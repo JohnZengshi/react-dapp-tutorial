@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-01-16 14:58:36
+ * @LastEditTime: 2024-02-26 21:45:42
  * @Author: John
  */
 import "./Nav.scss";
@@ -27,6 +27,8 @@ export default function (props: { connectBtn?: any }) {
   const isSmallScreen = useAppSelector((state) => state.sys.isSmallScreen);
   const navigate = useNavigate();
   const [meunOpen, setMeunOpen] = useState(false);
+  const [navExploreOpen, setNavExploreOpen] = useState(false);
+  const [navCommunityOpen, setNavCommunityOpen] = useState(false);
   return (
     <>
       <div className="nav fixed t-0 z-[10] flex flex-row items-center w-[100vw] justify-between bg-[#000000] ">
@@ -47,15 +49,52 @@ export default function (props: { connectBtn?: any }) {
         />
 
         {/* TODO 移动端适配菜单✔*/}
-        <div className="nav_list flex items-center absolute left-1/2 translate-x-[-50%]">
+        <div className="nav_list flex items-center justify-between absolute left-1/2 translate-x-[-50%]">
           <div className="nav_btn">
             <button
               onClick={() => {
+                navigate("/");
+              }}
+            >
+              <span>HOME</span>
+            </button>
+          </div>
+          <div className="nav_btn">
+            <button
+              onClick={() => {
+                return CustomToast("coming soon");
                 navigate("/participate");
               }}
             >
-              <span>Roosbox</span>
+              <span>KEYBOX</span>
             </button>
+          </div>
+
+          <div className="nav_btn">
+            <button>
+              <span>EXPLORE</span>
+              <IconFont
+                name="arrow-down"
+                color="#f58c00"
+                className="arrowDown active"
+              />
+              <IconFont
+                name="arrow-down"
+                color="#FFFFFF"
+                className="arrowDown"
+              />
+            </button>
+            <div className="dropDownMeun">
+              <div className="dropDownMeunContent">
+                <ul>
+                  <li onClick={() => CustomToast("coming soon")}>
+                    ROOS Explorer（testnet）
+                  </li>
+                  <li onClick={() => CustomToast("coming soon")}>bridge</li>
+                  <li onClick={() => CustomToast("coming soon")}>run node</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div className="nav_btn">
@@ -66,23 +105,103 @@ export default function (props: { connectBtn?: any }) {
 
           <div className="nav_btn">
             <button onClick={() => CustomToast("coming soon")}>
-              <span>Bridge</span>
+              <span>COMMUNITY </span>
+              <IconFont
+                name="arrow-down"
+                color="#f58c00"
+                className="arrowDown active"
+              />
+              <IconFont
+                name="arrow-down"
+                color="#FFFFFF"
+                className="arrowDown"
+              />
             </button>
+
+            <div className="dropDownMeun">
+              <div className="dropDownMeunContent">
+                <ul>
+                  <li onClick={() => CustomToast("coming soon")}>
+                    <IconFont name="discord" className="icon" color="#EAEAEA" />
+                    <IconFont
+                      name="discord"
+                      className="icon active"
+                      color={"#f58c00"}
+                    />
+                    <span>Discord</span>
+                  </li>
+                  <li
+                    onClick={() =>
+                      window.open("https://twitter.com/btcl2_roos", "_blank")
+                    }
+                  >
+                    <IconFont
+                      name="a-xinbantuitewuyuanjiao"
+                      className="icon"
+                      color="#EAEAEA"
+                    />
+                    <IconFont
+                      name="a-xinbantuitewuyuanjiao"
+                      className="icon active"
+                      color={"#f58c00"}
+                    />
+                    <span>Twitter</span>
+                  </li>
+                  <li onClick={() => CustomToast("coming soon")}>
+                    <IconFont
+                      name="telegram1"
+                      className="icon"
+                      color="#EAEAEA"
+                    />
+                    <IconFont
+                      name="telegram1"
+                      className="icon active"
+                      color={"#f58c00"}
+                    />
+                    <span>Telegram</span>
+                  </li>
+                  <li onClick={() => CustomToast("coming soon")}>
+                    <IconFont
+                      name="Youtube-fill"
+                      className="icon active"
+                      color={"#f58c00"}
+                    />
+                    <IconFont
+                      name="Youtube-fill"
+                      className="icon"
+                      color="#EAEAEA"
+                    />
+                    <span>youtube</span>
+                  </li>
+                  <li
+                    onClick={() =>
+                      window.open("https://medium.com/@roosnetwork", "_blank")
+                    }
+                  >
+                    <IconFont
+                      name="medium"
+                      className="icon active"
+                      color={"#f58c00"}
+                    />
+                    <IconFont name="medium" className="icon" color="#EAEAEA" />
+                    <span>medium</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <div className="nav_btn">
-            <button onClick={() => CustomToast("coming soon")}>
-              <span>Airdrop</span>
+            <button
+              onClick={() =>
+                window.open("https://roos.gitbook.io/roos/", "_blank")
+              }
+            >
+              <span>DOCS</span>
             </button>
           </div>
 
           {/* <div className="nav_btn">
-            <button onClick={() => CustomToast("coming soon")}>
-              <span>Journey</span>
-            </button>
-          </div> */}
-
-          <div className="nav_btn">
             <button
               onClick={() => {
                 window.open("https://info.roospro.com", "_blank");
@@ -90,7 +209,7 @@ export default function (props: { connectBtn?: any }) {
             >
               <span>BLOG</span>
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div
@@ -114,29 +233,136 @@ export default function (props: { connectBtn?: any }) {
               {/* <img className="logo" src={roosLogo}></img> */}
               <DropdownMenuItem
                 onClick={() => {
+                  navigate("/");
+                }}
+              >
+                home
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  return CustomToast("coming soon");
                   navigate("/participate");
                 }}
               >
-                Roosbox
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => CustomToast("coming soon")}>
-                Ecosystems
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => CustomToast("coming soon")}>
-                Bridge
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => CustomToast("coming soon")}>
-                Airdrop
+                keybox
               </DropdownMenuItem>
               {/* <DropdownMenuItem onClick={() => CustomToast("coming soon")}>
-                Journey
+                explore
               </DropdownMenuItem> */}
+              <div
+                className={`flex items-center ${
+                  navExploreOpen ? "active" : ""
+                }`}
+                onClick={() => setNavExploreOpen(!navExploreOpen)}
+              >
+                <span>explore</span>
+                <IconFont
+                  name="arrow-down"
+                  className="icon"
+                  color={navExploreOpen ? "#F58C00" : "#EAEAEA"}
+                />
+              </div>
+              {navExploreOpen && (
+                <>
+                  <div
+                    className="sub"
+                    onClick={() => CustomToast("coming soon")}
+                  >
+                    ROOS Explorer（testnet）
+                  </div>
+                  <div
+                    className="sub"
+                    onClick={() => CustomToast("coming soon")}
+                  >
+                    bridge
+                  </div>
+                  <div
+                    className="sub"
+                    onClick={() => CustomToast("coming soon")}
+                  >
+                    run node
+                  </div>
+                </>
+              )}
+              <DropdownMenuItem onClick={() => CustomToast("coming soon")}>
+                ecosystem
+              </DropdownMenuItem>
+
+              <div
+                className={`flex items-center ${
+                  navCommunityOpen ? "active" : ""
+                }`}
+                onClick={() => setNavCommunityOpen(!navCommunityOpen)}
+              >
+                <span>community</span>
+                <IconFont
+                  name="arrow-down"
+                  className="icon"
+                  color={navCommunityOpen ? "#F58C00" : "#EAEAEA"}
+                />
+              </div>
+              {navCommunityOpen && (
+                <>
+                  <div
+                    className="sub"
+                    onClick={() => CustomToast("coming soon")}
+                  >
+                    <IconFont name="discord" className="icon" color="#EAEAEA" />
+                    <span>Discord</span>
+                  </div>
+                  <div
+                    className="sub"
+                    onClick={() =>
+                      window.open("https://twitter.com/btcl2_roos", "_blank")
+                    }
+                  >
+                    <IconFont
+                      name="a-xinbantuitewuyuanjiao"
+                      className="icon"
+                      color="#EAEAEA"
+                    />
+                    <span>Twitter</span>
+                  </div>
+                  <div
+                    className="sub"
+                    onClick={() => CustomToast("coming soon")}
+                  >
+                    <IconFont
+                      name="telegram1"
+                      className="icon"
+                      color="#EAEAEA"
+                    />
+                    <span>Telegram</span>
+                  </div>
+                  <div
+                    className="sub"
+                    onClick={() => CustomToast("coming soon")}
+                  >
+                    <IconFont
+                      name="Youtube-fill"
+                      className="icon"
+                      color="#EAEAEA"
+                    />
+                    <span>youtube</span>
+                  </div>
+                  <div
+                    className="sub"
+                    onClick={() =>
+                      window.open("https://medium.com/@roosnetwork", "_blank")
+                    }
+                  >
+                    <IconFont name="medium" className="icon" color="#EAEAEA" />
+                    <span>medium</span>
+                  </div>
+                </>
+              )}
+
               <DropdownMenuItem
                 onClick={() => {
-                  window.open("https://info.roospro.com", "_blank");
+                  window.open("https://roos.gitbook.io/roos/", "_blank");
                 }}
               >
-                BLOG
+                docs
               </DropdownMenuItem>
 
               <div className="iconList flex items-center">

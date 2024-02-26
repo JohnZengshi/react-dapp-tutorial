@@ -2,6 +2,12 @@
 /* eslint-disable */
 
 import React, { SVGAttributes, FunctionComponent } from 'react';
+import Telegram1 from './Telegram1';
+import YoutubeFill from './YoutubeFill';
+import Discord from './Discord';
+import AXinbantuitewuyuanjiao from './AXinbantuitewuyuanjiao';
+import Medium from './Medium';
+import ArrowDown from './ArrowDown';
 import Wushuju1 from './Wushuju1';
 import Metamask from './Metamask';
 import Jiazai from './Jiazai';
@@ -13,6 +19,12 @@ import Roos from './Roos';
 import ADropDownmenu from './ADropDownmenu';
 import Telegram from './Telegram';
 import Github from './Github';
+export { default as Telegram1 } from './Telegram1';
+export { default as YoutubeFill } from './YoutubeFill';
+export { default as Discord } from './Discord';
+export { default as AXinbantuitewuyuanjiao } from './AXinbantuitewuyuanjiao';
+export { default as Medium } from './Medium';
+export { default as ArrowDown } from './ArrowDown';
 export { default as Wushuju1 } from './Wushuju1';
 export { default as Metamask } from './Metamask';
 export { default as Jiazai } from './Jiazai';
@@ -25,7 +37,7 @@ export { default as ADropDownmenu } from './ADropDownmenu';
 export { default as Telegram } from './Telegram';
 export { default as Github } from './Github';
 
-export type IconNames = 'wushuju1' | 'metamask' | 'jiazai' | 'gantanhao-yuankuang' | 'book' | 'Bitcoin' | 'StarkWare' | 'roos' | 'a-drop-downmenu' | 'telegram' | 'github';
+export type IconNames = 'telegram1' | 'Youtube-fill' | 'discord' | 'a-xinbantuitewuyuanjiao' | 'medium' | 'arrow-down' | 'wushuju1' | 'metamask' | 'jiazai' | 'gantanhao-yuankuang' | 'book' | 'Bitcoin' | 'StarkWare' | 'roos' | 'a-drop-downmenu' | 'telegram' | 'github';
 
 interface Props extends Omit<SVGAttributes<SVGElement>, 'color'> {
   name: IconNames;
@@ -35,6 +47,18 @@ interface Props extends Omit<SVGAttributes<SVGElement>, 'color'> {
 
 const IconFont: FunctionComponent<Props> = ({ name, ...rest }) => {
   switch (name) {
+    case 'telegram1':
+      return <Telegram1 {...rest} />;
+    case 'Youtube-fill':
+      return <YoutubeFill {...rest} />;
+    case 'discord':
+      return <Discord {...rest} />;
+    case 'a-xinbantuitewuyuanjiao':
+      return <AXinbantuitewuyuanjiao {...rest} />;
+    case 'medium':
+      return <Medium {...rest} />;
+    case 'arrow-down':
+      return <ArrowDown {...rest} />;
     case 'wushuju1':
       return <Wushuju1 {...rest} />;
     case 'metamask':

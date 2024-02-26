@@ -192,7 +192,8 @@ const MetaMask = forwardRef<
       rebateRatio,
       pAddress,
       ethereum,
-      user.wallet.address
+      user.wallet.address,
+      "MetaMask"
     );
   }
 

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-02-26 16:11:19
+ * @LastEditTime: 2024-02-26 20:54:27
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -188,14 +188,14 @@ export default function () {
               : "text-[#333] border-b-[#380522]"
           } flex border-solid justify-center items-center flex-1`}
         >
-          <span className="uppercase">{props.content}</span>
+          <span>{props.content}</span>
         </button>
       </>
     );
   }
   return (
     <>
-      <ScrollArea className="Participate">
+      <ScrollArea className="Participate bg-[#232323]">
         <div className="content flex flex-col">
           <div className="card m-0-auto">
             <div className="left top relative">
@@ -208,14 +208,14 @@ export default function () {
                 {nodeInfo?.id == 2 && <img src={boxT2} alt="" />}
                 {nodeInfo?.id == 3 && <img src={boxT3} alt="" />} */}
                 <div className="boxBg"></div>
-                <div className="boxFornt"></div>
+                {/* <div className="boxFornt"></div> */}
                 <img src={participate_box} alt="" />
               </div>
             </div>
 
             <div className="right bottom">
               <div className="rightContent bottomContent w-full h-full box-border flex flex-col">
-                <div className="top_box">
+                <div className="top_box bg-[#0c0907]">
                   <div className="boxselect w-full flex items-center justify-between">
                     {nodeList.map((v, i) => {
                       return (
@@ -392,7 +392,7 @@ export default function () {
 
           <Invite className="Participate-invite" />
         </div>
-        <ConnectUs />
+        {/* <ConnectUs /> */}
       </ScrollArea>
     </>
   );

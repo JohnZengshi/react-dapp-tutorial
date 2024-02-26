@@ -32,10 +32,11 @@
     border-radius: 2px;
     opacity: 1;
     background: #1f1f1f;
-    padding: 0 30px;
+    // padding: 0 30px;
     padding-top: 11.67px;
     padding-bottom: 37.7px;
     > div {
+      padding: 0 30px;
       height: 54px;
 
       /* Roosbox */
@@ -44,7 +45,7 @@
       font-family: Raleway-Medium;
       font-size: 14px;
       font-weight: 500;
-      line-height: normal;
+      line-height: 54px;
       text-transform: uppercase;
       letter-spacing: 0em;
 
@@ -76,6 +77,44 @@
         z-index: 0;
 
         border-bottom: 0.5px solid #f58c00;
+      }
+
+      .icon {
+        margin-left: 2px;
+      }
+
+      &.sub {
+        /* ROOS Explorer（testnet） */
+        height: 40px;
+        /* 自动布局子元素 */
+        opacity: 1;
+
+        font-family: Raleway-Medium;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 40px;
+        letter-spacing: 0px;
+
+        color: #eaeaea;
+
+        z-index: 0;
+        background-color: #141414;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        > .icon {
+          margin-right: 5px;
+        }
+      }
+
+      &.active {
+        color: #f58c00;
+        background-color: #141414;
+        // border-bottom: 0.5px solid #f58c00;
+        .icon {
+          transform: rotate(180deg);
+        }
       }
     }
 

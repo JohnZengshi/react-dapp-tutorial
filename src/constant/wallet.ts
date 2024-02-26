@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-21 15:31:59
- * @LastEditTime: 2024-02-26 15:55:23
+ * @LastEditTime: 2024-02-26 19:55:52
  * @Author: John
  */
 
@@ -19,7 +19,7 @@ type chainType = {
 export const WALLET_ARBITRUM_ONE: chainType = {
   chainId: "0xa4b1", // 42161
   rpcUrls: ["https://arbitrum.llamarpc.com"],
-  blockExplorerUrls: ["https://arbiscan.io"],
+  blockExplorerUrls: ["https://explorer.arbitrum.io"],
   chainName: "Arbitrum One",
   nativeCurrency: {
     symbol: "ETH",

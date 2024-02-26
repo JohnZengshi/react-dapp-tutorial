@@ -495,7 +495,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
 
                   {/* Arbitrum One */}
                   <span className="chainTitle flex flex-row items-center">
-                    <span className="point"></span> Etherscan Wallet
+                    <span className="point"></span> Ethereum Wallet
                   </span>
 
                   <button
@@ -508,42 +508,46 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
                     </span>
                   </button>
 
-                  <button
+                  {/* <button
                     className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
                     onClick={() => connectWallet("MetaMask", "Arbitrum One")}
                   >
-                    {/* <img className="" src={unisat_logo} alt="" /> */}
                     <IconFont className="walletIcon" name="metamask" />
                     <span className="font-[Raleway-Bold]  text-[#fff]">
                       MetaMask
                     </span>
-                  </button>
+                  </button> */}
 
                   {/* Arbitrum Test */}
-                  <span className="chainTitle flex flex-row items-center">
-                    <span className="point"></span> Arbitrum Testnet
-                  </span>
+                  {import.meta.env.MODE != "production" && (
+                    <>
+                      <span className="chainTitle flex flex-row items-center">
+                        <span className="point"></span> Arbitrum Testnet
+                      </span>
 
-                  <button
-                    className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                    onClick={() => connectWallet("OKX", "Arbitrum test")}
-                  >
-                    <img className="" src={okx_logo} alt="" />
-                    <span className="font-[Raleway-Bold]  text-[#fff]">
-                      OKX
-                    </span>
-                  </button>
+                      <button
+                        className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                        onClick={() => connectWallet("OKX", "Arbitrum test")}
+                      >
+                        <img className="" src={okx_logo} alt="" />
+                        <span className="font-[Raleway-Bold]  text-[#fff]">
+                          OKX
+                        </span>
+                      </button>
 
-                  <button
-                    className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                    onClick={() => connectWallet("MetaMask", "Arbitrum test")}
-                  >
-                    {/* <img className="" src={unisat_logo} alt="" /> */}
-                    <IconFont className="walletIcon" name="metamask" />
-                    <span className="font-[Raleway-Bold]  text-[#fff]">
-                      MetaMask
-                    </span>
-                  </button>
+                      <button
+                        className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                        onClick={() =>
+                          connectWallet("MetaMask", "Arbitrum test")
+                        }
+                      >
+                        <IconFont className="walletIcon" name="metamask" />
+                        <span className="font-[Raleway-Bold]  text-[#fff]">
+                          MetaMask
+                        </span>
+                      </button>
+                    </>
+                  )}
                 </>
               )}
 

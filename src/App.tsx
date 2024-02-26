@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 08:51:29
- * @LastEditTime: 2024-02-25 19:33:01
+ * @LastEditTime: 2024-02-26 20:00:16
  * @Author: John
  */
 // import "./App.css";
@@ -32,6 +32,7 @@ const App = () => {
     flexible(window, document, (isSmall) => {
       dispatch(SET_IS_SMALL_SCREEN(isSmall));
     });
+    console.log("env MODE:", import.meta.env.MODE);
     console.log("VITE_BASE_URL", import.meta.env.VITE_BASE_URL);
     console.log("render");
   }, []);

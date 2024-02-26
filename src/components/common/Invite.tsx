@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-02-26 16:26:07
+ * @LastEditTime: 2024-02-26 20:46:05
  * @Author: John
  */
 import "./Invite.scss";
@@ -70,13 +70,16 @@ export default function (
     <>
       <div
         {...props}
-        className={`invite relative bg-[#26021798] box-border border-solid border-[rgb(245, 140, 0)] flex flex-col overflow-hidden ${props.className}`}
+        className={`invite relative bg-[#0c0907] box-border border-solid border-[rgb(245, 140, 0)] flex flex-col overflow-hidden ${props.className}`}
       >
         <img className="logo" src={roos_logo} alt="" />
         <span className="font-[Raleway-Bold] uppercase tracking-[0em] text-[#F58C00]">
           {/* Get Rewards Through Referral */}
           referral Giveaway
-          <span>Referral NFTs and get {nodeInfo?.rebateRatio}% back.</span>
+          {/* <span>Referral NFTs and get {nodeInfo?.rebateRatio}% back.</span> */}
+          <span>
+            Referral KeyBOX and get {nodeInfo?.rebateRatio}% USDT Rebate
+          </span>
         </span>
         {/* <span className="font-[Raleway-Medium] text-[#EAEAEA]">
           Buy RoosBOX to obtain your referral code and share your referral code
@@ -163,9 +166,12 @@ export default function (
         )}
 
         <span className="ReferralTip">
-          Referral NFTs to get level 1 {nodeInfo?.rbitOne}% BRIT and{" "}
-          {nodeInfo?.nftOne}% NFTs Accessories, get level 2{" "}
-          {nodeInfo?.rebateTwo}% BRIT and {nodeInfo?.nftTwo}% NFTs Accessories.
+          Referral keyBox to get level1 {nodeInfo?.rbitOne}% GasBit and{" "}
+          {nodeInfo?.nftOne}% nft keys, get level2 {nodeInfo?.rebateTwo}% GasBit
+          and {nodeInfo?.nftTwo}% nft keys.
+          {/* Referral KeyBOX to get level1 team member {nodeInfo?.rbitOne}% Gasbit
+          points and nft keys,get level2 team member 10% Gasbit points and nft
+          keys. */}
         </span>
 
         <img className="logo-big absolute z-[1]" src={roos_logo_big} alt="" />

@@ -2,7 +2,7 @@
   .Participate {
     position: relative;
     // background-color: #000000;
-    background-image: url("../assets/home_bg.png");
+    // background-image: url("../assets/home_bg.png");
     height: 100vh;
     width: 100vw;
     background-repeat: no-repeat;
@@ -76,7 +76,7 @@
               width: 100%;
               opacity: 1;
               animation: rotate 40s linear infinite;
-              margin: 0 auto;
+              margin: auto;
               // margin-top: 18px;
               z-index: 2;
             }
@@ -348,22 +348,24 @@
               /* 矩形 29 */
 
               border-radius: 5px;
-              background: rgb(38 2 23 / 80%);
+              // background: rgb(38 2 23 / 80%);
+              // background-color: rgb(12, 9, 7);
               box-sizing: border-box;
               border: 1px solid rgba(245, 140, 0, 0.2);
 
               .boxselect {
-                height: 39px;
+                // height: 39px;
                 button {
                   // justify-content: flex-start;
                   // padding-left: 15px;
+                  padding: 10px 0;
                   span {
                     /* ROOSBOX T1 */
                     font-family: Raleway-Medium;
                     font-size: 18px;
                     font-weight: 600;
                     line-height: normal;
-                    text-transform: uppercase;
+                    // text-transform: uppercase;
                     letter-spacing: 0em;
 
                     font-variation-settings: "opsz" auto;
@@ -553,6 +555,13 @@
 
             font-feature-settings: "kern" on;
             color: #333333;
+
+            .loadingIcon {
+              margin-right: 10px;
+              width: 15px;
+              height: 15px;
+              animation: loading 5s linear infinite;
+            }
           }
         }
       }

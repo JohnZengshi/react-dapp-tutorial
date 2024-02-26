@@ -1,18 +1,21 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-23 18:47:07
- * @LastEditTime: 2024-02-26 16:46:42
+ * @LastEditTime: 2024-02-26 20:04:03
  * @Author: John
  */
 import Web3 from "web3";
 import Contract from "web3-eth-contract";
 import { abi as test_roos_abi } from "@/contract/ROOS_test.json";
+import { abi as roos_abi } from "@/contract/ROOS.json";
 import { abi as test_usdt_abi } from "@/contract/USDT_test.json";
+import usdt_abi from "@/contract/USDT.json";
 import erc20Abi from "@/contract/erc20abi.json";
 import { Ethereum } from "@/constant/wallet";
 import { API_CONTRACT_ADDRESS } from "./api";
 import CustomToast from "@/components/common/CustomToast";
 import { isMobile } from ".";
+import { WalletType } from "@/store/reducer";
 
 export async function subimtByContract(
   buyAmount: bigint, // 支付金额
@@ -21,7 +24,8 @@ export async function subimtByContract(
   rebateRatio: number, // 返佣比例,
   pAddress: string, // 上级地址
   ethereum?: Ethereum,
-  fromAddress?: string
+  fromAddress?: string,
+  walletType?: WalletType
 ) {
   console.log("pay buy contract params", { buyAmount, buyCount, fromAddress });
   const contractAddress = await API_CONTRACT_ADDRESS();
@@ -36,8 +40,8 @@ export async function subimtByContract(
     roosAbi = test_roos_abi;
     usdtAbi = test_usdt_abi;
   } else {
-    roosAbi = test_roos_abi;
-    usdtAbi = test_usdt_abi;
+    roosAbi = roos_abi;
+    usdtAbi = usdt_abi;
   }
   const contract = new Contract(roosAbi, contractAddress, web3);
   const usdtContract = new Contract(usdtAbi, networkUsdtAddress, web3);
@@ -142,14 +146,15 @@ export async function subimtByContract(
               })
               .on("transactionHash", function (hash) {
                 console.log("Transaction Hash:", hash);
-                reslove(hash);
+                if (walletType === "OKX") reslove(hash);
+
                 // 这里可以对交易哈希进行处理，比如显示在页面上
+              })
+              .then(function (receipt) {
+                // other parts of code to use receipt
+                console.log("buyNFTNew send:", receipt);
+                if (walletType === "MetaMask") reslove(receipt.transactionHash);
               });
-            // .then(function (receipt) {
-            //   // other parts of code to use receipt
-            //   console.log("buyNFTNew send:", receipt);
-            //   reslove(receipt.transactionHash);
-            // });
           });
       } catch (err: any) {
         reject(err);

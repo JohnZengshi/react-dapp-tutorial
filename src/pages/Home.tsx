@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-01-16 10:39:36
+ * @LastEditTime: 2024-02-26 21:45:46
  * @Author: John
  */
 import roosHomeBg from "@/assets/roos-home.mp4";
@@ -20,6 +20,7 @@ import Bitmap from "@/assets/bitmap.svg";
 import tuite_y from "@/assets/tuite_y.svg";
 import { useAppSelector } from "@/store/hooks";
 import IconFont from "@/components/iconfont";
+import CustomToast from "@/components/common/CustomToast";
 export default function () {
   const isSmallScreen = useAppSelector((state) => state.sys.isSmallScreen);
   const navigate = useNavigate();
@@ -52,13 +53,14 @@ export default function () {
               </span>
               <button
                 onClick={() => {
+                  return CustomToast("coming soon");
                   navigate("/participate");
                 }}
               >
-                Get ROOSBOX Now
+                Get KEYBOX Now
               </button>
             </div>
-            <ConnectUs />
+            {/* <ConnectUs /> */}
           </>
         )}
         {isSmallScreen && (
@@ -76,6 +78,7 @@ export default function () {
             <span>Treasure Your Roosbox</span>
             <button
               onClick={() => {
+                return CustomToast("coming soon");
                 navigate("/participate");
               }}
               className="btn"
