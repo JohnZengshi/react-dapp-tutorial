@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-02-26 13:53:50
+ * @LastEditTime: 2024-02-27 15:16:44
  * @Author: John
  */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
@@ -58,17 +58,7 @@ const initialState: UserState = {
     unisatWalletInstalled: false,
     walletType: "",
     notificationTriggerEvent: "",
-    payInfo: {
-      buyCount: 0,
-      buyAmount: "",
-      toAddress: "",
-      hash: "",
-      orderNumber: 0,
-
-      address: "", // 上级地址
-      num: 0, // 随机数
-      rebateRatio: 0, // 返佣比例
-    },
+    payInfo: null,
     thirdInviteCode: "",
     chainType: "",
   },

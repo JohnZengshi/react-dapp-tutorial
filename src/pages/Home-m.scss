@@ -88,26 +88,26 @@
           margin-top: 20px;
         }
 
+        // &:nth-of-type(6) {
+        //   /* Partners */
+
+        //   /* 自动布局子元素 */
+
+        //   font-family: Raleway-Medium;
+        //   font-size: 20px;
+        //   font-weight: 600;
+        //   line-height: normal;
+        //   text-transform: uppercase;
+        //   letter-spacing: 0em;
+
+        //   font-feature-settings: "kern" on;
+        //   color: #666666;
+
+        //   z-index: 0;
+        //   margin-top: 10px;
+        // }
+
         &:nth-of-type(6) {
-          /* Partners */
-
-          /* 自动布局子元素 */
-
-          font-family: Raleway-Medium;
-          font-size: 20px;
-          font-weight: 600;
-          line-height: normal;
-          text-transform: uppercase;
-          letter-spacing: 0em;
-
-          font-feature-settings: "kern" on;
-          color: #666666;
-
-          z-index: 0;
-          margin-top: 10px;
-        }
-
-        &:nth-of-type(7) {
           /* Permissionless. Frictionless. Boundless. */
 
           font-family: Raleway-Medium;
@@ -150,9 +150,9 @@
       }
 
       .bar {
+        margin-top: 10px;
         width: 171px;
         height: 10px;
-        margin-top: 10px;
       }
 
       .btn {

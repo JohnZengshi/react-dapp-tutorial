@@ -146,12 +146,17 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
             if (hash)
               dispatch(SET_PAY_INFO({ ...user.wallet.payInfo, hash: hash }));
           } catch (err) {
-            console.log(err);
+            console.log("用户取消支付:", err);
             dispatch(SET_BUY_LOADING(false));
             // TODO 用户取消支付✔
             // if (hash == "") CustomToast("user cancel payment");
             // CustomToast("cancel payment");
-            API_PAY_NODE_SMS(user.wallet.payInfo.orderNumber, "123456789", 2);
+            await API_PAY_NODE_SMS(
+              user.wallet.payInfo.orderNumber,
+              "123456789",
+              2
+            );
+            dispatch(SET_PAY_INFO(null));
           }
         })();
         break;

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-02-26 21:45:42
+ * @LastEditTime: 2024-02-27 16:22:45
  * @Author: John
  */
 import "./Nav.scss";
@@ -62,7 +62,7 @@ export default function (props: { connectBtn?: any }) {
           <div className="nav_btn">
             <button
               onClick={() => {
-                return CustomToast("coming soon");
+                // return CustomToast("coming soon");
                 navigate("/participate");
               }}
             >
@@ -240,7 +240,7 @@ export default function (props: { connectBtn?: any }) {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
-                  return CustomToast("coming soon");
+                  // return CustomToast("coming soon");
                   navigate("/participate");
                 }}
               >

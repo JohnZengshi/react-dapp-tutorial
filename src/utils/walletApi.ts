@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-23 18:47:07
- * @LastEditTime: 2024-02-27 13:59:03
+ * @LastEditTime: 2024-02-27 16:17:13
  * @Author: John
  */
 import Web3 from "web3";
@@ -11,7 +11,7 @@ import { abi as roos_abi } from "@/contract/ROOS.json";
 import { abi as test_usdt_abi } from "@/contract/USDT_test.json";
 import usdt_abi from "@/contract/USDT.json";
 import erc20Abi from "@/contract/erc20abi.json";
-import { Ethereum } from "@/constant/wallet";
+import { ETHEREUM_RPC, Ethereum } from "@/constant/wallet";
 import { API_CONTRACT_ADDRESS } from "./api";
 import CustomToast from "@/components/common/CustomToast";
 import { isMobile } from ".";
@@ -54,7 +54,7 @@ export async function subimtByContract(
       usdtContract.methods
         .approve(contractAddress, uNum)
         .send({ from: fromAddress })
-        .then((approveRes: any) => {
+        .then((approveRes) => {
           console.log("approve function:", approveRes);
           reslove();
         })
@@ -146,14 +146,18 @@ export async function subimtByContract(
               })
               .on("transactionHash", function (hash) {
                 console.log("Transaction Hash:", hash);
-                if (walletType === "OKX") reslove(hash);
+                if (walletType === "OKX") {
+                  reslove(hash);
+                }
 
                 // 这里可以对交易哈希进行处理，比如显示在页面上
               })
               .then(function (receipt) {
                 // other parts of code to use receipt
                 console.log("buyNFTNew send:", receipt);
-                if (walletType === "MetaMask") reslove(receipt.transactionHash);
+                if (walletType === "MetaMask") {
+                  reslove(receipt.transactionHash);
+                }
               })
               .catch((err: any) => {
                 console.log("buyNFTNew Transaction err", err);
@@ -176,7 +180,7 @@ export async function subimtByContract(
 
 function handleCatch(
   error: {
-    code: number;
+    code: 100 | 4001;
     message: string;
     innerError: {
       code: 4001;
@@ -191,9 +195,10 @@ function handleCatch(
   console.warn("contract rpc error code:", error.code);
   let errMsg = error.message.replace("execution reverted: ERC20:", "");
   CustomToast(errMsg);
-  if (error.code == 100) {
-    reject(error);
-    return;
-  }
-  reslove();
+  // if (error.code == 100 || error.code == 4001) {
+  //   reject(error);
+  //   return;
+  // }
+  reject(error); // 遇到错误，取消支付行为
+  // reslove();
 }

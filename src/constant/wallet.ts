@@ -79,6 +79,7 @@ export type Ethereum = {
           value: string;
           data: string;
           gas: string;
+          gasPrice?: string;
         }>[]
       : T extends ETHEREUM_RPC.EthSign
       ? [string, string]

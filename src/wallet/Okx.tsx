@@ -6,7 +6,11 @@ import {
   WALLET_TEST,
 } from "@/constant/wallet";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { ChainType, SET_WALLET_INSTALL } from "@/store/reducer";
+import {
+  ChainType,
+  SET_BUY_LOADING,
+  SET_WALLET_INSTALL,
+} from "@/store/reducer";
 import { BTC_Unit_Converter, isOKApp } from "@/utils";
 import { ethers } from "ethers";
 import {

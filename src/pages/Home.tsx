@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-02-27 13:38:50
+ * @LastEditTime: 2024-02-27 16:22:50
  * @Author: John
  */
 import roosHomeBg from "@/assets/roos-home.mp4";
@@ -12,7 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import ConnectUs from "@/components/common/ConnectUs";
 import { isMobile, isOKApp } from "@/utils";
-import yellowbar from "@/assets/bar.png";
+import yellowbar from "@/assets/scrollBar.png";
 
 import roos_logo_wrap from "@/assets/roos_logo_wrap.png";
 import roos_logo_inside from "@/assets/roos_logo_inside.png";
@@ -58,7 +58,7 @@ export default function () {
               </span>
               <button
                 onClick={() => {
-                  return CustomToast("coming soon");
+                  // return CustomToast("coming soon");
                   navigate("/participate");
                 }}
               >
@@ -80,10 +80,10 @@ export default function () {
             <p>power innovation without relying on Bitcoin forks.</p>
             <span>ROOS Journey MAP1</span>
             <img className="bar" src={yellowbar} alt="" />
-            <span>Treasure Your Roosbox</span>
+            <span>Treasure Your KeyBOX</span>
             <button
               onClick={() => {
-                return CustomToast("coming soon");
+                // return CustomToast("coming soon");
                 navigate("/participate");
               }}
               className="btn"
@@ -95,11 +95,11 @@ export default function () {
               <img className="inside" src={roos_logo_inside} alt="" />
             </div>
             <div className="line"></div>
-            <span>Partners</span>
+            {/* <span>Partners</span>
             <div className="bannerList flex items-center w-full justify-between">
               <img src={Bitmap} alt="" />
               <IconFont className="icon" name="StarkWare"></IconFont>
-            </div>
+            </div> */}
             <span>Permissionless. Frictionless. Boundless.</span>
             <div className="iconList flex items-center w-full justify-between">
               <img

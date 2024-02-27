@@ -131,7 +131,7 @@ const MetaMask = forwardRef<
   // 处理连接
   const connect = async (chainType: ChainType) => {
     return new Promise<string>(async (reslove, reject) => {
-      // await checkinstall();
+      await checkinstall();
       try {
         let res = await ethereum?.request({
           method: ETHEREUM_RPC.EthRequestAccounts,

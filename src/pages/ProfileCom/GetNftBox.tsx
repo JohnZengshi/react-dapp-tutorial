@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-23 18:02:58
- * @LastEditTime: 2024-02-26 21:45:55
+ * @LastEditTime: 2024-02-27 16:22:57
  * @Author: John
  */
 import "./GetNftBox.scss";
@@ -14,7 +14,7 @@ export const GetNftBox = () => {
   const navigate = useNavigate();
 
   const handleSubmit = () => {
-    return CustomToast("coming soon");
+    // return CustomToast("coming soon");
     navigate("/participate");
   };
 

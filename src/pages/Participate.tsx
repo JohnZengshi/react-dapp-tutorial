@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-02-26 20:54:27
+ * @LastEditTime: 2024-02-27 15:20:36
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -127,9 +127,9 @@ export default function () {
       dispatch(
         CUSTOM_DIALOG({
           content: "Mint is successful",
-          hash: `You ROOS NFTs ${buyNftIds}`, // TODO nft id
+          hash: `Your KeyBOX ${buyNftIds}`,
           showConfirmBtn: true,
-          confirmBtnText: "Check My NFTs",
+          confirmBtnText: "Check My keyBOX",
           confirmBtnCallBack: () => navigate("/profile"),
         })
       );
@@ -350,6 +350,15 @@ export default function () {
                           //   orderInfo.data.buyAmount,
                           //   "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk"
                           // );
+                          if (user.wallet.payInfo && isOKApp) {
+                            // 检测是否存在之前的订单，有则取消订单（在okxapp中特殊处理）
+                            await API_PAY_NODE_SMS(
+                              user.wallet.payInfo.orderNumber,
+                              "123456789",
+                              2
+                            );
+                            dispatch(SET_PAY_INFO(null));
+                          }
 
                           dispatch(
                             SET_PAY_INFO({
