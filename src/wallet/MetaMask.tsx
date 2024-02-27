@@ -143,10 +143,24 @@ const MetaMask = forwardRef<
               params: [{ chainId: WALLET_ETHEREUM.chainId }],
             });
           } else if (chainType == "Arbitrum One") {
-            await ethereum?.request({
-              method: ETHEREUM_RPC.WalletAddEthereumChain,
-              params: [WALLET_ARBITRUM_ONE],
-            });
+            try {
+              await ethereum?.request({
+                method: ETHEREUM_RPC.WalletSwitchEthereumChain,
+                params: [{ chainId: WALLET_ARBITRUM_ONE.chainId }],
+              });
+            } catch (switchError: any) {
+              if (switchError.code === 4902) {
+                try {
+                  await ethereum?.request({
+                    method: ETHEREUM_RPC.WalletAddEthereumChain,
+                    params: [WALLET_ARBITRUM_ONE],
+                  });
+                } catch (addError) {
+                  // handle "add" error
+                  console.error(addError);
+                }
+              }
+            }
           } else if (chainType == "Arbitrum test") {
             try {
               await ethereum?.request({
