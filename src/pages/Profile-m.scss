@@ -120,6 +120,34 @@
                 }
               }
             }
+
+            .count {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: space-between;
+              margin-top: 5px;
+              padding: 0 5px;
+              > span {
+                /* Token Reward */
+
+                font-family: Raleway-Medium;
+                font-size: 10px;
+                font-weight: 500;
+                line-height: normal;
+                letter-spacing: 0em;
+
+                font-variation-settings: "opsz" auto;
+                font-feature-settings: "kern" on;
+                color: #999999;
+
+                z-index: 0;
+
+                &:last-of-type {
+                  font-family: DINPRO-MEDIUM;
+                }
+              }
+            }
           }
         }
 

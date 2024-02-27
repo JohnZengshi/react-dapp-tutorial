@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-02-27 16:22:50
+ * @LastEditTime: 2024-02-27 16:38:08
  * @Author: John
  */
 import roosHomeBg from "@/assets/roos-home.mp4";
@@ -21,6 +21,7 @@ import tuite_y from "@/assets/tuite_y.svg";
 import { useAppSelector } from "@/store/hooks";
 import IconFont from "@/components/iconfont";
 import CustomToast from "@/components/common/CustomToast";
+import { THIRD_URL } from "@/constant/thirdUrl";
 export default function () {
   const isSmallScreen = useAppSelector((state) => state.sys.isSmallScreen);
   const navigate = useNavigate();
@@ -105,7 +106,7 @@ export default function () {
               <img
                 src={tuite_y}
                 onClick={() => {
-                  window.open("https://twitter.com/btcl2_roos", "_blank");
+                  window.open(THIRD_URL.TWITTER, "_blank");
                 }}
                 alt=""
               />

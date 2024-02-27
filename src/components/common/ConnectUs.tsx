@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-09 14:57:52
- * @LastEditTime: 2024-01-16 12:43:50
+ * @LastEditTime: 2024-02-27 16:37:23
  * @Author: John
  */
 
@@ -11,6 +11,7 @@ import tuite from "@/assets/tuite.svg";
 import Bitmap from "@/assets/bitmap.svg";
 import { useNavigate } from "react-router-dom";
 import IconFont from "../iconfont";
+import { THIRD_URL } from "@/constant/thirdUrl";
 export default function () {
   const navigate = useNavigate();
   return (
@@ -30,7 +31,7 @@ export default function () {
             className="icon cursor-pointer"
             src={tuite}
             onClick={() => {
-              window.open("https://twitter.com/btcl2_roos", "_blank");
+              window.open(THIRD_URL.TWITTER, "_blank");
             }}
             alt=""
           />
@@ -85,7 +86,7 @@ export default function () {
           className="icon"
           src={tuite}
           onClick={() => {
-            window.open("https://twitter.com/btcl2_roos", "_blank");
+            window.open(THIRD_URL.TWITTER, "_blank");
           }}
           alt=""
         />

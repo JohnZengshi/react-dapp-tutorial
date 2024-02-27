@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:25:43
- * @LastEditTime: 2024-02-26 19:40:18
+ * @LastEditTime: 2024-02-27 17:35:40
  * @Author: John
  */
 import "./Profile-m.scss";
@@ -191,6 +191,11 @@ export default function () {
                             <span>{v.nodeName}</span>
                             <span>#{v.id}</span>
                           </div>
+
+                          <div className="count">
+                            <span>Token Reward</span>
+                            <span>38000&nbsp;ROS</span>
+                          </div>
                         </li>
                       ))}
                       {/* {Array.from({ length: 20 }).map((v, i) => (
@@ -199,6 +204,11 @@ export default function () {
                           <div className="boxDes">
                             <span>Box</span>
                             <span>123</span>
+                          </div>
+
+                          <div className="count">
+                            <span>Token Reward</span>
+                            <span>38000&nbsp;ROS</span>
                           </div>
                         </li>
                       ))} */}
@@ -225,13 +235,13 @@ export default function () {
                       <span className="num">
                         {referralReward?.oneNftAmount || "-"}
                       </span>
-                      <span className="text">LEV1 NFTKEYS</span>
+                      <span className="text">LEV1 KEYBOXS</span>
                     </li>
                     <li className="item">
                       <span className="num">
                         {referralReward?.twoNftAmount || "-"}
                       </span>
-                      <span className="text">LEV2 NFTKEYS</span>
+                      <span className="text">LEV2 KEYBOXS</span>
                     </li>
                     <li className="item">
                       <span className="num">
@@ -314,7 +324,7 @@ export default function () {
               {currentNav == 2 && (
                 <div className="nftAccessories box-border">
                   <div className="accessoriesContainer">
-                    <p className="title">My BTCStorage Trailblazer Key</p>
+                    <p className="title">My BTCStorage Trailblazer Keys</p>
                     <div className="header">
                       <div className="accessories">
                         <NftsAccessories />

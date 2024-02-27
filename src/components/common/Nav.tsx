@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-02-27 16:22:45
+ * @LastEditTime: 2024-02-27 17:21:28
  * @Author: John
  */
 import "./Nav.scss";
@@ -22,6 +22,8 @@ import tuite_y from "@/assets/tuite_y.svg";
 import CustomToast from "./CustomToast";
 import { useAppSelector } from "@/store/hooks";
 import IconFont from "@/components/iconfont";
+import { THIRD_URL } from "@/constant/thirdUrl";
+import CustomNavigationMenu from "./CustomNavigationMenu";
 
 export default function (props: { connectBtn?: any }) {
   const isSmallScreen = useAppSelector((state) => state.sys.isSmallScreen);
@@ -50,166 +52,89 @@ export default function (props: { connectBtn?: any }) {
 
         {/* TODO 移动端适配菜单✔*/}
         <div className="nav_list flex items-center justify-between absolute left-1/2 translate-x-[-50%]">
-          <div className="nav_btn">
-            <button
-              onClick={() => {
-                navigate("/");
-              }}
-            >
-              <span>HOME</span>
-            </button>
-          </div>
-          <div className="nav_btn">
-            <button
-              onClick={() => {
-                // return CustomToast("coming soon");
-                navigate("/participate");
-              }}
-            >
-              <span>KEYBOX</span>
-            </button>
-          </div>
-
-          <div className="nav_btn">
-            <button>
-              <span>EXPLORE</span>
-              <IconFont
-                name="arrow-down"
-                color="#f58c00"
-                className="arrowDown active"
-              />
-              <IconFont
-                name="arrow-down"
-                color="#FFFFFF"
-                className="arrowDown"
-              />
-            </button>
-            <div className="dropDownMeun">
-              <div className="dropDownMeunContent">
-                <ul>
-                  <li onClick={() => CustomToast("coming soon")}>
-                    ROOS Explorer（testnet）
-                  </li>
-                  <li onClick={() => CustomToast("coming soon")}>bridge</li>
-                  <li onClick={() => CustomToast("coming soon")}>run node</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div className="nav_btn">
-            <button onClick={() => CustomToast("coming soon")}>
-              <span>Ecosystems</span>
-            </button>
-          </div>
-
-          <div className="nav_btn">
-            <button onClick={() => CustomToast("coming soon")}>
-              <span>COMMUNITY </span>
-              <IconFont
-                name="arrow-down"
-                color="#f58c00"
-                className="arrowDown active"
-              />
-              <IconFont
-                name="arrow-down"
-                color="#FFFFFF"
-                className="arrowDown"
-              />
-            </button>
-
-            <div className="dropDownMeun">
-              <div className="dropDownMeunContent">
-                <ul>
-                  <li onClick={() => CustomToast("coming soon")}>
-                    <IconFont name="discord" className="icon" color="#EAEAEA" />
-                    <IconFont
-                      name="discord"
-                      className="icon active"
-                      color={"#f58c00"}
-                    />
-                    <span>Discord</span>
-                  </li>
-                  <li
-                    onClick={() =>
-                      window.open("https://twitter.com/btcl2_roos", "_blank")
-                    }
-                  >
-                    <IconFont
-                      name="a-xinbantuitewuyuanjiao"
-                      className="icon"
-                      color="#EAEAEA"
-                    />
-                    <IconFont
-                      name="a-xinbantuitewuyuanjiao"
-                      className="icon active"
-                      color={"#f58c00"}
-                    />
-                    <span>Twitter</span>
-                  </li>
-                  <li onClick={() => CustomToast("coming soon")}>
-                    <IconFont
-                      name="telegram1"
-                      className="icon"
-                      color="#EAEAEA"
-                    />
-                    <IconFont
-                      name="telegram1"
-                      className="icon active"
-                      color={"#f58c00"}
-                    />
-                    <span>Telegram</span>
-                  </li>
-                  <li onClick={() => CustomToast("coming soon")}>
-                    <IconFont
-                      name="Youtube-fill"
-                      className="icon active"
-                      color={"#f58c00"}
-                    />
-                    <IconFont
-                      name="Youtube-fill"
-                      className="icon"
-                      color="#EAEAEA"
-                    />
-                    <span>youtube</span>
-                  </li>
-                  <li
-                    onClick={() =>
-                      window.open("https://medium.com/@roosnetwork", "_blank")
-                    }
-                  >
-                    <IconFont
-                      name="medium"
-                      className="icon active"
-                      color={"#f58c00"}
-                    />
-                    <IconFont name="medium" className="icon" color="#EAEAEA" />
-                    <span>medium</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div className="nav_btn">
-            <button
-              onClick={() =>
-                window.open("https://roos.gitbook.io/roos/", "_blank")
-              }
-            >
-              <span>DOCS</span>
-            </button>
-          </div>
-
-          {/* <div className="nav_btn">
-            <button
-              onClick={() => {
-                window.open("https://info.roospro.com", "_blank");
-              }}
-            >
-              <span>BLOG</span>
-            </button>
-          </div> */}
+          <CustomNavigationMenu
+            title="HOME"
+            titleCallBack={() => {
+              navigate("/");
+            }}
+          />
+          <CustomNavigationMenu
+            title="KEYBOX"
+            titleCallBack={() => {
+              navigate("/participate");
+            }}
+          />
+          <CustomNavigationMenu
+            title="EXPLORE"
+            itemList={[
+              {
+                title: "ROOS Explorer（testnet）",
+                callBack() {
+                  CustomToast("coming soon");
+                },
+              },
+              {
+                title: "bridge",
+                callBack() {
+                  CustomToast("coming soon");
+                },
+              },
+              {
+                title: "run node",
+                callBack() {
+                  CustomToast("coming soon");
+                },
+              },
+            ]}
+          />
+          <CustomNavigationMenu
+            title="Ecosystems"
+            titleCallBack={() => CustomToast("coming soon")}
+          />
+          <CustomNavigationMenu
+            title="COMMUNITY"
+            itemList={[
+              {
+                title: "Discord",
+                icon: "discord",
+                callBack() {
+                  CustomToast("coming soon");
+                },
+              },
+              {
+                title: "Twitter",
+                icon: "a-xinbantuitewuyuanjiao",
+                callBack() {
+                  window.open(THIRD_URL.TWITTER, "_blank");
+                },
+              },
+              {
+                title: "Telegram",
+                icon: "telegram1",
+                callBack() {
+                  CustomToast("coming soon");
+                },
+              },
+              {
+                title: "youtube",
+                icon: "Youtube-fill",
+                callBack() {
+                  CustomToast("coming soon");
+                },
+              },
+              {
+                title: "medium",
+                icon: "medium",
+                callBack() {
+                  window.open(THIRD_URL.MEDIUM, "_blank");
+                },
+              },
+            ]}
+          />
+          <CustomNavigationMenu
+            title="DOCS"
+            titleCallBack={() => window.open(THIRD_URL.GITBOOK, "_blank")}
+          />
         </div>
 
         <div
@@ -312,9 +237,7 @@ export default function (props: { connectBtn?: any }) {
                   </div>
                   <div
                     className="sub"
-                    onClick={() =>
-                      window.open("https://twitter.com/btcl2_roos", "_blank")
-                    }
+                    onClick={() => window.open(THIRD_URL.TWITTER, "_blank")}
                   >
                     <IconFont
                       name="a-xinbantuitewuyuanjiao"
@@ -347,9 +270,7 @@ export default function (props: { connectBtn?: any }) {
                   </div>
                   <div
                     className="sub"
-                    onClick={() =>
-                      window.open("https://medium.com/@roosnetwork", "_blank")
-                    }
+                    onClick={() => window.open(THIRD_URL.MEDIUM, "_blank")}
                   >
                     <IconFont name="medium" className="icon" color="#EAEAEA" />
                     <span>medium</span>
@@ -359,7 +280,7 @@ export default function (props: { connectBtn?: any }) {
 
               <DropdownMenuItem
                 onClick={() => {
-                  window.open("https://roos.gitbook.io/roos/", "_blank");
+                  window.open(THIRD_URL.GITBOOK, "_blank");
                 }}
               >
                 docs
@@ -369,7 +290,7 @@ export default function (props: { connectBtn?: any }) {
                 {/* <img
                   src={tuite_y}
                   onClick={() => {
-                    window.open("https://twitter.com/btcl2_roos", "_blank");
+                    window.open(THIRD_URL.TWITTER, "_blank");
                   }}
                   alt=""
                 />
@@ -389,7 +310,7 @@ export default function (props: { connectBtn?: any }) {
                 <img
                   src={tuite_y}
                   onClick={() => {
-                    window.open("https://twitter.com/btcl2_roos", "_blank");
+                    window.open(THIRD_URL.TWITTER, "_blank");
                   }}
                   alt=""
                 />
