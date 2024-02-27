@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-02-26 21:45:46
+ * @LastEditTime: 2024-02-27 13:38:50
  * @Author: John
  */
 import roosHomeBg from "@/assets/roos-home.mp4";
@@ -45,10 +45,15 @@ export default function () {
               <span>By The Bitcoiners.</span>
               <span>Permissionless. Frictionless. Boundless.</span>
               <span>
-                ROOS is a trustless Bitcoin Layer2 Scaling Solution based on ZK
+                {/* ROOS is a trustless Bitcoin Layer2 Scaling Solution based on ZK
                 Rollups,which bolsters transaction speed and broadens
                 application diversity without sacrificing security.We aim to
                 create a Bitcoin rollup ecosystem to power innovation and
+                experimentation without relying on Bitcoin forks. */}
+                ROOS is the first modular layer2 to scale bitcoin’s computing &
+                storage based on zk rollup,which bolsters transaction speed and
+                broadens application diversity without sacrificing security.We
+                aim to create a Bitcoin rollup ecosystem to power innovation and
                 experimentation without relying on Bitcoin forks.
               </span>
               <button

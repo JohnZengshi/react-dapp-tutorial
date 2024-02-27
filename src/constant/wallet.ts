@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-21 15:31:59
- * @LastEditTime: 2024-02-26 19:55:52
+ * @LastEditTime: 2024-02-27 11:03:26
  * @Author: John
  */
 
@@ -49,6 +49,7 @@ export enum ETHEREUM_RPC {
   EthSendTransaction = "eth_sendTransaction",
   EthSign = "eth_sign", // OKX
   PERSONAL_SIGN = "personal_sign",
+  ETH_SUBSCRIBE = "eth_subscribe",
 }
 
 export type Ethereum = {
@@ -83,6 +84,8 @@ export type Ethereum = {
       ? [string, string]
       : T extends ETHEREUM_RPC.PERSONAL_SIGN
       ? [string, string]
+      : T extends ETHEREUM_RPC.ETH_SUBSCRIBE
+      ? ["newHeads" | "logs" | "newPendingTransactions" | "syncing"]
       : any;
   }) => Promise<
     T extends ETHEREUM_RPC.EthRequestAccounts
@@ -91,6 +94,7 @@ export type Ethereum = {
           | ETHEREUM_RPC.EthSendTransaction
           | ETHEREUM_RPC.EthSign
           | ETHEREUM_RPC.PERSONAL_SIGN
+          | ETHEREUM_RPC.ETH_SUBSCRIBE
       ? string
       : void
   >;

@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-23 18:47:07
- * @LastEditTime: 2024-02-26 20:04:03
+ * @LastEditTime: 2024-02-27 13:59:03
  * @Author: John
  */
 import Web3 from "web3";
@@ -154,10 +154,20 @@ export async function subimtByContract(
                 // other parts of code to use receipt
                 console.log("buyNFTNew send:", receipt);
                 if (walletType === "MetaMask") reslove(receipt.transactionHash);
+              })
+              .catch((err: any) => {
+                console.log("buyNFTNew Transaction err", err);
+                handleCatch(isMobile ? err.error : err, reslove, reject);
+                // reject(isMobile ? err.error : err);
               });
+          })
+          .catch((err: any) => {
+            console.log("buyNFTNew estimateGas err", err);
+            handleCatch(isMobile ? err.error : err, reslove, reject);
+            // reject(isMobile ? err.error : err);
           });
       } catch (err: any) {
-        reject(err);
+        // reject(err);
         handleCatch(isMobile ? err.error : err, reslove, reject);
       }
     });
@@ -165,12 +175,22 @@ export async function subimtByContract(
 }
 
 function handleCatch(
-  error: { code: number; message: string },
+  error: {
+    code: number;
+    message: string;
+    innerError: {
+      code: 4001;
+      message: string;
+      stack: string;
+    };
+  },
   reslove: (reason?: any) => void,
   reject: (reason?: any) => void
 ) {
+  console.log("contract rpc inner error:", error.innerError);
   console.warn("contract rpc error code:", error.code);
-  CustomToast(error.message);
+  let errMsg = error.message.replace("execution reverted: ERC20:", "");
+  CustomToast(errMsg);
   if (error.code == 100) {
     reject(error);
     return;
