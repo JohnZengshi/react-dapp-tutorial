@@ -12,7 +12,6 @@ import {
   SET_WALLET_INSTALL,
 } from "@/store/reducer";
 import { BTC_Unit_Converter, isOKApp } from "@/utils";
-import { ethers } from "ethers";
 import {
   forwardRef,
   useImperativeHandle,
@@ -311,7 +310,7 @@ const Okx = forwardRef<
       } else {
         okxwallet
           ?.request({
-            method: ETHEREUM_RPC.EthSign,
+            method: ETHEREUM_RPC.PERSONAL_SIGN,
             params: [
               address,
               `0x${Buffer.from(message, "utf8").toString("hex")}`,

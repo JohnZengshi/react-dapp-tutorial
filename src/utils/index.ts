@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-02-26 14:20:56
+ * @LastEditTime: 2024-02-29 17:15:19
  * @Author: John
  */
 import CustomToast from "@/components/common/CustomToast";
@@ -172,4 +172,42 @@ export function getChainCode(type: ChainType) {
   }
 
   return chainType;
+}
+
+export function copyText(text: string) {
+  // try {
+  //   navigator.clipboard
+  //     .writeText(text)
+  //     .then(() => {
+  //       CustomToast("Copy Success");
+  //     })
+  //     .catch(() => {
+  //       CustomToast("Copy Fail");
+  //     });
+  // } catch (error) {
+  //   CustomToast("Failed to copy");
+  // }
+
+  // value 为需要复制的内容
+  const value = text;
+  // 1、创建DOM input框
+  const input = document.createElement("input");
+  // 2、隐藏input
+  // @ts-ignore
+  input.style = { opacity: 0, height: 0, lineHeight: 0, fontSize: 0 };
+
+  // 3、将指定文本赋值给input
+  input.value = value;
+  // 4、将input插入文档
+  document.body.appendChild(input);
+  // 5、选中文本
+  // @ts-ignore
+  input.select();
+  // 6、复制到剪切板
+  const isCopySuccess = document.execCommand("copy");
+
+  // 7、复制成功后提示
+  isCopySuccess && CustomToast("Copy Success");
+  // 8、 销魂DOM
+  document.body.removeChild(input);
 }

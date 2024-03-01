@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-02-26 20:46:05
+ * @LastEditTime: 2024-02-29 16:37:12
  * @Author: John
  */
 import "./Invite.scss";
@@ -22,7 +22,7 @@ import {
   API_GET_NODE_LIST,
   NodeInfo,
 } from "@/utils/api";
-import { UrlQueryParamsKey, isMobile, shortenString } from "@/utils";
+import { UrlQueryParamsKey, copyText, isMobile, shortenString } from "@/utils";
 import CustomToast from "./CustomToast";
 import { SET_USER_INVITATION_CODE } from "@/store/reducer";
 import * as clipboard from "clipboard-polyfill";
@@ -125,12 +125,16 @@ export default function (
               <button
                 onClick={() => {
                   if (user.wallet.connected && invitationCode) {
-                    clipboard.writeText(
+                    copyText(
                       `${import.meta.env.VITE_BASE_URL}/#/participate?${
                         UrlQueryParamsKey.INVITE_CODE
                       }=${invitationCode}`
                     );
-                    CustomToast("Copy Success");
+                    // clipboard.writeText(
+                    //   `${import.meta.env.VITE_BASE_URL}/#/participate?${
+                    //     UrlQueryParamsKey.INVITE_CODE
+                    //   }=${invitationCode}`
+                    // );
                   }
                 }}
               >
@@ -154,8 +158,9 @@ export default function (
                     invitationCode &&
                     user.wallet.address
                   ) {
-                    clipboard.writeText(invitationCode);
-                    CustomToast("Copy Success");
+                    copyText(invitationCode);
+                    // clipboard.writeText(invitationCode);
+                    // CustomToast("Copy Success");
                   }
                 }}
               >

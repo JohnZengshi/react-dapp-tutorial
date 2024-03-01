@@ -1,6 +1,7 @@
 import IconFont, { IconNames } from "../iconfont";
 import CustomToast from "./CustomToast";
 import "./CustomNavigationMenu.scss";
+import { Fragment } from "react";
 
 export default function (props: {
   title: string;
@@ -28,7 +29,7 @@ export default function (props: {
             <div className="dropDownMeunContent">
               <ul>
                 {props.itemList?.map((v, i) => (
-                  <>
+                  <Fragment key={i}>
                     {v.icon ? (
                       <li onClick={() => v.callBack?.()}>
                         <IconFont
@@ -46,7 +47,7 @@ export default function (props: {
                     ) : (
                       <li onClick={() => v.callBack?.()}>{v.title}</li>
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </ul>
             </div>

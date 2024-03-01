@@ -1,0 +1,30 @@
+@include mq {
+  .ExperienceTip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 245px;
+    margin: 0 auto;
+    .computer {
+      width: 135px;
+      height: 124px;
+      margin-top: 155px;
+    }
+
+    > span {
+      /* For the best experience, please use a */
+
+      font-family: Raleway-Medium;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: 0em;
+
+      font-variation-settings: "opsz" auto;
+      font-feature-settings: "kern" on;
+      color: #9e9e9e;
+      margin-top: 20px;
+      text-align: center;
+    }
+  }
+}

@@ -2,6 +2,7 @@
 /* eslint-disable */
 
 import React, { SVGAttributes, FunctionComponent } from 'react';
+import Diannao1 from './Diannao1';
 import Telegram1 from './Telegram1';
 import YoutubeFill from './YoutubeFill';
 import Discord from './Discord';
@@ -19,6 +20,7 @@ import Roos from './Roos';
 import ADropDownmenu from './ADropDownmenu';
 import Telegram from './Telegram';
 import Github from './Github';
+export { default as Diannao1 } from './Diannao1';
 export { default as Telegram1 } from './Telegram1';
 export { default as YoutubeFill } from './YoutubeFill';
 export { default as Discord } from './Discord';
@@ -37,7 +39,7 @@ export { default as ADropDownmenu } from './ADropDownmenu';
 export { default as Telegram } from './Telegram';
 export { default as Github } from './Github';
 
-export type IconNames = 'telegram1' | 'Youtube-fill' | 'discord' | 'a-xinbantuitewuyuanjiao' | 'medium' | 'arrow-down' | 'wushuju1' | 'metamask' | 'jiazai' | 'gantanhao-yuankuang' | 'book' | 'Bitcoin' | 'StarkWare' | 'roos' | 'a-drop-downmenu' | 'telegram' | 'github';
+export type IconNames = 'diannao1' | 'telegram1' | 'Youtube-fill' | 'discord' | 'a-xinbantuitewuyuanjiao' | 'medium' | 'arrow-down' | 'wushuju1' | 'metamask' | 'jiazai' | 'gantanhao-yuankuang' | 'book' | 'Bitcoin' | 'StarkWare' | 'roos' | 'a-drop-downmenu' | 'telegram' | 'github';
 
 interface Props extends Omit<SVGAttributes<SVGElement>, 'color'> {
   name: IconNames;
@@ -47,6 +49,8 @@ interface Props extends Omit<SVGAttributes<SVGElement>, 'color'> {
 
 const IconFont: FunctionComponent<Props> = ({ name, ...rest }) => {
   switch (name) {
+    case 'diannao1':
+      return <Diannao1 {...rest} />;
     case 'telegram1':
       return <Telegram1 {...rest} />;
     case 'Youtube-fill':

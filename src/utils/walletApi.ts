@@ -1,10 +1,10 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-23 18:47:07
- * @LastEditTime: 2024-02-27 18:43:04
+ * @LastEditTime: 2024-03-01 09:57:18
  * @Author: John
  */
-import Web3 from "web3";
+import Web3, { utils } from "web3";
 import Contract from "web3-eth-contract";
 import { abi as test_roos_abi } from "@/contract/ROOS_test.json";
 import { abi as roos_abi } from "@/contract/ROOS.json";
@@ -50,12 +50,13 @@ export async function subimtByContract(
 
   // 授权U
   const authorizedU = (uNum: bigint) => {
+    console.log("授权金额参数：", contractAddress, uNum);
     return new Promise<void>((reslove, reject) => {
       usdtContract.methods
         .approve(contractAddress, uNum)
         .send({ from: fromAddress })
         .then((approveRes) => {
-          console.log("approve function:", approveRes);
+          console.log("approve ok:", approveRes);
           reslove();
         })
         .catch((err: any) => {

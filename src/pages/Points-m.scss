@@ -1,0 +1,10 @@
+@include mq {
+  .Points {
+    height: 100vh;
+    background: #0c0c0c;
+
+    .content {
+      padding-top: var(--mb-nav-height);
+    }
+  }
+}

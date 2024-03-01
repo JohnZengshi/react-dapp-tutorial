@@ -102,7 +102,7 @@
               opacity: 1;
 
               font-family: Raleway-Bold;
-              font-size: 12px;
+              font-size: 16px;
               font-weight: bold;
               line-height: normal;
               letter-spacing: 0em;
@@ -170,90 +170,6 @@
           padding-left: 24px;
           padding-right: 21px;
           padding-top: 41px;
-          .recentJoinsItem {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            margin-bottom: 14px;
-            margin-top: 18px;
-            &:first-of-type {
-              margin-top: 0;
-            }
-            .icon {
-              /* 矩形 12 */
-
-              width: 24px;
-              height: 24px;
-              border-radius: 50%;
-              border-radius: 12px;
-              opacity: 1;
-
-              background: #373737;
-
-              box-sizing: border-box;
-              border: 1px solid rgba(245, 140, 0, 0.2);
-
-              margin-right: 14px;
-            }
-
-            .mid {
-              display: flex;
-              flex-direction: column;
-              span {
-                &:nth-of-type(1) {
-                  /* DorothyR16233 */
-
-                  opacity: 1;
-
-                  font-family: Raleway-Medium;
-                  font-size: 12px;
-                  font-weight: normal;
-                  line-height: normal;
-                  letter-spacing: 0em;
-
-                  font-variation-settings: "opsz" auto;
-                  font-feature-settings: "kern" on;
-                  color: #f58c00;
-                }
-
-                &:nth-of-type(2) {
-                  /* Invited by ThomasLisa98710 */
-
-                  opacity: 1;
-
-                  font-family: Raleway-Medium;
-                  font-size: 12px;
-                  font-weight: normal;
-                  line-height: normal;
-                  letter-spacing: 0em;
-
-                  font-variation-settings: "opsz" auto;
-                  font-feature-settings: "kern" on;
-                  color: #505050;
-
-                  margin-top: 2px;
-                }
-              }
-            }
-
-            .time {
-              /* 3 mins ago */
-
-              opacity: 1;
-
-              font-family: Raleway-Medium;
-              font-size: 12px;
-              font-weight: normal;
-              line-height: normal;
-              letter-spacing: 0em;
-
-              font-variation-settings: "opsz" auto;
-              font-feature-settings: "kern" on;
-              color: #989898;
-
-              margin-left: auto;
-            }
-          }
 
           .line {
             /* 直线 23 */

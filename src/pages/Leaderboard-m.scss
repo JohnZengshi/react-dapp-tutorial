@@ -1,0 +1,14 @@
+@include mq {
+  .Leaderboard {
+    height: 100vh;
+    background-color: #0c0c0c;
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      padding-top: var(--mb-nav-height);
+    }
+  }
+}
