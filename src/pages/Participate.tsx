@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-02-27 15:20:36
+ * @LastEditTime: 2024-03-05 17:22:24
  * @Author: John
  */
 import { Input } from "@/components/ui/input";
@@ -38,7 +38,7 @@ import boxT2 from "@/assets/boxT2.png";
 import boxT3 from "@/assets/boxT3.png";
 import participate_box from "@/assets/participate_box.png";
 import { useNavigate } from "react-router-dom";
-import { CUSTOM_DIALOG } from "@/store/customCom";
+import { CUSTOM_DIALOG, SET_CUSTOM_DIALOG_OPEN } from "@/store/customCom";
 import ReduceAddInput from "@/components/common/ReduceAddInput";
 import Iconfont from "@/components/iconfont";
 type OrderInfo = {
@@ -173,6 +173,21 @@ export default function () {
 
     return () => {};
   }, [user.wallet.payInfo?.hash]);
+
+  useEffect(() => {
+    if (user.buyLoading) {
+      dispatch(
+        CUSTOM_DIALOG({
+          content: "During payment, please do not exit or switch interfaces",
+          cannotClose: true,
+          loading: true,
+        })
+      );
+    } else {
+      dispatch(SET_CUSTOM_DIALOG_OPEN(false));
+    }
+    return () => {};
+  }, [user.buyLoading]);
 
   function ActiveButton(
     props: { content: string; active: boolean; key?: any } & ButtonProps

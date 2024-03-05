@@ -206,7 +206,8 @@ const Okx = forwardRef<
               }
             }
             reslove(result[0]);
-          });
+          })
+          .catch(handleCatch);
       }
     });
   }
@@ -282,7 +283,7 @@ const Okx = forwardRef<
 
   // 统一处理错误
   function handleCatch(e: { code: number; message: string }) {
-    // console.log(e.code);
+    console.log("handle catch:", e);
     if (typeof e.message === "string") {
       console.warn(e.message);
       if (/[\u4e00-\u9fa5]/.test(e.message)) return;

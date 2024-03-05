@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-14 17:41:17
- * @LastEditTime: 2024-02-26 15:35:04
+ * @LastEditTime: 2024-03-05 17:24:56
  * @Author: John
  */
 import "./CustomDialog.scss";
@@ -41,7 +41,9 @@ export default function () {
             {customCom.dialog.loading && (
               <IconFont name="jiazai" className="loading" color={"#F58C00"} />
             )}
-            <span className="content_text">{customCom.dialog.content}</span>
+            <span className="content_text text-center">
+              {customCom.dialog.content}
+            </span>
             {customCom.dialog.hash && (
               <span
                 className="hash"
