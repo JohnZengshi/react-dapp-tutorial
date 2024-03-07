@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-02-25 23:06:35
+ * @LastEditTime: 2024-03-05 16:58:50
  * @Author: John
  */
 import { defineConfig, loadEnv } from "vite";
@@ -14,8 +14,8 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 export default ({ mode }) => {
   return defineConfig({
     server: {
-      // host: "192.168.10.167",
-      host: "192.168.5.172",
+      host: "192.168.10.167",
+      // host: "192.168.5.172",
       // https: true,
       proxy: {
         "/dev": {
