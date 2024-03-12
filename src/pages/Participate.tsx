@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-03-12 10:04:51
+ * @LastEditTime: 2024-03-12 13:53:28
  * @Author: John
  */
 import "./Participate.scss";
@@ -29,9 +29,11 @@ import { useNavigate } from "react-router-dom";
 import { CUSTOM_DIALOG, SET_CUSTOM_DIALOG_OPEN } from "@/store/customCom";
 import ReduceAddInput from "@/components/common/ReduceAddInput";
 import Iconfont from "@/components/iconfont";
-import { useChainId, useSwitchChain } from "wagmi";
+import { useChainId, useSwitchAccount, useSwitchChain } from "wagmi";
 import { sepoliaTestNetwork } from "@/constant/wallet";
 import { arbitrum } from "viem/chains";
+import { switchAccount, getConnections } from "@wagmi/core";
+import { config } from "@/components/WalletProvider";
 type OrderInfo = {
   buyAmount: string;
   buyCount: number;
@@ -335,18 +337,22 @@ export default function () {
                         if (!nodeInfo) return;
                         // TODO 切换网络✔
                         console.log("current chain id:", chainId);
-                        if (import.meta.env.MODE != "production") {
-                          if (chainId != sepoliaTestNetwork.id) {
-                            await switchChainAsync({
-                              chainId: sepoliaTestNetwork.id,
-                            });
+                        try {
+                          if (import.meta.env.MODE != "production") {
+                            if (chainId != sepoliaTestNetwork.id) {
+                              await switchChainAsync({
+                                chainId: sepoliaTestNetwork.id,
+                              });
+                            }
+                          } else {
+                            if (chainId != arbitrum.id) {
+                              await switchChainAsync({
+                                chainId: arbitrum.id,
+                              });
+                            }
                           }
-                        } else {
-                          if (chainId != arbitrum.id) {
-                            await switchChainAsync({
-                              chainId: arbitrum.id,
-                            });
-                          }
+                        } catch (error) {
+                          return;
                         }
                         // TODO 购买节点✔
                         let orderInfo = await fetchUrl<
