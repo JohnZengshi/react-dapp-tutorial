@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-21 15:31:59
- * @LastEditTime: 2024-03-11 14:53:00
+ * @LastEditTime: 2024-03-12 16:56:46
  * @Author: John
  */
 
@@ -128,7 +128,7 @@ export type Ethereum = {
 
 declare global {
   interface Window {
-    ethereum?: Ethereum;
+    ethereum?: Ethereum & { isTokenPocket?: boolean };
     okxwallet:
       | ({
           bitcoin: any;
@@ -151,5 +151,6 @@ declare global {
           removeListener: (event: string, handle: any) => void;
         }
       | undefined;
+    bitkeep?: { ethereum?: Ethereum };
   }
 }
