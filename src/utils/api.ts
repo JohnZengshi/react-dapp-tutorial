@@ -4,6 +4,7 @@
  * @LastEditTime: 2024-02-25 13:55:36
  * @Author: John
  */
+import { TYPE_ADDRESS } from "@/types";
 import { fetchUrl, getChainCode, localStorageKey } from ".";
 import { ChainType } from "@/store/reducer";
 
@@ -35,7 +36,7 @@ export async function API_GET_NODE_LIST() {
   return res.data;
 }
 
-export async function API_CHECT_EXIT(address: string) {
+export async function API_CHECT_EXIT(address: TYPE_ADDRESS) {
   let res = await fetchUrl<{ exist: boolean }>(
     `/api/account/exist?account=${address}&chainType=1`,
     {
@@ -47,7 +48,7 @@ export async function API_CHECT_EXIT(address: string) {
 
 export type SIGNUP_CHAIN_TYPE = 1 | 2 | 3 | 4 | 5 | 6; // 1=Bitcoin 2=Ethereum 3=Polygon 4=BNB Chain 5=Arbitrum One
 export async function API_SIGNUP(
-  address: string,
+  address: TYPE_ADDRESS,
   shareCode: string,
   publicKey: string
   // chainType: ChainType
@@ -55,7 +56,7 @@ export async function API_SIGNUP(
   let res = await fetchUrl<
     any,
     {
-      account: string;
+      account: TYPE_ADDRESS;
       shareCode: string;
       publicKey: string;
       chainType: SIGNUP_CHAIN_TYPE;

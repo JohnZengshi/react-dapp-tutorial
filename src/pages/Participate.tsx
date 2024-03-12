@@ -1,24 +1,15 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-03-05 17:22:24
+ * @LastEditTime: 2024-03-12 10:04:51
  * @Author: John
  */
-import { Input } from "@/components/ui/input";
 import "./Participate.scss";
 import "./Participate-m.scss";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import {
-  Wallet,
-  fetchUrl,
-  isMobile,
-  isOKApp,
-  localStorageKey,
-  shortenString,
-} from "@/utils";
+import { fetchUrl, isOKApp, shortenString } from "@/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import ConnectUs from "@/components/common/ConnectUs";
 import CustomToast from "@/components/common/CustomToast";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import Invite from "@/components/common/Invite";
@@ -33,14 +24,14 @@ import {
   API_PAY_NODE_SMS,
   NodeInfo,
 } from "@/utils/api";
-import boxT1 from "@/assets/boxT1.png";
-import boxT2 from "@/assets/boxT2.png";
-import boxT3 from "@/assets/boxT3.png";
 import participate_box from "@/assets/participate_box.png";
 import { useNavigate } from "react-router-dom";
 import { CUSTOM_DIALOG, SET_CUSTOM_DIALOG_OPEN } from "@/store/customCom";
 import ReduceAddInput from "@/components/common/ReduceAddInput";
 import Iconfont from "@/components/iconfont";
+import { useChainId, useSwitchChain } from "wagmi";
+import { sepoliaTestNetwork } from "@/constant/wallet";
+import { arbitrum } from "viem/chains";
 type OrderInfo = {
   buyAmount: string;
   buyCount: number;
@@ -69,6 +60,9 @@ export default function () {
 
   const { buyNftIds, startPollingCheckBuyStatus, stopPollingCheckBuyStatus } =
     usePollingCheckBuyStatus();
+
+  const { chains, switchChain, switchChainAsync } = useSwitchChain();
+  const chainId = useChainId();
 
   let remaining = useMemo(() => {
     if (nodeInfo) {
@@ -329,15 +323,31 @@ export default function () {
 
                         return;
                       }
-                      if (user.wallet.chainType == "BTC") {
-                        CustomToast("MINT Please Switch To Etherscan Wallet !");
-                        return;
-                      }
+                      // TODO MINT Please Switch To Etherscan Wallet???
+                      // if (user.wallet.chainType == "BTC") {
+                      //   CustomToast("MINT Please Switch To Etherscan Wallet !");
+                      //   return;
+                      // }
 
                       if (user.buyLoading) return;
 
                       if (typeof num === "number") {
                         if (!nodeInfo) return;
+                        // TODO 切换网络✔
+                        console.log("current chain id:", chainId);
+                        if (import.meta.env.MODE != "production") {
+                          if (chainId != sepoliaTestNetwork.id) {
+                            await switchChainAsync({
+                              chainId: sepoliaTestNetwork.id,
+                            });
+                          }
+                        } else {
+                          if (chainId != arbitrum.id) {
+                            await switchChainAsync({
+                              chainId: arbitrum.id,
+                            });
+                          }
+                        }
                         // TODO 购买节点✔
                         let orderInfo = await fetchUrl<
                           OrderInfo,

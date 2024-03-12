@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-02-27 15:16:44
+ * @LastEditTime: 2024-03-11 10:42:23
  * @Author: John
  */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
@@ -23,7 +23,7 @@ export interface UserState {
     connected: boolean;
     walletInstall: boolean;
     unisatWalletInstalled: boolean;
-    walletType: WalletType;
+    // walletType: WalletType;
     notificationTriggerEvent:
       | "CONNECT" // 链接钱包
       | "TRANSACTION" // 交易
@@ -42,7 +42,7 @@ export interface UserState {
       rebateRatio: number; // 返佣比例
     } | null;
     thirdInviteCode: string;
-    chainType: ChainType;
+    // chainType: ChainType;
   };
   logInStatus: "LOGIN" | "LOG_OUT";
   buyLoading: boolean;
@@ -56,11 +56,11 @@ const initialState: UserState = {
     connected: false,
     walletInstall: false,
     unisatWalletInstalled: false,
-    walletType: "",
+    // walletType: "",
     notificationTriggerEvent: "",
     payInfo: null,
     thirdInviteCode: "",
-    chainType: "",
+    // chainType: "",
   },
   logInStatus: "LOG_OUT",
   buyLoading: false,
@@ -88,12 +88,12 @@ export const userSlice = createSlice({
     SET_UNISAT_WALLET_INSTALL: (state, action: PayloadAction<boolean>) => {
       state.wallet.unisatWalletInstalled = action.payload;
     },
-    SET_WALLET_TYPE: (
-      state,
-      action: PayloadAction<UserState["wallet"]["walletType"]>
-    ) => {
-      state.wallet.walletType = action.payload;
-    },
+    // SET_WALLET_TYPE: (
+    //   state,
+    //   action: PayloadAction<UserState["wallet"]["walletType"]>
+    // ) => {
+    //   state.wallet.walletType = action.payload;
+    // },
     SET_NOTIFICATION_TRIGGER_EVENT: (
       state,
       action: PayloadAction<UserState["wallet"]["notificationTriggerEvent"]>
@@ -117,12 +117,12 @@ export const userSlice = createSlice({
       state.logInStatus = action.payload;
     },
 
-    SET_CHAIN_TYPE: (
-      state,
-      action: PayloadAction<UserState["wallet"]["chainType"]>
-    ) => {
-      state.wallet.chainType = action.payload;
-    },
+    // SET_CHAIN_TYPE: (
+    //   state,
+    //   action: PayloadAction<UserState["wallet"]["chainType"]>
+    // ) => {
+    //   state.wallet.chainType = action.payload;
+    // },
 
     SET_BUY_LOADING: (
       state,
@@ -141,12 +141,12 @@ export const {
   SET_CONNECTED,
   SET_WALLET_INSTALL,
   SET_UNISAT_WALLET_INSTALL,
-  SET_WALLET_TYPE,
+  // SET_WALLET_TYPE,
   SET_NOTIFICATION_TRIGGER_EVENT,
   SET_PAY_INFO,
   SET_THIRD_INVITE_CODE,
   SET_LOGINSTATUS,
-  SET_CHAIN_TYPE,
+  // SET_CHAIN_TYPE,
   SET_BUY_LOADING,
 } = userSlice.actions;
 

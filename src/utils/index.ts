@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-02-29 17:15:19
+ * @LastEditTime: 2024-03-11 10:27:17
  * @Author: John
  */
 import CustomToast from "@/components/common/CustomToast";
@@ -52,9 +52,11 @@ export enum localStorageKey {
 }
 
 export enum sessionStorageKey {
-  okx_address = "okx_address",
-  unisat_address = "unisat_address",
-  metaMask_address = "metaMask_address",
+  // okx_address = "okx_address",
+  // unisat_address = "unisat_address",
+  // metaMask_address = "metaMask_address",
+
+  wallet_address = "wallet_address",
   roos_token = "roos_token",
 }
 
@@ -80,10 +82,7 @@ export async function fetchUrl<D = any, P = any>(
       sessionStorage.getItem(sessionStorageKey.roos_token)?.split("::::")[1] ||
       "",
     "Accept-Language": "zh-CN",
-    address:
-      sessionStorage.getItem(sessionStorageKey.okx_address) ||
-      sessionStorage.getItem(sessionStorageKey.metaMask_address) ||
-      "",
+    address: sessionStorage.getItem(sessionStorageKey.wallet_address) || "",
     // address,
     "Content-Type": "application/json",
   };

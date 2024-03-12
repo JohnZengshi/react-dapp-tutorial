@@ -21,6 +21,7 @@ import {
 import { toWei } from "web3-utils";
 import { Contract } from "web3-eth-contract";
 import { subimtByContract } from "@/utils/walletApi";
+import { TYPE_ADDRESS } from "@/types";
 /*
  * @LastEditors: John
  * @Date: 2024-01-02 12:58:36
@@ -28,13 +29,13 @@ import { subimtByContract } from "@/utils/walletApi";
  * @Author: John
  */
 type Account = {
-  address: string;
+  address: TYPE_ADDRESS;
   compressedPublicKey: string;
   publicKey: string;
 };
 // let connecting = false; // TODO 优化connecting状态✔
 export type Okx_HandleType = {
-  _connect: (chainType: ChainType) => Promise<string>;
+  _connect: (chainType: ChainType) => Promise<TYPE_ADDRESS>;
   _disConnect: () => Promise<void>;
   _onSubmit: (
     buyAmount: string,
@@ -44,7 +45,7 @@ export type Okx_HandleType = {
     pAddress: string,
     toAddress?: string
   ) => Promise<string>;
-  _sign: (address: string, message: string) => Promise<string>;
+  _sign: (address: TYPE_ADDRESS, message: string) => Promise<string>;
 };
 
 const Okx = forwardRef<
@@ -100,11 +101,13 @@ const Okx = forwardRef<
       // 监听账户变化
       // TODO 移动端无法触发？？？✔
       console.log("绑定accountChanged事件");
-      if (user.wallet.chainType == "BTC") {
-        okxwallet?.bitcoin?.on("accountChanged", handleAccountsChanged);
-        return;
-      }
-      okxwallet?.on("accountsChanged", (accounts: string[]) => {
+
+      // TODO btc钱包监听用户变化
+      // if (user.wallet.chainType == "BTC") {
+      //   okxwallet?.bitcoin?.on("accountChanged", handleAccountsChanged);
+      //   return;
+      // }
+      okxwallet?.on("accountsChanged", (accounts: TYPE_ADDRESS[]) => {
         handleAccountsChanged({
           address: accounts[0],
           compressedPublicKey: "",
@@ -114,13 +117,15 @@ const Okx = forwardRef<
     })();
     return () => {
       console.log("解绑accountChanged事件");
-      if (user.wallet.chainType == "BTC") {
-        okxwallet?.bitcoin?.removeListener(
-          "accountChanged",
-          handleAccountsChanged
-        );
-        return;
-      }
+
+      // TODO btc钱包解绑用户变化时间
+      // if (user.wallet.chainType == "BTC") {
+      //   okxwallet?.bitcoin?.removeListener(
+      //     "accountChanged",
+      //     handleAccountsChanged
+      //   );
+      //   return;
+      // }
       okxwallet?.removeListener("accountsChanged", handleAccountsChanged);
     };
   }, []);
@@ -145,7 +150,7 @@ const Okx = forwardRef<
 
   // 连接钱包
   async function connect(chainType: ChainType) {
-    return new Promise<string>(async (reslove, reject) => {
+    return new Promise<TYPE_ADDRESS>(async (reslove, reject) => {
       await checkinstall();
       if (chainType == "BTC") {
         okxwallet?.bitcoin
@@ -237,48 +242,48 @@ const Okx = forwardRef<
     pAddress: string,
     toAddress?: string
   ) {
-    if (user.wallet.chainType == "BTC") {
-      return new Promise<string>((reslove, reject) => {
-        // console.log("okxwallet.bitcoin", okxwallet?.bitcoin);
+    // TODO btc钱包交易
+    // if (user.wallet.chainType == "BTC") {
+    //   return new Promise<string>((reslove, reject) => {
+    //     // console.log("okxwallet.bitcoin", okxwallet?.bitcoin);
 
-        if (typeof okxwallet?.bitcoin === "undefined") return;
-        console.log(
-          "values.satoshis * BTC_Unit_Converter",
-          buyCount * BTC_Unit_Converter
-        );
-        // console.log(address, toAddress, cost * BTC_Unit_Converter);
-        console.log("send", okxwallet.bitcoin.send);
-        okxwallet.bitcoin
-          .send({
-            from: user.wallet.address,
-            to: toAddress,
-            value: buyCount,
-          })
-          .then((txid: { txhash: string }) => {
-            // console.log(txid);
+    //     if (typeof okxwallet?.bitcoin === "undefined") return;
+    //     console.log(
+    //       "values.satoshis * BTC_Unit_Converter",
+    //       buyCount * BTC_Unit_Converter
+    //     );
+    //     // console.log(address, toAddress, cost * BTC_Unit_Converter);
+    //     console.log("send", okxwallet.bitcoin.send);
+    //     okxwallet.bitcoin
+    //       .send({
+    //         from: user.wallet.address,
+    //         to: toAddress,
+    //         value: buyCount,
+    //       })
+    //       .then((txid: { txhash: string }) => {
+    //         // console.log(txid);
 
-            // CustomToast(`请求交易成功,txid值为：${txid.txhash}`);
+    //         // CustomToast(`请求交易成功,txid值为：${txid.txhash}`);
 
-            reslove(txid.txhash);
-          })
-          .catch((e: any) => {
-            console.log("用户取消交易");
-            handleCatch(e);
-            reject(e);
-          });
-      });
-    } else {
-      return subimtByContract(
-        BigInt(buyAmount),
-        buyCount,
-        randomNumber,
-        rebateRatio,
-        pAddress,
-        okxwallet,
-        user.wallet.address,
-        "OKX"
-      );
-    }
+    //         reslove(txid.txhash);
+    //       })
+    //       .catch((e: any) => {
+    //         console.log("用户取消交易");
+    //         handleCatch(e);
+    //         reject(e);
+    //       });
+    //   });
+    // } else {
+    return subimtByContract(
+      BigInt(buyAmount),
+      buyCount,
+      randomNumber,
+      rebateRatio,
+      pAddress,
+      okxwallet,
+      user.wallet.address
+    );
+    // }
   }
 
   // 统一处理错误
@@ -292,37 +297,39 @@ const Okx = forwardRef<
   }
 
   // 签名
-  async function sign(address: string, message: string): Promise<string> {
+  async function sign(address: TYPE_ADDRESS, message: string): Promise<string> {
     return new Promise((reslove, reject) => {
       // let address = localStorage.getItem(localStorageKey.okx_address);
       // TODO 签名✔
       // const nonce = "22a68408-fea7-4491-996c-a92fbf710a72";
       // const message = `Welcome to OKX!\n\nThis request will not trigger a blockchain transaction.\n    \nYour authentication status will reset after 24 hours.\n    \nWallet address:\n${result.address}\n    \nNonce:\n${nonce}\n`;
       // const message = "need sign string";
-      console.log("签名?", user.wallet.chainType);
-      if (user.wallet.chainType == "BTC") {
-        okxwallet?.bitcoin
-          .signMessage(message, { from: address }) // OKX app 钱包新的签名方法传参（官网的方法传参不对）！！！！
-          .then(async (sign: string) => {
-            console.log("okx signature:", sign);
-            reslove(sign);
-          })
-          .catch(handleCatch);
-      } else {
-        okxwallet
-          ?.request({
-            method: ETHEREUM_RPC.PERSONAL_SIGN,
-            params: [
-              address,
-              `0x${Buffer.from(message, "utf8").toString("hex")}`,
-            ],
-          })
-          .then((sign) => {
-            console.log(sign);
-            reslove(sign);
-          })
-          .catch((err) => handleCatch(err));
-      }
+      // console.log("签名?", user.wallet.chainType);
+
+      // TODO btc钱包签名
+      // if (user.wallet.chainType == "BTC") {
+      //   okxwallet?.bitcoin
+      //     .signMessage(message, { from: address }) // OKX app 钱包新的签名方法传参（官网的方法传参不对）！！！！
+      //     .then(async (sign: string) => {
+      //       console.log("okx signature:", sign);
+      //       reslove(sign);
+      //     })
+      //     .catch(handleCatch);
+      // } else {
+      okxwallet
+        ?.request({
+          method: ETHEREUM_RPC.PERSONAL_SIGN,
+          params: [
+            address,
+            `0x${Buffer.from(message, "utf8").toString("hex")}`,
+          ],
+        })
+        .then((sign) => {
+          console.log(sign);
+          reslove(sign);
+        })
+        .catch((err) => handleCatch(err));
+      // }
     });
   }
 

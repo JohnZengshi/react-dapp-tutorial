@@ -1,9 +1,12 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-21 15:31:59
- * @LastEditTime: 2024-02-27 11:03:26
+ * @LastEditTime: 2024-03-11 14:53:00
  * @Author: John
  */
+
+import { TYPE_ADDRESS } from "@/types";
+import { defineChain } from "viem/utils";
 
 type chainType = {
   chainId: string;
@@ -41,6 +44,28 @@ export const WALLET_TEST: chainType = {
 export const WALLET_ETHEREUM: Pick<chainType, "chainId"> = {
   chainId: "0x1",
 };
+
+export const sepoliaTestNetwork = defineChain({
+  id: 11155111,
+  name: "Sepolia test network",
+  nativeCurrency: {
+    name: "SepoliaETH",
+    symbol: "ETH",
+    decimals: 0,
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc.sepolia.org"],
+      webSocket: undefined,
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "",
+      url: "https://sepolia.etherscan.io",
+    },
+  },
+});
 
 export enum ETHEREUM_RPC {
   EthRequestAccounts = "eth_requestAccounts",
@@ -82,15 +107,15 @@ export type Ethereum = {
           gasPrice?: string;
         }>[]
       : T extends ETHEREUM_RPC.EthSign
-      ? [string, string]
+      ? [TYPE_ADDRESS, string]
       : T extends ETHEREUM_RPC.PERSONAL_SIGN
-      ? [string, string]
+      ? [TYPE_ADDRESS, TYPE_ADDRESS]
       : T extends ETHEREUM_RPC.ETH_SUBSCRIBE
       ? ["newHeads" | "logs" | "newPendingTransactions" | "syncing"]
       : any;
   }) => Promise<
     T extends ETHEREUM_RPC.EthRequestAccounts
-      ? string[]
+      ? TYPE_ADDRESS[]
       : T extends
           | ETHEREUM_RPC.EthSendTransaction
           | ETHEREUM_RPC.EthSign

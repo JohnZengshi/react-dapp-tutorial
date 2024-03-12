@@ -51,9 +51,10 @@ import { ChainType } from "@/store/reducer";
 import Web3 from "web3";
 import { signTransaction, Transaction } from "web3-eth-accounts";
 import { subimtByContract } from "@/utils/walletApi";
+import { TYPE_ADDRESS } from "@/types";
 
 export type MetaMask_HandleType = {
-  _connect: (chainType: ChainType) => Promise<string>;
+  _connect: (chainType: ChainType) => Promise<TYPE_ADDRESS>;
   _disConnect?: () => Promise<void>;
   _onSubmit: (
     buyAmount: string,
@@ -62,7 +63,7 @@ export type MetaMask_HandleType = {
     rebateRatio: number, // 返佣比例,
     pAddress: string
   ) => Promise<string>;
-  _sign: (address: string, message: string) => Promise<string>;
+  _sign: (address: TYPE_ADDRESS, message: string) => Promise<string>;
 };
 
 const formSchema = z.object({
@@ -79,7 +80,7 @@ const formSchema = z.object({
 const MetaMask = forwardRef<
   MetaMask_HandleType,
   {
-    handleAccountsChanged: (accounts: string) => void;
+    handleAccountsChanged: (accounts: TYPE_ADDRESS) => void;
     checkInstalledOk: () => Promise<void>;
   }
 >((props, ref) => {
@@ -130,7 +131,7 @@ const MetaMask = forwardRef<
 
   // 处理连接
   const connect = async (chainType: ChainType) => {
-    return new Promise<string>(async (reslove, reject) => {
+    return new Promise<TYPE_ADDRESS>(async (reslove, reject) => {
       await checkinstall();
       try {
         let res = await ethereum?.request({
@@ -206,13 +207,12 @@ const MetaMask = forwardRef<
       rebateRatio,
       pAddress,
       ethereum,
-      user.wallet.address,
-      "MetaMask"
+      user.wallet.address
     );
   }
 
   // 签名
-  const sign = (address: string, message: string) => {
+  const sign = (address: TYPE_ADDRESS, message: string) => {
     return new Promise<string>((reslove, reject) => {
       ethereum
         ?.request({
@@ -266,7 +266,7 @@ const MetaMask = forwardRef<
   }, []);
 
   // 用户变化
-  async function handleAccountsChanged(accounts: Array<string>) {
+  async function handleAccountsChanged(accounts: Array<TYPE_ADDRESS>) {
     props.handleAccountsChanged(accounts[0]);
   }
 

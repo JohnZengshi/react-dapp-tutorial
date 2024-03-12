@@ -13,6 +13,7 @@ import { BTC_Unit_Converter } from "@/utils";
 import CustomToast from "@/components/common/CustomToast";
 import { useAppDispatch } from "@/store/hooks";
 import { SET_UNISAT_WALLET_INSTALL } from "@/store/reducer";
+import { TYPE_ADDRESS } from "@/types";
 
 const formSchema = z.object({
   toAddress: z.string(),
@@ -23,12 +24,12 @@ export type UniSat_handleType = {
   _connect: () => Promise<string>;
   _disConnect: () => Promise<void>;
   _onSubmit: (cost: number, toAddress: string) => Promise<string>;
-  _sign: (address: string, message: string) => Promise<string>;
+  _sign: (address: TYPE_ADDRESS, message: string) => Promise<string>;
 };
 const UniSat = forwardRef<
   UniSat_handleType,
   {
-    handleAccountsChanged: (_accounts: string[]) => void;
+    handleAccountsChanged: (_accounts: TYPE_ADDRESS[]) => void;
     checkInstalledOk: () => Promise<void>;
   }
 >(function (props, ref) {
@@ -53,7 +54,7 @@ const UniSat = forwardRef<
   });
 
   // 切换钱包
-  const handleAccountsChanged = (_accounts: string[]) => {
+  const handleAccountsChanged = (_accounts: TYPE_ADDRESS[]) => {
     props.handleAccountsChanged(_accounts);
   };
 
@@ -129,7 +130,7 @@ const UniSat = forwardRef<
   }
 
   // 签名
-  async function sign(address: string, message: string): Promise<string> {
+  async function sign(address: TYPE_ADDRESS, message: string): Promise<string> {
     return new Promise(async (reslove, reject) => {
       try {
         let sign = await unisat?.signMessage(message);
