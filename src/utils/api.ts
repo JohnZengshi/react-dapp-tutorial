@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-10 10:15:30
- * @LastEditTime: 2024-02-25 13:55:36
+ * @LastEditTime: 2024-03-12 13:55:15
  * @Author: John
  */
 import { TYPE_ADDRESS } from "@/types";
@@ -297,8 +297,11 @@ export async function API_GET_W_ORD_NODE_PRO() {
 }
 
 export async function API_CONTRACT_ADDRESS() {
-  let res = await fetchUrl<{ address: string }>(`/api/node/contractAddress`, {
-    method: "GET",
-  });
+  let res = await fetchUrl<{ address: TYPE_ADDRESS }>(
+    `/api/node/contractAddress`,
+    {
+      method: "GET",
+    }
+  );
   return res?.data.address;
 }
