@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 08:51:29
- * @LastEditTime: 2024-02-26 20:00:16
+ * @LastEditTime: 2024-03-08 11:41:29
  * @Author: John
  */
 // import "./App.css";
@@ -25,6 +25,7 @@ import { SET_IS_SMALL_SCREEN } from "./store/sys";
 import Points from "./pages/Points";
 import Leaderboard from "./pages/Leaderboard";
 import Test from "./pages/Test";
+import { WalletProvider } from "./components/WalletProvider";
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -37,19 +38,21 @@ const App = () => {
     console.log("render");
   }, []);
   return (
-    <div className="App">
-      <Nav connectBtn={<ConnectWallet />} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/participate" element={<Participate />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/points" element={<Points />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="/test" element={<Test />} />
-      </Routes>
-      <Toaster />
-      <CustomDialog />
-    </div>
+    <WalletProvider>
+      <div className="App">
+        <Nav connectBtn={<ConnectWallet />} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/participate" element={<Participate />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/points" element={<Points />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/test" element={<Test />} />
+        </Routes>
+        <Toaster />
+        <CustomDialog />
+      </div>
+    </WalletProvider>
   );
 };
 

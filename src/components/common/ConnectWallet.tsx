@@ -1,4 +1,10 @@
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+/*
+ * @LastEditors: John
+ * @Date: 2024-03-08 09:44:08
+ * @LastEditTime: 2024-03-12 09:58:23
+ * @Author: John
+ */
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   Fragment,
   forwardRef,
@@ -7,14 +13,12 @@ import {
   useRef,
   useState,
 } from "react";
-import UseOkx, { Okx_HandleType } from "@/wallet/Okx";
-import UseUniSat, { UniSat_handleType } from "@/wallet/UniSat";
+import { Okx_HandleType } from "@/wallet/Okx";
+import { UniSat_handleType } from "@/wallet/UniSat";
 import {
   UrlQueryParamsKey,
   fillArray,
   getUrlQueryParam,
-  isOKApp,
-  localStorageKey,
   sessionStorageKey,
   shortenString,
 } from "@/utils";
@@ -33,14 +37,13 @@ import {
   ChainType,
   SET_ADDRESS,
   SET_BUY_LOADING,
-  SET_CHAIN_TYPE,
+  // SET_CHAIN_TYPE,
   SET_CONNECTED,
   SET_LOGINSTATUS,
   SET_NOTIFICATION_TRIGGER_EVENT,
   SET_PAY_INFO,
   SET_THIRD_INVITE_CODE,
-  SET_WALLET_INSTALL,
-  SET_WALLET_TYPE,
+  // SET_WALLET_TYPE,
   WalletType,
 } from "@/store/reducer";
 import { useNavigate } from "react-router-dom";
@@ -53,33 +56,42 @@ import {
   API_PAY_NODE_SMS,
   API_SIGNUP,
   API_BIND_OR_NOT,
-  SIGNUP_CHAIN_TYPE,
   API_BINDING_RELATIONSHIP,
 } from "@/utils/api";
 import { Md5 } from "ts-md5";
 import CustomDialogContent from "./CustomDialogContent";
-import MetaMask, { MetaMask_HandleType } from "@/wallet/MetaMask";
-import detectEthereumProvider from "@metamask/detect-provider";
+import { MetaMask_HandleType } from "@/wallet/MetaMask";
 import copy from "@/assets/copy.png";
 import * as clipboard from "clipboard-polyfill";
 import IconFont from "../iconfont";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
+import {
+  useAccount,
+  useBlockNumber,
+  useDisconnect,
+  useSignMessage,
+} from "wagmi";
+import { getWalletClient } from "@wagmi/core";
+import { TYPE_ADDRESS } from "@/types";
+import { config } from "../WalletProvider";
+import { subimtByContract } from "@/utils/walletApi";
 
-/*
- * @LastEditors: John
- * @Date: 2024-01-02 14:40:57
- * @LastEditTime: 2024-01-03 14:29:20
- * @Author: John
- */
 export type ConnectWallet_handleType = {
   // _onSubmit: (cost: number, toAddress: string) => Promise<string>;
-  _setWalletType: (type: WalletType) => void;
+  // _setWalletType: (type: WalletType) => void;
   _selectWallet: () => void;
 };
 const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
   props,
   ref
 ) {
-  const [open, setOpen] = useState(false);
+  const { open, close } = useWeb3Modal();
+  const { address, addresses, isConnected } = useAccount();
+  const { signMessage, signMessageAsync } = useSignMessage();
+  const { disconnect } = useDisconnect();
+  const { data, error } = useBlockNumber();
+
+  const [selectWalletOpen, setSelectWalletOpen] = useState(false);
   const [connectWalletType, setConnectWalletType] = useState<
     "MULTI_CHAIN" | "SINGLE"
   >("MULTI_CHAIN");
@@ -99,7 +111,8 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
       case "SELECT_WALLET": // 选择钱包
         dispatch(SET_NOTIFICATION_TRIGGER_EVENT(""));
         setConnectWalletType("MULTI_CHAIN");
-        setOpen(true);
+        // setSelectWalletOpen(true);
+        open();
 
         break;
       case "CONNECT": // 连接
@@ -115,32 +128,44 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
           try {
             dispatch(SET_BUY_LOADING(true));
             let hash = "";
-            if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
-              hash = await uniSatRef.current._onSubmit(
-                user.wallet.payInfo.buyCount,
-                user.wallet.payInfo.toAddress
-              );
-            } else if (user.wallet.walletType === "OKX" && okxRef.current) {
-              hash = await okxRef.current._onSubmit(
-                user.wallet.payInfo.buyAmount,
-                user.wallet.payInfo.buyCount,
-                user.wallet.payInfo.num,
-                user.wallet.payInfo.rebateRatio,
-                user.wallet.payInfo.address,
-                user.wallet.payInfo.toAddress
-              );
-            } else if (
-              user.wallet.walletType === "MetaMask" &&
-              metaMaskRef.current
-            ) {
-              hash = await metaMaskRef.current._onSubmit(
-                user.wallet.payInfo.buyAmount,
-                user.wallet.payInfo.buyCount,
-                user.wallet.payInfo.num,
-                user.wallet.payInfo.rebateRatio,
-                user.wallet.payInfo.address
-              );
-            }
+            // TODO 重写发送交易✔
+            // if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
+            //   hash = await uniSatRef.current._onSubmit(
+            //     user.wallet.payInfo.buyCount,
+            //     user.wallet.payInfo.toAddress
+            //   );
+            // } else if (user.wallet.walletType === "OKX" && okxRef.current) {
+            //   hash = await okxRef.current._onSubmit(
+            //     user.wallet.payInfo.buyAmount,
+            //     user.wallet.payInfo.buyCount,
+            //     user.wallet.payInfo.num,
+            //     user.wallet.payInfo.rebateRatio,
+            //     user.wallet.payInfo.address,
+            //     user.wallet.payInfo.toAddress
+            //   );
+            // } else if (
+            //   user.wallet.walletType === "MetaMask" &&
+            //   metaMaskRef.current
+            // ) {
+            //   hash = await metaMaskRef.current._onSubmit(
+            //     user.wallet.payInfo.buyAmount,
+            //     user.wallet.payInfo.buyCount,
+            //     user.wallet.payInfo.num,
+            //     user.wallet.payInfo.rebateRatio,
+            //     user.wallet.payInfo.address
+            //   );
+            // }
+            const provider = await getWalletClient(config);
+
+            hash = await subimtByContract(
+              BigInt(user.wallet.payInfo.buyAmount),
+              user.wallet.payInfo.buyCount,
+              user.wallet.payInfo.num,
+              user.wallet.payInfo.rebateRatio,
+              user.wallet.payInfo.address,
+              provider,
+              user.wallet.address
+            );
 
             console.log("调起支付成功，得到：hash", hash);
             if (hash)
@@ -164,7 +189,8 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
       case "SELECT_WALLET_MULTI_CHAIN": // 选择钱包（多链）
         dispatch(SET_NOTIFICATION_TRIGGER_EVENT(""));
         setConnectWalletType("MULTI_CHAIN");
-        setOpen(true);
+        // setSelectWalletOpen(true);
+        open();
         break;
 
       default:
@@ -176,28 +202,14 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
 
   useImperativeHandle(ref, () => {
     return {
-      // _onSubmit(cost: number, toAddress: string) {
-      //   if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
-      //     return uniSatRef.current._onSubmit(cost, toAddress);
-      //   } else if (user.wallet.walletType === "OKX" && okxRef.current) {
-      //     return okxRef.current._onSubmit(cost, toAddress);
-      //   }
-      //   return new Promise((reslove) => reslove(""));
+      // _setWalletType(type: WalletType) {
+      //   // setWalletType(type);
+      //   dispatch(SET_WALLET_TYPE(type));
       // },
-      // _connect() {
-      //   if (user.wallet.walletType === "UNISAT" && uniSatRef.current) {
-      //     return uniSatRef.current._connect();
-      //   } else if (user.wallet.walletType === "OKX" && okxRef.current) {
-      //     return okxRef.current._connect();
-      //   }
-      // },
-      _setWalletType(type: WalletType) {
-        // setWalletType(type);
-        dispatch(SET_WALLET_TYPE(type));
-      },
       _selectWallet() {
         setConnectWalletType("MULTI_CHAIN");
-        setOpen(true);
+        // setSelectWalletOpen(true);
+        open();
       },
     };
   });
@@ -206,50 +218,62 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
   const unisat = window.unisat;
 
   useEffect(() => {}, [user]);
+
+  // 检测上次链接的钱包（废弃）
+  // useEffect(() => {
+  //   let timer = setInterval(async () => {
+  //     if (unisat) {
+  //       const [address] = await unisat.getAccounts();
+  //       if (address) {
+  //         clearInterval(timer);
+  //         console.log("user is connected unisat!!");
+  //         dispatch(SET_WALLET_TYPE("UNISAT"));
+
+  //         return;
+  //       }
+  //     }
+
+  //     if (okxwallet) {
+  //       if (sessionStorage.getItem(sessionStorageKey.okx_address)) {
+  //         clearInterval(timer);
+  //         console.log("user is connected okx!!");
+  //         dispatch(SET_WALLET_TYPE("OKX"));
+  //         return;
+  //       }
+  //     }
+
+  //     const metaMask = await detectEthereumProvider();
+  //     if (metaMask) {
+  //       if (sessionStorage.getItem(sessionStorageKey.metaMask_address)) {
+  //         clearInterval(timer);
+  //         console.log("user is connected metaMask!!");
+  //         dispatch(SET_WALLET_TYPE("MetaMask"));
+  //         return;
+  //       }
+  //     }
+  //   }, 1000);
+
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, []);
+
   useEffect(() => {
-    let timer = setInterval(async () => {
-      if (unisat) {
-        const [address] = await unisat.getAccounts();
-        if (address) {
-          clearInterval(timer);
-          console.log("user is connected unisat!!");
-          dispatch(SET_WALLET_TYPE("UNISAT"));
+    const lowerAddress = address?.toLocaleLowerCase();
+    if (lowerAddress) handleAccountsChanged(lowerAddress as TYPE_ADDRESS);
+  }, [address]);
 
-          return;
-        }
-      }
+  useEffect(() => {
+    console.log("error:", error);
 
-      if (okxwallet) {
-        if (sessionStorage.getItem(sessionStorageKey.okx_address)) {
-          clearInterval(timer);
-          console.log("user is connected okx!!");
-          dispatch(SET_WALLET_TYPE("OKX"));
-          return;
-        }
-      }
-
-      const metaMask = await detectEthereumProvider();
-      if (metaMask) {
-        if (sessionStorage.getItem(sessionStorageKey.metaMask_address)) {
-          clearInterval(timer);
-          console.log("user is connected metaMask!!");
-          dispatch(SET_WALLET_TYPE("MetaMask"));
-          return;
-        }
-      }
-    }, 1000);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+    return () => {};
+  }, [error]);
 
   // TODO 注册✔
   async function signUp(
-    address: string,
+    address: TYPE_ADDRESS,
     inviteCode: string,
-    publicKey: string,
-    chainType: ChainType
+    publicKey: string
   ) {
     await API_SIGNUP(address, inviteCode, publicKey);
   }
@@ -257,18 +281,20 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
   // 签名并且登录
   async function signAndLogin(
     publicKey: string,
-    address: string
+    address: TYPE_ADDRESS
   ): Promise<"LOGIN_SUCCESS" | undefined> {
     const message = `userAddressSignature:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`;
-    let sign;
-    if (user.wallet.walletType == "OKX") {
-      sign = await okxRef.current?._sign(address, message);
-    } else if (user.wallet.walletType == "UNISAT") {
-      sign = await uniSatRef.current?._sign(address, message);
-    } else if (user.wallet.walletType == "MetaMask") {
-      sign = await metaMaskRef.current?._sign(address, message);
-    }
-    // TODO 暂时用不到sign
+    let sign: string | undefined;
+    // TODO 重写sign签名 ✔
+    // if (user.wallet.walletType == "OKX") {
+    //   sign = await okxRef.current?._sign(address, message);
+    // } else if (user.wallet.walletType == "UNISAT") {
+    //   sign = await uniSatRef.current?._sign(address, message);
+    // } else if (user.wallet.walletType == "MetaMask") {
+    //   sign = await metaMaskRef.current?._sign(address, message);
+    // }
+    sign = await signMessageAsync({ message });
+    // 暂时用不到sign
     // console.log("get sign:", sign);
     if (!address) return;
 
@@ -302,7 +328,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
   }
 
   // 检测token
-  async function checkToken(address: string): Promise<void> {
+  async function checkToken(address: TYPE_ADDRESS): Promise<void> {
     const roos_token = sessionStorage.getItem(sessionStorageKey.roos_token);
     console.log("roos_token", roos_token);
     // TODO 判断是否有token，没有则签名请求获取token✔
@@ -311,40 +337,39 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
 
       // TODO 获取publickey 欧易app内无法获取？？？
       let pk = "";
-      if (
-        !isOKApp &&
-        user.wallet.walletType == "OKX" &&
-        user.wallet.chainType == "BTC"
-      ) {
-        pk = await okxwallet?.bitcoin.getPublicKey();
-        if (!pk) {
-          CustomToast("get public key fail!");
-          return;
-        }
-        setPublicKey(pk);
-      } else {
-        // TODO app内写死key✔
-        pk =
-          "0305ef2a74bff2e2d68764c557ce2daecac92caa7a9406e3a90c2cf7c5b444a154";
-      }
+      // if (
+      //   !isOKApp &&
+      //   user.wallet.walletType == "OKX" &&
+      //   user.wallet.chainType == "BTC"
+      // ) {
+      //   pk = await okxwallet?.bitcoin.getPublicKey();
+      //   if (!pk) {
+      //     CustomToast("get public key fail!");
+      //     return;
+      //   }
+      //   setPublicKey(pk);
+      // } else {
+      // TODO app内写死key✔
+      pk = "0305ef2a74bff2e2d68764c557ce2daecac92caa7a9406e3a90c2cf7c5b444a154";
+      // }
 
       if (!(await API_CHECT_EXIT(address))) {
         // TODO 邀请码未强制要求绑定✔
-        await signUp(address, inviteCode, pk, user.wallet.chainType);
+        await signUp(address, inviteCode, pk);
       }
 
-      signAndLogin(pk, address);
+      await signAndLogin(pk, address);
     } else {
       // TODO 用户已经登录，直接保存数据✔
       saveUserData(address);
     }
   }
 
-  // 连接钱包
+  // 连接钱包（废弃）
   async function connectWallet(type: WalletType, chain: ChainType) {
     console.log("chain check", chain);
-    dispatch(SET_WALLET_TYPE(type));
-    dispatch(SET_CHAIN_TYPE(chain));
+    // dispatch(SET_WALLET_TYPE(type));
+    // dispatch(SET_CHAIN_TYPE(chain));
     let address;
     if (type == "OKX") {
       if (!okxRef.current) return;
@@ -358,27 +383,28 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     }
     if (!address) return;
     // TODO 钱包连接完就保存地址✔
-    if (user.wallet.walletType == "OKX")
-      sessionStorage.setItem(sessionStorageKey.okx_address, address);
-    if (user.wallet.walletType == "UNISAT")
-      sessionStorage.setItem(sessionStorageKey.unisat_address, address);
-    if (user.wallet.walletType == "MetaMask")
-      sessionStorage.setItem(sessionStorageKey.metaMask_address, address);
-
+    // if (user.wallet.walletType == "OKX")
+    //   sessionStorage.setItem(sessionStorageKey.okx_address, address);
+    // if (user.wallet.walletType == "UNISAT")
+    //   sessionStorage.setItem(sessionStorageKey.unisat_address, address);
+    // if (user.wallet.walletType == "MetaMask")
+    //   sessionStorage.setItem(sessionStorageKey.metaMask_address, address);
+    sessionStorage.setItem(sessionStorageKey.wallet_address, address);
     await checkToken(address);
   }
 
   // 用户切换
-  async function handleAccountsChanged(address: string | undefined) {
+  async function handleAccountsChanged(address: TYPE_ADDRESS) {
     clearUserData();
     if (address) {
       // TODO 钱包切换完就保存地址✔
-      if (user.wallet.walletType == "OKX")
-        sessionStorage.setItem(sessionStorageKey.okx_address, address);
-      if (user.wallet.walletType == "UNISAT")
-        sessionStorage.setItem(sessionStorageKey.unisat_address, address);
-      if (user.wallet.walletType == "MetaMask")
-        sessionStorage.setItem(sessionStorageKey.metaMask_address, address);
+      sessionStorage.setItem(sessionStorageKey.wallet_address, address);
+      // if (user.wallet.walletType == "OKX")
+      //   sessionStorage.setItem(sessionStorageKey.okx_address, address);
+      // if (user.wallet.walletType == "UNISAT")
+      //   sessionStorage.setItem(sessionStorageKey.unisat_address, address);
+      // if (user.wallet.walletType == "MetaMask")
+      //   sessionStorage.setItem(sessionStorageKey.metaMask_address, address);
       await checkToken(address);
     }
   }
@@ -397,10 +423,11 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     dispatch(SET_CONNECTED(false));
     dispatch(SET_ADDRESS(""));
     dispatch(SET_BUY_LOADING(false));
-    sessionStorage.removeItem(sessionStorageKey.okx_address);
-    sessionStorage.removeItem(sessionStorageKey.unisat_address);
-    sessionStorage.removeItem(sessionStorageKey.metaMask_address);
-
+    // TODO 清空用户保存的地址✔
+    // sessionStorage.removeItem(sessionStorageKey.okx_address);
+    // sessionStorage.removeItem(sessionStorageKey.unisat_address);
+    // sessionStorage.removeItem(sessionStorageKey.metaMask_address);
+    sessionStorage.removeItem(sessionStorageKey.wallet_address);
     sessionStorage.removeItem(sessionStorageKey.roos_token);
   }
 
@@ -410,7 +437,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
       let urlInviteCode = getUrlQueryParam(UrlQueryParamsKey.INVITE_CODE);
       if (urlInviteCode) dispatch(SET_THIRD_INVITE_CODE(urlInviteCode));
       // TODO 弹窗提示输入邀请码✔
-      setOpen(false);
+      setSelectWalletOpen(false);
       setInviteCodeDialogOpen(true);
       setInviteCode(urlInviteCode || "");
       return;
@@ -435,9 +462,10 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
       {/* 选择钱包弹窗 */}
       {!user.wallet.connected && (
         <Dialog
-          open={open}
+          // open={selectWalletOpen}
+          open={false}
           onOpenChange={(v) => {
-            setOpen(v);
+            setSelectWalletOpen(v);
           }}
         >
           <DialogTrigger asChild>
@@ -445,7 +473,8 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
               className="ConnectWallet hover:bg-[#F58C00] hover:text-[#FFFFFF]"
               onClick={() => {
                 setConnectWalletType("MULTI_CHAIN");
-                setOpen(true);
+                // setSelectWalletOpen(true);
+                open();
               }}
             >
               CONNECT WALLET
@@ -459,45 +488,6 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
 
               {connectWalletType == "MULTI_CHAIN" && (
                 <>
-                  {/* Ethereum */}
-                  {/* <span className="chainTitle flex flex-row items-center">
-                    <span className="point"></span> Ethereum Wallet
-                  </span>
-                  <button
-                    className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                    onClick={() => connectWallet("OKX", "ETHEREUM")}
-                  >
-                    <img className="" src={okx_logo} alt="" />
-                    <span className="font-[Raleway-Bold]  text-[#fff]">
-                      OKX
-                    </span>
-                  </button>
-
-                  <button
-                    className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                    onClick={() => connectWallet("MetaMask", "ETHEREUM")}
-                  >
-                    <img className="" src={unisat_logo} alt="" />
-                    <span className="font-[Raleway-Bold]  text-[#fff]">
-                      MetaMask
-                    </span>
-                  </button> */}
-
-                  {/* Polygon */}
-                  {/* <span className="chainTitle flex flex-row items-center">
-                    <span className="point"></span> Polygon
-                  </span>
-
-                  <button
-                    className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                    onClick={() => connectWallet("MetaMask", "POLYGON")}
-                  >
-                    <img className="" src={unisat_logo} alt="" />
-                    <span className="font-[Raleway-Bold]  text-[#fff]">
-                      MetaMask
-                    </span>
-                  </button> */}
-
                   {/* Arbitrum One */}
                   <span className="chainTitle flex flex-row items-center">
                     <span className="point"></span> Ethereum Wallet
@@ -512,16 +502,6 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
                       OKX
                     </span>
                   </button>
-
-                  {/* <button
-                    className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
-                    onClick={() => connectWallet("MetaMask", "Arbitrum One")}
-                  >
-                    <IconFont className="walletIcon" name="metamask" />
-                    <span className="font-[Raleway-Bold]  text-[#fff]">
-                      MetaMask
-                    </span>
-                  </button> */}
 
                   {/* Arbitrum Test */}
                   {import.meta.env.MODE != "production" && (
@@ -627,11 +607,13 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
             <DropdownMenuItem>
               <button
                 onClick={async () => {
-                  if (user.wallet.walletType == "UNISAT") {
-                    await uniSatRef.current?._disConnect();
-                  } else if (user.wallet.walletType == "OKX") {
-                    await okxRef.current?._disConnect();
-                  }
+                  // if (user.wallet.walletType == "UNISAT") {
+                  //   await uniSatRef.current?._disConnect();
+                  // } else if (user.wallet.walletType == "OKX") {
+                  //   await okxRef.current?._disConnect();
+                  // }
+                  // TODO 处理断开链接✔
+                  disconnect();
                   clearUserData();
                 }}
                 className="item disconnect flex items-center "
@@ -643,8 +625,8 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
           </DropdownMenuContent>
         </DropdownMenu>
       )}
-      {/* okx钱包占位 */}
-      {user.wallet.walletType === "OKX" && (
+      {/* okx钱包占位(废弃) */}
+      {/* {user.wallet.walletType === "OKX" && (
         <UseOkx
           ref={okxRef}
           handleAccountsChanged={async (addressInfo) => {
@@ -653,9 +635,9 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
           }}
           checkInstalledOk={() => connectWallet("OKX", user.wallet.chainType)}
         />
-      )}
-      {/* unisat钱包占位 */}
-      {user.wallet.walletType === "UNISAT" && (
+      )} */}
+      {/* unisat钱包占位(废弃) */}
+      {/* {user.wallet.walletType === "UNISAT" && (
         <UseUniSat
           ref={uniSatRef}
           handleAccountsChanged={async (accounts) => {
@@ -666,14 +648,9 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
             connectWallet("UNISAT", user.wallet.chainType)
           }
         />
-      )}
-
-      {user.wallet.walletType === "MetaMask" && (
-        // <MetaMaskProvider
-        //   sdkOptions={{
-        //     dappMetadata: {},
-        //   }}
-        // >
+      )} */}
+      {/* MetaMask钱包占位(废弃) */}
+      {/* {user.wallet.walletType === "MetaMask" && (
         <MetaMask
           ref={metaMaskRef}
           handleAccountsChanged={async (accounts) => {
@@ -684,8 +661,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
             connectWallet("MetaMask", user.wallet.chainType)
           }
         />
-        // </MetaMaskProvider>
-      )}
+      )} */}
       {/* 输入邀请码弹窗 */}
       <Dialog
         open={inviteCodeDialogOpen}
