@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-03-08 09:44:08
- * @LastEditTime: 2024-03-12 09:58:23
+ * @LastEditTime: 2024-03-12 18:10:26
  * @Author: John
  */
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -70,6 +70,7 @@ import {
   useBlockNumber,
   useDisconnect,
   useSignMessage,
+  useSwitchAccount,
 } from "wagmi";
 import { getWalletClient } from "@wagmi/core";
 import { TYPE_ADDRESS } from "@/types";
@@ -85,11 +86,12 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
   props,
   ref
 ) {
-  const { open, close } = useWeb3Modal();
-  const { address, addresses, isConnected } = useAccount();
-  const { signMessage, signMessageAsync } = useSignMessage();
+  const { open } = useWeb3Modal();
+  const { address, connector } = useAccount();
+  useSwitchAccount();
+  const { signMessageAsync } = useSignMessage();
   const { disconnect } = useDisconnect();
-  const { data, error } = useBlockNumber();
+  const { error } = useBlockNumber();
 
   const [selectWalletOpen, setSelectWalletOpen] = useState(false);
   const [connectWalletType, setConnectWalletType] = useState<
@@ -214,10 +216,9 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     };
   });
 
-  const okxwallet = window.okxwallet;
-  const unisat = window.unisat;
-
-  useEffect(() => {}, [user]);
+  useEffect(() => {
+    console.log("connector:", connector);
+  }, [connector]);
 
   // 检测上次链接的钱包（废弃）
   // useEffect(() => {
@@ -293,7 +294,13 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
     // } else if (user.wallet.walletType == "MetaMask") {
     //   sign = await metaMaskRef.current?._sign(address, message);
     // }
-    sign = await signMessageAsync({ message });
+    try {
+      sign = await signMessageAsync({ message });
+    } catch (error) {
+      // 用户拒绝签名或者遇到错误，断开链接
+      disconnect();
+      return;
+    }
     // 暂时用不到sign
     // console.log("get sign:", sign);
     if (!address) return;
