@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-14 17:41:17
- * @LastEditTime: 2024-03-05 17:24:56
+ * @LastEditTime: 2024-03-15 17:23:44
  * @Author: John
  */
 import "./CustomDialog.scss";
@@ -30,6 +30,7 @@ export default function () {
             dispatch(SET_CUSTOM_DIALOG_OPEN(true));
             return;
           }
+          if (!v) customCom.dialog.onClose?.();
           dispatch(SET_CUSTOM_DIALOG_OPEN(v));
         }}
       >
