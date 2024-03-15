@@ -9,55 +9,6 @@
     background-repeat: no-repeat;
     background-size: cover;
 
-    .videoBg {
-      width: 1734px;
-      height: 976px;
-      position: absolute;
-      top: 16px;
-      left: 0;
-      transform: translateX(256px) scale(0.8);
-
-      video {
-        object-fit: contain;
-        overflow-clip-margin: content-box;
-        overflow: clip;
-
-        pointer-events: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-        -o-object-fit: none;
-        object-fit: none;
-        display: block;
-
-        &:first-of-type {
-          position: absolute;
-          top: 0;
-          left: 0;
-          pointer-events: none;
-          user-select: none;
-          object-fit: none;
-          display: block;
-        }
-
-        &:last-of-type {
-          position: absolute;
-          top: 0;
-          // zIndex: -9;
-          background: linear-gradient(
-            0deg,
-            rgb(0, 0, 0) 12%,
-            rgba(0, 0, 0, 0.75) 17%,
-            rgba(0, 0, 0, 0.4) 23%,
-            rgba(0, 0, 0, 0.28) 32%,
-            rgba(0, 0, 0, 0.12) 52%,
-            rgb(0, 0, 0) 100%
-          );
-          display: block;
-        }
-      }
-    }
-
     > .content {
       height: 100vh;
 
@@ -82,8 +33,61 @@
         padding-top: var(--pc-nav-height);
         margin-top: calc(239px - 88px);
         width: 87%;
+        position: relative;
+
+        .videoBg {
+          width: 1734px;
+          height: 976px;
+          position: absolute;
+          top: -65px;
+          right: -320px;
+          transform: scale(0.8);
+          z-index: 0;
+
+          video {
+            object-fit: contain;
+            overflow-clip-margin: content-box;
+            overflow: clip;
+
+            pointer-events: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            -o-object-fit: none;
+            object-fit: none;
+            display: block;
+
+            &:first-of-type {
+              position: absolute;
+              top: 0;
+              left: 0;
+              pointer-events: none;
+              user-select: none;
+              object-fit: none;
+              display: block;
+            }
+
+            &:last-of-type {
+              position: absolute;
+              top: 0;
+              // zIndex: -9;
+              background: linear-gradient(
+                0deg,
+                rgb(0, 0, 0) 12%,
+                rgba(0, 0, 0, 0.75) 17%,
+                rgba(0, 0, 0, 0.4) 23%,
+                rgba(0, 0, 0, 0.28) 32%,
+                rgba(0, 0, 0, 0.12) 52%,
+                rgb(0, 0, 0) 100%
+              );
+              display: block;
+            }
+          }
+        }
+
         > span {
-          &:nth-child(1) {
+          z-index: 1;
+          &:nth-of-type(1) {
             opacity: 1;
 
             font-family: Raleway-ExtraBold;
@@ -97,8 +101,8 @@
             color: #f58c00;
           }
 
-          &:nth-child(2),
-          &:nth-child(3) {
+          &:nth-of-type(2),
+          &:nth-of-type(3) {
             /* for The bitcoiners. */
 
             opacity: 1;
@@ -116,7 +120,7 @@
             margin-top: 10px;
           }
 
-          &:nth-child(4) {
+          &:nth-of-type(4) {
             /* Permissionless. Frictionless. Boundless. */
 
             /* 自动布局子元素 */
@@ -131,12 +135,10 @@
             font-feature-settings: "kern" on;
             color: #f58c00;
 
-            z-index: 0;
-
             margin-top: 54px;
           }
 
-          &:nth-child(5) {
+          &:nth-of-type(5) {
             /* ROOS is the first fully decentralized EVM-compatible Bitcoin L2 that uses BTC as Gas. It allows all DApps which can run in the Ethereum ecosystem to operate on Bitcoin L2. */
 
             /* 自动布局子元素 */
@@ -152,8 +154,6 @@
 
             font-feature-settings: "kern" on;
             color: #ffffff;
-
-            z-index: 1;
 
             margin-top: 20px;
           }
@@ -187,6 +187,7 @@
 
           margin-top: 102px;
           margin-bottom: 119px;
+          z-index: 1;
         }
       }
     }

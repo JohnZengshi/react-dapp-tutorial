@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-03-12 13:53:28
+ * @LastEditTime: 2024-03-15 17:21:10
  * @Author: John
  */
 import "./Participate.scss";
@@ -30,10 +30,15 @@ import { CUSTOM_DIALOG, SET_CUSTOM_DIALOG_OPEN } from "@/store/customCom";
 import ReduceAddInput from "@/components/common/ReduceAddInput";
 import Iconfont from "@/components/iconfont";
 import { useChainId, useSwitchAccount, useSwitchChain } from "wagmi";
-import { sepoliaTestNetwork } from "@/constant/wallet";
+import { roosTestNetwork, sepoliaTestNetwork } from "@/constant/wallet";
 import { arbitrum } from "viem/chains";
-import { switchAccount, getConnections } from "@wagmi/core";
+import {
+  switchAccount,
+  getConnections,
+  waitForTransactionReceipt,
+} from "@wagmi/core";
 import { config } from "@/components/WalletProvider";
+
 type OrderInfo = {
   buyAmount: string;
   buyCount: number;
@@ -92,7 +97,9 @@ export default function () {
   useEffect(() => {
     const hash = user.wallet.payInfo?.hash;
     if (!hash) return;
-    if (buyNftIds == null) {
+    console.log("buyNftIds:", buyNftIds);
+
+    if (buyNftIds == "") {
       // 确认中
       dispatch(
         CUSTOM_DIALOG({
@@ -107,18 +114,20 @@ export default function () {
           },
         })
       );
-    } else if (buyNftIds === "0") {
-      // 失败
-      dispatch(
-        CUSTOM_DIALOG({
-          content: "Mint failed",
-          hash: `Txn: ${shortenString(hash, 7, 7)}`,
-          showConfirmBtn: true,
-        })
-      );
-      dispatch(SET_PAY_INFO(null));
-      stopPollingCheckBuyStatus();
-    } else {
+    }
+    // else if (buyNftIds === "0") {
+    //   // 失败
+    //   dispatch(
+    //     CUSTOM_DIALOG({
+    //       content: "Mint failed",
+    //       hash: `Txn: ${shortenString(hash, 7, 7)}`,
+    //       showConfirmBtn: true,
+    //     })
+    //   );
+    //   dispatch(SET_PAY_INFO(null));
+    //   stopPollingCheckBuyStatus();
+    // }
+    else {
       // 成功
       dispatch(
         CUSTOM_DIALOG({
@@ -126,14 +135,19 @@ export default function () {
           hash: `Your KeyBOX ${buyNftIds}`,
           showConfirmBtn: true,
           confirmBtnText: "Check My keyBOX",
-          confirmBtnCallBack: () => navigate("/profile"),
+          confirmBtnCallBack: () => {
+            dispatch(SET_BUY_LOADING(false));
+            navigate("/profile");
+          },
+          onClose() {
+            dispatch(SET_BUY_LOADING(false));
+          },
         })
       );
       dispatch(SET_PAY_INFO(null));
       stopPollingCheckBuyStatus();
     }
 
-    dispatch(SET_BUY_LOADING(false));
     return () => {};
   }, [buyNftIds, user.wallet.payInfo?.hash]);
 
@@ -339,9 +353,9 @@ export default function () {
                         console.log("current chain id:", chainId);
                         try {
                           if (import.meta.env.MODE != "production") {
-                            if (chainId != sepoliaTestNetwork.id) {
+                            if (chainId != roosTestNetwork.id) {
                               await switchChainAsync({
-                                chainId: sepoliaTestNetwork.id,
+                                chainId: roosTestNetwork.id,
                               });
                             }
                           } else {
@@ -352,6 +366,7 @@ export default function () {
                             }
                           }
                         } catch (error) {
+                          console.log("error:", error);
                           return;
                         }
                         // TODO 购买节点✔
@@ -439,7 +454,7 @@ export default function () {
 }
 
 function usePollingCheckBuyStatus() {
-  const [buyNftIds, setBuyNftIds] = useState<string | null>();
+  const [buyNftIds, setBuyNftIds] = useState<string>("");
   const stop = useRef(false);
 
   function startPollingCheckBuyStatus(hash: string) {
@@ -448,9 +463,22 @@ function usePollingCheckBuyStatus() {
 
   const checkStatus = async (hash: string) => {
     return new Promise<void>(async (reslove, reject) => {
-      let res = await API_GET_ORDER_STATE_BY_HASH(hash);
-      setBuyNftIds(res.nftIds);
-      console.log("得到nft ids:", res.nftIds);
+      // let res = await API_GET_ORDER_STATE_BY_HASH(hash);
+      // setBuyNftIds(res.nftIds);
+      // console.log("得到nft ids:", res.nftIds);
+
+      const transactionReceipt = await waitForTransactionReceipt(config, {
+        hash: hash as `0x${string}`,
+      });
+
+      let nftData: `0x${string}` | undefined;
+      if (transactionReceipt.status == "success") {
+        nftData = transactionReceipt.logs[1].topics[3];
+        setBuyNftIds(`#${parseInt(nftData as string, 16)}`);
+      }
+      // console.log("transaction receipt:", transactionReceipt);
+      console.log("得到nft ids:", nftData);
+
       setTimeout(() => {
         reslove();
       }, 2000);

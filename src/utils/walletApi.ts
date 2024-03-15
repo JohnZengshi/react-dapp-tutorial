@@ -36,10 +36,22 @@ import usdt_abi from "@/contract/USDT.json";
 import erc20Abi from "@/contract/erc20abi.json";
 import { API_CONTRACT_ADDRESS } from "./api";
 import CustomToast from "@/components/common/CustomToast";
-import { writeContract, readContract, estimateGas } from "@wagmi/core";
+import {
+  writeContract,
+  readContract,
+  estimateGas,
+  watchContractEvent,
+  waitForTransactionReceipt,
+} from "@wagmi/core";
 import { config } from "@/components/WalletProvider";
 import { estimateContractGas } from "viem/actions";
-import { encodeFunctionData } from "viem/utils";
+import {
+  encodeFunctionData,
+  formatEther,
+  parseEther,
+  parseGwei,
+} from "viem/utils";
+import { TYPE_ADDRESS } from "@/types";
 
 /**
  * @description: 调用合约购买盒子
@@ -49,7 +61,7 @@ import { encodeFunctionData } from "viem/utils";
  * @param {number} rebateRatio
  * @param {string} pAddress
  * @param {any} ethereum
- * @param {string} fromAddress
+ * @param {TYPE_ADDRESS | ""} fromAddress
  * @return {*}
  */
 export async function subimtByContract(
@@ -59,10 +71,11 @@ export async function subimtByContract(
   rebateRatio: number, // 返佣比例,
   pAddress: string, // 上级地址
   ethereum?: any,
-  fromAddress?: string
+  fromAddress?: TYPE_ADDRESS | ""
 ) {
   console.log("pay buy contract params", { buyAmount, buyCount, fromAddress });
-  const contractAddress = await API_CONTRACT_ADDRESS();
+  await API_CONTRACT_ADDRESS(); // TODO 后台获取地址
+  const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
   const networkUsdtAddress = import.meta.env.VITE_NETWORK_USDT_ADDRESS;
   console.log("NETWORK_USDT:", networkUsdtAddress);
   const web3 = new Web3(ethereum);
@@ -109,7 +122,13 @@ export async function subimtByContract(
         functionName: "approve",
         args: [contractAddress, uNum],
       })
-        .then(() => reslove())
+        .then(async (hash) => {
+          console.log("approve res", hash);
+          const transactionReceipt = await waitForTransactionReceipt(config, {
+            hash,
+          });
+          if (transactionReceipt.status == "success") reslove();
+        })
         .catch((err) => {
           console.log("approve error", err);
           reject(err);
@@ -192,12 +211,6 @@ export async function subimtByContract(
       //         from: fromAddress,
       //         gas: (gas * 10n).toString(),
       //         gasPrice: (gas * 10n).toString(),
-
-      //         // gas: gasPrice.toString(),
-      //         // gasPrice: gasPrice.toString(),
-
-      //         // gas: parseInt(Number(gas) * 1.2 + ""),
-      //         // gasPrice: parseInt(gasPrice * 1.2 + ""),
       //       })
       //       .on("transactionHash", function (hash) {
       //         console.log("Transaction Hash:", hash);
@@ -216,16 +229,17 @@ export async function subimtByContract(
       //       })
       //       .catch((err: any) => {
       //         console.log("buyNFTNew Transaction err", err);
-      //         handleCatch(err, reslove, reject);
+      //         handleCatch(err, reslove);
       //         // reject(err);
       //       });
       //   })
       //   .catch((err: any) => {
       //     console.log("buyNFTNew estimateGas err", err);
-      //     handleCatch(err, reslove, reject);
+      //     handleCatch(err, reslove);
       //     // reject(err);
       //   });
 
+      // TODO 预估gas费报错
       estimateGas(config, {
         to: contractAddress,
         data: encodeFunctionData({

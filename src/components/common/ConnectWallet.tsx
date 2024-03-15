@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-03-08 09:44:08
- * @LastEditTime: 2024-03-12 18:10:26
+ * @LastEditTime: 2024-03-15 15:37:27
  * @Author: John
  */
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -72,7 +72,11 @@ import {
   useSignMessage,
   useSwitchAccount,
 } from "wagmi";
-import { getWalletClient } from "@wagmi/core";
+import {
+  getWalletClient,
+  watchContractEvent,
+  waitForTransactionReceipt,
+} from "@wagmi/core";
 import { TYPE_ADDRESS } from "@/types";
 import { config } from "../WalletProvider";
 import { subimtByContract } from "@/utils/walletApi";
@@ -417,7 +421,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
   }
 
   // 保存用户数据
-  function saveUserData(address: string) {
+  function saveUserData(address: TYPE_ADDRESS) {
     dispatch(SET_LOGINSTATUS("LOGIN"));
     dispatch(SET_CONNECTED(true));
     dispatch(SET_ADDRESS(address));

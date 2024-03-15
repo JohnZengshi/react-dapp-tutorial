@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-02-27 16:38:08
+ * @LastEditTime: 2024-03-15 11:11:52
  * @Author: John
  */
 import roosHomeBg from "@/assets/roos-home.mp4";
@@ -28,19 +28,19 @@ export default function () {
 
   return (
     <div className="Home">
-      {
-        <div className="videoBg">
-          {!isSmallScreen && (
-            <video muted loop autoPlay width="100%" height="100%">
-              <source src={roosHomeBg} type="video/mp4" />
-            </video>
-          )}
-        </div>
-      }
       <ScrollArea className="content">
         {!isSmallScreen && (
           <>
             <div className="content_1 flex flex-col box-border flex-auto">
+              {
+                <div className="videoBg">
+                  {(!isSmallScreen || !isMobile) && (
+                    <video muted loop autoPlay width="100%" height="100%">
+                      <source src={roosHomeBg} type="video/mp4" />
+                    </video>
+                  )}
+                </div>
+              }
               <span>The First Bitcoin Layer2</span>
               <span>For The Bitcoiners.</span>
               <span>By The Bitcoiners.</span>

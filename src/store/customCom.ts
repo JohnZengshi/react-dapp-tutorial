@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-02-26 15:34:55
+ * @LastEditTime: 2024-03-15 17:19:21
  * @Author: John
  */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
@@ -17,6 +17,7 @@ export interface CustomComState {
     loading?: boolean;
     hash?: string;
     clickHashCallBack?: () => void;
+    onClose?: () => void;
   };
 }
 
@@ -44,6 +45,7 @@ export const customComSlice = createSlice({
           | "confirmBtnCallBack"
           | "confirmBtnText"
           | "clickHashCallBack"
+          | "onClose"
         >
       >
     ) => {
@@ -56,6 +58,7 @@ export const customComSlice = createSlice({
       state.dialog.confirmBtnCallBack = action.payload.confirmBtnCallBack;
       state.dialog.confirmBtnText = action.payload.confirmBtnText;
       state.dialog.clickHashCallBack = action.payload.clickHashCallBack;
+      state.dialog.onClose = action.payload.onClose;
     },
     SET_CUSTOM_DIALOG_OPEN: (state, action: PayloadAction<boolean>) => {
       state.dialog.open = action.payload;

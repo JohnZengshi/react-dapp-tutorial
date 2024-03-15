@@ -1,9 +1,10 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-11 21:24:31
- * @LastEditTime: 2024-03-11 10:42:23
+ * @LastEditTime: 2024-03-15 14:33:28
  * @Author: John
  */
+import { TYPE_ADDRESS } from "@/types";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export type WalletType = "OKX" | "UNISAT" | "MetaMask" | "";
@@ -17,7 +18,7 @@ export type ChainType =
   | "";
 export interface UserState {
   wallet: {
-    address: string | undefined;
+    address: TYPE_ADDRESS | "";
     connecting: boolean;
     invitationCode: string;
     connected: boolean;
@@ -70,7 +71,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState: initialState,
   reducers: {
-    SET_ADDRESS: (state, action: PayloadAction<string | undefined>) => {
+    SET_ADDRESS: (state, action: PayloadAction<TYPE_ADDRESS | "">) => {
       state.wallet.address = action.payload;
     },
     SET_WALLET_CONNECTING: (state, action: PayloadAction<boolean>) => {

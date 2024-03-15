@@ -1,16 +1,16 @@
 /*
  * @LastEditors: John
  * @Date: 2024-03-06 11:26:45
- * @LastEditTime: 2024-03-12 18:08:15
+ * @LastEditTime: 2024-03-15 18:07:11
  * @Author: John
  */
 import { createWeb3Modal } from "@web3modal/wagmi/react";
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 
-import { WagmiProvider } from "wagmi";
+import { WagmiProvider, http } from "wagmi";
 import { arbitrum, mainnet } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { sepoliaTestNetwork } from "@/constant/wallet";
+import { roosTestNetwork, sepoliaTestNetwork } from "@/constant/wallet";
 
 // 0. Setup queryClient
 const queryClient = new QueryClient();
@@ -26,9 +26,14 @@ const metadata = {
   icons: ["https://www.roospro.com/favicon.ico"],
 };
 
-const chains = [mainnet, arbitrum, sepoliaTestNetwork] as const;
+const chains = [mainnet, arbitrum, roosTestNetwork] as const;
 export const config = defaultWagmiConfig({
   chains, // required
+  // transports: {
+  //   [mainnet.id]: http(mainnet.rpcUrls.default.http[0]),
+  //   [arbitrum.id]: http(arbitrum.rpcUrls.default.http[0]),
+  //   [roosTestNetwork.id]: http(roosTestNetwork.rpcUrls.default.http[0]),
+  // },
   projectId, // required
   metadata, // required
   enableWalletConnect: true, // Optional - true by default
