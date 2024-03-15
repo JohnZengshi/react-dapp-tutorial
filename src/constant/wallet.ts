@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-21 15:31:59
- * @LastEditTime: 2024-03-12 16:56:46
+ * @LastEditTime: 2024-03-15 18:15:56
  * @Author: John
  */
 
@@ -67,6 +67,28 @@ export const sepoliaTestNetwork = defineChain({
   },
 });
 
+export const roosTestNetwork = defineChain({
+  id: 646464,
+  name: "ROOS test network",
+  nativeCurrency: {
+    name: "RBTC",
+    symbol: "RBTC",
+    decimals: 0,
+  },
+  rpcUrls: {
+    default: {
+      http: ["http://8.218.251.93:8547"],
+      webSocket: undefined,
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "ROOS",
+      url: "https://explorer.roospro.com",
+    },
+  },
+});
+
 export enum ETHEREUM_RPC {
   EthRequestAccounts = "eth_requestAccounts",
   WalletSwitchEthereumChain = "wallet_switchEthereumChain",
@@ -77,6 +99,7 @@ export enum ETHEREUM_RPC {
   ETH_SUBSCRIBE = "eth_subscribe",
 }
 
+// 废弃
 export type Ethereum = {
   on: any;
   removeListener: any;
@@ -127,6 +150,7 @@ export type Ethereum = {
 };
 
 declare global {
+  // 废弃
   interface Window {
     ethereum?: Ethereum & { isTokenPocket?: boolean };
     okxwallet:
