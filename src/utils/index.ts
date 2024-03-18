@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-03-11 10:27:17
+ * @LastEditTime: 2024-03-18 16:36:12
  * @Author: John
  */
 import CustomToast from "@/components/common/CustomToast";
@@ -40,6 +40,14 @@ export function shortenString(
 }
 
 export const BTC_Unit_Converter = 100000000;
+/**
+ * @description: num转成usdt的bigint形式
+ * @param {number} num
+ * @return {*}
+ */
+export const num2usdtAsbigint = (num: number) => {
+  return BigInt(num * 1000000);
+};
 
 export const ua = navigator.userAgent;
 export const isIOS = /iphone|ipad|ipod|ios/i.test(ua);

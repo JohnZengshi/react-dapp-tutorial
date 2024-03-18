@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-21 15:31:59
- * @LastEditTime: 2024-03-15 18:15:56
+ * @LastEditTime: 2024-03-18 13:54:38
  * @Author: John
  */
 
@@ -73,7 +73,7 @@ export const roosTestNetwork = defineChain({
   nativeCurrency: {
     name: "RBTC",
     symbol: "RBTC",
-    decimals: 0,
+    decimals: 18,
   },
   rpcUrls: {
     default: {
@@ -87,6 +87,7 @@ export const roosTestNetwork = defineChain({
       url: "https://explorer.roospro.com",
     },
   },
+  testnet: true,
 });
 
 export enum ETHEREUM_RPC {

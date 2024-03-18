@@ -40,19 +40,25 @@ import {
   writeContract,
   readContract,
   estimateGas,
-  watchContractEvent,
   waitForTransactionReceipt,
+  getConnectorClient,
 } from "@wagmi/core";
 import { config } from "@/components/WalletProvider";
-import { estimateContractGas } from "viem/actions";
-import {
-  encodeFunctionData,
-  formatEther,
-  parseEther,
-  parseGwei,
-} from "viem/utils";
+import { defineChain, encodeFunctionData } from "viem/utils";
 import { TYPE_ADDRESS } from "@/types";
 
+const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
+const networkUsdtAddress = import.meta.env.VITE_NETWORK_USDT_ADDRESS;
+let roosAbi: any;
+let usdtAbi: any;
+
+if (import.meta.env.MODE == "development" || import.meta.env.MODE == "test") {
+  roosAbi = test_roos_abi;
+  usdtAbi = test_usdt_abi;
+} else {
+  roosAbi = roos_abi;
+  usdtAbi = usdt_abi;
+}
 /**
  * @description: 调用合约购买盒子
  * @param {bigint} buyAmount
@@ -75,116 +81,18 @@ export async function subimtByContract(
 ) {
   console.log("pay buy contract params", { buyAmount, buyCount, fromAddress });
   await API_CONTRACT_ADDRESS(); // TODO 后台获取地址
-  const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
-  const networkUsdtAddress = import.meta.env.VITE_NETWORK_USDT_ADDRESS;
   console.log("NETWORK_USDT:", networkUsdtAddress);
   const web3 = new Web3(ethereum);
 
-  let roosAbi: any;
-  let usdtAbi: any;
-
-  if (import.meta.env.MODE == "development" || import.meta.env.MODE == "test") {
-    roosAbi = test_roos_abi;
-    usdtAbi = test_usdt_abi;
-  } else {
-    roosAbi = roos_abi;
-    usdtAbi = usdt_abi;
-  }
   const contract = new Contract(roosAbi, contractAddress, web3);
   const usdtContract = new Contract(usdtAbi, networkUsdtAddress, web3);
   console.log("contract:", contract);
   console.log("usdt contract:", usdtContract);
 
-  /**
-   * @description: 授权U
-   * @param {bigint} uNum
-   * @return {*}
-   */
-  const authorizedU = (uNum: bigint) => {
-    console.log("授权金额参数：", contractAddress, uNum);
-    return new Promise<void>((reslove, reject) => {
-      // usdtContract.methods
-      //   .approve(contractAddress, uNum)
-      //   .send({ from: fromAddress })
-      //   .then((approveRes) => {
-      //     console.log("approve ok:", approveRes);
-      //     reslove();
-      //   })
-      //   .catch((err: any) => {
-      //     console.log("approve error", isMobile ? err.error : err);
-      //     reject(isMobile ? err.error : err);
-      //     // handleCatch(isMobile ? err.error : err, reslove, reject);
-      //   });
-
-      writeContract(config, {
-        abi: usdtAbi,
-        address: networkUsdtAddress,
-        functionName: "approve",
-        args: [contractAddress, uNum],
-      })
-        .then(async (hash) => {
-          console.log("approve res", hash);
-          const transactionReceipt = await waitForTransactionReceipt(config, {
-            hash,
-          });
-          if (transactionReceipt.status == "success") reslove();
-        })
-        .catch((err) => {
-          console.log("approve error", err);
-          reject(err);
-        });
-    });
-  };
-
-  /**
-   * @description : 获取已经授权的U
-   * @return {*}
-   */
-  const getApproveUsdt = async (): Promise<bigint | undefined> => {
-    return new Promise((reslove, reject) => {
-      // const tokenContract = new Contract(
-      //   erc20Abi as any,
-      //   networkUsdtAddress,
-      //   web3
-      // );
-      // tokenContract.methods
-      //   .allowance(fromAddress, contractAddress)
-      //   .call()
-      //   .then((res: any) => {
-      //     // resolve(res / Math.pow(10, 18));
-      //     reslove(res);
-      //   })
-      //   .catch((err: any) => {
-      //     console.log("get approve usdt err", err);
-      //     reject(err);
-      //   });
-
-      readContract(config, {
-        abi: erc20Abi,
-        address: networkUsdtAddress,
-        functionName: "allowance",
-        args: [fromAddress, contractAddress],
-      })
-        .then((res: any) => reslove(res))
-        .catch((err) => {
-          console.log("get approve usdt err", err);
-          reject(err);
-        });
-    });
-  };
-
   return new Promise<string>(async (reslove, reject) => {
     try {
-      let approvedU = await getApproveUsdt();
-
-      console.log("当前要授权的U:", buyAmount, "上次授权的U:", approvedU);
-
-      if (typeof approvedU == "undefined") {
-        // 获取授权U失败
-        CustomToast("get approve usdt error!");
-        return;
-      }
-
+      console.log("当前要授权的U:", buyAmount);
+      let approvedU = await getApproveUsdt(fromAddress);
       if (approvedU < buyAmount) {
         // const diffU = buyAmount - approvedU;
         await authorizedU(buyAmount);
@@ -198,48 +106,6 @@ export async function subimtByContract(
         rebateRatio,
         pAddress
       );
-
-      // contract.methods
-      //   .buyNFTNew(buyCount, buyAmount, randomNumber, rebateRatio, pAddress)
-      //   .estimateGas({ from: fromAddress })
-      //   .then((gas: bigint) => {
-      //     console.log("buyNFTNew estimateGas:", gas);
-
-      //     contract.methods
-      //       .buyNFTNew(buyCount, buyAmount, randomNumber, rebateRatio, pAddress)
-      //       .send({
-      //         from: fromAddress,
-      //         gas: (gas * 10n).toString(),
-      //         gasPrice: (gas * 10n).toString(),
-      //       })
-      //       .on("transactionHash", function (hash) {
-      //         console.log("Transaction Hash:", hash);
-      //         // if (walletType === "OKX") {
-      //         //   reslove(hash);
-      //         // }
-
-      //         // 这里可以对交易哈希进行处理，比如显示在页面上
-      //       })
-      //       .then(function (receipt) {
-      //         // other parts of code to use receipt
-      //         console.log("buyNFTNew send:", receipt);
-      //         // if (walletType === "MetaMask") {
-      //         reslove(receipt.transactionHash);
-      //         // }
-      //       })
-      //       .catch((err: any) => {
-      //         console.log("buyNFTNew Transaction err", err);
-      //         handleCatch(err, reslove);
-      //         // reject(err);
-      //       });
-      //   })
-      //   .catch((err: any) => {
-      //     console.log("buyNFTNew estimateGas err", err);
-      //     handleCatch(err, reslove);
-      //     // reject(err);
-      //   });
-
-      // TODO 预估gas费报错
       estimateGas(config, {
         to: contractAddress,
         data: encodeFunctionData({
@@ -309,7 +175,7 @@ function handleCatch(
     "contract rpc error code:",
     error.code || error.cause?.cause.code
   );
-  const commonErr = error.innerError || error.cause?.cause;
+  const commonErr = error.innerError || error.cause?.cause || error;
   let errMsg = "";
 
   if (commonErr?.message) {
@@ -323,3 +189,91 @@ function handleCatch(
   reject?.(commonErr); // 遇到错误，取消支付行为
   // reslove();
 }
+
+/**
+ * @description: 添加网络
+ * @param {ReturnType} netWork
+ * @return {*}
+ */
+export function addCustomChain(netWork: ReturnType<typeof defineChain>) {
+  return new Promise<void>(async (reslove, reject) => {
+    const connectors = await getConnectorClient(config);
+    connectors.transport
+      .request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            chainId: `0x${netWork.id.toString(16)}`,
+            chainName: netWork.name,
+            nativeCurrency: netWork.nativeCurrency,
+            rpcUrls: netWork.rpcUrls.default.http,
+            blockExplorerUrls: [netWork.blockExplorers.default.url],
+          },
+        ],
+      })
+      .then(() => reslove())
+      .catch((error) => {
+        console.log("wallet add ethereum chain error:", error);
+        handleCatch(error, reject);
+      });
+  });
+}
+
+/**
+ * @description: 获取已经授权的U
+ * @param {TYPE_ADDRESS} fromAddress
+ * @return {*}
+ */
+export const getApproveUsdt = async (
+  fromAddress?: TYPE_ADDRESS | ""
+): Promise<bigint> => {
+  return new Promise((reslove, reject) => {
+    readContract(config, {
+      abi: erc20Abi,
+      address: networkUsdtAddress,
+      functionName: "allowance",
+      args: [fromAddress, contractAddress],
+    })
+      .then((res: any) => {
+        console.log("上次授权的U:", res);
+        if (typeof res == "undefined") {
+          // 获取授权U失败
+          CustomToast("get approve usdt error!");
+          return;
+        }
+        reslove(res);
+      })
+      .catch((err) => {
+        console.log("get approve usdt err", err);
+        reject(err);
+      });
+  });
+};
+
+/**
+ * @description: 授权U
+ * @param {bigint} uNum
+ * @return {*}
+ */
+export const authorizedU = (uNum: bigint) => {
+  console.log("授权金额参数：", contractAddress, uNum);
+  return new Promise<void>((reslove, reject) => {
+    writeContract(config, {
+      abi: usdtAbi,
+      address: networkUsdtAddress,
+      functionName: "approve",
+      args: [contractAddress, uNum],
+    })
+      .then(async (hash) => {
+        console.log("approve res", hash);
+        const transactionReceipt = await waitForTransactionReceipt(config, {
+          hash,
+        });
+        if (transactionReceipt.status == "success") reslove();
+      })
+      .catch((err) => {
+        console.log("approve error", err);
+        reject(err);
+      });
+  });
+};

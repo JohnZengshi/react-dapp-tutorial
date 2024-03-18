@@ -1,14 +1,14 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-03-15 17:21:10
+ * @LastEditTime: 2024-03-18 16:33:50
  * @Author: John
  */
 import "./Participate.scss";
 import "./Participate-m.scss";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { fetchUrl, isOKApp, shortenString } from "@/utils";
+import { fetchUrl, isOKApp, num2usdtAsbigint, shortenString } from "@/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CustomToast from "@/components/common/CustomToast";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
@@ -18,26 +18,16 @@ import {
   SET_NOTIFICATION_TRIGGER_EVENT,
   SET_PAY_INFO,
 } from "@/store/reducer";
-import {
-  API_GET_NODE_LIST,
-  API_GET_ORDER_STATE_BY_HASH,
-  API_PAY_NODE_SMS,
-  NodeInfo,
-} from "@/utils/api";
+import { API_GET_NODE_LIST, API_PAY_NODE_SMS, NodeInfo } from "@/utils/api";
 import participate_box from "@/assets/participate_box.png";
 import { useNavigate } from "react-router-dom";
 import { CUSTOM_DIALOG, SET_CUSTOM_DIALOG_OPEN } from "@/store/customCom";
 import ReduceAddInput from "@/components/common/ReduceAddInput";
 import Iconfont from "@/components/iconfont";
-import { useChainId, useSwitchAccount, useSwitchChain } from "wagmi";
-import { roosTestNetwork, sepoliaTestNetwork } from "@/constant/wallet";
-import { arbitrum } from "viem/chains";
-import {
-  switchAccount,
-  getConnections,
-  waitForTransactionReceipt,
-} from "@wagmi/core";
+import { useAccount, useBalance, useChainId } from "wagmi";
+import { waitForTransactionReceipt, getChains, switchChain } from "@wagmi/core";
 import { config } from "@/components/WalletProvider";
+import { addCustomChain, authorizedU, getApproveUsdt } from "@/utils/walletApi";
 
 type OrderInfo = {
   buyAmount: string;
@@ -68,8 +58,12 @@ export default function () {
   const { buyNftIds, startPollingCheckBuyStatus, stopPollingCheckBuyStatus } =
     usePollingCheckBuyStatus();
 
-  const { chains, switchChain, switchChainAsync } = useSwitchChain();
   const chainId = useChainId();
+  const { connector, address } = useAccount();
+  const balance = useBalance({ address });
+
+  const [approvedU, setApprovedU] = useState<bigint>(0n);
+  const [approveding, setApproveding] = useState(false);
 
   let remaining = useMemo(() => {
     if (nodeInfo) {
@@ -146,6 +140,9 @@ export default function () {
       );
       dispatch(SET_PAY_INFO(null));
       stopPollingCheckBuyStatus();
+      (async () => {
+        setApprovedU(await getApproveUsdt(address));
+      })();
     }
 
     return () => {};
@@ -165,7 +162,7 @@ export default function () {
           1
         );
         if (res.type == 1) {
-          //TODO 支付后的状态轮询
+          //TODO 支付后的状态轮询✔
           // dispatch(
           //   CUSTOM_DIALOG({
           //     content:
@@ -184,11 +181,13 @@ export default function () {
     return () => {};
   }, [user.wallet.payInfo?.hash]);
 
+  // 提示用户正在购买中
   useEffect(() => {
     if (user.buyLoading) {
       dispatch(
         CUSTOM_DIALOG({
-          content: "During payment, please do not exit or switch interfaces",
+          content:
+            "Your purchase is being processed, Please do not exit this page!",
           cannotClose: true,
           loading: true,
         })
@@ -198,6 +197,52 @@ export default function () {
     }
     return () => {};
   }, [user.buyLoading]);
+
+  // 提示用户正在授权usdt中
+  useEffect(() => {
+    if (approveding) {
+      dispatch(
+        CUSTOM_DIALOG({
+          content: "Approving, Please do not exit this page!",
+          cannotClose: true,
+          loading: true,
+        })
+      );
+    } else {
+      dispatch(SET_CUSTOM_DIALOG_OPEN(false));
+    }
+    return () => {};
+  }, [approveding]);
+
+  useEffect(() => {
+    if (address) {
+      (async () => {
+        // TODO 切换网络✔
+        const chains = getChains(config);
+        console.log("all chains:", chains);
+        console.log("current chain id:", chainId);
+        let netWork = chains.find(
+          (v) => v.id == import.meta.env.VITE_PARTICIPATE_CHAIN_ID
+        );
+        console.log("participate network:", netWork);
+        if (chainId != netWork?.id && netWork) {
+          try {
+            await switchChain(config, {
+              chainId: netWork.id,
+            });
+          } catch (error) {
+            // TODO 切换网络失败，自动添加网络✔
+            console.log("switch chain error:", error);
+            // const provider: any = await connector?.getProvider();
+            await addCustomChain(netWork);
+          }
+        }
+
+        setApprovedU(await getApproveUsdt(address));
+      })();
+    }
+    return () => {};
+  }, [address]);
 
   function ActiveButton(
     props: { content: string; active: boolean; key?: any } & ButtonProps
@@ -349,26 +394,23 @@ export default function () {
 
                       if (typeof num === "number") {
                         if (!nodeInfo) return;
-                        // TODO 切换网络✔
-                        console.log("current chain id:", chainId);
-                        try {
-                          if (import.meta.env.MODE != "production") {
-                            if (chainId != roosTestNetwork.id) {
-                              await switchChainAsync({
-                                chainId: roosTestNetwork.id,
-                              });
-                            }
-                          } else {
-                            if (chainId != arbitrum.id) {
-                              await switchChainAsync({
-                                chainId: arbitrum.id,
-                              });
-                            }
+
+                        // TODO 授权usdt
+                        if (approvedU == 0n) {
+                          try {
+                            setApproveding(true);
+                            await authorizedU(
+                              num2usdtAsbigint(num * nodeInfo.nodePrice)
+                            );
+
+                            setApprovedU(await getApproveUsdt(address));
+                            setApproveding(false);
+                          } catch (error) {
+                            setApproveding(false);
                           }
-                        } catch (error) {
-                          console.log("error:", error);
                           return;
                         }
+
                         // TODO 购买节点✔
                         let orderInfo = await fetchUrl<
                           OrderInfo,
@@ -426,7 +468,7 @@ export default function () {
                       }
                     }}
                   >
-                    {user.buyLoading && (
+                    {(user.buyLoading || approveding) && (
                       <Iconfont
                         name="jiazai"
                         className="loadingIcon"
@@ -436,8 +478,9 @@ export default function () {
                     {!user.wallet.address
                       ? "Connent wallet"
                       : nodeRemaining > 0
-                      ? // ? "Buy Now"
-                        "Mint"
+                      ? approvedU > 0
+                        ? "Mint"
+                        : `Approve ${nodeInfo?.buyCoinName}`
                       : "Node Completed"}
                   </Button>
                 </div>
@@ -471,13 +514,16 @@ function usePollingCheckBuyStatus() {
         hash: hash as `0x${string}`,
       });
 
-      let nftData: `0x${string}` | undefined;
+      console.log("transaction receipt:", transactionReceipt);
       if (transactionReceipt.status == "success") {
-        nftData = transactionReceipt.logs[1].topics[3];
-        setBuyNftIds(`#${parseInt(nftData as string, 16)}`);
+        console.log("transaction receipt success:", transactionReceipt);
+        const nftLogs = transactionReceipt.logs.slice(1);
+        const nftDataArr = nftLogs.map((v) => v.topics[3]);
+        const nftDataStr = nftDataArr.map(
+          (v) => `#${parseInt(v as string, 16)}`
+        );
+        setBuyNftIds(nftDataStr.join(","));
       }
-      // console.log("transaction receipt:", transactionReceipt);
-      console.log("得到nft ids:", nftData);
 
       setTimeout(() => {
         reslove();
