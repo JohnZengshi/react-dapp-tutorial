@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-14 17:41:17
- * @LastEditTime: 2024-03-15 17:23:44
+ * @LastEditTime: 2024-03-18 16:05:17
  * @Author: John
  */
 import "./CustomDialog.scss";
@@ -35,7 +35,7 @@ export default function () {
         }}
       >
         <CustomDialogContent hiddenClose={customCom.dialog.cannotClose}>
-          <div className="CustomDialog flex flex-col justify-center items-center">
+          <div className="CustomDialog flex flex-col justify-center items-center w-full">
             {/* <img className="click_icon " src={clickIcon} alt="" /> */}
             {/* <img className="roos_logo" src={roosLogo} alt="" /> */}
             <IconFont name="roos" className="roos_logo" />
@@ -47,7 +47,7 @@ export default function () {
             </span>
             {customCom.dialog.hash && (
               <span
-                className="hash"
+                className="hash text-ellipsis whitespace-nowrap overflow-hidden block text-center w-full"
                 onClick={() => customCom.dialog.clickHashCallBack?.()}
               >
                 {customCom.dialog.hash}

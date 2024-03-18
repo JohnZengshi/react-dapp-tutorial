@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-03-06 11:26:45
- * @LastEditTime: 2024-03-15 18:07:11
+ * @LastEditTime: 2024-03-18 13:47:19
  * @Author: John
  */
 import { createWeb3Modal } from "@web3modal/wagmi/react";
@@ -10,7 +10,7 @@ import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { WagmiProvider, http } from "wagmi";
 import { arbitrum, mainnet } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { roosTestNetwork, sepoliaTestNetwork } from "@/constant/wallet";
+import { roosTestNetwork } from "@/constant/wallet";
 
 // 0. Setup queryClient
 const queryClient = new QueryClient();

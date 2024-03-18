@@ -1,7 +1,7 @@
 @include pq {
   .custom-toast {
     width: 580px;
-    height: 40px;
+    min-height: 40px;
     border-radius: 2px;
     opacity: 1;
 

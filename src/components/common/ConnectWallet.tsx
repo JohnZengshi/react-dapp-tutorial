@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-03-08 09:44:08
- * @LastEditTime: 2024-03-15 15:37:27
+ * @LastEditTime: 2024-03-18 16:33:09
  * @Author: John
  */
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -70,13 +70,8 @@ import {
   useBlockNumber,
   useDisconnect,
   useSignMessage,
-  useSwitchAccount,
 } from "wagmi";
-import {
-  getWalletClient,
-  watchContractEvent,
-  waitForTransactionReceipt,
-} from "@wagmi/core";
+import { getWalletClient } from "@wagmi/core";
 import { TYPE_ADDRESS } from "@/types";
 import { config } from "../WalletProvider";
 import { subimtByContract } from "@/utils/walletApi";
@@ -91,8 +86,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
   ref
 ) {
   const { open } = useWeb3Modal();
-  const { address, connector } = useAccount();
-  useSwitchAccount();
+  const { address, connector, isConnected, isDisconnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
   const { disconnect } = useDisconnect();
   const { error } = useBlockNumber();
