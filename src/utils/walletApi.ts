@@ -46,6 +46,7 @@ import {
 import { config } from "@/components/WalletProvider";
 import { defineChain, encodeFunctionData } from "viem/utils";
 import { TYPE_ADDRESS } from "@/types";
+import { Connector } from "wagmi";
 
 const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
 const networkUsdtAddress = import.meta.env.VITE_NETWORK_USDT_ADDRESS;
@@ -115,12 +116,14 @@ export async function subimtByContract(
         }),
       })
         .then((gas) => {
-          console.log("estimate gas:", gas);
+          const gasPrice = (gas * 12n) / 10n;
+          console.log("estimate gas:%d , my gas: %d", gas, gasPrice);
           writeContract(config, {
             abi: roosAbi,
             address: contractAddress,
             functionName: "buyNFTNew",
             args: [buyCount, buyAmount, randomNumber, rebateRatio, pAddress],
+            gasPrice,
           })
             .then((receipt) => {
               console.log("write contract success!, receipt:", receipt);
@@ -195,11 +198,14 @@ function handleCatch(
  * @param {ReturnType} netWork
  * @return {*}
  */
-export function addCustomChain(netWork: ReturnType<typeof defineChain>) {
+export function addCustomChain(
+  netWork: ReturnType<typeof defineChain>,
+  connector: Connector
+) {
   return new Promise<void>(async (reslove, reject) => {
-    const connectors = await getConnectorClient(config);
-    connectors.transport
-      .request({
+    const provider: any = await connector.getProvider?.();
+    provider
+      ?.request({
         method: "wallet_addEthereumChain",
         params: [
           {
@@ -258,21 +264,43 @@ export const getApproveUsdt = async (
 export const authorizedU = (uNum: bigint) => {
   console.log("授权金额参数：", contractAddress, uNum);
   return new Promise<void>((reslove, reject) => {
-    writeContract(config, {
-      abi: usdtAbi,
-      address: networkUsdtAddress,
-      functionName: "approve",
-      args: [contractAddress, uNum],
+    estimateGas(config, {
+      to: networkUsdtAddress,
+      data: encodeFunctionData({
+        abi: usdtAbi,
+        functionName: "approve",
+        args: [contractAddress, uNum],
+      }),
     })
-      .then(async (hash) => {
-        console.log("approve res", hash);
-        const transactionReceipt = await waitForTransactionReceipt(config, {
-          hash,
-        });
-        if (transactionReceipt.status == "success") reslove();
+      .then((gas) => {
+        const gasPrice = (gas * 12n) / 10n;
+        console.log(
+          "estimate approve gas:%d , my approve gas: %d",
+          gas,
+          gasPrice
+        );
+
+        writeContract(config, {
+          abi: usdtAbi,
+          address: networkUsdtAddress,
+          functionName: "approve",
+          args: [contractAddress, uNum],
+          gasPrice,
+        })
+          .then(async (hash) => {
+            console.log("approve res", hash);
+            const transactionReceipt = await waitForTransactionReceipt(config, {
+              hash,
+            });
+            if (transactionReceipt.status == "success") reslove();
+          })
+          .catch((err) => {
+            console.log("approve error", err);
+            reject(err);
+          });
       })
       .catch((err) => {
-        console.log("approve error", err);
+        console.log("estimate approve gas error", err);
         reject(err);
       });
   });
