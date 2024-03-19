@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 11:33:05
- * @LastEditTime: 2024-03-18 16:33:50
+ * @LastEditTime: 2024-03-19 14:10:09
  * @Author: John
  */
 import "./Participate.scss";
@@ -25,9 +25,14 @@ import { CUSTOM_DIALOG, SET_CUSTOM_DIALOG_OPEN } from "@/store/customCom";
 import ReduceAddInput from "@/components/common/ReduceAddInput";
 import Iconfont from "@/components/iconfont";
 import { useAccount, useBalance, useChainId } from "wagmi";
-import { waitForTransactionReceipt, getChains, switchChain } from "@wagmi/core";
+import {
+  waitForTransactionReceipt,
+  getChains,
+  switchChain,
+  getChainId,
+} from "@wagmi/core";
 import { config } from "@/components/WalletProvider";
-import { addCustomChain, authorizedU, getApproveUsdt } from "@/utils/walletApi";
+import { authorizedU, getApproveUsdt } from "@/utils/walletApi";
 
 type OrderInfo = {
   buyAmount: string;
@@ -58,9 +63,9 @@ export default function () {
   const { buyNftIds, startPollingCheckBuyStatus, stopPollingCheckBuyStatus } =
     usePollingCheckBuyStatus();
 
-  const chainId = useChainId();
   const { connector, address } = useAccount();
   const balance = useBalance({ address });
+  const currentChainId = useChainId();
 
   const [approvedU, setApprovedU] = useState<bigint>(0n);
   const [approveding, setApproveding] = useState(false);
@@ -214,30 +219,11 @@ export default function () {
     return () => {};
   }, [approveding]);
 
+  // 获取用户上次授权的U
   useEffect(() => {
     if (address) {
       (async () => {
-        // TODO 切换网络✔
-        const chains = getChains(config);
-        console.log("all chains:", chains);
-        console.log("current chain id:", chainId);
-        let netWork = chains.find(
-          (v) => v.id == import.meta.env.VITE_PARTICIPATE_CHAIN_ID
-        );
-        console.log("participate network:", netWork);
-        if (chainId != netWork?.id && netWork) {
-          try {
-            await switchChain(config, {
-              chainId: netWork.id,
-            });
-          } catch (error) {
-            // TODO 切换网络失败，自动添加网络✔
-            console.log("switch chain error:", error);
-            // const provider: any = await connector?.getProvider();
-            await addCustomChain(netWork);
-          }
-        }
-
+        await checkNetWork();
         setApprovedU(await getApproveUsdt(address));
       })();
     }
@@ -263,6 +249,125 @@ export default function () {
       </>
     );
   }
+
+  /**
+   * @description: 购买盒子
+   * @return {*}
+   */
+  async function participate() {
+    if (!nodeInfo) return;
+    // await checkNetWork();
+    // TODO 授权usdt
+    if (approvedU == 0n) {
+      try {
+        setApproveding(true);
+        await authorizedU(num2usdtAsbigint(num * nodeInfo.nodePrice));
+
+        setApprovedU(await getApproveUsdt(address));
+        setApproveding(false);
+      } catch (error) {
+        setApproveding(false);
+      }
+      return;
+    }
+
+    // TODO 购买节点✔
+    let orderInfo = await fetchUrl<
+      OrderInfo,
+      {
+        nodeId: number;
+        number: number;
+        tatolAmount: number;
+      }
+    >(
+      "/api/node/pay_node",
+      {
+        method: "POST",
+      },
+      {
+        nodeId: nodeInfo.id,
+        number: num,
+        tatolAmount: num * nodeInfo.nodePrice,
+      }
+    );
+    if (orderInfo) {
+      // setOrderInfo(res.data);
+
+      // TODO 重新处理钱包发送交易✔
+      // let hash = await connectWalletRef.current?._onSubmit(
+      //   orderInfo.data.buyAmount,
+      //   "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk"
+      // );
+      if (user.wallet.payInfo && isOKApp) {
+        // 检测是否存在之前的订单，有则取消订单（在okxapp中特殊处理）
+        await API_PAY_NODE_SMS(user.wallet.payInfo.orderNumber, "123456789", 2);
+        dispatch(SET_PAY_INFO(null));
+      }
+
+      dispatch(
+        SET_PAY_INFO({
+          buyAmount: orderInfo.data.buyAmount,
+          buyCount: orderInfo.data.buyCount,
+          toAddress: orderInfo.data.outAddress,
+          hash: "",
+          orderNumber: orderInfo.data.orderNumber,
+
+          address: orderInfo.data.address,
+          num: orderInfo.data.num,
+          rebateRatio: orderInfo.data.rebateRatio,
+        })
+      );
+      dispatch(SET_NOTIFICATION_TRIGGER_EVENT("TRANSACTION"));
+    }
+  }
+
+  /**
+   * @description: 检测网络并切换
+   * @return {*}
+   */
+  function checkNetWork() {
+    return new Promise<void>(async (reslove, reject) => {
+      // TODO 切换网络✔
+      const chains = getChains(config);
+      let chainId = getChainId(config);
+      // console.log("all chains:", chains);
+      console.log("current chain id:", chainId);
+      let netWork = chains.find(
+        (v) => v.id == import.meta.env.VITE_PARTICIPATE_CHAIN_ID
+      );
+      console.log("participate network:", netWork);
+      if (chainId != netWork?.id && netWork) {
+        try {
+          await switchChain(config, {
+            chainId: netWork.id,
+          });
+
+          const timer = setInterval(() => {
+            chainId = getChainId(config);
+            console.log("current chain id:", chainId);
+            if (chainId == netWork?.id) {
+              console.log("switch chain success!");
+              reslove();
+              clearInterval(timer);
+            }
+          }, 1000);
+        } catch (error) {
+          // TODO 切换网络失败，自动添加网络✔
+          console.error("switch chain error:", error);
+          // // const provider: any = await connector?.getProvider();
+          // try {
+          //   await addCustomChain(netWork, connector);
+          //   reslove();
+          // } catch (error) {
+          //   console.error("add chain error:", error);
+          // }
+        }
+      } else {
+        reslove();
+      }
+    });
+  }
+
   return (
     <>
       <ScrollArea className="Participate bg-[#232323]">
@@ -394,77 +499,8 @@ export default function () {
 
                       if (typeof num === "number") {
                         if (!nodeInfo) return;
-
-                        // TODO 授权usdt
-                        if (approvedU == 0n) {
-                          try {
-                            setApproveding(true);
-                            await authorizedU(
-                              num2usdtAsbigint(num * nodeInfo.nodePrice)
-                            );
-
-                            setApprovedU(await getApproveUsdt(address));
-                            setApproveding(false);
-                          } catch (error) {
-                            setApproveding(false);
-                          }
-                          return;
-                        }
-
-                        // TODO 购买节点✔
-                        let orderInfo = await fetchUrl<
-                          OrderInfo,
-                          {
-                            nodeId: number;
-                            number: number;
-                            tatolAmount: number;
-                          }
-                        >(
-                          "/api/node/pay_node",
-                          {
-                            method: "POST",
-                          },
-                          {
-                            nodeId: nodeInfo.id,
-                            number: num,
-                            tatolAmount: num * nodeInfo.nodePrice,
-                          }
-                        );
-                        if (orderInfo) {
-                          // setOrderInfo(res.data);
-
-                          // TODO 重新处理钱包发送交易✔
-                          // let hash = await connectWalletRef.current?._onSubmit(
-                          //   orderInfo.data.buyAmount,
-                          //   "bc1p0xjywgpgdcy2ps5naqf4m44zkqptuejnk6226dwt0v3gcqv8alvqtppykk"
-                          // );
-                          if (user.wallet.payInfo && isOKApp) {
-                            // 检测是否存在之前的订单，有则取消订单（在okxapp中特殊处理）
-                            await API_PAY_NODE_SMS(
-                              user.wallet.payInfo.orderNumber,
-                              "123456789",
-                              2
-                            );
-                            dispatch(SET_PAY_INFO(null));
-                          }
-
-                          dispatch(
-                            SET_PAY_INFO({
-                              buyAmount: orderInfo.data.buyAmount,
-                              buyCount: orderInfo.data.buyCount,
-                              toAddress: orderInfo.data.outAddress,
-                              hash: "",
-                              orderNumber: orderInfo.data.orderNumber,
-
-                              address: orderInfo.data.address,
-                              num: orderInfo.data.num,
-                              rebateRatio: orderInfo.data.rebateRatio,
-                            })
-                          );
-                          dispatch(
-                            SET_NOTIFICATION_TRIGGER_EVENT("TRANSACTION")
-                          );
-                        }
+                        await checkNetWork();
+                        participate();
                       }
                     }}
                   >
@@ -496,6 +532,10 @@ export default function () {
   );
 }
 
+/**
+ * @description: 轮询查询交易,获取nft
+ * @return {*}
+ */
 function usePollingCheckBuyStatus() {
   const [buyNftIds, setBuyNftIds] = useState<string>("");
   const stop = useRef(false);
