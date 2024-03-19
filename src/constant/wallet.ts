@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-02-21 15:31:59
- * @LastEditTime: 2024-03-18 13:54:38
+ * @LastEditTime: 2024-03-18 17:23:04
  * @Author: John
  */
 
@@ -77,7 +77,7 @@ export const roosTestNetwork = defineChain({
   },
   rpcUrls: {
     default: {
-      http: ["http://8.218.251.93:8547"],
+      http: ["https://testrpc.roospro.com"],
       webSocket: undefined,
     },
   },
