@@ -1,14 +1,14 @@
 /*
  * @LastEditors: John
  * @Date: 2024-03-06 11:26:45
- * @LastEditTime: 2024-03-18 13:47:19
+ * @LastEditTime: 2024-03-19 14:07:39
  * @Author: John
  */
 import { createWeb3Modal } from "@web3modal/wagmi/react";
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 
-import { WagmiProvider, http } from "wagmi";
-import { arbitrum, mainnet } from "wagmi/chains";
+import { WagmiProvider } from "wagmi";
+import { mainnet } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { roosTestNetwork } from "@/constant/wallet";
 
@@ -26,7 +26,11 @@ const metadata = {
   icons: ["https://www.roospro.com/favicon.ico"],
 };
 
-const chains = [mainnet, arbitrum, roosTestNetwork] as const;
+// mainnet, arbitrum,
+const chains =
+  import.meta.env.MODE == "production"
+    ? ([mainnet] as const)
+    : ([roosTestNetwork] as const);
 export const config = defaultWagmiConfig({
   chains, // required
   // transports: {
