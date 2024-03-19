@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-03-08 09:44:08
- * @LastEditTime: 2024-03-18 16:33:09
+ * @LastEditTime: 2024-03-19 13:54:51
  * @Author: John
  */
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -257,16 +257,19 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
   //   };
   // }, []);
 
+  // 监听地址
   useEffect(() => {
     const lowerAddress = address?.toLocaleLowerCase();
     if (lowerAddress) handleAccountsChanged(lowerAddress as TYPE_ADDRESS);
   }, [address]);
 
+  // 监听钱包断开链接
   useEffect(() => {
-    console.log("error:", error);
+    console.log("is disconnected:", isDisconnected);
+    if (isDisconnected) clearUserData();
 
     return () => {};
-  }, [error]);
+  }, [isDisconnected]);
 
   // TODO 注册✔
   async function signUp(
