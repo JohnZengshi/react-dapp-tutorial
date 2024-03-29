@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2023-12-29 10:31:13
- * @LastEditTime: 2024-02-25 11:25:48
+ * @LastEditTime: 2024-03-29 15:09:38
  * @Author: John
  */
 /*
@@ -13,6 +13,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import "normalize.css";
 import "./index.css";
 import "../app/globals.css";
 import "./variable.scss";
