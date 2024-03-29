@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.3",
+    "@lottiefiles/react-lottie-player": "^3.5.3",
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/sdk-react": "^0.14.1",
     "@okxweb3/coin-bitcoin": "^1.0.8",
