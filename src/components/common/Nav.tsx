@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-04-03 17:51:27
+ * @LastEditTime: 2024-04-03 21:28:13
  * @Author: John
  */
 import "./Nav.scss";
@@ -82,6 +82,12 @@ export default function (props: { connectBtn?: any }) {
             title="Home"
             titleCallBack={() => {
               navigate("/");
+            }}
+          />
+          <CustomNavigationMenu
+            title="bridge"
+            titleCallBack={() => {
+              CustomToast("coming soon");
             }}
           />
           {/* <CustomNavigationMenu

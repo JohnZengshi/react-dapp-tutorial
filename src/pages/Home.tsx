@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-04-03 17:24:50
+ * @LastEditTime: 2024-04-03 23:33:49
  * @Author: John
  */
 
@@ -38,12 +38,12 @@ import Tech1 from "@/assets/svg/Tech1.svg";
 import Tech2 from "@/assets/svg/Tech2.svg";
 import Tech3 from "@/assets/svg/Tech3.svg";
 
-import Guidance_1 from "@/assets/svg/Guidance_1.svg";
-import Guidance_2 from "@/assets/svg/Guidance_2.svg";
-import Guidance_3 from "@/assets/svg/Guidance_3.svg";
+import event1 from "@/assets/event1.png";
+import event2 from "@/assets/event2.png";
+import event3 from "@/assets/event3.png";
 
 import effect_box from "@/assets/svg/effect_box.svg";
-import event3 from "@/assets/svg/event-03.svg";
+// import event3 from "@/assets/svg/event-03.svg";
 
 import techBg from "@/assets/svg/techBg.svg";
 import CustomToast from "@/components/common/CustomToast";
@@ -72,7 +72,7 @@ export default function () {
   });
 
   useEffect(() => {
-    console.log("scroll progress:", progress);
+    // console.log("scroll progress:", progress);
     if (progress == HOMEPAGE_THRESHOLD.theEnd) {
       // console.log("到底了");
     } else if (progress >= HOMEPAGE_THRESHOLD.fifthScreen) {
@@ -119,7 +119,83 @@ export default function () {
             className="w-full h-[300vh] flex flex-col snap-center relative snap-mandatory"
             id="TECHNOLOGY_ARCHITECTURE_PAG1"
           >
-            <TechnologyArchitecture activeSub={subPage} />
+            {subPage == 1 && (
+              <TechnologyArchitecture
+                title="Modular Architecture"
+                imgPath={Tech3}
+                desArr={[
+                  {
+                    title: "Decentralization",
+                    des: "Design principles for decentralization at all stages of the scenario.",
+                  },
+                  {
+                    title: "ROOS BTCLayer",
+                    des: "A Zk Rollup for computing,type2 ZK-EVM, migrate EVM-based dApps to ROOS effortlessly.",
+                  },
+                  {
+                    title: "ROOS BTCStorage",
+                    des: "1st bitcoin storage rollup, leverages bitcoin's security to scale bitcoin's storage and data capabilities.",
+                  },
+                  {
+                    title: "ROOS Bridge",
+                    des: "Just one step to complete asset bridging between L1 and L2,superior UX.",
+                  },
+                ]}
+              />
+            )}
+            {subPage == 2 && (
+              <TechnologyArchitecture
+                title="Advanced Rollup Design"
+                imgPath={Tech1}
+                desArr={[
+                  {
+                    title: "Decentralized Sequencer",
+                    des: "Based on leader elections, avoiding single-point failures from centralized Sequencers.",
+                  },
+                  {
+                    title: "DA Layer",
+                    des: "Distributed storage system, efficient data synchronization, DAS data sampling.",
+                  },
+                  {
+                    title: "No MEV",
+                    des: "RPC nodes and DA Layer form a star network. User transactions go straight to DA's Cache layer, no Mempool required. This eradicates MEV issues, boosting transaction security and fairness.",
+                  },
+                  {
+                    title: "Sequencer integrated in DA Layer",
+                    des: "Sequencer nodes and DA nodes merge into ROOS Nodes, forming a star network named ROOS Port for decentralized rapid response.",
+                  },
+                  {
+                    title: "ZK EVM",
+                    des: "Type-2,Custom VM + Bytecode-level compatibility.",
+                  },
+                ]}
+              />
+            )}
+            {subPage == 3 && (
+              <TechnologyArchitecture
+                title="The Advantages of BTCStorage"
+                imgPath={Tech2}
+                desArr={[
+                  {
+                    title: "More Capacity",
+                    des: "Elevates Bitcoin's storage capacity from TB to EB.",
+                  },
+                  {
+                    title: "More Cheaper",
+                    des: "Consistently cheaper than Web2, slashing Bitcoin storage costs by 99%.",
+                  },
+                  {
+                    title: "More Practical",
+                    des: "Based on the optimistic verification mode of smart contracts, modular design, highly scalable, high-performance, and secure.",
+                  },
+                  {
+                    title: "More Greener",
+                    des: "Aggregating idle storage and computing resources reduces emissions by 77% compared to centralized cloud.",
+                  },
+                ]}
+              />
+            )}
+
             <motion.div
               onViewportEnter={() => {
                 console.log("ele1 show!");
@@ -168,8 +244,8 @@ export const Top = ({}: PropsWithChildren<{}>) => {
                 },
               }}
             >
-              <span>Scaling &nbsp;</span>
-              <span>Bitcoin </span>
+              <span>Scaling&nbsp;</span>
+              <span>Bitcoin's </span>
             </motion.div>
             <motion.span
               initial={{ y: 50 }}
@@ -183,7 +259,7 @@ export const Top = ({}: PropsWithChildren<{}>) => {
                 },
               }}
             >
-              Without&nbsp;Compromise
+              Computing&nbsp;/&nbsp;Storage
             </motion.span>
           </div>
           <motion.div className="small_text flex flex-col">
@@ -199,7 +275,7 @@ export const Top = ({}: PropsWithChildren<{}>) => {
                 },
               }}
             >
-              lnstant, Economical, Unlimited Storage.
+              The New Paradigm for Scaling Bitcoin
             </motion.span>
           </motion.div>
         </div>
@@ -360,16 +436,15 @@ export const Guidance = ({
             <span>Scale Without Compromise</span>
             <span
               className={cn(
-                "text-ellipsis overflow-hidden whitespace-pre-wrap",
-                "line-clamp-6"
+                "text-ellipsis overflow-hidden whitespace-pre-wrap"
               )}
             >
-              Inherit Bitcoin-level security through Bitcoin's POW at L1 and
-              Zero-Knowledge Proofs at L2.Turing-completeness,Type2
-              ZK-EVM,migrate EVM-based dApps to ROOS effortlessly.Unlock
-              Bitcoin's computing and storage capabilities to empower the next
-              billion users and revolutionize decentralized applications for the
-              future.
+              - Inherit Bitcoin-level security through Bitcoin's POW at L1 and
+              Zero-Knowledge Proofs at L2. <br />- Turing-completeness,Type2
+              ZK-EVM,migrate EVM-based dApps to ROOS effortlessly. <br />-
+              Unlock Bitcoin's computing and storage capabilities to empower the
+              next billion users and revolutionize decentralized applications
+              for the future.
             </span>
           </div>
           <div className="guidance_1 img bg-cover bg-center"></div>
@@ -380,14 +455,12 @@ export const Guidance = ({
             title="Modular Architecture"
             content="The overall architecture of ROOS Network adopts a modular design to drive the Bitcoin ecosystem's limitless growth, striking an optimal balance between scalability, security, and decentralization. It consists of three key modules: ROOS BTCLayer, ROOS BTCStorage, and ROOS Bridge."
             liClassName="flex flex-1 flex-col justify-between"
-            contentClassName="line-clamp-4"
           />
           <GuidanceCard
             index={3}
             title="Decentralized From Day One"
             content="Decentralization is in our DNA. We make zero compromises in achieving scalability, and sequencing will be completely decentralized from Day1 on the mainnet - creating a network that is not only easy to participate in, but one that's unstoppable."
             liClassName="flex flex-1 flex-col justify-between"
-            contentClassName="line-clamp-4"
           />
         </div>
       </div>
@@ -396,17 +469,17 @@ export const Guidance = ({
 };
 
 export const TechnologyArchitecture = ({
-  activeSub,
+  title,
+  imgPath,
+  desArr,
   contanerClassName,
 }: PropsWithChildren<{
-  activeSub: number;
+  title: string;
+  imgPath: string;
+  desArr: { title: string; des: string }[];
   contanerClassName?: string;
 }>) => {
   const [currentSubActive, setCurrentSubActive] = useState(1);
-  useEffect(() => {
-    setCurrentSubActive(activeSub);
-    return () => {};
-  }, [activeSub]);
 
   return (
     <>
@@ -422,40 +495,29 @@ export const TechnologyArchitecture = ({
           alt=""
         />
         <div className={cn("top flex items-center w-full")}>
-          {activeSub == 1 && (
-            <motion.span
-              className={cn("cursor-pointer")}
-              onClick={() => {
-                setCurrentSubActive(1);
-                document
-                  .querySelector(`#TECHNOLOGY_ARCHITECTURE_PAG1`)
-                  ?.scrollIntoView();
-              }}
-              initial={{ y: 20, opacity: 0 }}
-              whileInView={{
-                y: 0,
-                opacity: 1,
-                transition: {
-                  type: "spring",
-                  bounce: 0.4,
-                  duration: 0.8,
-                  delay: 0.1,
-                },
-              }}
-            >
-              Status Quo&nbsp;&nbsp;
-            </motion.span>
-          )}
-
-          {activeSub == 2 && (
-            <motion.span
-              className={cn("cursor-pointer")}
-              onClick={() => {
-                setCurrentSubActive(2);
-                document
-                  .querySelector(`#TECHNOLOGY_ARCHITECTURE_PAG2`)
-                  ?.scrollIntoView();
-              }}
+          <motion.span
+            className={cn("cursor-pointer")}
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{
+              y: 0,
+              opacity: 1,
+              transition: {
+                type: "spring",
+                bounce: 0.4,
+                duration: 0.8,
+                delay: 0.1,
+              },
+            }}
+          >
+            {title}&nbsp;&nbsp;
+          </motion.span>
+        </div>
+        <div className="t_container flex flex-row w-full">
+          <div className="left flex items-center justify-center flex-auto box-border">
+            <motion.img
+              className="h-full"
+              src={imgPath}
+              alt=""
               initial={{ y: 20, opacity: 0 }}
               whileInView={{
                 y: 0,
@@ -467,99 +529,14 @@ export const TechnologyArchitecture = ({
                   delay: 0.2,
                 },
               }}
-            >
-              With Espresso&nbsp;&nbsp;
-            </motion.span>
-          )}
-
-          {activeSub == 3 && (
-            <motion.span
-              className={cn("cursor-pointer")}
-              onClick={() => {
-                setCurrentSubActive(3);
-                document
-                  .querySelector(`#TECHNOLOGY_ARCHITECTURE_PAG3`)
-                  ?.scrollIntoView();
-              }}
-              initial={{ y: 20, opacity: 0 }}
-              whileInView={{
-                y: 0,
-                opacity: 1,
-                transition: {
-                  type: "spring",
-                  bounce: 0.4,
-                  duration: 0.8,
-                  delay: 0.3,
-                },
-              }}
-            >
-              The Future
-            </motion.span>
-          )}
-        </div>
-        <div className="t_container flex flex-row w-full">
-          <div className="left flex items-center justify-center flex-auto box-border">
-            {currentSubActive == 1 && (
-              <motion.img
-                className="h-full"
-                src={Tech1}
-                alt=""
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{
-                  y: 0,
-                  opacity: 1,
-                  transition: {
-                    type: "spring",
-                    bounce: 0.4,
-                    duration: 0.8,
-                    delay: 0.2,
-                  },
-                }}
-              />
-            )}
-            {currentSubActive == 2 && (
-              <motion.img
-                className="h-full"
-                src={Tech2}
-                alt=""
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{
-                  y: 0,
-                  opacity: 1,
-                  transition: {
-                    type: "spring",
-                    bounce: 0.4,
-                    duration: 0.8,
-                    delay: 0.2,
-                  },
-                }}
-              />
-            )}
-            {currentSubActive == 3 && (
-              <motion.img
-                className="h-full"
-                src={Tech3}
-                alt=""
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{
-                  y: 0,
-                  opacity: 1,
-                  transition: {
-                    type: "spring",
-                    bounce: 0.4,
-                    duration: 0.8,
-                    delay: 0.2,
-                  },
-                }}
-              />
-            )}
+            />
           </div>
           <div className="right">
             <ul className="flex flex-col h-full">
-              {Array.from({ length: 4 }).map((v, _i) => (
+              {desArr.map((v, _i) => (
                 <Fragment key={_i}>
                   <motion.li
-                    className="flex-1"
+                    className="flex-1 flex flex-col justify-center"
                     initial={{ y: 20, opacity: 0 }}
                     whileInView={{
                       y: 0,
@@ -573,12 +550,8 @@ export const TechnologyArchitecture = ({
                     }}
                     viewport={{ once: true }}
                   >
-                    <span>Espresso's HotShot finality</span>
-                    <span>
-                      Espresso's HotShot finality gadget is optimistically
-                      responsive and guarantees fast transaction finality and
-                      throughput limited only by network bandwidth.
-                    </span>
+                    <span>{v.title}</span>
+                    <span>{v.des}</span>
                   </motion.li>
                 </Fragment>
               ))}
@@ -629,7 +602,7 @@ export const EventNews = ({
           },
         }}
       >
-        Bitlayer Ecosystem Event & News
+        ROOS Ecosystem Event & News
       </motion.span>
       <motion.span
         className="t3 text-[#FFC100]"
@@ -665,13 +638,36 @@ export const EventNews = ({
             ref: sliderRef,
           }}
         >
-          {Array.from({ length: 4 }).map((v, i) => (
-            <EventNewsCard
-              i={i}
-              key={i}
-              onClick={() => window.open(THIRD_URL.TWITTER, "_blank")}
-            />
-          ))}
+          <EventNewsCard
+            i={1}
+            imgSrc={event1}
+            onClick={() =>
+              window.open(
+                "https://roosnetwork.medium.com/roos-the-first-module-layer-2-scaling-bitcoins-computing-and-storage-df3e7cf35e76",
+                "_blank"
+              )
+            }
+          />
+          <EventNewsCard
+            i={2}
+            imgSrc={event2}
+            onClick={() =>
+              window.open(
+                "https://roosnetwork.medium.com/announcing-roos-roadmap-evolving-to-bring-bitcoin-to-internet-scale-135c32990bc7",
+                "_blank"
+              )
+            }
+          />
+          <EventNewsCard
+            i={3}
+            imgSrc={event3}
+            onClick={() =>
+              window.open(
+                "https://roosnetwork.medium.com/roos-global-ambassador-program-join-us-now-9d81870668b2",
+                "_blank"
+              )
+            }
+          />
         </Slider>
       </motion.div>
       <div className="indicator flex flex-row items-center">
@@ -749,7 +745,7 @@ export const Community = ({
       >
         Join The Community of The Future
       </motion.span>
-      <motion.span
+      {/* <motion.span
         className="t3 text-[#FFC100]"
         initial={{ y: -20 }}
         whileInView={{
@@ -763,7 +759,7 @@ export const Community = ({
         }}
       >
         stay active with bitlayer any
-      </motion.span>
+      </motion.span> */}
 
       <motion.ul className="joinList flex flex-row flex-wrap justify-between">
         <JoinCard
@@ -828,29 +824,29 @@ export const Footer = () => {
             }}
           />
 
-          <div className="des flex flex-col">
+          {/* <div className="des flex flex-col">
             <span>Did team leverages decentralized</span>
             <span>identity to empower identity</span>
             <span>building and community growth</span>
-          </div>
+          </div> */}
         </div>
         <div className="right flex flex-row items-center">
           <ul className="links flex flex-row">
-            <li className="item flex flex-col">
+            {/* <li className="item flex flex-col">
               <span className="cursor-pointer">Products</span>
               <span className="cursor-pointer">Roos</span>
               <span className="cursor-pointer">Roos Profile</span>
               <span className="cursor-pointer">Voty</span>
               <span className="cursor-pointer">SoulFrag</span>
-            </li>
+            </li> */}
             <li className="item flex flex-col">
               <span className="cursor-pointer">Company</span>
               <span className="cursor-pointer">About</span>
               <span className="cursor-pointer">Join us</span>
-              <span className="flex flex-row items-center cursor-pointer">
+              {/* <span className="flex flex-row items-center cursor-pointer">
                 Voty&nbsp;&nbsp;
                 <IconFont name="lianjiejiantou" color={"#fff"} />
-              </span>
+              </span> */}
               <span className="flex flex-row items-center cursor-pointer">
                 Media kit&nbsp;&nbsp;
                 <IconFont name="lianjiejiantou" color={"#fff"} />
@@ -920,8 +916,9 @@ export const GuidanceCard = ({
 
 export const EventNewsCard = ({
   i,
+  imgSrc,
   onClick,
-}: PropsWithChildren<{ i: number; onClick?: () => void }>) => {
+}: PropsWithChildren<{ i: number; imgSrc: string; onClick?: () => void }>) => {
   const [scope, animate] = useAnimate();
   return (
     <motion.div
@@ -962,9 +959,9 @@ export const EventNewsCard = ({
           } as DOMKeyframesDefinition);
         }}
       >
-        <img className="container" src={event3}></img>
+        <img className="container" src={imgSrc}></img>
         <div className="bottom flex flex-row justify-between w-full">
-          <span className="text-[#fff]">0{i + 1}</span>
+          <span className="text-[#fff]">0{i}</span>
           <span className="text-[#fff]">BITCOIN SINGAPORE</span>
         </div>
       </motion.div>
