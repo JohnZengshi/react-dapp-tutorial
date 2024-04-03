@@ -1,5 +1,215 @@
 @include mq {
   // 移动端样式
   .Home {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    .TOP {
+      .container {
+        .left {
+          .big_text {
+            span {
+            }
+
+            > div {
+              > span {
+                &:last-of-type {
+                }
+              }
+            }
+          }
+          .small_text {
+            span {
+            }
+          }
+        }
+        .right {
+          .lottie_animation {
+          }
+        }
+      }
+
+      .sliding {
+        .left {
+          /* 02 */
+          > span {
+            &:last-of-type {
+            }
+          }
+        }
+        .mid {
+          > span {
+          }
+          .btn1 {
+          }
+        }
+
+        .btn2 {
+        }
+      }
+    }
+    .GUIDANCE {
+      .t1 {
+      }
+      .btns {
+        .btn {
+          > span {
+          }
+
+          &.active {
+            > span {
+            }
+          }
+        }
+      }
+
+      .cards {
+        .card1 {
+          .textContainer {
+          }
+          .img {
+            &.guidance_1 {
+            }
+          }
+        }
+        .card {
+          .line {
+          }
+
+          .img {
+            &.guidance_2 {
+            }
+            &.guidance_3 {
+            }
+          }
+        }
+
+        .textContainer {
+          > span {
+            &:nth-of-type(1) {
+            }
+
+            &:nth-of-type(2) {
+            }
+          }
+        }
+
+        .bottom {
+        }
+      }
+    }
+    .TECHNOLOGY_ARCHITECTURE {
+      .top {
+        > span {
+        }
+      }
+      .t_container {
+        .left {
+        }
+        .right {
+          ul {
+            li {
+              &:last-of-type {
+              }
+              > span {
+                &:nth-of-type(1) {
+                }
+
+                &:nth-of-type(2) {
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .EVENT_NEWS {
+      .list {
+        .slick-list {
+        }
+        .item {
+          .container {
+          }
+          .bottom {
+            > span {
+            }
+          }
+        }
+      }
+      .indicator {
+        .left {
+        }
+        .right {
+        }
+      }
+    }
+    .COMMUNITY {
+      .joinList {
+        .item {
+          &:nth-last-child(1),
+          &:nth-last-child(2) {
+          }
+
+          .context {
+            .left {
+              span {
+                &:first-of-type {
+                }
+                &:last-of-type {
+                }
+              }
+            }
+            .right {
+            }
+          }
+        }
+      }
+    }
+    .FOOTER {
+      .container {
+        .left {
+          .logo {
+          }
+          .des {
+            > span {
+            }
+          }
+        }
+        .right {
+          .links {
+            .item {
+              > span {
+                &:first-of-type {
+                }
+                &:first-of-type,
+                &:nth-of-type(2) {
+                }
+              }
+            }
+          }
+        }
+      }
+      .bottom {
+        span {
+        }
+      }
+    }
+
+    // common
+    .BASE_TITLE {
+      .t1 {
+      }
+      .t2 {
+      }
+      .t3 {
+      }
+    }
+
+    .EFFECT_BOX {
+      > .context {
+      }
+      .effectLine {
+      }
+    }
   }
 }
