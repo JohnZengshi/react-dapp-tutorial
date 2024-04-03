@@ -55,10 +55,10 @@
 
         &.active {
           /* 矩形 4 */
-          background: #f58c00;
+          background: #ffc100;
           border-radius: 9.46px;
 
-          border: 1px solid #f58c00;
+          border: 1px solid #ffc100;
 
           color: #000000;
           border-bottom: none;
@@ -213,8 +213,8 @@
             > span {
               &.active {
                 font-family: Raleway-Bold;
-                color: #f58c00;
-                border-bottom: 1px solid #f58c00;
+                color: #ffc100;
+                border-bottom: 1px solid #ffc100;
               }
             }
           }
@@ -322,7 +322,7 @@
                   font-size: 32px;
                   letter-spacing: 0em;
                   font-feature-settings: "kern" on;
-                  color: #f58c00;
+                  color: #ffc100;
                 }
 
                 .rightsAndInterests {

@@ -72,11 +72,11 @@
         letter-spacing: 0em;
 
         font-feature-settings: "kern" on;
-        color: #f58c00;
+        color: #ffc100;
 
         z-index: 0;
 
-        border-bottom: 0.5px solid #f58c00;
+        border-bottom: 0.5px solid #ffc100;
       }
 
       .icon {
@@ -109,9 +109,9 @@
       }
 
       &.active {
-        color: #f58c00;
+        color: #ffc100;
         background-color: #141414;
-        // border-bottom: 0.5px solid #f58c00;
+        // border-bottom: 0.5px solid #ffc100;
         .icon {
           transform: rotate(180deg);
         }

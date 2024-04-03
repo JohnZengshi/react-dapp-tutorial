@@ -53,7 +53,7 @@ createWeb3Modal({
   wagmiConfig: config,
   projectId,
   themeVariables: {
-    "--w3m-accent": "#f58c00",
+    "--w3m-accent": "#ffc100",
   },
   featuredWalletIds: [
     ...(window.ethereum

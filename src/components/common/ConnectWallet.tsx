@@ -459,7 +459,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
       {/* 个人中心入口 */}
       {user.wallet.connected && (
         <button
-          className="profile text-[#F58C00] uppercase z-[101]"
+          className="profile text-[#ffc100] uppercase z-[101]"
           onClick={() => {
             navigate("/profile");
           }}
@@ -478,7 +478,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
         >
           <DialogTrigger asChild>
             <button
-              className="ConnectWallet hover:bg-[#F58C00] hover:text-[#FFFFFF]"
+              className="ConnectWallet hover:bg-[#ffc100] hover:text-[#FFFFFF]"
               onClick={() => {
                 setConnectWalletType("MULTI_CHAIN");
                 // setSelectWalletOpen(true);
@@ -490,7 +490,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
           </DialogTrigger>
           <CustomDialogContent>
             <div className="selectWallet flex justify-center flex-col">
-              <span className="font-[Raleway-Bold] text-[#F58C00] uppercase ">
+              <span className="font-[Raleway-Bold] text-[#ffc100] uppercase ">
                 Connect Wallet
               </span>
 
@@ -502,7 +502,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
                   </span>
 
                   <button
-                    className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                    className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#ffc100] hover:border-[#ffc100]"
                     onClick={() => connectWallet("OKX", "Arbitrum One")}
                   >
                     <img className="" src={okx_logo} alt="" />
@@ -519,7 +519,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
                       </span>
 
                       <button
-                        className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                        className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#ffc100] hover:border-[#ffc100]"
                         onClick={() => connectWallet("OKX", "Arbitrum test")}
                       >
                         <img className="" src={okx_logo} alt="" />
@@ -529,7 +529,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
                       </button>
 
                       <button
-                        className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                        className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#ffc100] hover:border-[#ffc100]"
                         onClick={() =>
                           connectWallet("MetaMask", "Arbitrum test")
                         }
@@ -548,7 +548,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
                 <span className="point"></span> Bitcoin Wallet
               </span>
               <button
-                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#ffc100] hover:border-[#ffc100]"
                 onClick={() => connectWallet("OKX", "BTC")}
               >
                 <img className="" src={okx_logo} alt="" />
@@ -556,7 +556,7 @@ const ConnectWallet = forwardRef<ConnectWallet_handleType, {}>(function (
               </button>
 
               <button
-                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#F58C00] hover:border-[#F58C00]"
+                className="box-border border-solid border-[#EAEAEA] flex flex-row items-center hover:bg-[#ffc100] hover:border-[#ffc100]"
                 onClick={() => connectWallet("UNISAT", "BTC")}
               >
                 <img className="" src={unisat_logo} alt="" />

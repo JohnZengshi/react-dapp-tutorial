@@ -31,8 +31,8 @@
         padding: 0 15px;
 
         &.active {
-          border-bottom: 1px solid #f58c00;
-          color: #f58c00;
+          border-bottom: 1px solid #ffc100;
+          color: #ffc100;
         }
       }
     }
@@ -183,8 +183,8 @@
             > span {
               &.active {
                 font-family: Raleway-Bold;
-                color: #f58c00;
-                border-bottom: 1px solid #f58c00;
+                color: #ffc100;
+                border-bottom: 1px solid #ffc100;
               }
             }
           }
@@ -302,7 +302,7 @@
                   letter-spacing: 0em;
 
                   font-feature-settings: "kern" on;
-                  color: #f58c00;
+                  color: #ffc100;
 
                   z-index: 0;
                 }

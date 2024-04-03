@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-12 09:59:21
- * @LastEditTime: 2024-02-29 16:37:12
+ * @LastEditTime: 2024-04-03 17:59:13
  * @Author: John
  */
 import "./Invite.scss";
@@ -26,6 +26,7 @@ import { UrlQueryParamsKey, copyText, isMobile, shortenString } from "@/utils";
 import CustomToast from "./CustomToast";
 import { SET_USER_INVITATION_CODE } from "@/store/reducer";
 import * as clipboard from "clipboard-polyfill";
+import IconFont from "../iconfont";
 
 export default function (
   props: PropsWithChildren<HTMLAttributes<HTMLDivElement>>
@@ -72,8 +73,9 @@ export default function (
         {...props}
         className={`invite relative bg-[#0c0907] box-border border-solid border-[rgb(245, 140, 0)] flex flex-col overflow-hidden ${props.className}`}
       >
-        <img className="logo" src={roos_logo} alt="" />
-        <span className="font-[Raleway-Bold] uppercase tracking-[0em] text-[#F58C00]">
+        {/* <img className="logo" src={roos_logo} alt="" /> */}
+        <IconFont name="roos" className="logo" />
+        <span className="font-[Raleway-Bold] uppercase tracking-[0em] text-[#ffc100]">
           {/* Get Rewards Through Referral */}
           referral Giveaway
           {/* <span>Referral NFTs and get {nodeInfo?.rebateRatio}% back.</span> */}
@@ -86,12 +88,12 @@ export default function (
           with others to get referral rewards.
         </span> */}
         {!user.wallet.connected && (
-          <span className="font-[Raleway-Medium] text-[#F58C00]">
+          <span className="font-[Raleway-Medium] text-[#ffc100]">
             <>Connect wallet to receive invitation link.</>
           </span>
         )}
         {user.wallet.connected && !invitationCode && (
-          <span className="font-[Raleway-Medium] text-[#F58C00]">
+          <span className="font-[Raleway-Medium] text-[#ffc100]">
             <>Purchase ROOSBOX to get invitation link.</>
           </span>
         )}
@@ -101,7 +103,7 @@ export default function (
               <span className="font-[Raleway-Medium] text-[#EAEAEA]">
                 Link：
               </span>
-              <span className="font-[Raleway-Medium] text-[#F58C00] underline">
+              <span className="font-[Raleway-Medium] text-[#ffc100] underline">
                 {user.wallet.connected && invitationCode && (
                   // TODO 邀请连接需要动态生成
                   <>
@@ -146,7 +148,7 @@ export default function (
               <span className="font-[Raleway-Medium] text-[#EAEAEA]">
                 code：
               </span>
-              <span className="font-[Raleway-Medium]  text-[#F58C00] underline">
+              <span className="font-[Raleway-Medium]  text-[#ffc100] underline">
                 {user.wallet.connected && invitationCode && (
                   <>{invitationCode}</>
                 )}

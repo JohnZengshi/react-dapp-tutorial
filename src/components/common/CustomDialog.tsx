@@ -40,7 +40,7 @@ export default function () {
             {/* <img className="roos_logo" src={roosLogo} alt="" /> */}
             <IconFont name="roos" className="roos_logo" />
             {customCom.dialog.loading && (
-              <IconFont name="jiazai" className="loading" color={"#F58C00"} />
+              <IconFont name="jiazai" className="loading" color={"#ffc100"} />
             )}
             <span className="content_text text-center">
               {customCom.dialog.content}

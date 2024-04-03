@@ -240,7 +240,7 @@ export default function () {
           onClick={props.onClick}
           className={`box-select-item active h-full ${
             props.active
-              ? "text-[#F58C00] border-b-[#F58C00]"
+              ? "text-[#ffc100] border-b-[#ffc100]"
               : "text-[#333] border-b-[#380522]"
           } flex border-solid justify-center items-center flex-1`}
         >
@@ -449,7 +449,7 @@ export default function () {
                 </div>
 
                 <div className="content-bottom flex flex-col flex-auto">
-                  <span className="text-[#F58C00]">{nodeInfo?.title}</span>
+                  <span className="text-[#ffc100]">{nodeInfo?.title}</span>
                   <div
                     className="rightsAndInterests text-[#EAEAEA]"
                     dangerouslySetInnerHTML={{

@@ -21,7 +21,7 @@ export const GetNftBox = () => {
   return (
     <div className="GetNftBox">
       {/* <div className="content"></div> */}
-      <IconFont name="wushuju1" className="emtiyDataIcon" color={"#F58C00"} />
+      <IconFont name="wushuju1" className="emtiyDataIcon" color={"#ffc100"} />
       <div className="btn" onClick={handleSubmit}>
         Get KeyBox
       </div>

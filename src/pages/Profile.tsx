@@ -330,7 +330,7 @@ export default function () {
                         <NftsAccessories />
                       </div>
                       <div className="mining">
-                        <span className="text-[#F58C00]">
+                        <span className="text-[#ffc100]">
                           {/* {nodeInfo?.title} */}
                           Synthesis Rules And Functions
                         </span>

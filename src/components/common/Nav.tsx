@@ -216,7 +216,7 @@ export default function (props: { connectBtn?: any }) {
                 <IconFont
                   name="arrow-down"
                   className="icon"
-                  color={navExploreOpen ? "#F58C00" : "#EAEAEA"}
+                  color={navExploreOpen ? "#ffc100" : "#EAEAEA"}
                 />
               </div>
               {navExploreOpen && (
@@ -255,7 +255,7 @@ export default function (props: { connectBtn?: any }) {
                 <IconFont
                   name="arrow-down"
                   className="icon"
-                  color={navCommunityOpen ? "#F58C00" : "#EAEAEA"}
+                  color={navCommunityOpen ? "#ffc100" : "#EAEAEA"}
                 />
               </div>
               {navCommunityOpen && (
@@ -346,12 +346,12 @@ export default function (props: { connectBtn?: any }) {
                   }}
                   alt=""
                 />
-                <IconFont className="icon" name="telegram" color="#F58C00" />
-                <IconFont className="icon" name="github" color="#F58C00" />
+                <IconFont className="icon" name="telegram" color="#ffc100" />
+                <IconFont className="icon" name="github" color="#ffc100" />
                 <IconFont
                   className="icon"
                   name="book"
-                  color="#F58C00"
+                  color="#ffc100"
                   onClick={() => {
                     window.open(
                       "https://roos.gitbook.io/roos-ntework/",

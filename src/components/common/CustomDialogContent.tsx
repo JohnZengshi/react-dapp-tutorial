@@ -16,8 +16,8 @@ export default function (
   return (
     <DialogContent {...props} className={`dialog-content ${props.className}`}>
       <div className="custom-dialog">
-        <div className="warpper_box border-solid border-[#F58C00] blur-[10px] absolute"></div>
-        <div className="content_box flex flex-col items-center absolute border-solid border-[#F58C00] bg-[#550935] opacity-80 ">
+        <div className="warpper_box border-solid border-[#ffc100] blur-[10px] absolute"></div>
+        <div className="content_box flex flex-col items-center absolute border-solid border-[#ffc100] bg-[#550935] opacity-80 ">
           {props.children}
         </div>
       </div>
