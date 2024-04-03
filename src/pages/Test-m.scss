@@ -1,7 +1,8 @@
 @include mq {
   .Test {
-    height: 100vh;
-    width: 100vw;
-    padding-top: var(--mb-nav-height);
+    height: 100vh !important;
+    width: 100vw !important;
+    // padding-top: var(--mb-nav-height);
+    background: #253237;
   }
 }

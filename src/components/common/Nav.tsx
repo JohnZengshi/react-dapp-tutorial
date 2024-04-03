@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-02-27 17:21:28
+ * @LastEditTime: 2024-04-03 16:56:21
  * @Author: John
  */
 import "./Nav.scss";
@@ -15,7 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isMobile } from "@/utils";
 
 import tuite_y from "@/assets/tuite_y.svg";
@@ -24,16 +24,37 @@ import { useAppSelector } from "@/store/hooks";
 import IconFont from "@/components/iconfont";
 import { THIRD_URL } from "@/constant/thirdUrl";
 import CustomNavigationMenu from "./CustomNavigationMenu";
+import { HOMEPAGE_THRESHOLD } from "@/constant";
+import { motion } from "framer-motion";
 
 export default function (props: { connectBtn?: any }) {
   const isSmallScreen = useAppSelector((state) => state.sys.isSmallScreen);
+
   const navigate = useNavigate();
   const [meunOpen, setMeunOpen] = useState(false);
   const [navExploreOpen, setNavExploreOpen] = useState(false);
   const [navCommunityOpen, setNavCommunityOpen] = useState(false);
+  const HomeScrollYProgress = useAppSelector(
+    (state) => state.sys.HomeScrollYProgress
+  );
+
   return (
     <>
-      <div className="nav fixed t-0 z-[10] flex flex-row items-center w-[100vw] justify-between bg-[#000000] ">
+      <motion.div
+        animate={
+          HomeScrollYProgress == HOMEPAGE_THRESHOLD.theEnd
+            ? "hidden"
+            : "visible"
+        }
+        variants={{
+          hidden: { y: -20, opacity: 0 },
+          visible: {
+            y: 0,
+            opacity: 1,
+          },
+        }}
+        className="nav fixed t-0 z-[50] flex flex-row items-center w-[100vw] justify-between "
+      >
         {/* <img
           className="logo"
           src={roosLogo}
@@ -51,21 +72,21 @@ export default function (props: { connectBtn?: any }) {
         />
 
         {/* TODO 移动端适配菜单✔*/}
-        <div className="nav_list flex items-center justify-between absolute left-1/2 translate-x-[-50%]">
+        <div className="nav_list flex items-center justify-between ml-auto">
           <CustomNavigationMenu
-            title="HOME"
+            title="Home"
             titleCallBack={() => {
               navigate("/");
             }}
           />
-          <CustomNavigationMenu
-            title="KEYBOX"
+          {/* <CustomNavigationMenu
+            title="Keybox"
             titleCallBack={() => {
               navigate("/participate");
             }}
-          />
+          /> */}
           <CustomNavigationMenu
-            title="EXPLORE"
+            title="Explore"
             itemList={[
               {
                 title: "ROOS Explorer（testnet）",
@@ -92,7 +113,7 @@ export default function (props: { connectBtn?: any }) {
             titleCallBack={() => CustomToast("coming soon")}
           />
           <CustomNavigationMenu
-            title="COMMUNITY"
+            title="Community"
             itemList={[
               {
                 title: "Discord",
@@ -132,7 +153,7 @@ export default function (props: { connectBtn?: any }) {
             ]}
           />
           <CustomNavigationMenu
-            title="DOCS"
+            title="Docs"
             titleCallBack={() => window.open(THIRD_URL.GITBOOK, "_blank")}
           />
         </div>
@@ -331,7 +352,7 @@ export default function (props: { connectBtn?: any }) {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </div>
+      </motion.div>
       {/* <div className="nav_display"></div> */}
     </>
   );

@@ -1,21 +1,24 @@
 @include pq {
-  .nav_display {
-    height: var(--pc-nav-height);
-  }
   .nav {
     height: var(--pc-nav-height);
+    background: transparent;
 
     .logo {
-      width: 96.58px;
-      height: 38px;
-      margin-left: 14px;
+      width: 7.3vw;
+      height: 2.1vw;
+      margin-left: 4.1vw;
     }
 
     .nav_list {
-      width: 40%;
-      min-width: 605px;
+      .CustomNavigationMenu {
+        margin-right: 5.3vw;
+        &:last-of-type {
+          margin-right: 2.2vw;
+        }
+      }
       .nav_btn {
         position: relative;
+
         button {
           // margin-right: 64px;
           background-color: transparent;
@@ -142,6 +145,7 @@
 
     .nav_meun {
       margin-right: 6%;
+      display: none;
       .meun-icon {
         display: none;
       }

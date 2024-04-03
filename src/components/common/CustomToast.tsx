@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-10 22:19:25
- * @LastEditTime: 2024-01-16 11:23:45
+ * @LastEditTime: 2024-04-03 16:55:15
  * @Author: John
  */
 import { toast } from "@/components/ui/use-toast";
@@ -11,14 +11,14 @@ import Iconfont from "../iconfont";
 
 export default function CustomToast(message: string, time?: number) {
   toast({
-    className: `custom-toast bg-[#f58c00]/50 border-[#f58c00] border-solid backdrop-blur-[5px]`,
+    className: `custom-toast bg-[#FFC100]/50 border-[#FFC100] border-solid backdrop-blur-[5px]`,
     duration: time || 1000,
     action: (
       <>
         <Iconfont
           name="gantanhao-yuankuang"
           className="toast-info-icon"
-          color="#F58C00"
+          color="#FFC100"
         ></Iconfont>
         <span className="text-[#fff]/80">{message}</span>
       </>

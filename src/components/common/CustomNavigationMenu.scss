@@ -9,25 +9,25 @@
       align-items: center;
 
       span {
-        opacity: 1;
+        /* keybox */
 
-        font-family: Raleway-Medium;
-        font-size: 18px;
-        font-weight: 500;
+        opacity: 1;
+        font-family: DM Sans;
+        font-size: 0.93vw;
+        font-weight: normal;
         line-height: normal;
-        text-transform: uppercase;
+        text-transform: capitalize;
         letter-spacing: 0em;
 
-        font-feature-settings: "kern" on;
-        color: #eaeaea;
+        font-variation-settings: "opsz" auto;
 
-        z-index: 0;
+        z-index: 1;
       }
 
       .arrowDown {
-        width: 16px;
-        height: 16px;
-        margin-left: 5px;
+        width: 0.83vw;
+        height: 0.83vw;
+        margin-left: 0.26vw;
         &.active {
           display: none !important;
         }
@@ -35,7 +35,7 @@
     }
     .dropDownMeun {
       display: none;
-      padding-top: 13px;
+      padding-top: 0.67vw;
       position: absolute;
       top: calc(100%);
 
@@ -47,7 +47,7 @@
         display: flex;
         /* 自动布局 */
         flex-direction: column;
-        padding: 25px;
+        padding: 1.3vw;
 
         background: #1f1f1f;
 
@@ -59,7 +59,7 @@
             /* ROOS Explorer（testnet） */
 
             font-family: Raleway-Medium;
-            font-size: 18px;
+            font-size: 0.93vw;
             font-weight: 500;
             line-height: normal;
             letter-spacing: 0px;
@@ -68,14 +68,14 @@
             cursor: pointer;
             white-space: nowrap;
             text-transform: capitalize;
-            margin-bottom: 25px;
+            margin-bottom: 1.3vw;
             display: flex;
             align-items: center;
 
             .icon {
-              margin-right: 5px;
-              width: 20px;
-              height: 20px;
+              margin-right: 0.26vw;
+              width: 1.04vw;
+              height: 1.04vw;
 
               &.active {
                 display: none !important;

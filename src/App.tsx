@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 08:51:29
- * @LastEditTime: 2024-03-08 11:41:29
+ * @LastEditTime: 2024-03-30 13:41:42
  * @Author: John
  */
 // import "./App.css";
@@ -40,7 +40,7 @@ const App = () => {
   return (
     <WalletProvider>
       <div className="App">
-        <Nav connectBtn={<ConnectWallet />} />
+        <Nav />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/participate" element={<Participate />} />
