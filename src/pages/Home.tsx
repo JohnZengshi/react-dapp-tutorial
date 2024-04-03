@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-04-03 17:12:31
+ * @LastEditTime: 2024-04-03 17:24:50
  * @Author: John
  */
 
@@ -148,7 +148,7 @@ export default function () {
     </>
   );
 }
-
+// 页面
 export const Top = ({}: PropsWithChildren<{}>) => {
   return (
     <div className={cn("TOP h-[100vh] flex flex-col snap-center relative")}>
@@ -869,6 +869,7 @@ export const Footer = () => {
   );
 };
 
+// 组件
 export const GuidanceCard = ({
   index,
   title,

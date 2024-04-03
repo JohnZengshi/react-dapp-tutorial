@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-03-08 09:44:08
- * @LastEditTime: 2024-04-01 18:25:10
+ * @LastEditTime: 2024-04-03 17:46:16
  * @Author: John
  */
 import IconFont, { IconNames } from "../iconfont";
@@ -79,7 +79,7 @@ export default function (props: {
           <>
             <IconFont
               name="arrow-down"
-              color="#f58c00"
+              color="#ffc100"
               className="arrowDown active"
             />
             <IconFont
@@ -112,7 +112,7 @@ export default function (props: {
                         <IconFont
                           name={v.icon}
                           className="icon active"
-                          color={"#f58c00"}
+                          color={"#ffc100"}
                         />
                         <span>{v.title}</span>
                       </li>

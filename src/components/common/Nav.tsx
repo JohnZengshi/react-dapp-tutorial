@@ -1,12 +1,12 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-04 17:11:06
- * @LastEditTime: 2024-04-03 16:56:21
+ * @LastEditTime: 2024-04-03 17:51:27
  * @Author: John
  */
 import "./Nav.scss";
 import "./Nav-m.scss";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import meun from "@/assets/meum.png";
 import meum_m from "@/assets/meum-m.png";
 import {
@@ -26,6 +26,7 @@ import { THIRD_URL } from "@/constant/thirdUrl";
 import CustomNavigationMenu from "./CustomNavigationMenu";
 import { HOMEPAGE_THRESHOLD } from "@/constant";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export default function (props: { connectBtn?: any }) {
   const isSmallScreen = useAppSelector((state) => state.sys.isSmallScreen);
@@ -37,6 +38,7 @@ export default function (props: { connectBtn?: any }) {
   const HomeScrollYProgress = useAppSelector(
     (state) => state.sys.HomeScrollYProgress
   );
+  const location = useLocation();
 
   return (
     <>
@@ -53,7 +55,10 @@ export default function (props: { connectBtn?: any }) {
             opacity: 1,
           },
         }}
-        className="nav fixed t-0 z-[50] flex flex-row items-center w-[100vw] justify-between "
+        className={cn(
+          "nav fixed t-0 z-[50] flex flex-row items-center w-[100vw] justify-between",
+          location.pathname != "/" ? "bg-[#232323]" : ""
+        )}
       >
         {/* <img
           className="logo"
@@ -104,6 +109,12 @@ export default function (props: { connectBtn?: any }) {
                 title: "run node",
                 callBack() {
                   CustomToast("coming soon");
+                },
+              },
+              {
+                title: "key box",
+                callBack() {
+                  navigate("/participate");
                 },
               },
             ]}
