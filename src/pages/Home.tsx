@@ -1,7 +1,7 @@
 /*
  * @LastEditors: John
  * @Date: 2024-01-03 10:05:18
- * @LastEditTime: 2024-04-03 23:33:49
+ * @LastEditTime: 2024-04-03 23:40:38
  * @Author: John
  */
 
@@ -108,7 +108,7 @@ export default function () {
 
   return (
     <>
-      {!false ? (
+      {!isSmallScreen ? (
         <div
           className="Home relative snap-y snap-mandatory h-[100vh] overflow-y-scroll scroll-smooth"
           ref={containerRef}
